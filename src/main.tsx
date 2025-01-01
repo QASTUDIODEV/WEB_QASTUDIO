@@ -5,9 +5,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'styled-components';
 
 import { queryClient } from './apis/queryClient';
-import App from './App';
-import GlobalStyle from './styles/global';
-import theme from './styles/theme';
+import App from './App.tsx';
+
+import GlobalStyle from '@/styles/global.ts';
+import theme from '@/styles/theme.ts';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

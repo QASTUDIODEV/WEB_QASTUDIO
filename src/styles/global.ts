@@ -1,8 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
+import { normalize } from 'styled-normalize';
 
 const GlobalStyle = createGlobalStyle`
-    ${reset}
+    ${normalize}
     @font-face {
         font-family: 'Pretendard';
         src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -16,7 +16,11 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
     }
-    
+
+    html, body {
+        height: 100%;
+    }
+
     body {
         min-height: 100vh;
     }
