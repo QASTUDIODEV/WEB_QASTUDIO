@@ -9,6 +9,18 @@ const colors = {
     point_1: '#008080',
     point_2: '#0D409D',
   },
+  primary: {
+    pri_50: '#DFE8F9',
+    pri_100: '#B2C8EE',
+    pri_200: '#98B2E1',
+    pri_300: '#6C8BC2',
+    pri_400: '#546E9D',
+    pri_500: '#374D76',
+    pri_600: '#1B3159',
+    pri_700: '#0E2245',
+    pri_800: '#02112C',
+    pri_900: '#000714',
+  },
   error: {
     error_50: '#FFF6F6',
     error_100: '#FFEAEA',
