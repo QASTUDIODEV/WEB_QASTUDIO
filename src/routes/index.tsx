@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
         path: '/signup',
         element: <SignupPage />,
       },
+      {
+        path: '/mypage',
+        element: <MyPage />,
+      },
     ],
   },
   {
@@ -56,24 +60,16 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       {
-        path: '/dashboard',
+        path: 'dashboard/:projectId',
         element: <DashboardPage />,
       },
       {
-        path: '/dashboard/:projectId',
-        element: <DashboardPage />,
-      },
-      {
-        path: '/scenario/:projectId',
+        path: 'scenario/:projectId',
         element: <ScenarioPage />,
       },
       {
-        path: '/information/:projectId',
+        path: 'information/:projectId',
         element: <ProjectInfoPage />,
-      },
-      {
-        path: '/mypage',
-        element: <MyPage />,
       },
     ],
   },
