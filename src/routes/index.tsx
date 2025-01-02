@@ -40,13 +40,10 @@ export const router = createBrowserRouter([
     element: <ScenarioActPage />,
   },
   {
-    path: `/auth`,
+    path: `/`,
     element: <AuthLayout />,
     children: [
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
+      { index: true, element: <LoginPage /> },
       {
         path: '/signup',
         element: <SignupPage />,
@@ -54,7 +51,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/',
+    path: '/project',
     element: <MainLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
