@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.0",
     "@tanstack/react-query": "^5.62.11",
     "@tanstack/react-query-devtools": "^5.62.11",
     "axios": "^1.7.9",
@@ -21,7 +22,9 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
+    "redux": "^5.0.1",
     "sonner": "^1.7.1",
     "styled-components": "^6.1.13",
     "styled-normalize": "^8.1.1",
