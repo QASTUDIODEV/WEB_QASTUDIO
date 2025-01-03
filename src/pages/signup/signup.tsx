@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
+import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Input from '@/components/common/input/input.tsx';
 import Profile from '@/components/common/profile/profile';
 
@@ -30,6 +31,9 @@ export default function SignupPage() {
             <S.Wrapper>
               <Input />
             </S.Wrapper>
+            <S.MessageWrapper>
+              <ValidataionMessage message="Authentication completed" isError={false} />
+            </S.MessageWrapper>
 
             <S.Wrapper>
               <span>Password</span>
@@ -54,6 +58,9 @@ export default function SignupPage() {
             <S.ProfileEditBtn>
               <img src={ProfileEdit} />
             </S.ProfileEditBtn>
+            <S.Backdrop>
+              <img src={ProfileEdit} />
+            </S.Backdrop>
           </S.ProfileImg>
 
           <S.Form>
@@ -61,6 +68,9 @@ export default function SignupPage() {
             <Input />
             {/* 임시 버튼 */}
             <button onClick={() => setStep(1)}>Sign up</button>
+            <S.MessageWrapper2>
+              <ValidataionMessage message="Authentication completed" isError={false} />
+            </S.MessageWrapper2>
           </S.Form>
 
           <S.BackButton>
