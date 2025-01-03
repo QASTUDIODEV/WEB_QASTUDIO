@@ -50,7 +50,7 @@ export default function SignupPage() {
       {step === 1 && (
         <>
           <S.ProfileImg>
-            {/* <Profile profileImg={defaultProfile} /> */}
+            <Profile profileImg={defaultProfile} />
             <S.ProfileEditBtn>
               <img src={ProfileEdit} />
             </S.ProfileEditBtn>
