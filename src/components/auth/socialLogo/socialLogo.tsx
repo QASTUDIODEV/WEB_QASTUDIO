@@ -8,13 +8,13 @@ export default function SocialLogo() {
   return (
     <S.LoginButtons>
       <S.Logo color="#ffffff">
-        <img src={GoogleLogo} alt="" />
+        <img src={GoogleLogo} alt="Google Login Button Image" />
       </S.Logo>
       <S.Logo color="#FEE500">
-        <img src={KakaoLogo} alt="" />
+        <img src={KakaoLogo} alt="Kakao Login Button Image" />
       </S.Logo>
       <S.Logo color="black">
-        <img src={GithubLogo} alt="" />
+        <img src={GithubLogo} alt="Github Login Button Image" />
       </S.Logo>
     </S.LoginButtons>
   );

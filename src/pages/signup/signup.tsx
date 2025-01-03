@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -15,9 +16,16 @@ import * as S from '@/pages/signup/signup.style';
 
 export default function SignupPage() {
   const [step, setStep] = useState(0);
+  const navigate = useNavigate();
+  // const [userProfileImg, setUserProfileImg] = useState('');
+  const contentInputRef = useRef<HTMLInputElement | null>(null);
+  const handleInputClick = () => {
+    contentInputRef.current?.click();
+  };
+
   return (
     <S.Container>
-      <img src={Logo} alt="" />
+      <img src={Logo} alt="QASTUDIO Logo Image" />
       {step === 0 && (
         <>
           <S.Form>
@@ -45,21 +53,21 @@ export default function SignupPage() {
 
           <OrDivider />
           <SocialLogo />
-          <S.BackButton>
-            <img src={ArrowLeft} />
+          <S.BackButton onClick={() => navigate(-1)}>
+            <img src={ArrowLeft} alt="Back Button Image" />
             Back
           </S.BackButton>
         </>
       )}
       {step === 1 && (
         <>
-          <S.ProfileImg>
+          <S.ProfileImg onClick={handleInputClick}>
             <Profile profileImg={defaultProfile} />
             <S.ProfileEditBtn>
-              <img src={ProfileEdit} />
+              <img src={ProfileEdit} alt="Profile Edit Button Image" />
             </S.ProfileEditBtn>
             <S.Backdrop>
-              <img src={ProfileEdit} />
+              <img src={ProfileEdit} alt="Profile Edit Button Image" />
             </S.Backdrop>
           </S.ProfileImg>
 
@@ -71,10 +79,11 @@ export default function SignupPage() {
             <S.MessageWrapper2>
               <ValidataionMessage message="Authentication completed" isError={false} />
             </S.MessageWrapper2>
+            <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} />
           </S.Form>
 
-          <S.BackButton>
-            <img src={ArrowLeft} />
+          <S.BackButton onClick={() => setStep(0)}>
+            <img src={ArrowLeft} alt="Back Button Image" />
             Back
           </S.BackButton>
         </>
