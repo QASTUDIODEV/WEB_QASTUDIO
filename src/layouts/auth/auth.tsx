@@ -6,6 +6,10 @@ export default function AuthLayout() {
   return (
     <S.Container>
       <Outlet />
+      <S.Circle1 />
+      <S.Circle2 />
+      <S.Circle3 />
+      <S.Circle4 />
     </S.Container>
   );
 }
