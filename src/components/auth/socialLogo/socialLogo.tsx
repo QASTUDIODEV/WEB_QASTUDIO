@@ -1,4 +1,4 @@
-import * as S from '@/components/socialLogo/socialLogo.style';
+import * as S from '@/components/auth/socialLogo/socialLogo.style';
 
 import GithubLogo from '@/image/githubLogo.svg';
 import GoogleLogo from '@/image/googleLogo.svg';

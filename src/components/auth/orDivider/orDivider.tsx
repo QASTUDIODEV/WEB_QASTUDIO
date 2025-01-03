@@ -1,4 +1,4 @@
-import * as S from '@/components/orDivider/orDivider.style';
+import * as S from '@/components/auth/orDivider/orDivider.style';
 
 export default function OrDivider() {
   return (
