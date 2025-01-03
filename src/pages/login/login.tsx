@@ -13,7 +13,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   return (
     <S.Container>
-      <img src={Logo} alt="" />
+      <img src={Logo} alt="QASTUDIO Logo Image" />
       <S.Container2>
         <S.Texts>
           <S.Title>Welcome to QASTUDIO !</S.Title>

@@ -24,15 +24,22 @@ const Form = styled.form`
   button {
     height: 40px;
   }
+  .profile-image-upload {
+    display: none;
+  }
 `;
 
-const BackButton = styled.div`
+const BackButton = styled.button`
   height: 27px;
   ${({ theme }) => theme.text.medium_18}
   position: absolute;
   gap: 4px;
   top: 20px;
   left: 20px;
+  z-index: 1;
+  color: white;
+  border: none;
+  background-color: ${({ theme }) => theme.colors.black};
   ${({ theme }) => theme.align.row_center};
   img {
     height: 24px;
@@ -47,6 +54,9 @@ const ProfileImg = styled.div`
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
   position: relative;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ProfileEditBtn = styled.button`
@@ -60,6 +70,9 @@ const ProfileEditBtn = styled.button`
   left: 144px;
   border: none;
   z-index: 2;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Wrapper = styled.div`
