@@ -29,6 +29,7 @@ const Description = styled.div`
 const Form = styled.form`
   gap: 10px;
   ${({ theme }) => theme.align.column_center};
+  position: relative;
 
   span {
     ${({ theme }) => theme.text.medium_14};
@@ -60,4 +61,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 4px;
 `;
-export { Button, Buttons, Container, Container2, Description, Form, Texts, Title, Wrapper };
+
+const MessageWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  top: 2px;
+  right: 0;
+`;
+export { Button, Buttons, Container, Container2, Description, Form, MessageWrapper, Texts, Title, Wrapper };
