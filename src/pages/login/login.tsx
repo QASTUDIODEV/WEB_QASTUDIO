@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
+import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Input from '@/components/common/input/input.tsx';
 
 import Logo from '@/image/logo.svg';
@@ -19,6 +20,9 @@ export default function LoginPage() {
           <S.Description>Login and enjoy QASTUDIO more.</S.Description>
         </S.Texts>
         <S.Form>
+          <S.MessageWrapper>
+            <ValidataionMessage isError={true} message={`Something's wrong`} />
+          </S.MessageWrapper>
           <S.Wrapper>
             <span>Email</span>
             <Input />

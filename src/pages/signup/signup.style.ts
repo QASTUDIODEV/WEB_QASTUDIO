@@ -15,9 +15,11 @@ const Container = styled.div`
 const Form = styled.form`
   width: 301px;
   gap: 10px;
+  position: relative;
   ${({ theme }) => theme.align.column_center};
   span {
     ${({ theme }) => theme.text.medium_14};
+    width: 100%;
   }
   button {
     height: 40px;
@@ -57,11 +59,47 @@ const ProfileEditBtn = styled.button`
   top: 144px;
   left: 144px;
   border: none;
+  z-index: 2;
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   position: relative;
+  width: 100%;
 `;
-export { BackButton, Container, Form, ProfileEditBtn, ProfileImg, Wrapper };
+
+const Backdrop = styled.div`
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  border-radius: 100%;
+  z-index: 1;
+  &:hover {
+    opacity: 100%;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+  }
+  img {
+    width: 64px;
+    height: 64px;
+  }
+`;
+
+const MessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const MessageWrapper2 = styled.div`
+  display: flex;
+  position: absolute;
+  top: 2px;
+  right: 0;
+`;
+export { BackButton, Backdrop, Container, Form, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
