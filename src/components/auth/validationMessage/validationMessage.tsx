@@ -12,12 +12,12 @@ export default function ValidataionMessage({ message, isError }: TValidationMess
     <>
       {isError ? (
         <S.Container>
-          <img src={Wrong} />
+          <img src={Wrong} alt="wrong" />
           <S.ErrorMessage>{message}</S.ErrorMessage>
         </S.Container>
       ) : (
         <S.Container>
-          <img src={Valid} />
+          <img src={Valid} alt="valid" />
           <S.TrueMessage>{message}</S.TrueMessage>
         </S.Container>
       )}
