@@ -5,8 +5,8 @@ const SideBar = styled.div`
   width: 320px;
   height: 100vh;
   background: ${({ theme }) => theme.colors.primary.pri_800};
-  position: fixed;
-  overflow-y: auto;
+  position: sticky;
+  top: 0;
   color: ${({ theme }) => theme.colors.gray.gray_50};
 `;
 
