@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   ${({ theme }) => theme.align.row_space_between}
-  img {
+  svg {
     width: 18px;
     height: 18px;
   }

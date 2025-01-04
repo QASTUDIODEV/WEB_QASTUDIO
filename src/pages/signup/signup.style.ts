@@ -55,6 +55,10 @@ const ProfileImg = styled.div`
   &:hover {
     cursor: pointer;
   }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const ProfileEditBtn = styled.button`
