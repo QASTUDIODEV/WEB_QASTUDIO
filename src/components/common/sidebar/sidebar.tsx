@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 import * as S from '@/components/common/sidebar/sidebar.style';
 
-import ArrowDown from '@/assets/images/ArrowDown.svg?react';
-import DashboardLogo from '@/assets/images/DashboardLogo.svg?react';
-import InformationLogo from '@/assets/images/InformationLogo.svg?react';
-import Logo from '@/assets/images/Logo.svg?react';
-import Plus from '@/assets/images/Plus.svg?react';
-import ProjectLogo from '@/assets/images/ProjectLogo.svg?react';
-import SearchImg from '@/assets/images/SearchImg.svg?react';
-import SenarioLogo from '@/assets/images/SenarioLogo.svg?react';
+import Plus from '@/assets/icons/add.svg?react';
+import ArrowDown from '@/assets/icons/arrow_down.svg?react';
+import SenarioLogo from '@/assets/icons/file_branch.svg?react';
+import DashboardLogo from '@/assets/icons/grid.svg?react';
+import InformationLogo from '@/assets/icons/info.svg?react';
+import Logo from '@/assets/icons/logo.svg?react';
+import ProjectLogo from '@/assets/icons/package.svg?react';
+import SearchImg from '@/assets/icons/search.svg?react';
 
 export default function Sidebar() {
   const [searchActive, setSearchActive] = useState(false);
