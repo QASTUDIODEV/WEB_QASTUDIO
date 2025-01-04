@@ -1,12 +1,14 @@
-import * as S from '@/components/common/input/input.style.ts';
+import type { ChangeEvent } from 'react';
 
-// 예시 입니다. 해당 내용 삭제하고 input 컴포넌트 작성해주세요
+import * as S from '@/components/common/input/input.style';
 
-export default function Input() {
-  return (
-    <S.InputWrapper>
-      <p>테스트</p>
-      <input />
-    </S.InputWrapper>
-  );
+type TInputProps = {
+  value?: string;
+  placeholder?: string;
+  width?: `${number}px` | `${number}%`;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+export default function Input({ value, placeholder = '입력하세요', width = '820px', onChange }: TInputProps) {
+  return <S.InputWrapper value={value} placeholder={placeholder} width={width} onChange={onChange} />;
 }
