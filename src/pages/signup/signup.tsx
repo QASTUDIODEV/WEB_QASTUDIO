@@ -60,7 +60,7 @@ export default function SignupPage() {
       {step === 1 && (
         <>
           <S.ProfileImg onClick={handleInputClick}>
-            <Profile isDefault={true} />
+            <Profile />
             <S.ProfileEditBtn>
               <ProfileEdit />
             </S.ProfileEditBtn>
