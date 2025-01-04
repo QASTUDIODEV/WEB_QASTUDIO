@@ -100,7 +100,7 @@ const Backdrop = styled.div`
     justify-content: center;
     align-items: center;
   }
-  img {
+  svg {
     width: 64px;
     height: 64px;
   }
