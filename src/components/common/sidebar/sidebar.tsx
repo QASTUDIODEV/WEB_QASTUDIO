@@ -28,7 +28,7 @@ export default function Sidebar() {
   return (
     <S.SideBar>
       <S.Container>
-        <Logo />
+        <Logo width={32} height={32} />
         <S.Profile>
           <S.ProfileImg />
           <S.ProfileName>eunji</S.ProfileName>
