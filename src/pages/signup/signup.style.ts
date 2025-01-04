@@ -3,13 +3,11 @@ import styled from 'styled-components';
 const Container = styled.div`
   ${({ theme }) => theme.align.column_center};
   position: relative;
-  /* width: 500px;
-  height: 514px; */
   padding: 50px 120px;
   gap: 20px;
   border-radius: 16px;
   z-index: 1;
-  background-color: ${({ theme }) => theme.colors.background.black};
+  background-color: linear-gradient(0deg, #16181c, #16181c), linear-gradient(76.11deg, #0e2245 0%, #000714 100.13%);
 `;
 
 const Form = styled.form`

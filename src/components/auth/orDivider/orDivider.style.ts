@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Line = styled.line`
+const Line = styled.div`
   background-color: ${({ theme }) => theme.colors.gray.gray_500};
   width: 180px;
   height: 0.1px;
