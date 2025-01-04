@@ -7,11 +7,9 @@ import ValidataionMessage from '@/components/auth/validationMessage/validationMe
 import Input from '@/components/common/input/input.tsx';
 import Profile from '@/components/common/profile/profile';
 
-import ArrowLeft from '@/image/arrow_left.svg';
-import defaultProfile from '@/image/defaultProfile.svg';
-import Logo from '@/image/logo.svg';
-import ProfileEdit from '@/image/profileEdit.svg';
-
+import Logo from '/public/icons/logo.svg?react';
+import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
+import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/signup/signup.style';
 
 export default function SignupPage() {
@@ -25,7 +23,7 @@ export default function SignupPage() {
 
   return (
     <S.Container>
-      <img src={Logo} alt="QASTUDIO Logo Image" />
+      <Logo style={{ width: '48px', height: '48px' }} />
       {step === 0 && (
         <>
           <S.Form>
@@ -54,7 +52,7 @@ export default function SignupPage() {
           <OrDivider />
           <SocialLogo />
           <S.BackButton onClick={() => navigate(-1)}>
-            <img src={ArrowLeft} alt="Back Button Image" />
+            <ArrowLeft style={{ width: '24px', height: '24px' }} />
             Back
           </S.BackButton>
         </>
@@ -62,12 +60,12 @@ export default function SignupPage() {
       {step === 1 && (
         <>
           <S.ProfileImg onClick={handleInputClick}>
-            <Profile profileImg={defaultProfile} />
+            <Profile isDefault={true} />
             <S.ProfileEditBtn>
-              <img src={ProfileEdit} alt="Profile Edit Button Image" />
+              <ProfileEdit />
             </S.ProfileEditBtn>
             <S.Backdrop>
-              <img src={ProfileEdit} alt="Profile Edit Button Image" />
+              <ProfileEdit />
             </S.Backdrop>
           </S.ProfileImg>
 
@@ -83,7 +81,7 @@ export default function SignupPage() {
           </S.Form>
 
           <S.BackButton onClick={() => setStep(0)}>
-            <img src={ArrowLeft} alt="Back Button Image" />
+            <ArrowLeft style={{ width: '24px', height: '24px' }} />
             Back
           </S.BackButton>
         </>

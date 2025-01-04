@@ -5,15 +5,15 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Input from '@/components/common/input/input.tsx';
 
-import Logo from '@/image/logo.svg';
-
 import * as S from '@/pages/login/login.style.ts';
+
+import Logo from '/public/icons/logo.svg?react';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   return (
     <S.Container>
-      <img src={Logo} alt="QASTUDIO Logo Image" />
+      <Logo style={{ width: '48px', height: '48px' }} />
       <S.Container2>
         <S.Texts>
           <S.Title>Welcome to QASTUDIO !</S.Title>

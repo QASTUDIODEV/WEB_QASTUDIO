@@ -12,6 +12,10 @@ const Logo = styled.div`
   width: 56px;
   height: 56px;
   border-radius: 99px;
+  svg {
+    width: 25px;
+    height: 25px;
+  }
 `;
 
 export { LoginButtons, Logo };

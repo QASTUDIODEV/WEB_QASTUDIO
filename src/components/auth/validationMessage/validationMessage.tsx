@@ -1,7 +1,7 @@
 import * as S from '@/components/auth/validationMessage/validationMessage.style';
 
-import Valid from '@/image/valid.svg';
-import Wrong from '@/image/wrong.svg';
+import Valid from '@/assets/icons/check_circle.svg?react';
+import Wrong from '@/assets/icons/wrong.svg?react';
 
 type TValidationMessage = {
   message: string;
@@ -12,12 +12,12 @@ export default function ValidataionMessage({ message, isError }: TValidationMess
     <>
       {isError ? (
         <S.Container>
-          <img src={Wrong} alt="wrong" />
+          <Wrong />
           <S.ErrorMessage>{message}</S.ErrorMessage>
         </S.Container>
       ) : (
         <S.Container>
-          <img src={Valid} alt="valid" />
+          <Valid />
           <S.TrueMessage>{message}</S.TrueMessage>
         </S.Container>
       )}
