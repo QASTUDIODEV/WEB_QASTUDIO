@@ -1,116 +1,121 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const SideBar = styled.div`
-  width: 320px;
+export const SideBar = styled.div<{ hasScroll: boolean }>`
+  width: 16.6667%;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.primary.pri_800};
+  background: ${({ theme }) => `linear-gradient(76.11deg, ${theme.colors.primary.pri_700} 0%, ${theme.colors.primary.pri_900} 100.13%)`};
   position: sticky;
+  overflow-y: auto;
   top: 0;
-  color: ${({ theme }) => theme.colors.gray.gray_50};
+  color: #d6deec;
+  padding-bottom: ${(props) => (props.hasScroll ? '40px' : '0')};
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
-  padding-left: 40px;
+  padding-top: 15.313%;
+  padding-left: 10.938%;
 `;
 
-const Profile = styled.div`
-  margin-top: 30px;
-  padding: 12px 0;
+export const Profile = styled.div`
+  padding-top: 14.0625%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2.5%;
 `;
 
-const ProfileImg = styled.img`
+export const ProfileImg = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
-const ProfileName = styled.p`
+export const ProfileName = styled.p`
   margin: 0;
   ${({ theme }) => theme.text.medium_24};
-  color: ${({ theme }) => theme.colors.gray.gray_50};
+  color: #d6deec;
 `;
 
-const Search = styled.div`
+export const Search = styled.div`
   display: flex;
   align-items: center;
-  padding: 12px 0;
-  gap: 8px;
+  padding-top: 7.5%;
+  gap: 2.5%;
   cursor: pointer;
 `;
 
-const SearchText = styled.p`
+export const SearchText = styled.input`
   margin: 0;
   ${({ theme }) => theme.text.medium_18};
-  color: ${({ theme }) => theme.colors.gray.gray_50};
-`;
-
-const SearchInput = styled.input`
-  margin: 12px 0;
-  width: 240px;
-  height: 47px;
-  padding: 14px 17px;
-  border-radius: 8.57px;
-  border: 1px solid ${({ theme }) => theme.colors.white};
+  color: #d6deec;
   background: none;
-  color: ${({ theme }) => theme.colors.white};
-
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 2.5% 3.75%;
   &::placeholder {
-    color: ${({ theme }) => theme.colors.gray.gray_200};
+    color: #d6deec;
   }
 `;
 
-const Projects = styled.div`
-  margin-top: 32px;
-  padding: 12px 40px;
+export const Projects = styled.div`
+  margin-top: 26.09%;
+  padding: 0 10.938%;
+  padding-bottom: 10.625%;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
 `;
 
-const ProjectText = styled.p`
-  margin: 0;
+export const ProjectText = styled.p`
   ${({ theme }) => theme.text.medium_24};
-  color: ${({ theme }) => theme.colors.gray.gray_50};
+  color: #d6deec;
 `;
 
-const Project = styled.div`
+export const Project = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 12px 40px;
+  padding: 4.602% 10.625%;
   gap: 8px;
   cursor: pointer;
 `;
 
-const ProjectName = styled.p`
-  margin: 0;
-  ${({ theme }) => theme.text.medium_18};
-  color: ${({ theme }) => theme.colors.gray.gray_50};
+export const SemiBox = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 4.05%;
 `;
 
-const ProjectContent = styled.div<{ $isActive?: boolean }>`
+export const ProjectName = styled.p`
+  margin: 0;
+  ${({ theme }) => theme.text.medium_18};
+  color: #d6deec;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+`;
+
+export const ProjectContent = styled.div<{ $isActive?: boolean }>`
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 40px 12px 60px;
-  background: ${({ $isActive }) => ($isActive ? '#424854CC' : 'transparent')};
+  gap: 2.5%;
+  padding: 4.602% 0% 4.602% 15.625%;
+  background: ${({ $isActive }) => ($isActive ? 'rgba(223, 232, 249, 0.1)' : 'transparent')};
 `;
 
-const ProjectContentName = styled.p`
+export const ProjectContentName = styled.p`
   margin: 0;
   ${({ theme }) => theme.text.medium_18};
-  color: ${({ theme }) => theme.colors.gray.gray_50};
+  color: #d6deec;
 `;
 
-const ProjectContents = styled.div<{ $isOpen: boolean }>`
+export const ProjectContents = styled.div<{ $isOpen: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -118,26 +123,12 @@ const ProjectContents = styled.div<{ $isOpen: boolean }>`
   transition: max-height 0.3s ease-out;
 `;
 
-const StyledNavLink = styled(NavLink)`
+export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   color: inherit;
 `;
 
-export {
-  Container,
-  Profile,
-  ProfileImg,
-  ProfileName,
-  Project,
-  ProjectContent,
-  ProjectContentName,
-  ProjectContents,
-  ProjectName,
-  Projects,
-  ProjectText,
-  Search,
-  SearchInput,
-  SearchText,
-  SideBar,
-  StyledNavLink,
-};
+export const FooterPadding = styled.div`
+  height: 40px;
+  background: none;
+`;

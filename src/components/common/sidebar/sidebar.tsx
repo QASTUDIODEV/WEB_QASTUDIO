@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import * as S from '@/components/common/sidebar/sidebar.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
+import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import SenarioLogo from '@/assets/icons/file_branch.svg?react';
 import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
@@ -12,8 +13,9 @@ import ProjectLogo from '@/assets/icons/package.svg?react';
 import SearchImg from '@/assets/icons/search.svg?react';
 
 export default function Sidebar() {
-  const [searchActive, setSearchActive] = useState(false);
   const [menuStates, setMenuStates] = useState([false, false, false]);
+  const [hasScroll, setHasScroll] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   const toggleMenu = (index: number) => {
     setMenuStates((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
@@ -25,23 +27,36 @@ export default function Sidebar() {
     { id: 3, name: 'Project_3' },
   ];
 
+  const handleScroll = () => {
+    setHasScroll(true);
+  };
+
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+
+    if (sidebar) {
+      sidebar.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (sidebar) {
+        sidebar.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
-    <S.SideBar>
+    <S.SideBar ref={sidebarRef} hasScroll={hasScroll}>
       <S.Container>
         <Logo width={32} height={32} />
         <S.Profile>
           <S.ProfileImg />
           <S.ProfileName>eunji</S.ProfileName>
         </S.Profile>
-        <S.Search
-          onClick={() => {
-            setSearchActive(!searchActive);
-          }}
-        >
+        <S.Search>
           <SearchImg />
-          <S.SearchText>검색</S.SearchText>
+          <S.SearchText placeholder="Search" />
         </S.Search>
-        {searchActive && <S.SearchInput placeholder="검색어" />}
       </S.Container>
 
       <S.Projects>
@@ -52,9 +67,11 @@ export default function Sidebar() {
       {projects.map((project, index) => (
         <div key={project.id}>
           <S.Project onClick={() => toggleMenu(index)}>
-            <ProjectLogo />
-            <S.ProjectName>{project.name}</S.ProjectName>
-            <ArrowDown />
+            <S.SemiBox>
+              <ProjectLogo />
+              <S.ProjectName>{project.name}</S.ProjectName>
+            </S.SemiBox>
+            {menuStates[index] ? <ArrowUp /> : <ArrowDown />}
           </S.Project>
           <S.ProjectContents $isOpen={menuStates[index]}>
             <S.StyledNavLink to={`/project/dashboard/${project.id}`}>
@@ -84,6 +101,9 @@ export default function Sidebar() {
           </S.ProjectContents>
         </div>
       ))}
+
+      {/* 하단 여백 */}
+      {hasScroll && <S.FooterPadding />}
     </S.SideBar>
   );
 }
