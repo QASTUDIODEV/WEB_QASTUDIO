@@ -15,7 +15,6 @@ const Container = styled.div`
 const Form = styled.form`
   width: 300px;
   gap: 30px;
-  position: relative;
   ${({ theme }) => theme.align.column_center};
   span {
     ${({ theme }) => theme.text.medium_14};
