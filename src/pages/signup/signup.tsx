@@ -125,14 +125,14 @@ export default function SignupPage() {
                     right: '-70px',
                     top: '24px',
                     padding: '0px 10px',
-                    backgroundColor: isValid ? '#0d409d' : '#a0a0a0',
-                    color: isValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
-                    cursor: isValid ? 'pointer' : 'not-allowed',
+                    backgroundColor: isEmailValid ? '#0d409d' : '#a0a0a0',
+                    color: isEmailValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
+                    cursor: isEmailValid ? 'pointer' : 'not-allowed',
                     border: 'none',
                     borderRadius: '4px',
                   }}
                   onClick={handleVerify}
-                  disabled={isCodeValid || !isEmailValid}
+                  disabled={!isEmailValid}
                 >
                   Verify
                 </button>
