@@ -27,9 +27,10 @@ const Description = styled.div`
 `;
 
 const Form = styled.form`
-  gap: 10px;
+  gap: 15px;
   ${({ theme }) => theme.align.column_center};
   position: relative;
+  width: 100%;
 
   span {
     ${({ theme }) => theme.text.medium_14};
@@ -60,6 +61,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
 `;
 
 const MessageWrapper = styled.div`

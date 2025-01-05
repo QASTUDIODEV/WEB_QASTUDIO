@@ -1,20 +1,21 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import AuthInput from '@/components/auth/input/AuthInput';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
-import Input from '@/components/common/input/input.tsx';
 import Profile from '@/components/common/profile/profile';
 
-import Logo from '/public/icons/logo.svg?react';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
+import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/signup/signup.style';
 
 export default function SignupPage() {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
+  const [message, setMessage] = useState('The code is not correct'); //임시
   // const [userProfileImg, setUserProfileImg] = useState('');
   const contentInputRef = useRef<HTMLInputElement | null>(null);
   const handleInputClick = () => {
@@ -27,29 +28,49 @@ export default function SignupPage() {
       {step === 0 && (
         <>
           <S.Form>
-            <S.Wrapper>
-              <span>Email</span>
-              <Input />
-              {/* 임시 버튼 */}
-              <button style={{ position: 'absolute', right: '-50px', top: '25px' }}>Verify</button>
-            </S.Wrapper>
+            <S.Inputs>
+              <S.Wrapper>
+                <span>Email</span>
+                <AuthInput placeholder={'Email'} type="email" />
+                {/* 임시 버튼 */}
+                <button
+                  style={{
+                    position: 'absolute',
+                    right: '-70px',
+                    top: '25px',
+                    padding: '0px 10px',
+                    backgroundColor: '#0d409d',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                  }}
+                >
+                  Verify
+                </button>
+              </S.Wrapper>
 
-            <S.Wrapper>
-              <Input />
-            </S.Wrapper>
-            <S.MessageWrapper>
-              <ValidataionMessage message="Authentication completed" isError={false} />
-            </S.MessageWrapper>
+              <S.Wrapper>
+                <AuthInput placeholder={'Code'} type="code" isValid={false} />
+                {message != null && (
+                  <S.MessageWrapper>
+                    <ValidataionMessage message={message} isError={true} />
+                  </S.MessageWrapper>
+                )}
+              </S.Wrapper>
 
-            <S.Wrapper>
-              <span>Password</span>
-              <Input />
-            </S.Wrapper>
+              <S.Wrapper>
+                <span>Password</span>
+                <AuthInput placeholder={'Password'} type="password" />
+              </S.Wrapper>
+            </S.Inputs>
+
             {/* 임시 버튼 */}
-            <button onClick={() => setStep(1)}>Sign up</button>
+            <button onClick={() => setStep(1)} style={{ width: '100%', borderRadius: '4px', backgroundColor: '#0d409d', color: 'white', border: 'none' }}>
+              Sign up
+            </button>
+            <OrDivider />
           </S.Form>
 
-          <OrDivider />
           <SocialLogo />
           <S.BackButton onClick={() => navigate(-1)}>
             <ArrowLeft style={{ width: '24px', height: '24px' }} />
@@ -69,16 +90,20 @@ export default function SignupPage() {
             </S.Backdrop>
           </S.ProfileImg>
 
-          <S.Form>
-            <span>Nickname</span>
-            <Input />
+          <S.Form2>
+            <S.Wrapper>
+              <span>Nickname</span>
+              <AuthInput placeholder={'Nickname'} type="nickname" />
+            </S.Wrapper>
             {/* 임시 버튼 */}
-            <button onClick={() => setStep(1)}>Sign up</button>
+            <button style={{ width: '100%', backgroundColor: '#0D409D', color: 'white', borderRadius: '4px', border: 'none' }}>
+              Getting started with QASTUDIO
+            </button>
             <S.MessageWrapper2>
               <ValidataionMessage message="Authentication completed" isError={false} />
             </S.MessageWrapper2>
             <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} />
-          </S.Form>
+          </S.Form2>
 
           <S.BackButton onClick={() => setStep(0)}>
             <ArrowLeft style={{ width: '24px', height: '24px' }} />
