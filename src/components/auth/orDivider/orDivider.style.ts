@@ -18,9 +18,9 @@ const Container = styled.div`
     ${({ theme }) => theme.align.row_center};
     ${({ theme }) => theme.text.medium_14};
     color: ${({ theme }) => theme.colors.gray.gray_300};
-    z-index: 1;
+    z-index: 2;
     width: 60px;
-    background-color: ${({ theme }) => theme.colors.black};
+    background-color: ${({ theme }) => theme.colors.gray.gray_900};
   }
 `;
 

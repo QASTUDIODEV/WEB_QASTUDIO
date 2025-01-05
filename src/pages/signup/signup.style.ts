@@ -4,15 +4,31 @@ const Container = styled.div`
   ${({ theme }) => theme.align.column_center};
   position: relative;
   padding: 50px 120px;
-  gap: 20px;
+  gap: 30px;
   border-radius: 16px;
   z-index: 1;
-  background-color: linear-gradient(0deg, #16181c, #16181c), linear-gradient(76.11deg, #0e2245 0%, #000714 100.13%);
+  box-shadow: -1px 1px 4px 0px #1b3159;
+  /* background: linear-gradient(76deg, #0e2245 0%, #000714 100%), #16181c; */
+  background-color: #16181c;
 `;
 
 const Form = styled.form`
-  width: 301px;
-  gap: 10px;
+  width: 300px;
+  gap: 30px;
+  position: relative;
+  ${({ theme }) => theme.align.column_center};
+  span {
+    ${({ theme }) => theme.text.medium_14};
+    width: 100%;
+  }
+  button {
+    height: 40px;
+  }
+`;
+
+const Form2 = styled.form`
+  width: 300px;
+  gap: 20px;
   position: relative;
   ${({ theme }) => theme.align.column_center};
   span {
@@ -117,4 +133,11 @@ const MessageWrapper2 = styled.div`
   top: 2px;
   right: 0;
 `;
-export { BackButton, Backdrop, Container, Form, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
+
+const Inputs = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+`;
+export { BackButton, Backdrop, Container, Form, Form2, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
