@@ -37,7 +37,7 @@ export default function SignupPage() {
                   style={{
                     position: 'absolute',
                     right: '-70px',
-                    top: '25px',
+                    top: '24px',
                     padding: '0px 10px',
                     backgroundColor: '#0d409d',
                     color: 'white',
@@ -104,11 +104,6 @@ export default function SignupPage() {
             </S.MessageWrapper2>
             <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} />
           </S.Form2>
-
-          <S.BackButton onClick={() => setStep(0)}>
-            <ArrowLeft style={{ width: '24px', height: '24px' }} />
-            Back
-          </S.BackButton>
         </>
       )}
     </S.Container>
