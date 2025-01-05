@@ -4,7 +4,8 @@ export default function OrDivider() {
   return (
     <S.Container>
       <S.Line />
-      <span>Or</span>
+      <span>OR</span>
+      <S.Line />
     </S.Container>
   );
 }
