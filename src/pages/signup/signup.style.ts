@@ -8,7 +8,7 @@ const Container = styled.div`
   border-radius: 16px;
   z-index: 1;
   box-shadow: -1px 1px 4px 0px #1b3159;
-  /* background: linear-gradient(76deg, #0e2245 0%, #000714 100%), #16181c; */
+  background: linear-gradient(76deg, #0e2245 0%, #000714 100.13%);
   background-color: #16181c;
 `;
 
@@ -53,7 +53,7 @@ const BackButton = styled.button`
   z-index: 1;
   color: white;
   border: none;
-  background-color: ${({ theme }) => theme.colors.black};
+  background-color: rgba(0, 0, 0, 0);
   ${({ theme }) => theme.align.row_center};
   img {
     height: 24px;
