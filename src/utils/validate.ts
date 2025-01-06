@@ -31,4 +31,11 @@ function validatePassword(password: string): string {
   }
   return ''; // 유효한 비밀번호
 }
-export { validateEmail, validateNickname, validatePassword };
+
+function validateRepassword(password: string, repassword: string): string {
+  if (password !== repassword) {
+    return 'The Password is not correct';
+  }
+  return '';
+}
+export { validateEmail, validateNickname, validatePassword, validateRepassword };
