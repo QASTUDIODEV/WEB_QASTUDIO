@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { validateEmail, validatePassword } from '@/utils/validate';
+
 import AuthInput from '@/components/auth/authInput/authInput';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -14,8 +16,12 @@ type TValid = undefined | boolean;
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
-  const [isValid, setIsValid] = useState<TValid>(undefined);
+  const [emailMessage, setEmailMessage] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState('');
+
+  const [isEmailValid, setIsEmailValid] = useState<TValid>(undefined);
+  const [isPasswordValid, setIsPasswordValid] = useState<TValid>(undefined);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,15 +34,14 @@ export default function LoginPage() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = e.target.value;
     setEmail(emailValue);
+    const emailError = validateEmail(emailValue);
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailRegex.test(emailValue)) {
-      setIsValid(false);
-      setMessage('Invalid email format');
+    if (!emailError) {
+      setIsEmailValid(true);
+      setEmailMessage('');
     } else {
-      setIsValid(undefined); // 이메일이 유효하면 isValid는 undefined로 설정
-      setMessage('');
+      setIsEmailValid(false);
+      setEmailMessage(`Something's wrong!`);
     }
   };
 
@@ -44,17 +49,14 @@ export default function LoginPage() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
-
+    const passwordError = validatePassword(passwordValue);
     // 비밀번호 임시 조건: 8글자 이상
-    if (passwordValue.length < 8) {
-      setIsValid(false);
-      setMessage(`Something's wrong`);
-    } else if (email && email !== '' && password && password !== '') {
-      setIsValid(true);
-      setMessage('');
-    } else if (passwordValue.length >= 8) {
-      setIsValid(true);
-      setMessage('');
+    if (!passwordError) {
+      setIsPasswordValid(true);
+      setPasswordMessage('');
+    } else {
+      setIsPasswordValid(false);
+      setPasswordMessage(`Something's wrong!`);
     }
   };
 
@@ -68,11 +70,6 @@ export default function LoginPage() {
         </S.Texts>
         <S.Form onSubmit={handleSubmit}>
           {/* 유효성 검사에 따라 메시지 출력 */}
-          {message && (
-            <S.MessageWrapper>
-              <ValidataionMessage isError={true} message={message} />
-            </S.MessageWrapper>
-          )}
 
           <S.Wrapper>
             <span>Email</span>
@@ -81,9 +78,14 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={handleEmailChange} // 이메일 값 변경
-              isValid={isValid} // 이메일 유효성 상태 전달
+              isValid={isEmailValid && isPasswordValid} // 이메일 유효성 상태 전달
               autoComplete="email"
             />
+            {emailMessage && (
+              <S.MessageWrapper>
+                <ValidataionMessage isError={true} message={emailMessage} />
+              </S.MessageWrapper>
+            )}
           </S.Wrapper>
           <S.Wrapper>
             <span>Password</span>
@@ -92,9 +94,14 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={handlePasswordChange} // 비밀번호 값 변경
-              isValid={isValid} // 비밀번호 유효성 상태 전달
+              isValid={isPasswordValid && isEmailValid} // 비밀번호 유효성 상태 전달
               autoComplete="password"
             />
+            {passwordMessage && (
+              <S.MessageWrapper>
+                <ValidataionMessage isError={true} message={passwordMessage} />
+              </S.MessageWrapper>
+            )}
           </S.Wrapper>
         </S.Form>
         {/* 임시 버튼 */}
@@ -105,11 +112,11 @@ export default function LoginPage() {
             borderRadius: '4px',
             border: 'none',
             height: '40px',
-            backgroundColor: isValid ? '#0d409d' : '#a0a0a0',
-            color: isValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
-            cursor: isValid ? 'pointer' : 'not-allowed',
+            backgroundColor: isEmailValid && isPasswordValid ? '#0d409d' : '#a0a0a0',
+            color: isEmailValid && isPasswordValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
+            cursor: isEmailValid && isPasswordValid ? 'pointer' : 'not-allowed',
           }}
-          disabled={!isValid}
+          disabled={!isEmailValid || !isPasswordValid}
         >
           Login
         </button>
@@ -118,7 +125,7 @@ export default function LoginPage() {
 
       <SocialLogo />
       <S.Buttons>
-        <S.Button>Finding Passwords</S.Button>
+        <S.Button onClick={() => navigate('/finding')}>Finding Passwords</S.Button>
         <S.Button onClick={() => navigate('/signup')}>Sign up</S.Button>
       </S.Buttons>
     </S.Container>

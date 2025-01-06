@@ -160,7 +160,7 @@ export default function SignupPage() {
 
               {/* 인증 코드 입력 */}
               <S.Wrapper>
-                <CodeInput placeholder="Code" value={code} onChange={handleCodeChange} isValid={isCodeValid} autoComplete="off" />
+                <CodeInput placeholder="Code" value={code} onChange={handleCodeChange} isValid={isCodeValid} />
                 {codeMessage && (
                   <S.MessageWrapper>
                     <ValidataionMessage message={codeMessage} isError={!isCodeValid} />
@@ -190,10 +190,11 @@ export default function SignupPage() {
                   isValid={isRepasswordValid}
                 />
               </S.Wrapper>
+              {isCodeValid && (!isPasswordValid || !isRepasswordValid) && <S.Info>8 or more including numbers, letters, and special characters</S.Info>}
               {passwordMessage && (
-                <S.MessageWrapper2>
+                <S.MessageWrapper>
                   <ValidataionMessage message={passwordMessage} isError={!isEmailValid || !isPasswordValid || !isRepasswordValid} />
-                </S.MessageWrapper2>
+                </S.MessageWrapper>
               )}
               <button
                 type="button"
