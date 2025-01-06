@@ -137,4 +137,10 @@ const Inputs = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
-export { BackButton, Backdrop, Container, Form, Form2, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
+
+const Info = styled.div`
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  font-size: 10px;
+  line-height: 15px;
+`;
+export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };

@@ -30,7 +30,7 @@ const Form = styled.form`
   gap: 15px;
   ${({ theme }) => theme.align.column_center};
 
-  width: 100%;
+  width: 300px;
 
   span {
     ${({ theme }) => theme.text.medium_14};
@@ -67,9 +67,22 @@ const Wrapper = styled.div`
 
 const MessageWrapper = styled.div`
   display: flex;
-  position: absolute;
-  top: 2px;
-  right: 0;
 `;
-
-export { Button, Buttons, Container, Container2, Description, Form, MessageWrapper, Texts, Title, Wrapper };
+const BackButton = styled.button`
+  height: 27px;
+  ${({ theme }) => theme.text.medium_18}
+  position: absolute;
+  gap: 4px;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  color: white;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  ${({ theme }) => theme.align.row_center};
+  img {
+    height: 24px;
+    width: 24px;
+  }
+`;
+export { BackButton, Button, Buttons, Container, Container2, Description, Form, MessageWrapper, Texts, Title, Wrapper };
