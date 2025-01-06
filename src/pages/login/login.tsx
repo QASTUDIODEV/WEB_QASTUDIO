@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AuthInput from '@/components/auth/input/authInput';
+import AuthInput from '@/components/auth/authInput/authInput';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
