@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { validateEmail, validateNickname, validatePassword } from '@/utils/validate';
+import { validateEmail, validateNickname, validatePassword, validateRepassword } from '@/utils/validate';
 
-import AuthInput from '@/components/auth/input/authInput';
+import AuthInput from '@/components/auth/authInput/authInput';
+import CodeInput from '@/components/auth/codeInput/codeInput';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
@@ -18,17 +19,23 @@ type TValid = undefined | boolean;
 
 export default function SignupPage() {
   const [step, setStep] = useState(0);
-  const [message, setMessage] = useState('');
+  const [emailMessage, setEamilMessage] = useState('');
+  const [nicknameMessage, setNicknameMessage] = useState('');
+
+  const [passwordMessage, setPasswordMessage] = useState('');
+
   const [codeMessage, setCodeMessage] = useState('');
 
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [repassword, setRepassword] = useState('');
   const [isCodeValid, setIsCodeValid] = useState<TValid>(undefined);
   const [isEmailValid, setIsEmailValid] = useState<TValid>(undefined);
   const [isPasswordValid, setIsPasswordValid] = useState<TValid>(undefined);
   const [isNicknameValid, setIsNicknameValid] = useState<TValid>(undefined);
+  const [isRepasswordValid, setIsRepasswordValid] = useState<TValid>(undefined);
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
   const contentInputRef = useRef<HTMLInputElement | null>(null);
@@ -72,7 +79,7 @@ export default function SignupPage() {
     const emailError = validateEmail(emailValue);
 
     setIsEmailValid(!emailError);
-    setMessage(emailError || '');
+    setEamilMessage(emailError || '');
   };
 
   // 닉네임 입력 변경
@@ -82,7 +89,7 @@ export default function SignupPage() {
     const validationErrors = validateNickname(nicknameValue);
 
     setIsNicknameValid(validationErrors.length === 0);
-    setMessage(validationErrors[0] || '');
+    setNicknameMessage(validationErrors[0] || '');
   };
 
   // 비밀번호 입력 변경
@@ -92,7 +99,15 @@ export default function SignupPage() {
     const passwordError = validatePassword(passwordValue);
 
     setIsPasswordValid(!passwordError);
-    setMessage(passwordError || '');
+    setPasswordMessage(passwordError || '');
+  };
+
+  const handleRePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const repasswordValue = e.target.value;
+    setRepassword(repasswordValue);
+    const repasswordError = validateRepassword(password, repasswordValue);
+    setIsRepasswordValid(!repasswordError);
+    setPasswordMessage(repasswordError || '');
   };
 
   // 마지막 폼 제출
@@ -117,7 +132,7 @@ export default function SignupPage() {
               {/* 이메일 입력 */}
               <S.Wrapper>
                 <span>Email</span>
-                <AuthInput placeholder="Email" type="email" value={email} onChange={handleEmailChange} autoComplete="email" />
+                <AuthInput placeholder="Email" type="email" value={email} onChange={handleEmailChange} autoComplete="email" isValid={isEmailValid} />
                 <button
                   type="button"
                   style={{
@@ -136,16 +151,16 @@ export default function SignupPage() {
                 >
                   Verify
                 </button>
-                {message && (
+                {emailMessage && (
                   <S.MessageWrapper2>
-                    <ValidataionMessage message={message} isError={!isEmailValid || !isPasswordValid} />
+                    <ValidataionMessage message={emailMessage} isError={!isEmailValid || !isPasswordValid || !isRepasswordValid} />
                   </S.MessageWrapper2>
                 )}
               </S.Wrapper>
 
               {/* 인증 코드 입력 */}
               <S.Wrapper>
-                <AuthInput placeholder="Code" type="text" value={code} onChange={handleCodeChange} isValid={isCodeValid} autoComplete="off" />
+                <CodeInput placeholder="Code" value={code} onChange={handleCodeChange} isValid={isCodeValid} autoComplete="off" />
                 {codeMessage && (
                   <S.MessageWrapper>
                     <ValidataionMessage message={codeMessage} isError={!isCodeValid} />
@@ -156,17 +171,38 @@ export default function SignupPage() {
               {/* 비밀번호 입력 */}
               <S.Wrapper>
                 <span>Password</span>
-                <AuthInput placeholder="Password" type="password" value={password} onChange={handlePasswordChange} autoComplete="password" />
+                <AuthInput
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  autoComplete="password"
+                  isValid={isPasswordValid}
+                />
               </S.Wrapper>
-
+              <S.Wrapper>
+                <AuthInput
+                  placeholder="Re-enter Password"
+                  type="password"
+                  value={repassword}
+                  onChange={handleRePasswordChange}
+                  autoComplete="password"
+                  isValid={isRepasswordValid}
+                />
+              </S.Wrapper>
+              {passwordMessage && (
+                <S.MessageWrapper2>
+                  <ValidataionMessage message={passwordMessage} isError={!isEmailValid || !isPasswordValid || !isRepasswordValid} />
+                </S.MessageWrapper2>
+              )}
               <button
                 type="button"
                 onClick={() => {
                   setStep(1);
-                  setMessage('');
+                  setPasswordMessage('');
                 }}
                 style={buttonStyles}
-                disabled={!isEmailValid || !isPasswordValid || !isCodeValid}
+                disabled={!isEmailValid || !isPasswordValid || !isCodeValid || !isRepasswordValid}
               >
                 Sign up
               </button>
@@ -191,9 +227,9 @@ export default function SignupPage() {
             </S.ProfileImg>
 
             <S.Wrapper>
-              {message && (
+              {nicknameMessage && (
                 <S.MessageWrapper2>
-                  <ValidataionMessage message={message} isError={!isNicknameValid} />
+                  <ValidataionMessage message={nicknameMessage} isError={!isNicknameValid} />
                 </S.MessageWrapper2>
               )}
               <span>Nickname</span>

@@ -7,9 +7,7 @@ const Container = styled.div`
   gap: 30px;
   border-radius: 16px;
   z-index: 1;
-  box-shadow: -1px 1px 4px 0px #1b3159;
-  background: linear-gradient(76deg, #0e2245 0%, #000714 100.13%);
-  background-color: #16181c;
+  background-color: ${({ theme }) => theme.colors.black};
 `;
 
 const Form = styled.form`
