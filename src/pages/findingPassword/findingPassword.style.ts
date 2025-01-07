@@ -6,6 +6,7 @@ const Container = styled.div`
   gap: 20px;
   border-radius: 16px;
   z-index: 1;
+  position: relative;
   background-color: ${({ theme }) => theme.colors.black};
 `;
 const Container2 = styled.div`
@@ -67,6 +68,7 @@ const Wrapper = styled.div`
 
 const MessageWrapper = styled.div`
   display: flex;
+  width: 100%;
 `;
 const BackButton = styled.button`
   height: 27px;
