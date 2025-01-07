@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { validateCode, validateEmail, validateNickname, validateNotBlankCode, validatePassword, validateRepassword } from '@/utils/validate';
+import { validateSignup } from '@/utils/validate';
 
-import AuthInput from '@/components/auth/authInput/authInput';
-import CodeInput from '@/components/auth/codeInput/codeInput';
+import useForm from '@/hooks/auth/useForm';
+
+import { CodeModule, ErrorDownModule, ErrorTopModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
-import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Profile from '@/components/common/profile/profile';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
@@ -15,39 +15,26 @@ import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/signup/signup.style';
 
-function SignupPage() {
-  const [step, setStep] = useState(0);
-  const [messages, setMessages] = useState({
-    email: '',
-    nickname: '',
-    password: '',
-    code: '',
-    repassword: '',
-  });
-  const [inputs, setInputs] = useState({
-    email: '',
-    code: '',
-    password: '',
-    nickname: '',
-    repassword: '',
-  });
-  const [validations, setValidations] = useState<{
-    email: boolean | undefined;
-    code: boolean | undefined;
-    codeMatch: boolean | undefined;
-    password: boolean | undefined;
-    nickname: boolean | undefined;
-    repassword: boolean | undefined;
-  }>({
-    email: undefined,
-    code: undefined,
-    codeMatch: undefined,
-    password: undefined,
-    nickname: undefined,
-    repassword: undefined,
-  });
-  const [isValid, setIsValid] = useState(false);
+type TCodeVerify = undefined | boolean;
 
+function SignupPage() {
+  const signup = useForm({
+    initialValue: {
+      email: '',
+      password: '',
+      repassword: '',
+      code: '',
+      nickname: '',
+      authCode: '',
+    },
+    validate: validateSignup,
+  });
+
+  const [step, setStep] = useState(0);
+
+  const [isValid, setIsValid] = useState(false);
+  const [codeVerify, setCodeVerify] = useState<TCodeVerify>(undefined);
+  const [AuthCode, setAuthCode] = useState('');
   const navigate = useNavigate();
   const contentInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -67,57 +54,30 @@ function SignupPage() {
     contentInputRef.current?.click();
   };
 
-  const validateInput = (field: string, value: string) => {
-    switch (field) {
-      case 'email':
-        return validateEmail(value);
-      case 'code':
-        return validateNotBlankCode(value);
-      case 'nickname':
-        return validateNickname(value)[0];
-      case 'password':
-        return validatePassword(value);
-      case 'repassword':
-        return validateRepassword(inputs.password, value);
-      default:
-        return '';
+  useEffect(() => {
+    if (!signup.errors.email && !signup.errors.password && !signup.errors.code && !signup.errors.repassword && !signup.errors.nickname) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    const { value } = e.target;
-    setInputs((prev) => ({ ...prev, [field]: value }));
-
-    const error = validateInput(field, value);
-    setValidations((prev) => ({
-      ...prev,
-      [field]: !error,
-    }));
-    setMessages((prev) => ({
-      ...prev,
-      [field]: error || '',
-    }));
-  };
+  }, [signup.errors, signup.values]);
 
   const handleSendCode = () => {
-    if (validations.email) {
+    if (!signup.errors.email) {
       alert('해당 이메일로 인증 코드가 발송되었습니다');
       setStep(1);
+      setAuthCode('1234'); //추후 API 요청해서 받아온 인증 값으로 변경 예정
     } else {
       alert('올바른 이메일을 입력해주세요');
     }
   };
 
   const handleVerifyCode = () => {
-    const codeError = validateCode(inputs.code, '1234');
-    setValidations((prev) => ({
-      ...prev,
-      codeMatch: codeError === undefined ? false : !codeError,
-    }));
-    setMessages((prev) => ({
-      ...prev,
-      code: codeError || 'Authentication completed',
-    }));
+    if (signup.values.code === AuthCode) {
+      setCodeVerify(true);
+    } else {
+      setCodeVerify(false);
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
@@ -130,83 +90,60 @@ function SignupPage() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && validations.email) {
+      if (step === 0 && signup.valid.email) {
         handleSendCode();
       }
-      if (step === 1 && validations.code && !isValid) {
+      if (step === 1 && signup.valid.code && !isValid) {
         handleVerifyCode();
       }
       if (step === 1 && isValid) {
         handleNextStep();
       }
-      if (step === 2 && validations.nickname) {
-        handleSubmit(inputs.email, inputs.password, inputs.nickname);
+      if (step === 2 && signup.valid.nickname) {
+        handleSubmit(signup.values.email, signup.values.password, signup.values.nickname);
       }
     }
   };
 
-  useEffect(() => {
-    if (validations.codeMatch && validations.email && validations.password && validations.repassword) {
-      setIsValid(true);
-    }
-  }, [validations]);
-
   const renderStep0 = () => (
     <>
       <S.Inputs>
-        <S.Wrapper>
-          <span>Email</span>
-          <AuthInput
-            placeholder="Email"
-            type="email"
-            value={inputs.email}
-            onChange={(e) => handleInputChange(e, 'email')}
-            autoComplete="email"
-            isValid={validations.email}
-          />
-          <div style={{ width: '80px', position: 'absolute', top: '22px', right: '-90px' }}>
-            <button type="button" style={buttonStyles(validations.email)} onClick={handleSendCode} disabled={!validations.email}>
-              Send
-            </button>
-          </div>
-
-          {messages.email && (
-            <S.MessageWrapper2>
-              <ValidataionMessage message={messages.email} isError={!validations.email} />
-            </S.MessageWrapper2>
-          )}
-        </S.Wrapper>
-
-        <S.Wrapper>
-          <span>Password</span>
-          <AuthInput
-            placeholder="Password"
-            type="password"
-            value={inputs.password}
-            onChange={(e) => handleInputChange(e, 'password')}
-            autoComplete="password"
-            isValid={validations.password}
-          />
-        </S.Wrapper>
-
-        <S.Wrapper>
-          <AuthInput
-            placeholder="Password"
-            type="password"
-            value={inputs.repassword}
-            onChange={(e) => handleInputChange(e, 'repassword')}
-            autoComplete="password"
-            isValid={validations.repassword}
-          />
-        </S.Wrapper>
-
-        {messages.password && (
-          <S.MessageWrapper>
-            <ValidataionMessage message={messages.password} isError={!validations.password || !validations.repassword} />
-          </S.MessageWrapper>
-        )}
-
-        <button type="button" onClick={handleNextStep} style={buttonStyles(isValid)} disabled={!isValid}>
+        <ErrorTopModule
+          name="email"
+          Name="Email"
+          span="Email"
+          btnName="Send"
+          touched={signup.touched.email}
+          valid={signup.valid.email}
+          errorMessage={signup.errors.email}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('email')}
+        />
+        <ErrorDownModule
+          name="password"
+          Name="Password"
+          span="Password"
+          touched={signup.touched.password}
+          valid={signup.valid.password}
+          errorMessage={signup.errors.password}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('password')}
+        />
+        <ErrorDownModule
+          name="password"
+          Name="Password"
+          touched={signup.touched.repassword}
+          valid={signup.valid.repassword}
+          errorMessage={signup.errors.repassword}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('repassword')}
+        />
+        <button
+          type="button"
+          onClick={handleNextStep}
+          style={buttonStyles(isValid)}
+          disabled={!signup.valid.email && !signup.valid.code && !signup.valid.password && !signup.valid.repassword}
+        >
           Sign up
         </button>
       </S.Inputs>
@@ -222,96 +159,51 @@ function SignupPage() {
   const renderStep1 = () => (
     <>
       <S.Inputs>
-        <S.Wrapper>
-          <span>Email</span>
-          <AuthInput
-            placeholder="Email"
-            type="email"
-            value={inputs.email}
-            onChange={(e) => handleInputChange(e, 'email')}
-            autoComplete="email"
-            isValid={validations.email}
-          />
-          <div style={{ width: '80px', position: 'absolute', top: '24px', right: '-90px' }}>
-            <button type="button" style={buttonStyles(validations.email)} onClick={handleSendCode} disabled={!validations.email}>
-              ReSend
-            </button>
-          </div>
-
-          {messages.email && (
-            <S.MessageWrapper2>
-              <ValidataionMessage message={messages.email} isError={!validations.email} />
-            </S.MessageWrapper2>
-          )}
-        </S.Wrapper>
-
-        <S.Wrapper>
-          <CodeInput
-            placeholder="Code"
-            value={inputs.code}
-            onChange={(e) => handleInputChange(e, 'code')}
-            isValid={validations.code && validations.codeMatch}
-          />
-          {messages.code && (
-            <S.MessageWrapper>
-              <ValidataionMessage message={messages.code} isError={!validations.code || !validations.codeMatch} />
-            </S.MessageWrapper>
-          )}
-          <button
-            type="button"
-            style={{
-              position: 'absolute',
-              right: '-90px',
-              width: '79px',
-              padding: '0px 10px',
-              backgroundColor: validations.email ? (validations.codeMatch ? '#007f7f' : '#0d409d') : '#a0a0a0',
-              color: validations.email ? 'white' : '#d3d3d3', //임시로 막아봤습니다
-              cursor: validations.email ? (validations.codeMatch ? 'not-allowed' : 'pointer') : 'not-allowed',
-              border: 'none',
-              borderRadius: '4px',
-            }}
-            onClick={handleVerifyCode}
-            disabled={!validations.email}
-          >
-            Verify
-          </button>
-        </S.Wrapper>
-        <S.Wrapper>
-          <span>Password</span>
-          <AuthInput
-            placeholder="Password"
-            value={inputs.password}
-            onChange={(e) => handleInputChange(e, 'password')}
-            type="password"
-            autoComplete="password"
-            isValid={validations.password}
-          />
-          {messages.password && (
-            <S.MessageWrapper>
-              <ValidataionMessage message={messages.password} isError={!validations.password} />
-            </S.MessageWrapper>
-          )}
-        </S.Wrapper>
-        <S.Wrapper>
-          <AuthInput
-            placeholder="Password"
-            value={inputs.repassword}
-            onChange={(e) => handleInputChange(e, 'repassword')}
-            type="password"
-            autoComplete="password"
-            isValid={validations.repassword}
-          />
-          {messages.repassword && (
-            <S.MessageWrapper>
-              <ValidataionMessage message={messages.repassword} isError={!validations.repassword} />
-            </S.MessageWrapper>
-          )}
-        </S.Wrapper>
+        <ErrorTopModule
+          name="email"
+          Name="Email"
+          span="Email"
+          btnName="Resend"
+          touched={signup.touched.email}
+          valid={signup.valid.email}
+          errorMessage={signup.errors.email}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('email')}
+        />
+        <CodeModule
+          touched={signup.touched.code}
+          valid={signup.valid.code}
+          errorMessage={signup.errors.code}
+          Name={'Code'}
+          name={'code'}
+          codeVerify={codeVerify}
+          handleVerifyCode={handleVerifyCode}
+          {...signup.getTextInputProps('code')}
+        />
+        <ErrorDownModule
+          name="password"
+          Name="Password"
+          span="Password"
+          touched={signup.touched.password}
+          valid={signup.valid.password}
+          errorMessage={signup.errors.password}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('password')}
+        />
+        <ErrorDownModule
+          name="password"
+          Name="Password"
+          touched={signup.touched.repassword}
+          valid={signup.valid.repassword}
+          errorMessage={signup.errors.repassword}
+          handleSendCode={handleSendCode}
+          {...signup.getTextInputProps('repassword')}
+        />
         <button
           type="button"
           onClick={handleNextStep}
-          style={buttonStyles(validations.email && validations.codeMatch && validations.password && validations.repassword)}
-          disabled={!validations.email || !validations.codeMatch || !validations.password || !validations.repassword}
+          style={buttonStyles(signup.valid.email && signup.valid.code && signup.valid.password && signup.valid.repassword)}
+          disabled={!signup.valid.email && !signup.valid.code && !signup.valid.password && !signup.valid.repassword}
         >
           Sign up
         </button>
@@ -333,29 +225,21 @@ function SignupPage() {
           <ProfileEdit />
         </S.ProfileEditBtn>
       </S.ProfileImg>
-
-      <S.Wrapper>
-        <span>Nickname</span>
-        <AuthInput
-          placeholder="Nickname"
-          type="text"
-          value={inputs.nickname}
-          onChange={(e) => handleInputChange(e, 'nickname')}
-          autoComplete="nickname"
-          isValid={validations.nickname}
-        />
-        {messages.nickname && (
-          <S.MessageWrapper>
-            <ValidataionMessage message={messages.nickname} isError={!validations.nickname} />
-          </S.MessageWrapper>
-        )}
-      </S.Wrapper>
+      <ErrorTopModule
+        name="nickname"
+        Name="Nickname"
+        span="Nickname"
+        touched={signup.touched.nickname}
+        valid={signup.valid.nickname}
+        errorMessage={signup.errors.nickname}
+        {...signup.getTextInputProps('nickname')}
+      />
       <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
       <button
         type="button"
-        onClick={() => handleSubmit(inputs.email, inputs.password, inputs.nickname)}
-        style={buttonStyles(validations.nickname)}
-        disabled={!validations.nickname}
+        onClick={() => handleSubmit(signup.values.email, signup.values.password, signup.values.nickname)}
+        style={buttonStyles(signup.valid.nickname)}
+        disabled={!signup.valid.nickname}
       >
         Sign up
       </button>

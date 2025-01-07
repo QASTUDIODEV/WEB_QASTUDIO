@@ -7,6 +7,7 @@ const Container = styled.div`
   border-radius: 16px;
   z-index: 1;
   position: relative;
+  min-height: 299px;
   background-color: ${({ theme }) => theme.colors.black};
 `;
 const Container2 = styled.div`

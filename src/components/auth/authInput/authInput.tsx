@@ -13,7 +13,7 @@ export type TAuthInput = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function AuthInput({ placeholder, type, isValid, autoComplete, value, onChange }: TAuthInput) {
+export default function AuthInput({ placeholder, type, isValid, autoComplete, ...rest }: TAuthInput) {
   const [passwordType, setPasswordType] = useState('password');
 
   return (
@@ -23,8 +23,7 @@ export default function AuthInput({ placeholder, type, isValid, autoComplete, va
         type={type === 'password' ? passwordType : type}
         $isValid={isValid}
         autoComplete={type === 'password' ? (passwordType === 'text' ? 'current-password' : 'new-password') : autoComplete}
-        value={value}
-        onChange={onChange}
+        {...rest}
       />
       {type === 'password' && (
         <S.Eyes onClick={() => setPasswordType((prevType) => (prevType === 'password' ? 'text' : 'password'))} $active={passwordType === 'text'}>
