@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { validateEmail, validatePassword, validateRepassword } from '@/utils/validate';
+import { validateCode, validateEmail, validatePassword, validateRepassword } from '@/utils/validate';
 
 import AuthInput from '@/components/auth/authInput/authInput';
 import CodeInput from '@/components/auth/codeInput/codeInput';
@@ -24,6 +24,9 @@ export default function FindingPassword() {
   const [isPasswordValid, setIsPasswordValid] = useState<TValid>(undefined);
   const [isRepasswordValid, setIsRepasswordValid] = useState<TValid>(undefined);
   const [passwordMessage, setPasswordMessage] = useState('');
+  const [repasswordMessage, setRepasswordMessage] = useState('');
+
+  const [emailMessage, setEmailMessage] = useState('');
 
   const [isEmailValid, setIsEmailValid] = useState<TValid>(undefined);
   const navigate = useNavigate();
@@ -32,30 +35,27 @@ export default function FindingPassword() {
     const emailValue = e.target.value;
     setEmail(emailValue);
     const emailError = validateEmail(emailValue);
-
     setIsEmailValid(!emailError);
+    setEmailMessage(emailError || '');
   };
 
-  // 코드 실시간 검증
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const codeValue = e.target.value;
     setCode(codeValue);
-
-    if (codeValue === '1234') {
-      setIsCodeValid(true);
-      setCodeMessage('Authentication completed');
-    } else {
-      setIsCodeValid(false);
-      setCodeMessage('The code is not correct');
-    }
+    const codeError = validateCode(codeValue, '1234');
+    setIsCodeValid(!codeError);
+    setCodeMessage(codeError);
   };
 
-  // 비밀번호 입력 변경
+  const handleVerify = () => {
+    setStep(1);
+    alert('해당 이메일로 인증 코드가 발송되었습니다');
+  };
+
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
     const passwordError = validatePassword(passwordValue);
-
     setIsPasswordValid(!passwordError);
     setPasswordMessage(passwordError || '');
   };
@@ -65,39 +65,60 @@ export default function FindingPassword() {
     setRepassword(repasswordValue);
     const repasswordError = validateRepassword(password, repasswordValue);
     setIsRepasswordValid(!repasswordError);
-    setPasswordMessage(repasswordError || '');
+    setRepasswordMessage(repasswordError || '');
   };
 
-  // 마지막 폼 제출
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const handleSubmit = (userEmail: string, newPassword: string) => {
     navigate('/');
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.code === 'Enter') {
+      e.preventDefault();
+      if (step === 0 && isEmailValid) {
+        handleVerify();
+      }
+      if (step === 1 && isCodeValid) {
+        setStep(2);
+      }
+      if (step === 2 && isPasswordValid && isRepasswordValid) {
+        handleSubmit(email, password);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isCodeValid) {
+      setStep(2);
+    }
+  }, [isCodeValid]);
+
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
-      <S.Form>
+      <S.Form onKeyDown={(e) => handleKeyDown(e)}>
         {step === 0 && (
           <>
             <S.Wrapper>
               <span>Email</span>
-              <AuthInput
-                placeholder={'Email'}
-                type="email"
-                value={email}
-                onChange={handleEmailChange} // 이메일 값 변경
-                autoComplete="email"
-              />
+              <AuthInput placeholder={'Email'} type="email" value={email} onChange={handleEmailChange} autoComplete="email" isValid={isEmailValid} />
+              {emailMessage && (
+                <S.MessageWrapper>
+                  <ValidataionMessage message={emailMessage} isError={!isEmailValid} />
+                </S.MessageWrapper>
+              )}
             </S.Wrapper>
             <button
-              onClick={() => setStep(1)}
+              onClick={handleVerify}
+              type="button"
               style={{
                 width: '100%',
                 borderRadius: '4px',
                 border: 'none',
                 height: '40px',
                 backgroundColor: isEmailValid ? '#0d409d' : '#a0a0a0',
-                color: isEmailValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
+                color: isEmailValid ? 'white' : '#d3d3d3',
                 cursor: isEmailValid ? 'pointer' : 'not-allowed',
               }}
               disabled={!isEmailValid}
@@ -110,13 +131,7 @@ export default function FindingPassword() {
           <>
             <S.Wrapper>
               <span>Email</span>
-              <AuthInput
-                placeholder={'Email'}
-                type="email"
-                value={email}
-                onChange={handleEmailChange} // 이메일 값 변경
-                autoComplete="email"
-              />
+              <AuthInput placeholder={'Email'} type="email" value={email} onChange={handleEmailChange} autoComplete="email" isValid={isEmailValid} />
             </S.Wrapper>
             <S.Wrapper>
               <CodeInput placeholder={'Code'} value={code} onChange={handleCodeChange} />
@@ -127,19 +142,20 @@ export default function FindingPassword() {
               </S.MessageWrapper>
             )}
             <button
-              onClick={() => setStep(2)}
+              type="button"
+              onClick={handleVerify}
               style={{
                 width: '100%',
                 borderRadius: '4px',
                 border: 'none',
                 height: '40px',
                 backgroundColor: isEmailValid ? '#0d409d' : '#a0a0a0',
-                color: isEmailValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
+                color: isEmailValid ? 'white' : '#d3d3d3',
                 cursor: isEmailValid ? 'pointer' : 'not-allowed',
               }}
               disabled={!isEmailValid}
             >
-              Sign up
+              Resend code
             </button>
           </>
         )}
@@ -155,6 +171,11 @@ export default function FindingPassword() {
                 autoComplete="password"
                 isValid={isPasswordValid}
               />
+              {passwordMessage && (
+                <S.MessageWrapper>
+                  <ValidataionMessage message={passwordMessage} isError={!isPasswordValid} />
+                </S.MessageWrapper>
+              )}
             </S.Wrapper>
             <S.Wrapper>
               <span>Password</span>
@@ -166,21 +187,22 @@ export default function FindingPassword() {
                 autoComplete="password"
                 isValid={isRepasswordValid}
               />
+              {repasswordMessage && (
+                <S.MessageWrapper>
+                  <ValidataionMessage message={repasswordMessage} isError={!isRepasswordValid} />
+                </S.MessageWrapper>
+              )}
             </S.Wrapper>
-            {passwordMessage && (
-              <S.MessageWrapper>
-                <ValidataionMessage message={passwordMessage} isError={!isEmailValid || !isPasswordValid || !isRepasswordValid} />
-              </S.MessageWrapper>
-            )}
+
             <button
-              onClick={handleSubmit}
+              onClick={() => handleSubmit(email, password)}
               style={{
                 width: '100%',
                 borderRadius: '4px',
                 border: 'none',
                 height: '40px',
                 backgroundColor: isPasswordValid && isRepasswordValid ? '#0d409d' : '#a0a0a0',
-                color: isPasswordValid && isRepasswordValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
+                color: isPasswordValid && isRepasswordValid ? 'white' : '#d3d3d3',
                 cursor: isPasswordValid && isRepasswordValid ? 'pointer' : 'not-allowed',
               }}
               disabled={!isPasswordValid || !isRepasswordValid}

@@ -1,43 +1,68 @@
-const nicknamePattern = /^[a-zA-Z]{1,9}$/;
+const nicknamePattern = /^[a-zA-Z0-9가-힣]+$/;
 
 function validateNickname(nickname: string) {
   const errors: string[] = [];
 
   if (!nickname) {
     errors.push('Nickname is required.');
-  } else if (nickname.length > 21) {
-    errors.push('닉네임은 20자 이하여야 합니다.');
+  } else if (nickname.length > 20) {
+    errors.push('Invalid format.');
   } else if (!nicknamePattern.test(nickname)) {
-    errors.push('닉네임은 영어만 허용됩니다.');
+    errors.push('Invalid format.');
   }
+
   return errors;
 }
 
 function validateEmail(email: string): string {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!email) {
-    return 'Emails are required.';
+    return 'Required.';
   } else if (!emailRegex.test(email)) {
-    return '올바른 이메일 형식이 아닙니다.';
+    return 'Must be email format';
   }
   return ''; // 유효한 이메일
 }
 
 function validatePassword(password: string): string {
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
+
   if (!password) {
-    return 'Password is required.';
-  } else if (password.length < 8) {
-    return '비밀번호는 8자 이상이어야 합니다.';
+    return 'Required.';
+  } else if (password.length < 8 || password.length > 20) {
+    return '8-20 chars, letters, numbers, symbols.';
+  } else if (!regex.test(password)) {
+    return '8-20 chars, letters, numbers, symbols.';
   }
+
   return ''; // 유효한 비밀번호
 }
 
 function validateRepassword(password: string, repassword: string): string {
   if (!repassword) {
-    return 'Confirmation password is required.';
+    return 'Passwords must match.';
   } else if (password !== repassword) {
-    return 'The Password is not correct';
+    return 'Passwords must match.';
   }
   return '';
 }
-export { validateEmail, validateNickname, validatePassword, validateRepassword };
+
+function validateCode(enterCode: string, code: string): string {
+  if (!enterCode) {
+    return 'Required';
+  } else if (enterCode !== code) {
+    return 'Invalid code';
+  } else {
+    return '';
+  }
+}
+
+function validateNotBlankCode(code: string): string {
+  if (!code) {
+    return 'Required';
+  } else {
+    return '';
+  }
+}
+
+export { validateCode, validateEmail, validateNickname, validateNotBlankCode, validatePassword, validateRepassword };
