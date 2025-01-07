@@ -15,8 +15,7 @@ export const SideBar = styled.div<{ hasScroll: boolean }>`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 15.313%;
-  padding-left: 10.938%;
+  padding: 15.313% 10.938% 0 10.938%;
 `;
 
 export const Profile = styled.div`
@@ -24,6 +23,7 @@ export const Profile = styled.div`
   display: flex;
   align-items: center;
   gap: 2.5%;
+  cursor: pointer;
 `;
 
 export const ProfileImg = styled.img`
@@ -87,6 +87,7 @@ export const Project = styled.div`
 
 export const SemiBox = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   gap: 4.05%;
 `;
