@@ -9,10 +9,10 @@ export type TAuthInput = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function CodeInput({ placeholder, isValid, value, onChange }: TAuthInput) {
+export default function CodeInput({ placeholder, isValid, ...rest }: TAuthInput) {
   return (
     <S.Container>
-      <S.Input placeholder={placeholder} $isValid={isValid} value={value} onChange={onChange} />
+      <S.Input placeholder={placeholder} $isValid={isValid} {...rest} />
     </S.Container>
   );
 }

@@ -1,17 +1,15 @@
 const nicknamePattern = /^[a-zA-Z0-9가-힣]+$/;
 
 function validateNickname(nickname: string) {
-  const errors: string[] = [];
-
   if (!nickname) {
-    errors.push('Nickname is required.');
+    return 'Nickname is required.';
   } else if (nickname.length > 20) {
-    errors.push('Invalid format.');
+    return 'Invalid format.';
   } else if (!nicknamePattern.test(nickname)) {
-    errors.push('Invalid format.');
+    return 'Invalid format.';
   }
 
-  return errors;
+  return '';
 }
 
 function validateEmail(email: string): string {
@@ -47,7 +45,14 @@ function validateRepassword(password: string, repassword: string): string {
   return '';
 }
 
-function validateCode(enterCode: string, code: string): string {
+function validateCode(code: string): string {
+  if (!code) {
+    return 'Required';
+  } else {
+    return '';
+  }
+}
+function validateMatchCode(enterCode: string, code: string): string {
   if (!enterCode) {
     return 'Required';
   } else if (enterCode !== code) {
@@ -56,13 +61,74 @@ function validateCode(enterCode: string, code: string): string {
     return '';
   }
 }
+type TSignup = {
+  email: string;
+  password: string;
+  repassword: string;
+  code: string;
+  nickname: string;
+  authCode: string;
+};
 
-function validateNotBlankCode(code: string): string {
-  if (!code) {
-    return 'Required';
-  } else {
-    return '';
-  }
+type TLogin = {
+  email: string;
+  password: string;
+};
+
+type TFinding = {
+  email: string;
+  password: string;
+  repassword: string;
+  code: string;
+  authCode: string;
+};
+
+function validateSignup(values: TSignup) {
+  const errors = {
+    email: '',
+    password: '',
+    repassword: '',
+    code: '',
+    nickname: '',
+    authCode: '',
+  };
+
+  errors.email = validateEmail(values.email);
+  errors.password = validatePassword(values.password);
+  errors.repassword = validateRepassword(values.password, values.repassword);
+  errors.code = validateCode(values.code);
+  errors.authCode = validateMatchCode(values.code, values.authCode);
+  errors.nickname = validateNickname(values.nickname);
+  return errors;
 }
 
-export { validateCode, validateEmail, validateNickname, validateNotBlankCode, validatePassword, validateRepassword };
+function validateFinding(values: TFinding) {
+  const errors = {
+    email: '',
+    password: '',
+    repassword: '',
+    code: '',
+    authCode: '',
+  };
+
+  errors.email = validateEmail(values.email);
+  errors.password = validatePassword(values.password);
+  errors.repassword = validateRepassword(values.password, values.repassword);
+  errors.code = validateCode(values.code);
+  errors.authCode = validateMatchCode(values.code, values.authCode);
+
+  return errors;
+}
+
+function validateLogin(values: TLogin) {
+  const errors = {
+    email: '',
+    password: '',
+  };
+
+  errors.email = validateEmail(values.email);
+  errors.password = validatePassword(values.password);
+
+  return errors;
+}
+export { validateFinding, validateLogin, validateSignup };
