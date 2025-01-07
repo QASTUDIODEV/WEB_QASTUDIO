@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as S from '@/components/common/sidebar/sidebar.style';
 
@@ -10,6 +11,7 @@ import SenarioLogo from '@/assets/icons/file_branch.svg?react';
 import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
+import Out from '@/assets/icons/logout.svg?react';
 import SearchImg from '@/assets/icons/search.svg?react';
 
 type TUserProfile = {
@@ -21,11 +23,11 @@ type TUserProfile = {
 type TProject = {
   id: number;
   name: string;
-  owner: TUserProfile; // 생성자 정보
+  owner: TUserProfile;
 };
 
 export default function Sidebar() {
-  // 더미 데이터
+  const navigate = useNavigate();
   const userProfile: TUserProfile = {
     id: 1,
     name: 'eunji',
@@ -35,20 +37,19 @@ export default function Sidebar() {
   const [projects, setProjects] = useState<TProject[]>([
     { id: 1, name: 'UMC_PM_DAY', owner: { id: 2, name: 'user1', profileImg: '/path/to/user1.jpg' } },
     { id: 2, name: 'Project_2', owner: { id: 3, name: 'user2', profileImg: '/path/to/user2.jpg' } },
-    { id: 3, name: 'Project_3', owner: userProfile }, // 내 프로젝트
+    { id: 3, name: 'Project_3', owner: userProfile },
   ]);
 
-  const [menuStates, setMenuStates] = useState<boolean[]>(new Array(projects.length).fill(false)); // 프로젝트 토글 상태
+  const [menuStates, setMenuStates] = useState<boolean[]>(new Array(projects.length).fill(false));
   const [hasScroll, setHasScroll] = useState(false);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
-  // 스크롤 이벤트 처리
-  const handleScroll = () => {
-    setHasScroll(true);
-  };
-
   useEffect(() => {
     const sidebar = sidebarRef.current;
+
+    const handleScroll = () => {
+      setHasScroll(true);
+    };
 
     if (sidebar) {
       sidebar.addEventListener('scroll', handleScroll);
@@ -61,25 +62,27 @@ export default function Sidebar() {
     };
   }, []);
 
-  // 메뉴 토글
   const toggleMenu = (index: number) => {
     setMenuStates((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
   };
 
-  // 새로운 프로젝트 추가
   const addProject = () => {
     const newProject: TProject = {
       id: projects.length + 1,
       name: `Project_${projects.length + 1}`,
-      owner: userProfile, // 현재 사용자
+      owner: userProfile,
     };
     setProjects((prevProjects) => [...prevProjects, newProject]);
-    setMenuStates((prevStates) => [...prevStates, false]); // 새로운 토글 상태 추가
+    setMenuStates((prevStates) => [...prevStates, false]);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/', { replace: true });
   };
 
   return (
     <S.SideBar ref={sidebarRef} hasScroll={hasScroll}>
-      {/* 상단 유저 프로필 */}
       <S.Container>
         <Logo width={32} height={32} />
         <S.StyledNavLink to={`/mypage`}>
@@ -96,8 +99,6 @@ export default function Sidebar() {
           <S.SearchText placeholder="Search" />
         </S.Search>
       </S.Container>
-
-      {/* 프로젝트 리스트 */}
       <S.Projects>
         <S.ProjectText>Projects</S.ProjectText>
         <Plus onClick={addProject} />
@@ -140,8 +141,10 @@ export default function Sidebar() {
           </S.ProjectContents>
         </div>
       ))}
-
-      {/* 하단 여백 */}
+      <S.Logout onClick={handleLogout}>
+        Logout
+        <Out />
+      </S.Logout>
       {hasScroll && <S.FooterPadding />}
     </S.SideBar>
   );

@@ -133,3 +133,16 @@ export const FooterPadding = styled.div`
   height: 40px;
   background: none;
 `;
+
+export const Logout = styled.div`
+  padding: 0 10.938% 15.313% 10.938%;
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  ${({ theme }) => theme.text.medium_18};
+  gap: 10px;
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+`;
