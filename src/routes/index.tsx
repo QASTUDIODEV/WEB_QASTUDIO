@@ -8,7 +8,6 @@ import GithubOAuthHandler from '@/pages/auth/githubOAuth';
 import GoogleOAuthHandler from '@/pages/auth/googleOAuth';
 import KakaoOAuthHandler from '@/pages/auth/kakaoOAuth';
 import DashboardPage from '@/pages/dashboard/dashboard';
-import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
 import MyPage from '@/pages/mypage/mypage';
 import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
@@ -42,6 +41,12 @@ export const router = createBrowserRouter([
     element: <ScenarioActPage />,
   },
   {
+    path: '/mypage',
+    element: <MainLayout />,
+    children: [{ index: true, element: <MyPage /> }],
+  },
+
+  {
     path: `/`,
     element: <AuthLayout />,
     children: [
@@ -49,14 +54,6 @@ export const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupPage />,
-      },
-      {
-        path: '/mypage',
-        element: <MyPage />,
-      },
-      {
-        path: '/finding',
-        element: <FindingPassword />,
       },
     ],
   },
