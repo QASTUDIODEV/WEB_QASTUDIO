@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
+import AddProjectPage from '@/pages/addProject/addProject';
 import BasicOAuthHandler from '@/pages/auth/basicOAuth';
 import GithubOAuthHandler from '@/pages/auth/githubOAuth';
 import GoogleOAuthHandler from '@/pages/auth/googleOAuth';
@@ -58,7 +59,7 @@ export const router = createBrowserRouter([
     path: '/project',
     element: <MainLayout />,
     children: [
-      { index: true, element: <DashboardPage /> },
+      { index: true, element: <AddProjectPage /> },
       {
         path: 'dashboard/:projectId',
         element: <DashboardPage />,
