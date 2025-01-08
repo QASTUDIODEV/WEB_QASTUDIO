@@ -29,7 +29,7 @@ const Eyes = styled.div<{ $active?: boolean }>`
   right: 10px;
   top: 10px;
   svg {
-    fill: ${({ $active, theme }) => ($active ? theme.colors.gray.gray_700 : '#999999')};
+    fill: ${({ $active, theme }) => ($active ? theme.colors.gray.gray_700 : theme.colors.gray.gray_300)};
   }
 `;
 export { Container, Eyes, Input };
