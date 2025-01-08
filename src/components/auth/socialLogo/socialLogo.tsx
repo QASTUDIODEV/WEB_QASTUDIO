@@ -13,8 +13,8 @@ export default function SocialLogo() {
       <S.Logo color="#FEE500">
         <KakaoLogo />
       </S.Logo>
-      <S.Logo color="black">
-        <GithubLogo style={{ width: '40px', height: '40px' }} />
+      <S.Logo color="black" isGithub={true}>
+        <GithubLogo />
       </S.Logo>
     </S.LoginButtons>
   );

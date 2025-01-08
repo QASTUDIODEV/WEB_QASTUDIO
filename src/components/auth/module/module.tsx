@@ -13,6 +13,7 @@ type TModuleProps = {
   span?: string;
   Name: string;
   name: string;
+  top: boolean;
 };
 
 type TCodeModuleProps = {
@@ -27,40 +28,29 @@ type TCodeModuleProps = {
   handleVerifyCode: () => void;
 };
 
-export function ErrorTopModule({ btnName, touched, valid, errorMessage, span, name, Name, handleSendCode, ...rest }: TModuleProps) {
+export function InputModule({ btnName, touched, valid, errorMessage, span, name, Name, handleSendCode, top, ...rest }: TModuleProps) {
   return (
     <S.Wrapper>
       {span && <span>{span}</span>}
       <S.Wrapper2>
-        <AuthInput placeholder={Name} type={name} autoComplete={name} isValid={touched ? valid : true} {...rest} />
+        <AuthInput
+          placeholder={Name}
+          type={name}
+          autoComplete={name}
+          isValid={touched ? valid : true}
+          errorMessage={errorMessage}
+          touched={touched}
+          top={top}
+          {...rest}
+        />
         {btnName && (
-          <div style={{ position: 'absolute', right: '-90px', top: '0' }}>
+          <S.ButtonWrapper>
             <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid}>
               {btnName}
             </AuthButton>
-          </div>
+          </S.ButtonWrapper>
         )}
       </S.Wrapper2>
-
-      {errorMessage && touched && (
-        <S.MessageWrapper2>
-          <ValidataionMessage message={errorMessage} isError={!valid} />
-        </S.MessageWrapper2>
-      )}
-    </S.Wrapper>
-  );
-}
-
-export function ErrorDownModule({ touched, valid, errorMessage, span, name, Name, ...rest }: TModuleProps) {
-  return (
-    <S.Wrapper>
-      <span>{span}</span>
-      <AuthInput placeholder={Name} type={name} autoComplete={name} isValid={touched ? valid : true} {...rest} />
-      {errorMessage && touched && (
-        <S.MessageWrapper>
-          <ValidataionMessage message={errorMessage} isError={!valid} />
-        </S.MessageWrapper>
-      )}
     </S.Wrapper>
   );
 }

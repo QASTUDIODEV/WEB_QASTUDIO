@@ -6,7 +6,7 @@ import { validateLogin } from '@/utils/validate';
 import useForm from '@/hooks/auth/useForm';
 
 import AuthButton from '@/components/auth/authButton/authButton';
-import { ErrorDownModule } from '@/components/auth/module/module';
+import { InputModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 
@@ -43,21 +43,22 @@ export default function LoginPage() {
         </S.Texts>
         <S.Form onSubmit={handleSubmit}>
           {/* 유효성 검사에 따라 메시지 출력 */}
-          <ErrorDownModule
+          <InputModule
             name="email"
             Name="Email"
             span="Email"
-            btnName="Send"
+            top={true}
             touched={login.touched.email}
             valid={login.valid.email}
             errorMessage={login.errors.email}
             {...login.getTextInputProps('email')}
           />
 
-          <ErrorDownModule
+          <InputModule
             name="password"
             Name="Password"
             span="Password"
+            top={false}
             touched={login.touched.password}
             valid={login.valid.password}
             errorMessage={login.errors.password}
