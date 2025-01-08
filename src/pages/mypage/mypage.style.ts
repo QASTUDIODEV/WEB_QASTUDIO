@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+type TBannerImg = {
+  url?: string;
+};
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -10,6 +14,22 @@ const Container = styled.div`
   max-width: 1200px;
   gap: 20px;
 `;
+const Title = styled.div`
+  width: 79px;
+  height: 29px;
+  top: 80px;
+  left: 352px;
+  gap: 0px;
+  opacity: 0px;
+  font-family: Pretendard;
+  font-size: 19.2px;
+  font-weight: 500;
+  line-height: 28.8px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+`;
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -19,8 +39,17 @@ const ProfileWrapper = styled.div`
   border-radius: 12.8px;
   align-items: end;
   justify-content: space-between;
-  background: linear-gradient(0deg, rgba(0, 7, 20, 0.8) 0%, rgba(0, 7, 20, 0) 100%),
-    url('https://img.freepik.com/free-photo/cartoon-style-summer-scene-with-cute-animals_23-2151068415.jpg');
+`;
+
+const BannerImg = styled.div<TBannerImg>`
+  border-radius: 12.8px;
+  width: 100%;
+  position: absolute;
+  height: 320px;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  background: linear-gradient(0deg, rgba(0, 7, 20, 0.8) 0%, rgba(0, 7, 20, 0) 100%), url(${({ url }) => url});
   background-size: cover;
   background-position: center;
 `;
@@ -138,6 +167,7 @@ const ProfileImg = styled.div`
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
   position: relative;
+  z-index: 1;
   &:hover {
     cursor: pointer;
   }
@@ -169,6 +199,7 @@ const ProfileEditBtn = styled.button`
 `;
 export {
   Account,
+  BannerImg,
   Buttons,
   Container,
   ProfileEditBtn,
@@ -182,6 +213,7 @@ export {
   TBody,
   TD,
   TH,
+  Title,
   TR,
   UserInfo,
 };
