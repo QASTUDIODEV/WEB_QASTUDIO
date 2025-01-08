@@ -6,17 +6,20 @@ import * as S from '@/pages/projectInfo/projectInfo.style';
 export default function ProjectInfoPage() {
   return (
     <S.Container>
-      <S.BoxContainer>
+      <S.Profile>
+        <S.ProfileImg />
+        <S.ProfileName>ProjectName</S.ProfileName>
+      </S.Profile>
+      <S.Box height="18%">
+        <S.Title>Introduction to the Project</S.Title>
+        <S.Text>
+          사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다. <br />
+          (두줄까지 들어갈 수 있습니다.)
+        </S.Text>
+      </S.Box>
+      <S.SemiBox>
         <S.Left>
-          <S.Profile>
-            <S.ProfileImg />
-            <S.ProfileName>ProjectName</S.ProfileName>
-          </S.Profile>
-          <S.Box height="17.2413%" padding="2.155172% 3.23276%">
-            <S.Title>Introduction to the Project</S.Title>
-            <S.Text>Please upload the project</S.Text>
-          </S.Box>
-          <S.Box height="43.1034%" padding="2.155172% 3.23276%">
+          <S.Box height="64.19117647058824%">
             <S.Title>Add Project File</S.Title>
             <S.Text>
               Please enter the project folder for AI to understand the project.
@@ -28,7 +31,7 @@ export default function ProjectInfoPage() {
               <span className="text">Upload Project File (.zip)</span>
             </S.TextBtn>
           </S.Box>
-          <S.Box height="23.0603%" padding="2.155172% 3.23276%">
+          <S.Box height="33.6%">
             <S.Title>Add Character</S.Title>
             <S.Text>
               Please set up a user character to use the service.
@@ -42,27 +45,15 @@ export default function ProjectInfoPage() {
           </S.Box>
         </S.Left>
         <S.Right>
-          <S.Profile>
-            <S.ProfileImg />
-            <S.ProfileName>ProjectName</S.ProfileName>
-          </S.Profile>
-          <S.Box height="64.65518%" padding="5.882352% 8.82352%">
+          <S.Box height="100%">
             <S.Title>Team Members</S.Title>
-            <S.TextBtn width="38.82352941%" height="7.833333333%" padding="2.941176471% 5.882352941%">
+            <S.TextBtn width="38.82352941%" height="7.833333333%">
               <Plus />
               <span className="text">Invite</span>
             </S.TextBtn>
           </S.Box>
-          <S.Box height="23.06034%" padding="5.882352% 8.82352%">
-            <S.Title>View QA Sheet</S.Title>
-            <S.Text>Check the QA sheet</S.Text>
-            <S.TextBtn width="40.33333333%" height="21.96261%" padding="2.941176471% 5.882352941%">
-              <Locate />
-              <span className="text">Locate</span>
-            </S.TextBtn>
-          </S.Box>
         </S.Right>
-      </S.BoxContainer>
+      </S.SemiBox>
     </S.Container>
   );
 }
