@@ -2,9 +2,13 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   color: #d6deec;
-  background: var(--primary-pri_900, #000714);
+  background: ${({ theme }) => theme.colors.primary.pri_900};
   width: 100%;
   flex: 1;
+  height: 100vh;
+  padding: 6.375% 7.5% 3.125% 7.5%;
+  display: flex;
+  flex-direction: column;
 `;
 const Profile = styled.div`
   display: flex;
@@ -13,26 +17,26 @@ const Profile = styled.div`
 `;
 
 const ProfileImg = styled.img`
-  width: 32px;
-  height: 32px;
+  width: 25.6px;
+  height: 25.6px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const ProfileName = styled.p`
   font-family: Pretendard;
-  font-size: 24px;
+  font-size: 19.2px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%;
-  letter-spacing: 0.48px;
+  line-height: 150%; /* 28.8px */
+  letter-spacing: 0.384px;
 `;
 
-const Box = styled.div<{ height: string; padding: string }>`
+const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
   border-radius: 8px;
-  padding: ${(props) => props.padding};
+  padding: 16px 24px;
   position: relative;
 `;
 
@@ -52,32 +56,24 @@ const Right = styled.div`
   margin-left: 2.94112%;
 `;
 
-const BoxContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 6.375% 7.5% 3.125% 7.5%;
-  display: flex;
-`;
-
 const Title = styled.p`
-  color: var(--primary-pri_50, #dfe8f9);
+  color: ${({ theme }) => theme.colors.primary.pri_50};
   font-family: Pretendard;
-  font-size: 22px;
+  font-size: 17.6px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
-  letter-spacing: 0.44px;
+  letter-spacing: 0.352px;
 `;
 
 const Text = styled.p`
-  color: var(--gray-gray_300, #999);
-  padding-top: 1.960784%;
+  color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
-  font-size: 18px;
+  font-size: 14.4px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
-  letter-spacing: 0.36px;
+  letter-spacing: 0.288px;
 `;
 
 const TextBtn = styled.button<{ width: string; height: string; color?: string; padding?: string }>`
@@ -109,4 +105,10 @@ const TextBtn = styled.button<{ width: string; height: string; color?: string; p
   }
 `;
 
-export { Box, BoxContainer, Container, Left, Profile, ProfileImg, ProfileName, Right, Text, TextBtn, Title };
+const SemiBox = styled.div`
+  display: flex;
+  height: 100%;
+  margin-top: 32px;
+`;
+
+export { Box, Container, Left, Profile, ProfileImg, ProfileName, Right, SemiBox, Text, TextBtn, Title };
