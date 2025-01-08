@@ -5,6 +5,7 @@ import { validateFinding } from '@/utils/validate';
 
 import useForm from '@/hooks/auth/useForm';
 
+import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, ErrorDownModule, ErrorTopModule } from '@/components/auth/module/module';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
@@ -141,22 +142,12 @@ export default function FindingPassword() {
               span={'Re-enter Password'}
               {...finding.getTextInputProps('repassword')}
             />
-
-            <button
-              onClick={() => handleSubmit(finding.values.email, finding.values.password)}
-              style={{
-                width: '100%',
-                borderRadius: '4px',
-                border: 'none',
-                height: '40px',
-                backgroundColor: finding.valid.password && finding.valid.repassword ? '#0d409d' : '#a0a0a0',
-                color: finding.valid.password && finding.valid.repassword ? 'white' : '#d3d3d3',
-                cursor: finding.valid.password && finding.valid.repassword ? 'pointer' : 'not-allowed',
-              }}
+            <AuthButton
               disabled={!finding.valid.password || !finding.valid.repassword}
+              onClick={() => handleSubmit(finding.values.email, finding.values.password)}
             >
               Go to the login
-            </button>
+            </AuthButton>
           </>
         )}
       </S.Form>

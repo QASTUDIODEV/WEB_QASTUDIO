@@ -5,6 +5,7 @@ import { validateSignup } from '@/utils/validate';
 
 import useForm from '@/hooks/auth/useForm';
 
+import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, ErrorDownModule, ErrorTopModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -37,17 +38,6 @@ function SignupPage() {
   const [AuthCode, setAuthCode] = useState('');
   const navigate = useNavigate();
   const contentInputRef = useRef<HTMLInputElement | null>(null);
-
-  // 추후 삭제 예정
-  const buttonStyles = (enabled: boolean | undefined) => ({
-    width: '100%',
-    borderRadius: '4px',
-    border: 'none',
-    backgroundColor: enabled ? '#0d409d' : '#a0a0a0',
-    color: enabled ? 'white' : '#d3d3d3',
-    cursor: enabled ? 'pointer' : 'not-allowed',
-    height: '40px',
-  });
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.preventDefault(); // 클릭 시 기본 동작을 방지
@@ -96,7 +86,7 @@ function SignupPage() {
       if (step === 1 && signup.valid.code && !isValid) {
         handleVerifyCode();
       }
-      if (step === 1 && isValid) {
+      if (step === 1 && signup.valid.code && signup.valid.email && signup.valid.password && signup.valid.repassword) {
         handleNextStep();
       }
       if (step === 2 && signup.valid.nickname) {
@@ -138,14 +128,9 @@ function SignupPage() {
           handleSendCode={handleSendCode}
           {...signup.getTextInputProps('repassword')}
         />
-        <button
-          type="button"
-          onClick={handleNextStep}
-          style={buttonStyles(isValid)}
-          disabled={!signup.valid.email && !signup.valid.code && !signup.valid.password && !signup.valid.repassword}
-        >
+        <AuthButton type="button" format="normal" onClick={handleNextStep} disabled={!isValid}>
           Sign up
-        </button>
+        </AuthButton>
       </S.Inputs>
       <OrDivider />
       <SocialLogo />
@@ -199,14 +184,14 @@ function SignupPage() {
           handleSendCode={handleSendCode}
           {...signup.getTextInputProps('repassword')}
         />
-        <button
+        <AuthButton
           type="button"
+          format="normal"
           onClick={handleNextStep}
-          style={buttonStyles(signup.valid.email && signup.valid.code && signup.valid.password && signup.valid.repassword)}
-          disabled={!signup.valid.email && !signup.valid.code && !signup.valid.password && !signup.valid.repassword}
+          disabled={!signup.valid.code || !signup.valid.email || !signup.valid.password || !signup.valid.repassword}
         >
           Sign up
-        </button>
+        </AuthButton>
       </S.Inputs>
       <OrDivider />
       <SocialLogo />
@@ -235,14 +220,14 @@ function SignupPage() {
         {...signup.getTextInputProps('nickname')}
       />
       <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
-      <button
+      <AuthButton
         type="button"
+        format="normal"
         onClick={() => handleSubmit(signup.values.email, signup.values.password, signup.values.nickname)}
-        style={buttonStyles(signup.valid.nickname)}
         disabled={!signup.valid.nickname}
       >
         Sign up
-      </button>
+      </AuthButton>
     </>
   );
 

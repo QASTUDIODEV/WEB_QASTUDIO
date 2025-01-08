@@ -97,7 +97,10 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
 `;
-
+const Wrapper2 = styled.div`
+  display: flex;
+  position: relative;
+`;
 const Backdrop = styled.div`
   position: absolute;
   opacity: 0;
@@ -143,4 +146,4 @@ const Info = styled.div`
   font-size: 10px;
   line-height: 15px;
 `;
-export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
+export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper, Wrapper2 };
