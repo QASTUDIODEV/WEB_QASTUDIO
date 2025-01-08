@@ -1,17 +1,8 @@
 import * as S from './module.style';
+import AuthButton from '../authButton/authButton';
 import AuthInput from '../authInput/authInput';
 import CodeInput from '../codeInput/codeInput';
 import ValidataionMessage from '../validationMessage/validationMessage';
-
-const buttonStyles = (enabled: boolean | undefined) => ({
-  width: '100%',
-  borderRadius: '4px',
-  border: 'none',
-  backgroundColor: enabled ? '#0d409d' : '#a0a0a0',
-  color: enabled ? 'white' : '#d3d3d3',
-  cursor: enabled ? 'pointer' : 'not-allowed',
-  height: '40px',
-});
 
 type TModuleProps = {
   btnName?: string;
@@ -40,14 +31,17 @@ export function ErrorTopModule({ btnName, touched, valid, errorMessage, span, na
   return (
     <S.Wrapper>
       {span && <span>{span}</span>}
-      <AuthInput placeholder={Name} type={name} autoComplete={name} isValid={touched ? valid : true} {...rest} />
-      {btnName && (
-        <div style={{ width: '80px', position: 'absolute', top: '25px', right: '-90px' }}>
-          <button type="button" style={buttonStyles(valid && touched)} onClick={handleSendCode} disabled={!valid}>
-            {btnName}
-          </button>
-        </div>
-      )}
+      <S.Wrapper2>
+        <AuthInput placeholder={Name} type={name} autoComplete={name} isValid={touched ? valid : true} {...rest} />
+        {btnName && (
+          <div style={{ position: 'absolute', right: '-90px', top: '0' }}>
+            <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid}>
+              {btnName}
+            </AuthButton>
+          </div>
+        )}
+      </S.Wrapper2>
+
       {errorMessage && touched && (
         <S.MessageWrapper2>
           <ValidataionMessage message={errorMessage} isError={!valid} />
@@ -84,25 +78,11 @@ export function CodeModule({ touched, valid, errorMessage, Name, codeVerify, han
           codeVerify === false && <ValidataionMessage message={'Invalid code.'} isError={true} />
         )}
       </S.MessageWrapper>
-      <button
-        type="button"
-        style={{
-          position: 'absolute',
-          right: '-90px',
-          width: '79px',
-          padding: '0px 10px',
-          backgroundColor: valid ? (codeVerify ? '#007f7f' : '#0d409d') : '#a0a0a0',
-          color: valid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
-          cursor: valid ? (codeVerify ? 'not-allowed' : 'pointer') : 'not-allowed',
-          border: 'none',
-          borderRadius: '4px',
-          height: '41px',
-        }}
-        onClick={handleVerifyCode}
-        disabled={!valid}
-      >
-        Verify
-      </button>
+      <div style={{ position: 'absolute', right: '-90px' }}>
+        <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeVerify={codeVerify}>
+          Verify
+        </AuthButton>
+      </div>
     </S.Wrapper>
   );
 }

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { validateLogin } from '@/utils/validate';
 
 import useForm from '@/hooks/auth/useForm';
 
+import AuthButton from '@/components/auth/authButton/authButton';
 import { ErrorDownModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -12,8 +13,6 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
-
-type TValid = undefined | boolean;
 
 export default function LoginPage() {
   const login = useForm({
@@ -28,11 +27,6 @@ export default function LoginPage() {
     validate: validateLogin,
   });
   const navigate = useNavigate();
-
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [isEmailValid, setIsEmailValid] = useState<TValid>(undefined);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [isPasswordValid, setIsPasswordValid] = useState<TValid>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,21 +65,10 @@ export default function LoginPage() {
           />
         </S.Form>
         {/* 임시 버튼 */}
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            borderRadius: '4px',
-            border: 'none',
-            height: '40px',
-            backgroundColor: isEmailValid && isPasswordValid ? '#0d409d' : '#a0a0a0',
-            color: isEmailValid && isPasswordValid ? 'white' : '#d3d3d3', //임시로 막아봤습니다
-            cursor: isEmailValid && isPasswordValid ? 'pointer' : 'not-allowed',
-          }}
-          disabled={!isEmailValid || !isPasswordValid}
-        >
+        <AuthButton format="normal" disabled={!login.valid.email || !login.valid.password} type={'submit'}>
           Login
-        </button>
+        </AuthButton>
+
         <OrDivider />
       </S.Container2>
 
