@@ -130,4 +130,58 @@ const TBody = styled.tbody`
   height: auto;
   gap: 8px;
 `;
-export { Account, Buttons, Container, ProfileWrapper, ProjectList, ProjectNameTD, ProjectNum, Projects, Table, TBody, TD, TH, TR, UserInfo };
+
+const ProfileImg = styled.div`
+  width: 112px;
+  height: 112px;
+  border-radius: 100%;
+  background-color: #505050;
+  ${({ theme }) => theme.align.row_center};
+  position: relative;
+  &:hover {
+    cursor: pointer;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+const ProfileEditBtn = styled.button`
+  background-color: ${({ theme }) => theme.colors.point.point_2};
+  border-radius: 100%;
+  ${({ theme }) => theme.align.row_center};
+  position: absolute;
+  width: 44.8px;
+  height: 44.8px;
+  top: 67.2px;
+  left: 67.2px;
+  padding: 9.6px 8.8px 9.6px 10.4px;
+  gap: 0px;
+  border-radius: 79.2px;
+  opacity: 0px;
+
+  border: none;
+  z-index: 2;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+export {
+  Account,
+  Buttons,
+  Container,
+  ProfileEditBtn,
+  ProfileImg,
+  ProfileWrapper,
+  ProjectList,
+  ProjectNameTD,
+  ProjectNum,
+  Projects,
+  Table,
+  TBody,
+  TD,
+  TH,
+  TR,
+  UserInfo,
+};
