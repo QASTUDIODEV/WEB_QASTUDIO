@@ -32,8 +32,13 @@ const buttonTypes = {
     width: 79px;
     height: 41px;
     border: none;
-    background-color: ${({ valid, codeVerify }) => (valid ? (codeVerify ? '#007f7f' : '#0d409d') : '#a0a0a0')};
-    color: ${({ valid }) => (valid ? 'white' : '#d3d3d3')};
+    background-color: ${({ valid, codeVerify, theme }) => {
+      if (valid) {
+        return codeVerify ? theme.colors.point.point_1 : theme.colors.point.point_2;
+      }
+      return theme.colors.gray.gray_500;
+    }};
+    color: #ffffff;
   `,
 };
 
