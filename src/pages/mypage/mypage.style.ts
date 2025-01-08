@@ -48,7 +48,6 @@ const BannerImg = styled.div<TBannerImg>`
   height: 320px;
   top: 0;
   left: 0;
-  object-fit: cover;
   background: linear-gradient(0deg, rgba(0, 7, 20, 0.8) 0%, rgba(0, 7, 20, 0) 100%), url(${({ url }) => url});
   background-size: cover;
   background-position: center;
