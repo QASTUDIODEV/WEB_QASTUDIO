@@ -24,11 +24,17 @@ export default function MyPage() {
     { name: 'UMC_PM_DAY', participants: '12', date: '2025.01.09' },
     // 테스트 용, 추후 삭제 예정
   ];
-  const contentInputRef = useRef<HTMLInputElement | null>(null);
+  const bannerInputRef = useRef<HTMLInputElement | null>(null);
+  const profileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleInputClick = (e: React.MouseEvent) => {
+  const handleBannerInputClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    contentInputRef.current?.click();
+    bannerInputRef.current?.click();
+  };
+
+  const handleProfileInputClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    profileInputRef.current?.click();
   };
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -38,17 +44,19 @@ export default function MyPage() {
   };
   return (
     <S.Container>
-      <span>My Page</span>
+      <S.Title>My Page</S.Title>
       <S.ProfileWrapper>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <S.ProfileImg onClick={handleInputClick}>
+        <S.BannerImg onClick={handleBannerInputClick} url={'https://cdn.imweb.me/upload/S202207202685e30f16e24/8b48c67f8cdf6.jpeg'} />
+        <input className="banner-image-upload" ref={bannerInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+        <div style={{ display: 'flex', gap: '20px', zIndex: '1' }}>
+          <S.ProfileImg onClick={handleProfileInputClick}>
             <Profile />
             <S.ProfileEditBtn>
               {/* 아이콘은 추후에 수정하겠습니다..... */}
               <Edit />
             </S.ProfileEditBtn>
           </S.ProfileImg>
-          <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+          <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
           {isEdit ? (
             <S.UserInfo>
               <Input value={nickname} width="268px" onChange={handleNicknameChange} />
@@ -64,13 +72,13 @@ export default function MyPage() {
           )}
         </div>
         {isEdit ? (
-          <div>
+          <div style={{ zIndex: '2' }}>
             <Button type="small_square" color="default" disabled={false} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
               Done
             </Button>
           </div>
         ) : (
-          <div>
+          <div style={{ zIndex: '2' }}>
             <Button type="small_square" color="default" disabled={false} icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
               Edit
             </Button>
