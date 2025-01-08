@@ -41,6 +41,12 @@ export const router = createBrowserRouter([
     element: <ScenarioActPage />,
   },
   {
+    path: '/mypage',
+    element: <MainLayout />,
+    children: [{ index: true, element: <MyPage /> }],
+  },
+
+  {
     path: `/`,
     element: <AuthLayout />,
     children: [
@@ -48,10 +54,6 @@ export const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupPage />,
-      },
-      {
-        path: '/mypage',
-        element: <MyPage />,
       },
     ],
   },
