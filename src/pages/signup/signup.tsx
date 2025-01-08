@@ -188,7 +188,7 @@ function SignupPage() {
           type="button"
           format="normal"
           onClick={handleNextStep}
-          disabled={!signup.valid.code || !signup.valid.email || !signup.valid.password || !signup.valid.repassword}
+          disabled={!signup.valid.code || !codeVerify || !signup.valid.email || !signup.valid.password || !signup.valid.repassword}
         >
           Sign up
         </AuthButton>
