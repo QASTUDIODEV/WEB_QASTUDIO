@@ -46,44 +46,54 @@ export default function MyPage() {
     <S.Container>
       <S.Title>My Page</S.Title>
       <S.ProfileWrapper>
+        {/* 임시로 이미지 아무거나 넣어둠 */}
         <S.BannerImg onClick={handleBannerInputClick} url={'https://cdn.imweb.me/upload/S202207202685e30f16e24/8b48c67f8cdf6.jpeg'} />
         <input className="banner-image-upload" ref={bannerInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
-        <div style={{ display: 'flex', gap: '20px', zIndex: '1' }}>
-          <S.ProfileImg onClick={handleProfileInputClick}>
-            <Profile />
-            <S.ProfileEditBtn>
-              {/* 아이콘은 추후에 수정하겠습니다..... */}
-              <Edit />
-            </S.ProfileEditBtn>
-          </S.ProfileImg>
-          <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+        <S.Profile>
           {isEdit ? (
-            <S.UserInfo>
-              <Input value={nickname} width="268px" onChange={handleNicknameChange} />
-              <S.Account>email.email.com</S.Account>
-              {/* 소셜 로그인 아이콘 추가 예정 */}
-            </S.UserInfo>
+            <S.Container2>
+              <div style={{ display: 'flex', gap: '15px' }}>
+                <S.ProfileImg onClick={handleProfileInputClick} className="hover">
+                  <Profile />
+                  <S.ProfileEditBtn>
+                    {/* 아이콘은 추후에 수정하겠습니다..... */}
+                    <Edit />
+                  </S.ProfileEditBtn>
+                </S.ProfileImg>
+                <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+                <S.UserInfo>
+                  <Input value={nickname} width="268px" onChange={handleNicknameChange} />
+                  <S.Account>email.email.com</S.Account>
+                  {/* 소셜 로그인 아이콘 추가 예정 */}
+                </S.UserInfo>
+              </div>
+
+              <div style={{ zIndex: '2', alignSelf: 'end' }}>
+                <Button type="small_square" color="default" disabled={false} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
+                  Done
+                </Button>
+              </div>
+            </S.Container2>
           ) : (
-            <S.UserInfo>
-              <span>{nickname}</span>
-              <S.Account>email.email.com</S.Account>
-              {/* 소셜 로그인 아이콘 추가 예정 */}
-            </S.UserInfo>
+            <S.Container2>
+              <div style={{ display: 'flex', gap: '15px' }}>
+                <S.ProfileImg>
+                  <Profile />
+                </S.ProfileImg>
+                <S.UserInfo>
+                  <span>{nickname}</span>
+                  <S.Account>email.email.com</S.Account>
+                  {/* 소셜 로그인 아이콘 추가 예정 */}
+                </S.UserInfo>
+              </div>
+              <div style={{ zIndex: '2', alignSelf: 'end' }}>
+                <Button type="small_square" color="default" disabled={false} icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
+                  Edit
+                </Button>
+              </div>
+            </S.Container2>
           )}
-        </div>
-        {isEdit ? (
-          <div style={{ zIndex: '2' }}>
-            <Button type="small_square" color="default" disabled={false} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
-              Done
-            </Button>
-          </div>
-        ) : (
-          <div style={{ zIndex: '2' }}>
-            <Button type="small_square" color="default" disabled={false} icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
-              Edit
-            </Button>
-          </div>
-        )}
+        </S.Profile>
       </S.ProfileWrapper>
 
       <S.Projects>

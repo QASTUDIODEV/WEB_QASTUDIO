@@ -13,6 +13,7 @@ const Container = styled.div`
   padding: 30px;
   max-width: 1200px;
   gap: 20px;
+  overflow-y: scroll;
 `;
 const Title = styled.div`
   width: 79px;
@@ -35,32 +36,56 @@ const ProfileWrapper = styled.div`
   display: flex;
   position: relative;
   height: 320px;
-  padding: 10px 20px;
   border-radius: 12.8px;
+  width: 100%;
   align-items: end;
   justify-content: space-between;
+`;
+
+const Profile = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  left: 0px;
+  width: 100%;
+  gap: 20px;
+  z-index: 1;
+  height: 133px;
+  align-items: center;
+  .hover {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 const BannerImg = styled.div<TBannerImg>`
   border-radius: 12.8px;
   width: 100%;
-  position: absolute;
   height: 320px;
-  top: 0;
-  left: 0;
   background: linear-gradient(0deg, rgba(0, 7, 20, 0.8) 0%, rgba(0, 7, 20, 0) 100%), url(${({ url }) => url});
   background-size: cover;
   background-position: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  bottom: 10px;
+  padding: 16px 0;
   span {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-size: 38.4px;
     font-weight: 700;
+    line-height: 57.6px;
+    letter-spacing: 0.02em;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
   }
 `;
 
@@ -68,6 +93,12 @@ const Account = styled.div`
   display: flex;
   font-size: 19.2px;
   font-weight: 500;
+  font-family: Pretendard;
+  line-height: 28.8px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
 `;
 
 const ProjectNum = styled.div`
@@ -95,6 +126,7 @@ const ProjectNum = styled.div`
 
 const Projects = styled.div`
   display: flex;
+  flex: 1;
   gap: 20px;
 `;
 
@@ -167,9 +199,7 @@ const ProfileImg = styled.div`
   ${({ theme }) => theme.align.row_center};
   position: relative;
   z-index: 1;
-  &:hover {
-    cursor: pointer;
-  }
+
   svg {
     width: 24px;
     height: 24px;
@@ -196,11 +226,20 @@ const ProfileEditBtn = styled.button`
     cursor: pointer;
   }
 `;
+
+const Container2 = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 20px;
+`;
 export {
   Account,
   BannerImg,
   Buttons,
   Container,
+  Container2,
+  Profile,
   ProfileEditBtn,
   ProfileImg,
   ProfileWrapper,
