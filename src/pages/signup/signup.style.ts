@@ -59,8 +59,8 @@ const BackButton = styled.button`
 `;
 
 const ProfileImg = styled.div`
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 100%;
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
@@ -75,14 +75,13 @@ const ProfileImg = styled.div`
 `;
 
 const ProfileEditBtn = styled.button`
-  width: 56px;
-  height: 56px;
-  background-color: ${({ theme }) => theme.colors.primary.pri_300};
-  border-radius: 100%;
-  ${({ theme }) => theme.align.row_center};
+  top: 115.2px;
+  left: 115.2px;
+  padding: 9.6px;
+  border-radius: 79.2px;
+  background-color: ${({ theme }) => theme.colors.point.point_2};
+  ${({ theme }) => theme.align.row_center}
   position: absolute;
-  top: 144px;
-  left: 144px;
   border: none;
   z-index: 2;
   &:hover {

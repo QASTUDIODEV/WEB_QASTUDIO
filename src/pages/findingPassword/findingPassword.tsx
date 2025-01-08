@@ -6,7 +6,7 @@ import { validateFinding } from '@/utils/validate';
 import useForm from '@/hooks/auth/useForm';
 
 import AuthButton from '@/components/auth/authButton/authButton';
-import { CodeModule, ErrorDownModule, ErrorTopModule } from '@/components/auth/module/module';
+import { CodeModule, InputModule } from '@/components/auth/module/module';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
@@ -84,7 +84,8 @@ export default function FindingPassword() {
       <S.Form onKeyDown={(e) => handleKeyDown(e)}>
         {step === 0 && (
           <>
-            <ErrorTopModule
+            <InputModule
+              top={true}
               name="email"
               Name="Email"
               span="Email"
@@ -99,7 +100,8 @@ export default function FindingPassword() {
         )}
         {step === 1 && (
           <>
-            <ErrorTopModule
+            <InputModule
+              top={true}
               name="email"
               Name="Email"
               span="Email"
@@ -124,7 +126,8 @@ export default function FindingPassword() {
         )}
         {step === 2 && (
           <>
-            <ErrorDownModule
+            <InputModule
+              top={false}
               touched={finding.touched.password}
               valid={finding.valid.password}
               errorMessage={finding.errors.password}
@@ -133,7 +136,8 @@ export default function FindingPassword() {
               span={'New Password'}
               {...finding.getTextInputProps('password')}
             />
-            <ErrorDownModule
+            <InputModule
+              top={false}
               touched={finding.touched.repassword}
               valid={finding.valid.repassword}
               errorMessage={finding.errors.repassword}

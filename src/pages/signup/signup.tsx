@@ -6,7 +6,7 @@ import { validateSignup } from '@/utils/validate';
 import useForm from '@/hooks/auth/useForm';
 
 import AuthButton from '@/components/auth/authButton/authButton';
-import { CodeModule, ErrorDownModule, ErrorTopModule } from '@/components/auth/module/module';
+import { CodeModule, InputModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import Profile from '@/components/common/profile/profile';
@@ -98,7 +98,7 @@ function SignupPage() {
   const renderStep0 = () => (
     <>
       <S.Inputs>
-        <ErrorTopModule
+        <InputModule
           name="email"
           Name="Email"
           span="Email"
@@ -107,9 +107,10 @@ function SignupPage() {
           valid={signup.valid.email}
           errorMessage={signup.errors.email}
           handleSendCode={handleSendCode}
+          top={true}
           {...signup.getTextInputProps('email')}
         />
-        <ErrorDownModule
+        <InputModule
           name="password"
           Name="Password"
           span="Password"
@@ -117,15 +118,17 @@ function SignupPage() {
           valid={signup.valid.password}
           errorMessage={signup.errors.password}
           handleSendCode={handleSendCode}
+          top={false}
           {...signup.getTextInputProps('password')}
         />
-        <ErrorDownModule
+        <InputModule
           name="password"
           Name="Password"
           touched={signup.touched.repassword}
           valid={signup.valid.repassword}
           errorMessage={signup.errors.repassword}
           handleSendCode={handleSendCode}
+          top={false}
           {...signup.getTextInputProps('repassword')}
         />
         <AuthButton type="button" format="normal" onClick={handleNextStep} disabled={!isValid}>
@@ -144,7 +147,7 @@ function SignupPage() {
   const renderStep1 = () => (
     <>
       <S.Inputs>
-        <ErrorTopModule
+        <InputModule
           name="email"
           Name="Email"
           span="Email"
@@ -153,6 +156,7 @@ function SignupPage() {
           valid={signup.valid.email}
           errorMessage={signup.errors.email}
           handleSendCode={handleSendCode}
+          top={true}
           {...signup.getTextInputProps('email')}
         />
         <CodeModule
@@ -165,7 +169,8 @@ function SignupPage() {
           handleVerifyCode={handleVerifyCode}
           {...signup.getTextInputProps('code')}
         />
-        <ErrorDownModule
+        <InputModule
+          top={false}
           name="password"
           Name="Password"
           span="Password"
@@ -175,13 +180,14 @@ function SignupPage() {
           handleSendCode={handleSendCode}
           {...signup.getTextInputProps('password')}
         />
-        <ErrorDownModule
+        <InputModule
           name="password"
           Name="Password"
           touched={signup.touched.repassword}
           valid={signup.valid.repassword}
           errorMessage={signup.errors.repassword}
           handleSendCode={handleSendCode}
+          top={false}
           {...signup.getTextInputProps('repassword')}
         />
         <AuthButton
@@ -210,7 +216,8 @@ function SignupPage() {
           <ProfileEdit />
         </S.ProfileEditBtn>
       </S.ProfileImg>
-      <ErrorTopModule
+      <InputModule
+        top={true}
         name="nickname"
         Name="Nickname"
         span="Nickname"

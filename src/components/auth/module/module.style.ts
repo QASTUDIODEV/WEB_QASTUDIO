@@ -146,4 +146,25 @@ const Info = styled.div`
   font-size: 10px;
   line-height: 15px;
 `;
-export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper, Wrapper2 };
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  right: -90px;
+  top: 0;
+`;
+export {
+  BackButton,
+  Backdrop,
+  ButtonWrapper,
+  Container,
+  Form,
+  Form2,
+  Info,
+  Inputs,
+  MessageWrapper,
+  MessageWrapper2,
+  ProfileEditBtn,
+  ProfileImg,
+  Wrapper,
+  Wrapper2,
+};

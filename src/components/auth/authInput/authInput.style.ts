@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const InputWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 41px;
-  position: relative;
   border-radius: 4px;
 `;
-
+const Container = styled.div`
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  gap: 5px;
+  position: relative;
+  flex-direction: column;
+`;
 const Input = styled.input<{ $isValid?: boolean }>`
   width: 100%;
   height: 41px;
@@ -30,4 +36,16 @@ const Eyes = styled.div<{ $active?: boolean }>`
     fill: ${({ $active, theme }) => ($active ? theme.colors.gray.gray_700 : theme.colors.gray.gray_300)};
   }
 `;
-export { Container, Eyes, Input };
+
+const MessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const MessageWrapper2 = styled.div`
+  display: flex;
+  position: absolute;
+  top: -24px;
+  right: 0;
+`;
+export { Container, Eyes, Input, InputWrapper, MessageWrapper, MessageWrapper2 };
