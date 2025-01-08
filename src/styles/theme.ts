@@ -162,6 +162,12 @@ const align = {
     justify-content: space-between;
     align-items: center;
   `,
+  column_start: `
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  `,
 };
 
 export type TColorsType = typeof colors;
