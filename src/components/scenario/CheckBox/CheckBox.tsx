@@ -1,22 +1,44 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CheckBoxFalseIcon from '@/assets/icons/check box_false.svg?react';
 import CheckBoxTrueIcon from '@/assets/icons/check box_true.svg?react';
+import { toggleAll, toggleCharacter, toggleScenario } from '@/slices/scenarioSlice';
+import type { TAppDispatch, TRootState } from '@/store/store';
 
 interface ICheckBoxProps {
-  onClick?: () => void;
+  characterId?: number;
+  scenarioId?: number;
+  isAllCheckBox?: boolean;
 }
 
-export default function CheckBox({ onClick }: ICheckBoxProps) {
-  const [isChecked, setIsChecked] = useState(false);
+export default function CheckBox({ characterId, scenarioId, isAllCheckBox = false }: ICheckBoxProps) {
+  const dispatch = useDispatch<TAppDispatch>();
 
-  // 기본 클릭 함수: 체크박스 상태 토글
+  // 체크 여부 판단
+  const isChecked = useSelector((state: TRootState) => {
+    if (isAllCheckBox) {
+      return state.scenario.characters.every((char) => char.isChecked);
+    }
+    if (scenarioId) {
+      const character = state.scenario.characters.find((char) => char.id === characterId);
+      const scenario = character?.scenarios.find((scn) => scn.id === scenarioId);
+      return scenario?.isChecked ?? false;
+    }
+    if (characterId) {
+      const character = state.scenario.characters.find((char) => char.id === characterId);
+      return character?.isChecked ?? false;
+    }
+    return false;
+  });
+
+  // 클릭 함수
   const handleCheckBoxClick = () => {
-    setIsChecked(!isChecked);
-
-    // 추가 onClick 함수
-    if (onClick) {
-      onClick();
+    if (isAllCheckBox) {
+      dispatch(toggleAll());
+    } else if (scenarioId && characterId) {
+      dispatch(toggleScenario({ characterId, scenarioId }));
+    } else if (characterId) {
+      dispatch(toggleCharacter(characterId));
     }
   };
 

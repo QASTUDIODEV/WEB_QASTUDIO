@@ -14,6 +14,7 @@ interface ICharacter {
   isChecked: boolean;
   createdBy: string;
   createdAt: string;
+  isExpanded: boolean;
   scenarios: IScenario[];
 }
 
@@ -31,17 +32,19 @@ const initialState: IScenarioSlice = {
       isChecked: false,
       createdBy: 'User 1',
       createdAt: 'a few seconds ago',
+      isExpanded: false,
       scenarios: [
         { id: 1, name: 'Scenario 1', createdBy: 'User 1', createdAt: 'a few seconds ago', isChecked: false },
         { id: 2, name: 'Scenario 2', createdBy: 'User 2', createdAt: 'a minute ago', isChecked: false },
       ],
     },
     {
-      id: 1,
+      id: 2,
       title: '역할 2',
       isChecked: false,
       createdBy: 'User 3',
       createdAt: 'a few seconds ago',
+      isExpanded: false,
       scenarios: [{ id: 3, name: 'Scenario 3', createdBy: 'User 3', createdAt: 'a few seconds ago', isChecked: false }],
     },
   ],
@@ -83,8 +86,14 @@ const characterSlice = createSlice({
         }
       }
     },
+    toggleExpand: (state, action) => {
+      const character = state.characters.find((char) => char.id === action.payload);
+      if (character) {
+        character.isExpanded = !character.isExpanded;
+      }
+    },
   },
 });
 
-export const { edit, toggleAll, toggleCharacter, toggleScenario } = characterSlice.actions;
+export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand } = characterSlice.actions;
 export default characterSlice.reducer;
