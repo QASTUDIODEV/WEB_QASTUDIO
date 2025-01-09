@@ -6,7 +6,7 @@ const Container = styled.div`
   width: 100%;
   flex: 1;
   height: 100vh;
-  padding: 6.375% 7.5% 3.125% 7.5%;
+  padding: 5% 7.5% 3.125% 7.5%;
   display: flex;
   flex-direction: column;
 `;
@@ -42,6 +42,7 @@ const Box = styled.div<{ height: string }>`
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 `;
 
 const Left = styled.div`
@@ -124,6 +125,7 @@ const CharacterAddBox = styled.div`
   height: 100%;
   width: 13.7254902%;
   ${({ theme }) => theme.align.row_center}
+  cursor: pointer;
 
   svg {
     width: 50%;
@@ -136,6 +138,7 @@ const CharacterBox = styled.div`
   height: 100%;
   width: 13.7254902%;
   padding: 8px 12px;
+  cursor: pointer;
 `;
 type TWrapperProps = {
   top?: string;
