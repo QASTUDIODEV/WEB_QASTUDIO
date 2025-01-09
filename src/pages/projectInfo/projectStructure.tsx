@@ -3,11 +3,14 @@ import Button from '@/components/common/button/button';
 import * as S from '@/pages/projectInfo/projectStructure.style.ts';
 
 import Plus from '@/assets/icons/add.svg?react';
+import Branch from '@/assets/icons/branch.svg?react';
+import FileBranch from '@/assets/icons/file_branch.svg?react';
+import Rights from '@/assets/icons/rights.svg?react';
 
 type TProjectStructureProps = {
   selectedPage: string;
   setSelectedPage: (page: string) => void;
-  onBackToSummary: () => void; // 요약 페이지로 돌아가는 핸들러
+  onBackToSummary: () => void;
 };
 
 function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TProjectStructureProps) {
@@ -47,7 +50,15 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
     >
       <S.Title>Project structure</S.Title>
       <S.TitleBox>
-        <S.TextBold>{selectedPage}</S.TextBold>
+        <S.Wrap>
+          <S.TextBold>{selectedPage}</S.TextBold>
+          {pageDetails && (
+            <>
+              <Branch />
+              <S.Path>{pageDetails.path}</S.Path>
+            </>
+          )}
+        </S.Wrap>
         <S.ButtonWrapper>
           <Button
             type="small_square"
@@ -74,7 +85,6 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
       </S.TitleBox>
       {pageDetails && (
         <S.TextLight>
-          경로: {pageDetails.path}
           <br />
           사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다.
           <br />
@@ -85,9 +95,18 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
         <Plus />
       </S.Wrapper>
       <S.InnerBox>
-        <S.Wrapper top="5.6px" right="8px">
-          <Plus />
-        </S.Wrapper>
+        <S.LRBox width="41.66666667%">
+          <S.Wrap>
+            <Rights />
+            <S.InnerBoxTitle>Access rights</S.InnerBoxTitle>
+          </S.Wrap>
+        </S.LRBox>
+        <S.LRBox width="56.25%">
+          <S.Wrap>
+            <FileBranch />
+            <S.InnerBoxTitle>Scenario</S.InnerBoxTitle>
+          </S.Wrap>
+        </S.LRBox>
       </S.InnerBox>
     </S.Box>
   );
