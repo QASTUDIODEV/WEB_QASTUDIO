@@ -82,6 +82,12 @@ const buttonColors = {
   mint: css`
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme }) => theme.colors.point.point_1};
+    border: none;
+  `,
+  selected: css`
+    color: ${({ theme }) => theme.colors.primary.pri_800};
+    background-color: ${({ theme }) => theme.colors.primary.pri_50};
+    border: none;
   `,
 };
 
@@ -95,7 +101,7 @@ const disabledStyles = css`
 
 export const StyledButton = styled.button<{
   type: 'normal' | 'act' | 'small_round' | 'small_square' | 'tag';
-  color: 'default' | 'blue' | 'gray' | 'green' | 'white_round' | 'red' | 'white_square' | 'mint';
+  color: 'default' | 'blue' | 'gray' | 'green' | 'white_round' | 'red' | 'white_square' | 'mint' | 'selected';
   disabled: boolean;
 }>`
   display: inline-flex;
