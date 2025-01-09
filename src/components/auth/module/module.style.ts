@@ -59,8 +59,8 @@ const BackButton = styled.button`
 `;
 
 const ProfileImg = styled.div`
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   border-radius: 100%;
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
@@ -75,13 +75,14 @@ const ProfileImg = styled.div`
 `;
 
 const ProfileEditBtn = styled.button`
-  top: 115.2px;
-  left: 115.2px;
-  padding: 9.6px;
-  border-radius: 79.2px;
-  background-color: ${({ theme }) => theme.colors.point.point_2};
-  ${({ theme }) => theme.align.row_center}
+  width: 56px;
+  height: 56px;
+  background-color: ${({ theme }) => theme.colors.primary.pri_300};
+  border-radius: 100%;
+  ${({ theme }) => theme.align.row_center};
   position: absolute;
+  top: 144px;
+  left: 144px;
   border: none;
   z-index: 2;
   &:hover {
@@ -96,7 +97,10 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
 `;
-
+const Wrapper2 = styled.div`
+  display: flex;
+  position: relative;
+`;
 const Backdrop = styled.div`
   position: absolute;
   opacity: 0;
@@ -142,4 +146,25 @@ const Info = styled.div`
   font-size: 10px;
   line-height: 15px;
 `;
-export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  right: -90px;
+  top: 0;
+`;
+export {
+  BackButton,
+  Backdrop,
+  ButtonWrapper,
+  Container,
+  Form,
+  Form2,
+  Info,
+  Inputs,
+  MessageWrapper,
+  MessageWrapper2,
+  ProfileEditBtn,
+  ProfileImg,
+  Wrapper,
+  Wrapper2,
+};
