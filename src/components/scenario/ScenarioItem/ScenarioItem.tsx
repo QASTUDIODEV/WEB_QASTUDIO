@@ -4,21 +4,28 @@ import Calender from '@/assets/icons/calender.svg?react';
 import File from '@/assets/icons/file.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 
-export default function ScenarioItem() {
+interface IScenarioItemProps {
+  name: string;
+  createdBy: string;
+  createdAt: string;
+  isChecked: boolean;
+}
+
+export default function ScenarioItem({ name, createdBy, createdAt, isChecked }: IScenarioItemProps) {
   return (
     <S.ScenarioItem>
       <S.ScenarioItemLeftSide>
         <File />
-        <p>시나리오</p>
+        <p>{name}</p>
       </S.ScenarioItemLeftSide>
       <S.ScenarioRightSide>
         <S.Creater>
           <Calender width={24} height={24} />
-          <p>작성자 1</p>
+          <p>{createdBy}</p>
         </S.Creater>
         <S.Elapsed>
           <UserCircle />
-          <p>a few seconds ago</p>
+          <p>{createdAt}</p>
         </S.Elapsed>
       </S.ScenarioRightSide>
     </S.ScenarioItem>

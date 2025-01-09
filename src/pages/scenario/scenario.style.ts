@@ -8,7 +8,7 @@ export const Background = styled.div`
   justify-content: space-between;
   height: 100vh;
   p {
-    color: var(--primary-pri_50, #d9e6ff);
+    color: ${({ theme }) => theme.colors.primary.pri_50};
     font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
@@ -37,12 +37,6 @@ export const Header = styled.div`
     line-height: 150%;
     letter-spacing: 0.48px;
   }
-`;
-
-export const ButtonGroup = styled.div`
-  display: flex;
-  gap: 20px;
-  justify-content: flex-end;
 `;
 
 export const CharactersContainer = styled.div`

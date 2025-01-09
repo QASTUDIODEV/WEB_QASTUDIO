@@ -1,29 +1,64 @@
+import { useDispatch, useSelector } from 'react-redux';
+
 import * as S from '@/components/scenario/CharacterHeader/CharacterHeader.style';
+import CheckBox from '@/components/scenario/CheckBox/CheckBox';
 
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
+import type { TAppDispatch, TRootState } from '@/store/store';
 
-export default function CharacterHeader() {
+interface ICharacterHeaderProps {
+  title: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export default function CharacterHeader({ title, createdBy, createdAt }: ICharacterHeaderProps) {
+  // const dispatch = useDispatch<TAppDispatch>();
+  const isEdit = useSelector((state: TRootState) => state.scenario.isEdit);
   return (
-    <S.CharacterHeader>
-      <S.CharacterHeaderLeftSide>
-        <ArrowUp />
-        <UserProfile />
-        <p>로그인을 하려는 일반인</p>
-      </S.CharacterHeaderLeftSide>
+    <>
+      {isEdit ? (
+        <S.CharacterHeader>
+          <S.CharacterHeaderLeftSide>
+            <CheckBox />
+            <UserProfile />
+            <p>{title}</p>
+          </S.CharacterHeaderLeftSide>
 
-      <S.CharacterHeaderRightSide>
-        <S.Creater>
-          <Calender width={24} height={24} />
-          <p>작성자 1</p>
-        </S.Creater>
-        <S.Elapsed>
-          <UserCircle />
-          <p>a few seconds ago</p>
-        </S.Elapsed>
-      </S.CharacterHeaderRightSide>
-    </S.CharacterHeader>
+          <S.CharacterHeaderRightSide>
+            <S.Creater>
+              <Calender />
+              <p>{createdBy}</p>
+            </S.Creater>
+            <S.Elapsed>
+              <UserCircle />
+              <p>{createdAt}</p>
+            </S.Elapsed>
+          </S.CharacterHeaderRightSide>
+        </S.CharacterHeader>
+      ) : (
+        <S.CharacterHeader>
+          <S.CharacterHeaderLeftSide>
+            <ArrowUp />
+            <UserProfile />
+            <p>{title}</p>
+          </S.CharacterHeaderLeftSide>
+
+          <S.CharacterHeaderRightSide>
+            <S.Creater>
+              <Calender />
+              <p>{createdBy}</p>
+            </S.Creater>
+            <S.Elapsed>
+              <UserCircle />
+              <p>{createdAt}</p>
+            </S.Elapsed>
+          </S.CharacterHeaderRightSide>
+        </S.CharacterHeader>
+      )}
+    </>
   );
 }
