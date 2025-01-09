@@ -12,7 +12,7 @@ import * as S from '@/components/common/button/button.style.ts';
 interface IButtonProps {
   children: React.ReactNode;
   type?: 'normal' | 'act' | 'small_round' | 'small_square' | 'tag'; // 버튼 유형
-  color?: 'default' | 'blue' | 'gray' | 'green' | 'white_round' | 'red' | 'white_square' | 'mint'; // 버튼 색상 타입
+  color?: 'default' | 'blue' | 'gray' | 'green' | 'white_round' | 'red' | 'white_square' | 'mint' | 'selected'; // 버튼 색상 타입
   disabled?: boolean; // 비활성화 여부
   onClick?: () => void; // 클릭 이벤트
   icon?: React.ReactNode; // 아이콘 컴포넌트
