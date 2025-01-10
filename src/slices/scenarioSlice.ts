@@ -31,7 +31,7 @@ const initialState: IScenarioSlice = {
       title: '역할 1',
       isChecked: false,
       createdBy: 'User 1',
-      createdAt: 'a few seconds ago',
+      createdAt: '8 hours ago',
       isExpanded: false,
       scenarios: [
         { id: 1, name: 'Scenario 1', createdBy: 'User 1', createdAt: 'a few seconds ago', isChecked: false },
@@ -43,7 +43,7 @@ const initialState: IScenarioSlice = {
       title: '역할 2',
       isChecked: false,
       createdBy: 'User 3',
-      createdAt: 'a few seconds ago',
+      createdAt: '18 hours ago',
       isExpanded: false,
       scenarios: [{ id: 3, name: 'Scenario 3', createdBy: 'User 3', createdAt: 'a few seconds ago', isChecked: false }],
     },

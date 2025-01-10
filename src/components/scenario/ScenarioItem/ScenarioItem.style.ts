@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 
-export const ScenarioItem = styled.li`
+export const ScenarioItem = styled.div<{ isChecked: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 30px 50px;
+  border-radius: 4px;
+  background: ${({ isChecked }) => (isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit')};
 `;
 
 export const ScenarioItemLeftSide = styled.div`

@@ -13,24 +13,9 @@ export default function CharacterItem() {
     <div>
       {characters.map((character) => (
         <S.CharacterItem key={character.id}>
-          <CharacterHeader
-            characterId={character.id}
-            title={character.title}
-            createdBy={character.createdBy}
-            createdAt={character.createdAt}
-            isExpanded={character.isExpanded}
-          />
+          <CharacterHeader characterId={character.id} />
           {character.isExpanded &&
-            character.scenarios.map((scenario) => (
-              <ScenarioItem
-                key={scenario.id}
-                characterId={character.id}
-                scenarioId={scenario.id}
-                name={scenario.name}
-                createdBy={scenario.createdBy}
-                createdAt={scenario.createdAt}
-              />
-            ))}
+            character.scenarios.map((scenario) => <ScenarioItem key={scenario.id} characterId={character.id} scenarioId={scenario.id} />)}
         </S.CharacterItem>
       ))}
     </div>

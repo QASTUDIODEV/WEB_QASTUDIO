@@ -13,59 +13,61 @@ import type { TAppDispatch, TRootState } from '@/store/store';
 
 interface ICharacterHeaderProps {
   characterId: number;
-  title: string;
-  createdBy: string;
-  createdAt: string;
-  isExpanded: boolean;
 }
 
-export default function CharacterHeader({ characterId, title, createdBy, createdAt, isExpanded }: ICharacterHeaderProps) {
+export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
   const dispatch = useDispatch<TAppDispatch>();
-  const isEdit = useSelector((state: TRootState) => state.scenario.isEdit);
+  //시나리오 가져오기
+  const character = useSelector((state: TRootState) => state.scenario.characters.find((char) => char.id === characterId));
+  //편집 상태 판단
+  const isEdit: boolean = useSelector((state: TRootState) => state.scenario.isEdit);
 
-  // 아이콘 클릭 시 펼치기/접기 토글
+  // 펼치기 토글 함수
   const handleExpandToggle = () => {
     dispatch(toggleExpand(characterId));
   };
 
+  if (!character) {
+    return null;
+  }
+
   return (
     <>
       {isEdit ? (
-        <S.CharacterHeader>
+        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit}>
           <S.CharacterHeaderLeftSide>
             <CheckBox characterId={characterId} />
             <UserProfile />
-            <p>{title}</p>
+            <p>{character.title}</p>
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
               <Calender />
-              <p>{createdBy}</p>
+              <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
               <UserCircle />
-              <p>{createdAt}</p>
+              <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader>
+        <S.CharacterHeader isChecked={character.isChecked}>
           <S.CharacterHeaderLeftSide>
-            {/* ✅ isExpanded 상태에 따라 아이콘 변경 */}
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
-              {isExpanded ? <ArrowDown /> : <ArrowUp />}
+              {character.isExpanded ? <ArrowDown /> : <ArrowUp />}
             </div>
             <UserProfile />
-            <p>{title}</p>
+            <p>{character.title}</p>
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
               <Calender />
-              <p>{createdBy}</p>
+              <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
               <UserCircle />
-              <p>{createdAt}</p>
+              <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
