@@ -18,14 +18,19 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
     page: string[];
     path: string[];
     character: string[];
-    accessRights: boolean[];
+    accessRights: boolean[][];
   };
 
   const initialData: TData = {
     page: ['홈', '로그인', '로드맵', '마이페이지'],
     path: ['/', '/login', '/roadmap', '/mypage'],
-    accessRights: [true, false],
-    character: ['일반', '관리자'],
+    accessRights: [
+      [true, true, false],
+      [true, false, false],
+      [true, false, false],
+      [true, false, false],
+    ],
+    character: ['일반', '관리자', '비로그인'],
   };
 
   const data = { ...initialData };
@@ -40,6 +45,18 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
   };
 
   const pageDetails = getPageDetails();
+  const accessed: string[][] = new Array(data.page.length).fill(null).map(() => []);
+  const notAccessed: string[][] = new Array(data.page.length).fill(null).map(() => []);
+
+  data.accessRights.forEach((access, i) => {
+    access.forEach((isAccessible, j) => {
+      if (isAccessible) {
+        accessed[i].push(data.character[j]);
+      } else {
+        notAccessed[i].push(data.character[j]);
+      }
+    });
+  });
 
   return (
     <S.Box
@@ -86,7 +103,7 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
       {pageDetails && (
         <S.TextLight>
           <br />
-          사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다.
+          {selectedPage} 페이지 설명
           <br />
           (두줄까지 들어갈 수 있습니다.)
         </S.TextLight>
@@ -100,6 +117,32 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
             <Rights />
             <S.InnerBoxTitle>Access rights</S.InnerBoxTitle>
           </S.Wrap>
+          <S.AccessBox>
+            {accessed[data.page.indexOf(selectedPage)] && (
+              <S.AccessRights>
+                <Button type="small_round" color="green">
+                  접근 가능
+                </Button>
+                {accessed[data.page.indexOf(selectedPage)].map((a, index) => (
+                  <Button key={index} type="small_round" color="white_round">
+                    {a}
+                  </Button>
+                ))}
+              </S.AccessRights>
+            )}
+            {notAccessed[data.page.indexOf(selectedPage)] && (
+              <S.AccessRights>
+                <Button type="small_round" color="red">
+                  접근 불가능
+                </Button>
+                {notAccessed[data.page.indexOf(selectedPage)].map((a, index) => (
+                  <Button key={index} type="small_round" color="white_round">
+                    {a}
+                  </Button>
+                ))}
+              </S.AccessRights>
+            )}
+          </S.AccessBox>
         </S.LRBox>
         <S.LRBox width="56.25%">
           <S.Wrap>
