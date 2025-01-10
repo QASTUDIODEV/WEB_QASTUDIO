@@ -242,6 +242,12 @@ const ProfileImg = styled.div`
     height: 24px;
   }
 `;
+const MessageWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  top: -24px;
+  left: 0;
+`;
 
 const ProfileEditBtn = styled.button`
   background-color: ${({ theme }) => theme.colors.point.point_2};
@@ -284,6 +290,7 @@ export {
   ButtonWrapper,
   Container,
   Container2,
+  MessageWrapper,
   PlusWrapper,
   Profile,
   ProfileEditBtn,
