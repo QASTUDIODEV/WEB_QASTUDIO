@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { validateFinding } from '@/utils/validate';
-
-import useForm from '@/hooks/auth/useForm';
+import { findingSchema } from '@/utils/validate';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -14,25 +15,39 @@ import * as S from '@/pages/findingPassword/findingPassword.style';
 
 type TCodeVerify = undefined | boolean;
 
+type TFormValues = {
+  email: string;
+  password: string;
+  repassword: string;
+  code: string;
+};
+
+type TAPIFormValues = {
+  email: string;
+  password: string;
+};
+
 export default function FindingPassword() {
-  const finding = useForm({
-    initialValue: {
-      email: '',
-      password: '',
-      repassword: '',
-      code: '',
-      authCode: '',
-    },
-    validate: validateFinding,
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isValid, errors, touchedFields },
+  } = useForm<TFormValues>({
+    mode: 'onChange',
+    resolver: zodResolver(findingSchema),
   });
 
   const [step, setStep] = useState(0);
   const [codeVerify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const navigate = useNavigate();
 
   const handleSendCode = () => {
-    if (!finding.errors.email) {
+    if (!errors.email?.message) {
       alert('해당 이메일로 인증 코드가 발송되었습니다');
       setStep(1);
       setAuthCode('1234'); //추후 API 요청해서 받아온 인증 값으로 변경 예정
@@ -41,28 +56,35 @@ export default function FindingPassword() {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const handleSubmit = (userEmail: string, newPassword: string) => {
+  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
+    const { email, password } = data;
+    alert(email);
+    alert(password);
+
     navigate('/');
+    // 로그인 로직 추후 추가 예정
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && finding.valid.email) {
+      if (step === 0 && !errors.email?.message && touchedFields.email) {
         handleSendCode();
       }
-      if (step === 1 && finding.valid.code) {
+      if (step === 1 && !errors.code?.message && touchedFields.code) {
         setStep(2);
       }
-      if (step === 2 && finding.valid.password && finding.valid.repassword) {
-        handleSubmit(finding.values.email, finding.values.password);
+      if (step === 2 && !errors.password?.message && !errors.repassword?.message && touchedFields.password && touchedFields.repassword && passwordMatch) {
+        const email = watch('email');
+        const password = watch('password');
+        onSubmit({ email, password });
       }
     }
   };
 
   const handleVerifyCode = () => {
-    if (finding.values.code === AuthCode) {
+    const code = watch('code');
+    if (code === AuthCode) {
       setCodeVerify(true);
     } else {
       setCodeVerify(false);
@@ -70,31 +92,46 @@ export default function FindingPassword() {
   };
 
   useEffect(() => {
-    if (codeVerify) {
-      setStep(2);
+    if (watch('password') === watch('repassword')) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else {
+      setPasswordMatch(false);
+      setErrorMessage('Passwords must match.');
     }
-  }, [codeVerify]);
+  }, [watch('repassword'), watch('password')]);
 
   useEffect(() => {
     setStep(0);
   }, []);
+
+  useEffect(() => {
+    setCodeVerify(undefined);
+  }, [watch('email')]);
+
+  useEffect(() => {
+    if (codeVerify) {
+      setStep(2);
+    }
+  }, [AuthCode, watch('email'), codeVerify]);
+
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
-      <S.Form onKeyDown={(e) => handleKeyDown(e)}>
+      <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && (
           <>
             <InputModule
               top={true}
-              name="email"
+              inputname="email"
               Name="Email"
               span="Email"
               btnName="Send"
-              touched={finding.touched.email}
-              valid={finding.valid.email}
-              errorMessage={finding.errors.email}
               handleSendCode={handleSendCode}
-              {...finding.getTextInputProps('email')}
+              touched={touchedFields.email}
+              valid={touchedFields.email && !errors.email?.message}
+              errorMessage={errors.email?.message}
+              {...register('email')}
             />
           </>
         )}
@@ -102,25 +139,24 @@ export default function FindingPassword() {
           <>
             <InputModule
               top={true}
-              name="email"
+              inputname="email"
               Name="Email"
               span="Email"
               btnName="Send"
-              touched={finding.touched.email}
-              valid={finding.valid.email}
-              errorMessage={finding.errors.email}
               handleSendCode={handleSendCode}
-              {...finding.getTextInputProps('email')}
+              touched={touchedFields.email}
+              valid={touchedFields.email && !errors.email?.message}
+              errorMessage={errors.email?.message}
+              {...register('email')}
             />
             <CodeModule
-              touched={finding.touched.code}
-              valid={finding.valid.code}
-              errorMessage={finding.errors.code}
+              touched={touchedFields.code}
+              valid={touchedFields.code && !errors.code?.message}
+              errorMessage={errors.code?.message}
               Name={'Code'}
-              name={'code'}
               codeVerify={codeVerify}
               handleVerifyCode={handleVerifyCode}
-              {...finding.getTextInputProps('code')}
+              {...register('code')}
             />
           </>
         )}
@@ -128,27 +164,38 @@ export default function FindingPassword() {
           <>
             <InputModule
               top={false}
-              touched={finding.touched.password}
-              valid={finding.valid.password}
-              errorMessage={finding.errors.password}
+              touched={touchedFields.password}
+              valid={touchedFields.password && !errors.password?.message}
+              errorMessage={errors.password?.message}
               Name={'Password'}
-              name={'password'}
+              inputname={'password'}
               span={'New Password'}
-              {...finding.getTextInputProps('password')}
+              {...register('password')}
             />
             <InputModule
               top={false}
-              touched={finding.touched.repassword}
-              valid={finding.valid.repassword}
-              errorMessage={finding.errors.repassword}
+              touched={touchedFields.repassword}
+              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+              errorMessage={errors.repassword?.message || errorMessage}
               Name={'Password'}
-              name={'password'}
+              inputname={'password'}
               span={'Re-enter Password'}
-              {...finding.getTextInputProps('repassword')}
+              {...register('repassword')}
             />
             <AuthButton
-              disabled={!finding.valid.password || !finding.valid.repassword}
-              onClick={() => handleSubmit(finding.values.email, finding.values.password)}
+              disabled={
+                !touchedFields.email ||
+                !!errors.email?.message ||
+                !touchedFields.code ||
+                !touchedFields.password ||
+                !touchedFields.repassword ||
+                !codeVerify ||
+                !!errors.code?.message ||
+                !!errors.password?.message ||
+                !!errors.repassword?.message ||
+                !errorMessage
+              }
+              // isValid가 작동을 안함... ㅠㅠ whyrano
             >
               Go to the login
             </AuthButton>

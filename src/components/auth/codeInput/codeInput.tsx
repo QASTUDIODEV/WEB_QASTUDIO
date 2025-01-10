@@ -9,10 +9,12 @@ export type TAuthInput = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function CodeInput({ placeholder, isValid, ...rest }: TAuthInput) {
+const CodeInput = React.forwardRef<HTMLInputElement, TAuthInput>(({ placeholder, isValid, ...rest }, ref) => {
   return (
     <S.Container>
-      <S.Input placeholder={placeholder} $isValid={isValid} {...rest} />
+      <S.Input placeholder={placeholder} $isValid={isValid} ref={ref} disabled={isValid} {...rest} />
     </S.Container>
   );
-}
+});
+
+export default CodeInput;

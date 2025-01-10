@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { validateSignup } from '@/utils/validate';
-
-import useForm from '@/hooks/auth/useForm';
+import { signupSchema } from '@/utils/validate';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -18,22 +19,35 @@ import * as S from '@/pages/signup/signup.style';
 
 type TCodeVerify = undefined | boolean;
 
+type TFormValues = {
+  email: string;
+  password: string;
+  repassword: string;
+  code: string;
+  nickname: string;
+};
+
+type TAPIFormValues = {
+  email: string;
+  password: string;
+  nickname: string;
+};
+
 function SignupPage() {
-  const signup = useForm({
-    initialValue: {
-      email: '',
-      password: '',
-      repassword: '',
-      code: '',
-      nickname: '',
-      authCode: '',
-    },
-    validate: validateSignup,
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    formState: { isValid, errors, touchedFields },
+  } = useForm<TFormValues>({
+    mode: 'onChange',
+    resolver: zodResolver(signupSchema),
   });
 
   const [step, setStep] = useState(0);
-
-  const [isValid, setIsValid] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [codeVerify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
   const navigate = useNavigate();
@@ -44,16 +58,8 @@ function SignupPage() {
     contentInputRef.current?.click();
   };
 
-  useEffect(() => {
-    if (!signup.errors.email && !signup.errors.password && !signup.errors.code && !signup.errors.repassword && !signup.errors.nickname) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  }, [signup.errors, signup.values]);
-
   const handleSendCode = () => {
-    if (!signup.errors.email) {
+    if (!errors.email?.message) {
       alert('해당 이메일로 인증 코드가 발송되었습니다');
       setStep(1);
       setAuthCode('1234'); //추후 API 요청해서 받아온 인증 값으로 변경 예정
@@ -63,15 +69,34 @@ function SignupPage() {
   };
 
   const handleVerifyCode = () => {
-    if (signup.values.code === AuthCode) {
+    const code = getValues('code');
+    if (code === AuthCode) {
       setCodeVerify(true);
     } else {
       setCodeVerify(false);
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const handleSubmit = (email: string, passwrod: string, nickname: string) => {
+  useEffect(() => {
+    if (watch('password') === watch('repassword')) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else {
+      setPasswordMatch(false);
+      setErrorMessage('Passwords must match.');
+    }
+  }, [watch('repassword'), watch('password')]);
+
+  useEffect(() => {
+    setStep(0);
+  }, []);
+
+  useEffect(() => {
+    setCodeVerify(undefined);
+  }, [watch('email')]);
+
+  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
+    alert(data);
     navigate('/');
   };
 
@@ -80,17 +105,33 @@ function SignupPage() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && signup.valid.email) {
+      if (step === 0 && touchedFields.email && !errors.email?.message) {
         handleSendCode();
       }
-      if (step === 1 && signup.valid.code && !isValid) {
+      if (step === 1 && touchedFields.code && !errors.code?.message && !codeVerify) {
         handleVerifyCode();
       }
-      if (step === 1 && signup.valid.code && signup.valid.email && signup.valid.password && signup.valid.repassword) {
+      if (
+        step === 1 &&
+        touchedFields.code &&
+        !errors.code?.message &&
+        codeVerify &&
+        !errors.email?.message &&
+        touchedFields.email &&
+        touchedFields.password &&
+        !errors.password?.message &&
+        touchedFields.repassword &&
+        !errors.repassword?.message &&
+        passwordMatch
+      ) {
         handleNextStep();
       }
-      if (step === 2 && signup.valid.nickname) {
-        handleSubmit(signup.values.email, signup.values.password, signup.values.nickname);
+      if (step === 2 && touchedFields.nickname && !errors.nickname?.message) {
+        const email = getValues('email');
+        const password = getValues('password');
+        const nickname = getValues('nickname');
+
+        onSubmit({ email, password, nickname });
       }
     }
   };
@@ -99,37 +140,36 @@ function SignupPage() {
     <>
       <S.Inputs>
         <InputModule
-          name="email"
+          top={true}
+          inputname="email"
           Name="Email"
           span="Email"
           btnName="Send"
-          touched={signup.touched.email}
-          valid={signup.valid.email}
-          errorMessage={signup.errors.email}
           handleSendCode={handleSendCode}
-          top={true}
-          {...signup.getTextInputProps('email')}
+          touched={touchedFields.email}
+          valid={touchedFields.email && !errors.email?.message}
+          errorMessage={errors.email?.message}
+          {...register('email')}
         />
         <InputModule
-          name="password"
-          Name="Password"
-          span="Password"
-          touched={signup.touched.password}
-          valid={signup.valid.password}
-          errorMessage={signup.errors.password}
-          handleSendCode={handleSendCode}
           top={false}
-          {...signup.getTextInputProps('password')}
+          touched={touchedFields.password}
+          valid={touchedFields.password && !errors.password?.message}
+          errorMessage={errors.password?.message}
+          Name={'Password'}
+          inputname={'password'}
+          span={'New Password'}
+          {...register('password')}
         />
         <InputModule
-          name="password"
-          Name="Password"
-          touched={signup.touched.repassword}
-          valid={signup.valid.repassword}
-          errorMessage={signup.errors.repassword}
-          handleSendCode={handleSendCode}
           top={false}
-          {...signup.getTextInputProps('repassword')}
+          touched={touchedFields.repassword}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+          errorMessage={errors.repassword?.message || errorMessage}
+          Name={'Password'}
+          inputname={'password'}
+          span={'Re-enter Password'}
+          {...register('repassword')}
         />
         <AuthButton type="button" format="normal" onClick={handleNextStep} disabled={!isValid}>
           Sign up
@@ -148,53 +188,61 @@ function SignupPage() {
     <>
       <S.Inputs>
         <InputModule
-          name="email"
+          top={true}
+          inputname="email"
           Name="Email"
           span="Email"
-          btnName="Resend"
-          touched={signup.touched.email}
-          valid={signup.valid.email}
-          errorMessage={signup.errors.email}
+          btnName="Send"
           handleSendCode={handleSendCode}
-          top={true}
-          {...signup.getTextInputProps('email')}
+          touched={touchedFields.email}
+          valid={touchedFields.email && !errors.email?.message}
+          errorMessage={errors.email?.message}
+          {...register('email')}
         />
         <CodeModule
-          touched={signup.touched.code}
-          valid={signup.valid.code}
-          errorMessage={signup.errors.code}
+          touched={touchedFields.code}
+          valid={touchedFields.code && !errors.code?.message}
+          errorMessage={errors.code?.message}
           Name={'Code'}
-          name={'code'}
           codeVerify={codeVerify}
           handleVerifyCode={handleVerifyCode}
-          {...signup.getTextInputProps('code')}
+          {...register('code')}
         />
         <InputModule
           top={false}
-          name="password"
-          Name="Password"
-          span="Password"
-          touched={signup.touched.password}
-          valid={signup.valid.password}
-          errorMessage={signup.errors.password}
-          handleSendCode={handleSendCode}
-          {...signup.getTextInputProps('password')}
+          touched={touchedFields.password}
+          valid={touchedFields.password && !errors.password?.message}
+          errorMessage={errors.password?.message}
+          Name={'Password'}
+          inputname={'password'}
+          span={'New Password'}
+          {...register('password')}
         />
         <InputModule
-          name="password"
-          Name="Password"
-          touched={signup.touched.repassword}
-          valid={signup.valid.repassword}
-          errorMessage={signup.errors.repassword}
-          handleSendCode={handleSendCode}
           top={false}
-          {...signup.getTextInputProps('repassword')}
+          touched={touchedFields.repassword}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+          errorMessage={errors.repassword?.message || errorMessage}
+          Name={'Password'}
+          inputname={'password'}
+          span={'Re-enter Password'}
+          {...register('repassword')}
         />
         <AuthButton
           type="button"
           format="normal"
           onClick={handleNextStep}
-          disabled={!signup.valid.code || !codeVerify || !signup.valid.email || !signup.valid.password || !signup.valid.repassword}
+          disabled={
+            !touchedFields.email ||
+            !!errors.email?.message ||
+            !touchedFields.code ||
+            !touchedFields.password ||
+            !touchedFields.repassword ||
+            !codeVerify ||
+            !!errors.code?.message ||
+            !!errors.password?.message ||
+            !!errors.repassword?.message
+          }
         >
           Sign up
         </AuthButton>
@@ -218,20 +266,33 @@ function SignupPage() {
       </S.ProfileImg>
       <InputModule
         top={true}
-        name="nickname"
+        inputname="nickname"
         Name="Nickname"
         span="Nickname"
-        touched={signup.touched.nickname}
-        valid={signup.valid.nickname}
-        errorMessage={signup.errors.nickname}
-        {...signup.getTextInputProps('nickname')}
+        touched={touchedFields.nickname}
+        valid={touchedFields.nickname && !errors.nickname?.message}
+        errorMessage={errors.nickname?.message}
+        {...register('nickname')}
       />
       <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
       <AuthButton
-        type="button"
+        type="submit"
         format="normal"
-        onClick={() => handleSubmit(signup.values.email, signup.values.password, signup.values.nickname)}
-        disabled={!signup.valid.nickname}
+        disabled={
+          !touchedFields.email ||
+          !!errors.email?.message ||
+          !touchedFields.code ||
+          !touchedFields.password ||
+          !touchedFields.repassword ||
+          !touchedFields.nickname ||
+          !codeVerify ||
+          !!errors.code?.message ||
+          !!errors.password?.message ||
+          !!errors.repassword?.message ||
+          !!errors.nickname?.message ||
+          !errorMessage
+          // isValid가 작동을 안함... ㅠㅠ whyrano
+        }
       >
         Sign up
       </AuthButton>
@@ -241,7 +302,7 @@ function SignupPage() {
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
-      <S.Form onKeyDown={handleKeyDown}>
+      <S.Form onKeyDown={handleKeyDown} onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && renderStep0()}
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}

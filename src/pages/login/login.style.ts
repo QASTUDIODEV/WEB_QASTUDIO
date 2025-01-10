@@ -65,6 +65,11 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
+const Wrapper2 = styled.div`
+  display: flex;
+  position: relative;
+`;
+
 const MessageWrapper = styled.div`
   display: flex;
   position: absolute;
@@ -72,4 +77,4 @@ const MessageWrapper = styled.div`
   right: 0;
 `;
 
-export { Button, Buttons, Container, Container2, Description, Form, MessageWrapper, Texts, Title, Wrapper };
+export { Button, Buttons, Container, Container2, Description, Form, MessageWrapper, Texts, Title, Wrapper, Wrapper2 };
