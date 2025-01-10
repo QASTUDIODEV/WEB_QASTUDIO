@@ -73,7 +73,7 @@ export default function LoginPage() {
         <OrDivider />
       </S.Container2>
 
-      <SocialLogo />
+      <SocialLogo gap={20} size="large" />
       <S.Buttons>
         <S.Button onClick={() => navigate('/finding')}>Finding Passwords</S.Button>
         <S.Button onClick={() => navigate('/signup')}>Sign up</S.Button>
