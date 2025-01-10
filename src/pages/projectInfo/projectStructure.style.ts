@@ -110,4 +110,15 @@ const InnerBoxTitle = styled.p`
   line-height: 150%;
   letter-spacing: 0.288px;
 `;
-export { Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };
+const AccessRights = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+const AccessBox = styled.div`
+  display: flex;
+  margin: 10px; 20px;
+  flex-direction: column;
+`;
+export { AccessBox, AccessRights, Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };
