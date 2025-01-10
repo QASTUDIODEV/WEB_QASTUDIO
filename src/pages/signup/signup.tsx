@@ -136,7 +136,7 @@ function SignupPage() {
         </AuthButton>
       </S.Inputs>
       <OrDivider />
-      <SocialLogo />
+      <SocialLogo gap={20} size="large" />
       <S.BackButton onClick={() => navigate(-1)}>
         <ArrowLeft style={{ width: '24px', height: '24px' }} />
         Back
@@ -200,7 +200,7 @@ function SignupPage() {
         </AuthButton>
       </S.Inputs>
       <OrDivider />
-      <SocialLogo />
+      <SocialLogo gap={20} size="large" />
       <S.BackButton onClick={() => navigate(-1)}>
         <ArrowLeft style={{ width: '24px', height: '24px' }} />
         Back
