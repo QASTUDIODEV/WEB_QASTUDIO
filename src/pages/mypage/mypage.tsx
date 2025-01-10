@@ -1,19 +1,25 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 
-import Button from '@/components/common/button/button';
-import Input from '@/components/common/input/input';
 import Profile from '@/components/common/profile/profile';
+import MyProfile from '@/components/mypage/myProfile/myProfile';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
-import Done from '@/assets/icons/done.svg?react';
-import Edit from '@/assets/icons/edit.svg?react';
 import Package from '@/assets/icons/package.svg?react';
 import * as S from '@/pages/mypage/mypage.style';
+
+type TSocialPlatform = 'github' | 'kakao' | 'google';
+
+function findUnlinkedSocials(linkedAccounts: TSocialPlatform[]): TSocialPlatform[] {
+  const allSocialPlatforms: TSocialPlatform[] = ['github', 'kakao', 'google'];
+  return allSocialPlatforms.filter((platform) => !linkedAccounts.includes(platform));
+}
 
 export default function MyPage() {
   const [isEdit, setIsEdit] = useState(false);
   const [nickname, setNickname] = useState('기존 닉네임');
+  const socialLogin: TSocialPlatform[] = ['github'];
+  const unlinkedSocials = findUnlinkedSocials(socialLogin);
   const projects = [
     { name: 'UMC_PM_DAY', participants: '12', date: '2025.01.09' },
     { name: 'UMC_PM_DAY', participants: '12', date: '2025.01.09' },
@@ -24,78 +30,17 @@ export default function MyPage() {
     { name: 'UMC_PM_DAY', participants: '12', date: '2025.01.09' },
     // 테스트 용, 추후 삭제 예정
   ];
-  const bannerInputRef = useRef<HTMLInputElement | null>(null);
-  const profileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleBannerInputClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    bannerInputRef.current?.click();
-  };
-
-  const handleProfileInputClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    profileInputRef.current?.click();
-  };
-  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  };
-  const handleDoneClick = () => {
-    setIsEdit(false);
-  };
   return (
     <S.Container>
       <S.Title>My Page</S.Title>
-      <S.ProfileWrapper>
-        {/* 임시로 이미지 아무거나 넣어둠 */}
-        <S.BannerImg onClick={handleBannerInputClick} url={'https://cdn.imweb.me/upload/S202207202685e30f16e24/8b48c67f8cdf6.jpeg'} />
-        <input className="banner-image-upload" ref={bannerInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
-        <S.Profile>
-          {isEdit ? (
-            <S.Container2>
-              <div style={{ display: 'flex', gap: '15px' }}>
-                <S.ProfileImg onClick={handleProfileInputClick} className="hover">
-                  <Profile />
-                  <S.ProfileEditBtn>
-                    {/* 아이콘은 추후에 수정하겠습니다..... */}
-                    <Edit />
-                  </S.ProfileEditBtn>
-                </S.ProfileImg>
-                <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
-                <S.UserInfo>
-                  <Input value={nickname} width="268px" onChange={handleNicknameChange} />
-                  <S.Account>email.email.com</S.Account>
-                  {/* 소셜 로그인 아이콘 추가 예정 */}
-                </S.UserInfo>
-              </div>
-
-              <div style={{ zIndex: '2', alignSelf: 'end' }}>
-                <Button type="small_square" color="default" disabled={false} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
-                  Done
-                </Button>
-              </div>
-            </S.Container2>
-          ) : (
-            <S.Container2>
-              <div style={{ display: 'flex', gap: '15px' }}>
-                <S.ProfileImg>
-                  <Profile />
-                </S.ProfileImg>
-                <S.UserInfo>
-                  <span>{nickname}</span>
-                  <S.Account>email.email.com</S.Account>
-                  {/* 소셜 로그인 아이콘 추가 예정 */}
-                </S.UserInfo>
-              </div>
-              <div style={{ zIndex: '2', alignSelf: 'end' }}>
-                <Button type="small_square" color="default" disabled={false} icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
-                  Edit
-                </Button>
-              </div>
-            </S.Container2>
-          )}
-        </S.Profile>
-      </S.ProfileWrapper>
-
+      <MyProfile
+        isEdit={isEdit}
+        nickname={nickname}
+        setNickname={setNickname}
+        setIsEdit={setIsEdit}
+        socialLogin={socialLogin}
+        unlinkedSocials={unlinkedSocials}
+      />
       <S.Projects>
         <S.ProjectNum>
           <Package />
@@ -107,8 +52,8 @@ export default function MyPage() {
             <S.Table>
               <thead>
                 <tr>
-                  <S.TH style={{ paddingRight: '2rem' }}>Project Name</S.TH>
-                  <S.TH style={{ paddingRight: '2rem' }}>Participants</S.TH>
+                  <S.TH className="right">Project Name</S.TH>
+                  <S.TH className="right">Participants</S.TH>
                   <S.TH>Last Modified Date</S.TH>
                 </tr>
               </thead>

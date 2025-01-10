@@ -106,14 +106,16 @@ const Account = styled.div`
   text-decoration-skip-ink: none;
 `;
 
-const PlusWrapper = styled.div`
+const PlusWrapper = styled.button`
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   width: 26px;
   height: 26px;
   background-color: rgba(217, 230, 255, 0.2);
   border-radius: 79.2px;
+  border: none;
   svg {
     width: 10.97px;
     height: 10.97px;
