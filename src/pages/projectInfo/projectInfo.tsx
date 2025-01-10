@@ -27,6 +27,8 @@ export default function ProjectInfoPage() {
             Go to Site
           </Button>
         </S.Wrapper>
+        <S.ProfileImg />
+        <S.ProfileImg />
       </S.Profile>
       <S.Box height="18%">
         <S.Title>Introduction to the Project</S.Title>
@@ -52,11 +54,6 @@ export default function ProjectInfoPage() {
             >
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
-              <S.TextLight>
-                사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다.
-                <br />
-                (두줄까지 들어갈 수 있습니다.)
-              </S.TextLight>
               <S.Wrapper top="16px" right="24px">
                 <Plus />
               </S.Wrapper>
