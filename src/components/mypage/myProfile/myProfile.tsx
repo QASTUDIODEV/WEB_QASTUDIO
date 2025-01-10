@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
+import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import Profile from '@/components/common/profile/profile';
@@ -74,9 +75,17 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
                   <ProfileEdit />
                 </S.ProfileEditBtn>
               </S.ProfileImg>
+
               <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+
               <S.UserInfo>
-                <Input value={nickname} width="268px" onChange={handleNicknameChange} />
+                <div style={{ position: 'relative', display: 'flex' }}>
+                  <S.MessageWrapper>
+                    {/* 수정 예정 */}
+                    <ValidataionMessage message="탈락" isError={true} />
+                  </S.MessageWrapper>
+                  <Input value={nickname} width="268px" onChange={handleNicknameChange} />
+                </div>
                 <S.AccoutWrapper>
                   <S.Account>email.email.com</S.Account>
                   <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
