@@ -8,6 +8,7 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
+import type { ICharacter } from '@/slices/scenarioSlice';
 import { toggleExpand } from '@/slices/scenarioSlice';
 import type { TAppDispatch, TRootState } from '@/store/store';
 
@@ -17,8 +18,10 @@ interface ICharacterHeaderProps {
 
 export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
   const dispatch = useDispatch<TAppDispatch>();
+
   //시나리오 가져오기
-  const character = useSelector((state: TRootState) => state.scenario.characters.find((char) => char.id === characterId));
+  const character: ICharacter | undefined = useSelector((state: TRootState) => state.scenario.characters.find((char) => char.id === characterId));
+
   //편집 상태 판단
   const isEdit: boolean = useSelector((state: TRootState) => state.scenario.isEdit);
 
@@ -52,10 +55,10 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader isChecked={character.isChecked}>
+        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit}>
           <S.CharacterHeaderLeftSide>
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
-              {character.isExpanded ? <ArrowDown /> : <ArrowUp />}
+              {character.isExpanded ? <ArrowUp /> : <ArrowDown />}
             </div>
             <UserProfile />
             <p>{character.title}</p>

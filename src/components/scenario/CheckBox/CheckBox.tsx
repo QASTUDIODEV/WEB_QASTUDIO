@@ -14,25 +14,28 @@ interface ICheckBoxProps {
 export default function CheckBox({ characterId, scenarioId, isAllCheckBox = false }: ICheckBoxProps) {
   const dispatch = useDispatch<TAppDispatch>();
 
-  // 체크 여부 판단
-  const isChecked = useSelector((state: TRootState) => {
+  //  체크 여부 판단
+  const isChecked: boolean = useSelector((state: TRootState) => {
     if (isAllCheckBox) {
-      return state.scenario.characters.every((char) => char.isChecked);
+      //ALL
+      return state.scenario.characters.every((char) => char.isChecked && char.scenarios.every((scn) => scn.isChecked));
     }
     if (scenarioId) {
+      //시나리오
       const character = state.scenario.characters.find((char) => char.id === characterId);
       const scenario = character?.scenarios.find((scn) => scn.id === scenarioId);
       return scenario?.isChecked ?? false;
     }
     if (characterId) {
+      //역할
       const character = state.scenario.characters.find((char) => char.id === characterId);
       return character?.isChecked ?? false;
     }
     return false;
   });
 
-  // 클릭 함수
-  const handleCheckBoxClick = () => {
+  //  클릭 함수
+  const handleCheckBoxClick = (): void => {
     if (isAllCheckBox) {
       dispatch(toggleAll());
     } else if (scenarioId && characterId) {

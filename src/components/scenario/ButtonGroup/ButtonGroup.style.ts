@@ -17,3 +17,14 @@ export const AllCheckBoxGroup = styled.div`
   align-items: center;
   gap: 8px;
 `;
+
+export const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.error.error_400};
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.28px;
+`;

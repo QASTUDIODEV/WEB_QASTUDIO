@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface IScenario {
+export interface IScenario {
   id: number;
   name: string;
   createdBy: string;
@@ -8,7 +8,7 @@ interface IScenario {
   isChecked: boolean;
 }
 
-interface ICharacter {
+export interface ICharacter {
   id: number;
   title: string;
   isChecked: boolean;
@@ -18,7 +18,7 @@ interface ICharacter {
   scenarios: IScenario[];
 }
 
-interface IScenarioSlice {
+export interface IScenarioSlice {
   isEdit: boolean;
   characters: ICharacter[];
 }
@@ -54,11 +54,13 @@ const characterSlice = createSlice({
   name: 'character',
   initialState,
   reducers: {
+    //편짐 상태
     edit: (state) => {
       state.isEdit = !state.isEdit;
     },
+    //전체 선택/선택해제
     toggleAll: (state) => {
-      const allChecked = state.characters.every((character) => character.isChecked);
+      const allChecked: boolean = state.characters.every((character) => character.isChecked); //전체 체크 여부
       state.characters.forEach((character) => {
         character.isChecked = !allChecked;
         character.scenarios.forEach((scenario) => {
@@ -66,34 +68,50 @@ const characterSlice = createSlice({
         });
       });
     },
+    //역할 선택/선택해제
     toggleCharacter: (state, action) => {
-      const character = state.characters.find((char) => char.id === action.payload);
+      const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
       if (character) {
-        const newCheckedStatus = !character.isChecked;
+        const newCheckedStatus: boolean = !character.isChecked;
         character.isChecked = newCheckedStatus;
         character.scenarios.forEach((scenario) => {
           scenario.isChecked = newCheckedStatus;
         });
       }
     },
+    //시나리오 선택/선택해제
     toggleScenario: (state, action) => {
-      const { characterId, scenarioId } = action.payload;
-      const character = state.characters.find((char) => char.id === characterId);
+      const { characterId, scenarioId }: { characterId: number; scenarioId: number } = action.payload;
+      const character: ICharacter | undefined = state.characters.find((char) => char.id === characterId);
+
       if (character) {
-        const scenario = character.scenarios.find((scn) => scn.id === scenarioId);
+        const scenario: IScenario | undefined = character.scenarios.find((scn) => scn.id === scenarioId);
         if (scenario) {
           scenario.isChecked = !scenario.isChecked;
+
+          const allScenariosChecked: boolean = character.scenarios.every((scn) => scn.isChecked); //전체 시나리오 선택 여부
+          character.isChecked = allScenariosChecked;
         }
       }
     },
+    //확장 상태
     toggleExpand: (state, action) => {
-      const character = state.characters.find((char) => char.id === action.payload);
+      const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
       if (character) {
         character.isExpanded = !character.isExpanded;
       }
     },
+    //체크 리셋
+    resetChecks: (state) => {
+      state.characters.forEach((character) => {
+        character.isChecked = false;
+        character.scenarios.forEach((scenario) => {
+          scenario.isChecked = false;
+        });
+      });
+    },
   },
 });
 
-export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand } = characterSlice.actions;
+export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks } = characterSlice.actions;
 export default characterSlice.reducer;
