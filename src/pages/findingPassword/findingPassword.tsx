@@ -77,6 +77,7 @@ export default function FindingPassword() {
   };
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     const { email, password } = data;
     // alert(email);
     // alert(password);
@@ -146,7 +147,7 @@ export default function FindingPassword() {
               btnName="Send"
               handleSendCode={handleSendCode}
               touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
+              valid={touchedFields.email && !errors.email?.message}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
@@ -162,13 +163,13 @@ export default function FindingPassword() {
               btnName="Send"
               handleSendCode={handleSendCode}
               touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
+              valid={touchedFields.email && !errors.email?.message}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
             <CodeModule
               touched={touchedFields.code}
-              valid={touchedFields.code && !errors.code?.message ? 'true' : 'false'}
+              valid={touchedFields.code && !errors.code?.message}
               errorMessage={errors.code?.message}
               Name={'Code'}
               codeverify={codeverify}
@@ -182,7 +183,7 @@ export default function FindingPassword() {
             <InputModule
               top={false}
               touched={touchedFields.password}
-              valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
+              valid={touchedFields.password && !errors.password?.message}
               errorMessage={errors.password?.message}
               Name={'Password'}
               inputname={'password'}
@@ -192,14 +193,14 @@ export default function FindingPassword() {
             <InputModule
               top={false}
               touched={touchedFields.repassword}
-              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
+              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
               errorMessage={errors.repassword?.message || errorMessage}
               Name={'Password'}
               inputname={'password'}
               span={'Re-enter Password'}
               {...register('repassword')}
             />
-            <AuthButton disabled={!isValid}>Go to the login</AuthButton>
+            <AuthButton disabled={!isValid || !passwordMatch}>Go to the login</AuthButton>
           </>
         )}
       </S.Form>

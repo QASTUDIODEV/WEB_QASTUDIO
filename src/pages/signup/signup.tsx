@@ -170,14 +170,14 @@ function SignupPage() {
           btnName="Send"
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
-          valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
+          valid={touchedFields.email && !errors.email?.message}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
         <InputModule
           top={false}
           touched={touchedFields.password}
-          valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
+          valid={touchedFields.password && !errors.password?.message}
           errorMessage={errors.password?.message}
           Name={'Password'}
           inputname={'password'}
@@ -187,7 +187,7 @@ function SignupPage() {
         <InputModule
           top={false}
           touched={touchedFields.repassword}
-          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
           errorMessage={errors.repassword?.message || errorMessage}
           Name={'Password'}
           inputname={'password'}
@@ -218,13 +218,13 @@ function SignupPage() {
           btnName="Send"
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
-          valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
+          valid={touchedFields.email && !errors.email?.message}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
         <CodeModule
           touched={touchedFields.code}
-          valid={touchedFields.code && !errors.code?.message ? 'true' : 'false'}
+          valid={touchedFields.code && !errors.code?.message}
           errorMessage={errors.code?.message}
           Name={'Code'}
           codeverify={codeverify}
@@ -234,7 +234,7 @@ function SignupPage() {
         <InputModule
           top={false}
           touched={touchedFields.password}
-          valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
+          valid={touchedFields.password && !errors.password?.message}
           errorMessage={errors.password?.message}
           Name={'Password'}
           inputname={'password'}
@@ -244,7 +244,7 @@ function SignupPage() {
         <InputModule
           top={false}
           touched={touchedFields.repassword}
-          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
           errorMessage={errors.repassword?.message || errorMessage}
           Name={'Password'}
           inputname={'password'}
@@ -257,11 +257,12 @@ function SignupPage() {
           onClick={handleNextStep}
           disabled={
             !touchedFields.email ||
-            !!errors.email?.message ||
             !touchedFields.code ||
             !touchedFields.password ||
             !touchedFields.repassword ||
             !codeverify ||
+            !passwordMatch ||
+            !!errors.email?.message ||
             !!errors.code?.message ||
             !!errors.password?.message ||
             !!errors.repassword?.message
@@ -296,7 +297,7 @@ function SignupPage() {
         Name="Nickname"
         span="Nickname"
         touched={touchedFields.nickname}
-        valid={touchedFields.nickname && !errors.nickname?.message ? 'true' : 'false'}
+        valid={touchedFields.nickname && !errors.nickname?.message}
         errorMessage={errors.nickname?.message}
         {...register('nickname')}
       />

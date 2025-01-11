@@ -22,8 +22,8 @@ const buttonTypes = {
     border: none;
   `,
   code: css<{
-    valid?: string;
-    codeverify?: boolean;
+    $valid?: boolean;
+    $codeverify?: boolean;
   }>`
     padding: 12px 20px;
     ${({ theme }) => theme.text.medium_14};
@@ -31,13 +31,14 @@ const buttonTypes = {
     width: 79px;
     height: 41px;
     border: none;
-    background-color: ${({ valid, codeverify, theme }) => {
-      if (valid === 'true') {
-        return codeverify ? theme.colors.point.point_1 : theme.colors.point.point_2;
+    background-color: ${({ $valid, $codeverify, theme }) => {
+      if ($valid) {
+        return $codeverify ? theme.colors.point.point_1 : theme.colors.point.point_2;
       }
       return theme.colors.gray.gray_500;
     }};
     color: #ffffff;
+    cursor: ${({ $valid, $codeverify }) => ($valid && $codeverify ? 'not-allowed' : 'pointer')};
   `,
 };
 
@@ -53,7 +54,7 @@ export const StyledButton = styled.button<{
   format: 'normal' | 'small' | 'code';
   disabled: boolean;
   $codeverify?: boolean;
-  valid?: string;
+  $valid?: boolean;
 }>`
   display: inline-flex;
   justify-content: center;

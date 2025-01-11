@@ -10,7 +10,7 @@ import * as S from './module.style';
 type TModuleProps = {
   btnName?: string;
   touched: boolean | undefined;
-  valid: string | undefined;
+  valid: boolean | undefined;
   errorMessage: string | undefined;
   handleSendCode?: () => void;
   span?: string;
@@ -21,12 +21,11 @@ type TModuleProps = {
 
 type TCodeModuleProps = {
   touched: boolean | undefined;
-  valid: string | undefined;
+  valid: boolean | undefined;
   errorMessage: string | undefined;
   Name: string;
   codeverify: boolean | undefined;
   handleVerifyCode: () => void;
-  // ref: any;
 };
 
 // InputModule 컴포넌트
@@ -40,7 +39,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             placeholder={Name}
             type={inputname}
             autoComplete={inputname}
-            isValid={touched ? valid === 'true' : true}
+            isValid={touched ? valid : true}
             errorMessage={errorMessage}
             touched={touched}
             top={top}
@@ -76,7 +75,7 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
           )}
         </S.MessageWrapper>
         <div style={{ position: 'absolute', right: '-90px' }}>
-          <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={valid === 'true' ? false : true} codeverify={codeverify}>
+          <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeverify={codeverify}>
             Verify
           </AuthButton>
         </div>
