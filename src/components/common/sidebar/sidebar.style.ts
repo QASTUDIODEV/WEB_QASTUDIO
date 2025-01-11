@@ -27,39 +27,14 @@ export const Profile = styled.div`
   cursor: pointer;
 `;
 
-export const ProfileImg = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
 export const ProfileName = styled.p`
   margin: 0;
   ${({ theme }) => theme.text.medium_24};
   color: #d6deec;
 `;
-
-export const Search = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 7.5%;
-  gap: 2.5%;
-  cursor: pointer;
-`;
-
-export const SearchText = styled.input`
-  margin: 0;
-  ${({ theme }) => theme.text.medium_18};
-  color: #d6deec;
-  background: none;
-  border: none;
-  outline: none;
-  width: 100%;
-  padding: 2.5% 3.75%;
-  &::placeholder {
-    color: #d6deec;
-  }
+export const ProfileWrapper = styled.div`
+  width: 32px;
+  height: 32px;
 `;
 
 export const Projects = styled.div`

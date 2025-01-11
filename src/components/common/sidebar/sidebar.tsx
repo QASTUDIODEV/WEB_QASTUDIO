@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -12,7 +13,6 @@ import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import Out from '@/assets/icons/logout.svg?react';
-import SearchImg from '@/assets/icons/search.svg?react';
 
 type TUserProfile = {
   id: number;
@@ -88,16 +88,14 @@ export default function Sidebar() {
         <S.StyledNavLink to={`/mypage`}>
           <S.Profile>
             <S.SemiBox>
-              <S.ProfileImg src={userProfile.profileImg} alt="My Profile" />
+              <S.ProfileWrapper>
+                <Profile />
+              </S.ProfileWrapper>
               <S.ProfileName>{userProfile.name}</S.ProfileName>
             </S.SemiBox>
             <ArrowRight />
           </S.Profile>
         </S.StyledNavLink>
-        <S.Search>
-          <SearchImg />
-          <S.SearchText placeholder="Search" />
-        </S.Search>
       </S.Container>
       <S.Projects>
         <S.ProjectText>Projects</S.ProjectText>
@@ -108,7 +106,9 @@ export default function Sidebar() {
         <div key={project.id}>
           <S.Project onClick={() => toggleMenu(index)}>
             <S.SemiBox>
-              <S.ProfileImg src={project.owner.profileImg} alt={`${project.owner.name}'s Profile`} />
+              <S.ProfileWrapper>
+                <Profile />
+              </S.ProfileWrapper>
               <S.ProjectName>{project.name}</S.ProjectName>
             </S.SemiBox>
             {menuStates[index] ? <ArrowUp /> : <ArrowDown />}
