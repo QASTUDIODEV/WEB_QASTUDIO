@@ -11,13 +11,13 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    open: (state) => {
+    setOpen: (state) => {
       state.isOpen = !state.isOpen;
     },
   },
 });
 
-export const { open } = modalSlice.actions;
+export const { setOpen } = modalSlice.actions;
 
 const modalReducer = modalSlice.reducer;
 export default modalReducer;
