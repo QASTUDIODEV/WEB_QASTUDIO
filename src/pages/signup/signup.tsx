@@ -100,7 +100,7 @@ function SignupPage() {
   };
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    alert(data.email);
+    // alert(data.email);
     defaultSignup(data.email, data.password);
     navigate('/');
   };

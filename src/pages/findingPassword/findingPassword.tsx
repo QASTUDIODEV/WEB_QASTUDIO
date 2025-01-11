@@ -78,8 +78,8 @@ export default function FindingPassword() {
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
     const { email, password } = data;
-    alert(email);
-    alert(password);
+    // alert(email);
+    // alert(password);
     navigate('/');
   };
 

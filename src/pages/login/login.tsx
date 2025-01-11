@@ -32,7 +32,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    alert(data);
+    // alert(data);
     // 로그인 로직 추후 추가 예정
   };
 
