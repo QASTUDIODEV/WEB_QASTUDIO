@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -31,8 +31,8 @@ export default function FindingPassword() {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { isValid, errors, touchedFields },
+    control,
+    formState: { errors, touchedFields, isValid },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(findingSchema),
@@ -45,6 +45,26 @@ export default function FindingPassword() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
+
+  const watchedPassword = useWatch({
+    control,
+    name: 'password',
+  });
+
+  const watchedRepassword = useWatch({
+    control,
+    name: 'repassword',
+  });
+
+  const watchedEamil = useWatch({
+    control,
+    name: 'email',
+  });
+
+  const watchedCode = useWatch({
+    control,
+    name: 'code',
+  });
 
   const handleSendCode = () => {
     if (!errors.email?.message) {
@@ -60,9 +80,7 @@ export default function FindingPassword() {
     const { email, password } = data;
     alert(email);
     alert(password);
-
     navigate('/');
-    // 로그인 로직 추후 추가 예정
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -75,16 +93,15 @@ export default function FindingPassword() {
         setStep(2);
       }
       if (step === 2 && !errors.password?.message && !errors.repassword?.message && touchedFields.password && touchedFields.repassword && passwordMatch) {
-        const email = watch('email');
-        const password = watch('password');
+        const email = watchedEamil;
+        const password = watchedPassword;
         onSubmit({ email, password });
       }
     }
   };
 
   const handleVerifyCode = () => {
-    const code = watch('code');
-    if (code === AuthCode) {
+    if (watchedCode === AuthCode) {
       setCodeVerify(true);
     } else {
       setCodeVerify(false);
@@ -92,28 +109,28 @@ export default function FindingPassword() {
   };
 
   useEffect(() => {
-    if (watch('password') === watch('repassword')) {
+    setCodeVerify(undefined);
+  }, [watchedEamil]);
+
+  useEffect(() => {
+    if (codeVerify) {
+      setStep(2);
+    }
+  }, [AuthCode, watchedEamil, codeVerify, watchedCode]);
+
+  useEffect(() => {
+    if (watchedPassword === watchedRepassword) {
       setPasswordMatch(true);
       setErrorMessage('');
     } else {
       setPasswordMatch(false);
       setErrorMessage('Passwords must match.');
     }
-  }, [watch('repassword'), watch('password')]);
+  }, [watchedPassword, watchedRepassword]);
 
   useEffect(() => {
     setStep(0);
   }, []);
-
-  useEffect(() => {
-    setCodeVerify(undefined);
-  }, [watch('email')]);
-
-  useEffect(() => {
-    if (codeVerify) {
-      setStep(2);
-    }
-  }, [AuthCode, watch('email'), codeVerify]);
 
   return (
     <S.Container>
@@ -182,23 +199,7 @@ export default function FindingPassword() {
               span={'Re-enter Password'}
               {...register('repassword')}
             />
-            <AuthButton
-              disabled={
-                !touchedFields.email ||
-                !!errors.email?.message ||
-                !touchedFields.code ||
-                !touchedFields.password ||
-                !touchedFields.repassword ||
-                !codeVerify ||
-                !!errors.code?.message ||
-                !!errors.password?.message ||
-                !!errors.repassword?.message ||
-                !errorMessage
-              }
-              // isValid가 작동을 안함... ㅠㅠ whyrano
-            >
-              Go to the login
-            </AuthButton>
+            <AuthButton disabled={!isValid}>Go to the login</AuthButton>
           </>
         )}
       </S.Form>

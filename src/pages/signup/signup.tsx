@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -37,8 +37,9 @@ function SignupPage() {
   const {
     register,
     handleSubmit,
-    watch,
     getValues,
+    control,
+    setValue,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -53,12 +54,33 @@ function SignupPage() {
   const navigate = useNavigate();
   const contentInputRef = useRef<HTMLInputElement | null>(null);
 
+  const watchedPassword = useWatch({
+    control,
+    name: 'password',
+  });
+
+  const watchedRepassword = useWatch({
+    control,
+    name: 'repassword',
+  });
+
+  const watchedEmail = useWatch({
+    control,
+    name: 'email',
+  });
+
+  const watchedCode = useWatch({
+    control,
+    name: 'code',
+  });
+
   const handleInputClick = (e: React.MouseEvent) => {
     e.preventDefault(); // 클릭 시 기본 동작을 방지
     contentInputRef.current?.click();
   };
 
   const handleSendCode = () => {
+    setValue('code', '');
     if (!errors.email?.message) {
       alert('해당 이메일로 인증 코드가 발송되었습니다');
       setStep(1);
@@ -69,31 +91,12 @@ function SignupPage() {
   };
 
   const handleVerifyCode = () => {
-    const code = getValues('code');
-    if (code === AuthCode) {
+    if (watchedCode === AuthCode) {
       setCodeVerify(true);
     } else {
       setCodeVerify(false);
     }
   };
-
-  useEffect(() => {
-    if (watch('password') === watch('repassword')) {
-      setPasswordMatch(true);
-      setErrorMessage('');
-    } else {
-      setPasswordMatch(false);
-      setErrorMessage('Passwords must match.');
-    }
-  }, [watch('repassword'), watch('password')]);
-
-  useEffect(() => {
-    setStep(0);
-  }, []);
-
-  useEffect(() => {
-    setCodeVerify(undefined);
-  }, [watch('email')]);
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
     alert(data);
@@ -113,28 +116,46 @@ function SignupPage() {
       }
       if (
         step === 1 &&
-        touchedFields.code &&
-        !errors.code?.message &&
-        codeVerify &&
-        !errors.email?.message &&
         touchedFields.email &&
         touchedFields.password &&
-        !errors.password?.message &&
         touchedFields.repassword &&
+        touchedFields.code &&
+        passwordMatch &&
+        codeVerify &&
+        !errors.email?.message &&
+        !errors.password?.message &&
         !errors.repassword?.message &&
-        passwordMatch
+        !errors.code?.message
       ) {
         handleNextStep();
       }
-      if (step === 2 && touchedFields.nickname && !errors.nickname?.message) {
+      if (step === 2 && isValid) {
         const email = getValues('email');
         const password = getValues('password');
         const nickname = getValues('nickname');
-
         onSubmit({ email, password, nickname });
       }
     }
   };
+
+  useEffect(() => {
+    if (watchedPassword === watchedRepassword) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else {
+      setPasswordMatch(false);
+      setErrorMessage('Passwords must match.');
+    }
+  }, [watchedPassword, watchedRepassword]);
+
+  useEffect(() => {
+    setStep(0);
+  }, []);
+
+  useEffect(() => {
+    setCodeVerify(undefined);
+    setStep(0);
+  }, [watchedEmail]);
 
   const renderStep0 = () => (
     <>
@@ -275,25 +296,7 @@ function SignupPage() {
         {...register('nickname')}
       />
       <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
-      <AuthButton
-        type="submit"
-        format="normal"
-        disabled={
-          !touchedFields.email ||
-          !!errors.email?.message ||
-          !touchedFields.code ||
-          !touchedFields.password ||
-          !touchedFields.repassword ||
-          !touchedFields.nickname ||
-          !codeVerify ||
-          !!errors.code?.message ||
-          !!errors.password?.message ||
-          !!errors.repassword?.message ||
-          !!errors.nickname?.message ||
-          !errorMessage
-          // isValid가 작동을 안함... ㅠㅠ whyrano
-        }
-      >
+      <AuthButton type="submit" format="normal" disabled={!isValid}>
         Sign up
       </AuthButton>
     </>
