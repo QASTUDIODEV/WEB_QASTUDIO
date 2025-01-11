@@ -23,6 +23,19 @@ type TMyProfile = {
   unlinkedSocials: TSocialPlatform[];
 };
 
+const nicknamePattern = /^[a-zA-Z0-9가-힣]+$/;
+function validateNickname(nickname: string) {
+  if (!nickname) {
+    return 'Nickname is required.';
+  } else if (nickname.length > 20) {
+    return 'Invalid format.';
+  } else if (!nicknamePattern.test(nickname)) {
+    return 'Invalid format.';
+  }
+
+  return '';
+}
+
 export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, socialLogin, unlinkedSocials }: TMyProfile) {
   const bannerInputRef = useRef<HTMLInputElement | null>(null);
   const profileInputRef = useRef<HTMLInputElement | null>(null);
@@ -80,10 +93,13 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
 
               <S.UserInfo>
                 <div style={{ position: 'relative', display: 'flex' }}>
-                  <S.MessageWrapper>
-                    {/* 수정 예정 */}
-                    <ValidataionMessage message="탈락" isError={true} />
-                  </S.MessageWrapper>
+                  {validateNickname(nickname) && (
+                    <S.MessageWrapper>
+                      {/* 수정 예정 */}
+                      <ValidataionMessage message={validateNickname(nickname)} isError={true} />
+                    </S.MessageWrapper>
+                  )}
+
                   <Input value={nickname} width="268px" onChange={handleNicknameChange} />
                 </div>
                 <S.AccoutWrapper>
@@ -115,7 +131,7 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
               </S.UserInfo>
             </S.ProfileUserInfo>
             <S.ButtonWrapper>
-              <Button type="small_square" color="default" disabled={false} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
+              <Button type="small_square" color="default" disabled={!validateNickname(nickname)} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
                 Done
               </Button>
             </S.ButtonWrapper>
