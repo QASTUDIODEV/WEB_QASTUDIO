@@ -39,7 +39,7 @@ export default function FindingPassword() {
   });
 
   const [step, setStep] = useState(0);
-  const [codeVerify, setCodeVerify] = useState<TCodeVerify>(undefined);
+  const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -113,10 +113,10 @@ export default function FindingPassword() {
   }, [watchedEamil]);
 
   useEffect(() => {
-    if (codeVerify) {
+    if (codeverify) {
       setStep(2);
     }
-  }, [AuthCode, watchedEamil, codeVerify, watchedCode]);
+  }, [AuthCode, watchedEamil, codeverify, watchedCode]);
 
   useEffect(() => {
     if (watchedPassword === watchedRepassword) {
@@ -146,7 +146,7 @@ export default function FindingPassword() {
               btnName="Send"
               handleSendCode={handleSendCode}
               touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message}
+              valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
@@ -162,16 +162,16 @@ export default function FindingPassword() {
               btnName="Send"
               handleSendCode={handleSendCode}
               touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message}
+              valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
             <CodeModule
               touched={touchedFields.code}
-              valid={touchedFields.code && !errors.code?.message}
+              valid={touchedFields.code && !errors.code?.message ? 'true' : 'false'}
               errorMessage={errors.code?.message}
               Name={'Code'}
-              codeVerify={codeVerify}
+              codeverify={codeverify}
               handleVerifyCode={handleVerifyCode}
               {...register('code')}
             />
@@ -182,7 +182,7 @@ export default function FindingPassword() {
             <InputModule
               top={false}
               touched={touchedFields.password}
-              valid={touchedFields.password && !errors.password?.message}
+              valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
               errorMessage={errors.password?.message}
               Name={'Password'}
               inputname={'password'}
@@ -192,7 +192,7 @@ export default function FindingPassword() {
             <InputModule
               top={false}
               touched={touchedFields.repassword}
-              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
               errorMessage={errors.repassword?.message || errorMessage}
               Name={'Password'}
               inputname={'password'}

@@ -38,7 +38,7 @@ const Logos = styled.div<TLogosProp>`
   ${({ theme }) => theme.align.row_center};
   padding: 10px;
   gap: ${({ $gap }) => $gap}px;
-  height: ${({ size }) => (size === 'large' ? '100px' : '30px')};
+  height: ${({ size }) => (size === 'large' ? '60px' : '30px')};
 `;
 
 const Logo = styled.button<TLogoProps>`

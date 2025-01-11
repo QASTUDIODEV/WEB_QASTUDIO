@@ -10,7 +10,7 @@ import * as S from './module.style';
 type TModuleProps = {
   btnName?: string;
   touched: boolean | undefined;
-  valid: boolean | undefined;
+  valid: string | undefined;
   errorMessage: string | undefined;
   handleSendCode?: () => void;
   span?: string;
@@ -21,10 +21,10 @@ type TModuleProps = {
 
 type TCodeModuleProps = {
   touched: boolean | undefined;
-  valid: boolean | undefined;
+  valid: string | undefined;
   errorMessage: string | undefined;
   Name: string;
-  codeVerify: boolean | undefined;
+  codeverify: boolean | undefined;
   handleVerifyCode: () => void;
   // ref: any;
 };
@@ -40,7 +40,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             placeholder={Name}
             type={inputname}
             autoComplete={inputname}
-            isValid={touched ? valid : true}
+            isValid={touched ? valid === 'true' : true}
             errorMessage={errorMessage}
             touched={touched}
             top={top}
@@ -62,21 +62,21 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
 
 // CodeModule 컴포넌트
 export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
-  ({ touched, valid, errorMessage, Name, codeVerify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
+  ({ touched, valid, errorMessage, Name, codeverify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
     return (
       <S.Wrapper>
-        <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeVerify ? true : false) : false) : undefined} ref={ref} {...rest} />
+        <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeverify ? true : false) : false) : undefined} ref={ref} {...rest} />
         <S.MessageWrapper>
           {touched && errorMessage ? (
             <ValidationMessage message={errorMessage} isError={!valid} />
-          ) : codeVerify ? (
+          ) : codeverify ? (
             <ValidationMessage message={'Authentication completed'} isError={false} />
           ) : (
-            codeVerify === false && <ValidationMessage message={'Invalid code.'} isError={true} />
+            codeverify === false && <ValidationMessage message={'Invalid code.'} isError={true} />
           )}
         </S.MessageWrapper>
         <div style={{ position: 'absolute', right: '-90px' }}>
-          <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeVerify={codeVerify}>
+          <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={valid === 'true' ? false : true} codeverify={codeverify}>
             Verify
           </AuthButton>
         </div>

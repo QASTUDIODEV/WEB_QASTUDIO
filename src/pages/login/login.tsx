@@ -38,7 +38,7 @@ export default function LoginPage() {
 
   return (
     <S.Container>
-      <Logo style={{ width: '48px', height: '48px' }} />
+      <Logo className="logo" />
       <S.Container2>
         <S.Texts>
           <S.Title>Welcome to QASTUDIO !</S.Title>
@@ -52,7 +52,7 @@ export default function LoginPage() {
             span="Email"
             top={true}
             touched={touchedFields.email}
-            valid={touchedFields.email && !errors.email?.message}
+            valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
             errorMessage={errors.email?.message}
             {...register('email')}
           />
@@ -63,7 +63,7 @@ export default function LoginPage() {
             span="Password"
             top={false}
             touched={touchedFields.password}
-            valid={touchedFields.password && !errors.password}
+            valid={touchedFields.password && !errors.password ? 'true' : 'false'}
             errorMessage={errors.password?.message}
             {...register('password')}
           />
@@ -74,13 +74,12 @@ export default function LoginPage() {
         </AuthButton>
 
         <OrDivider />
+        <SocialLogo gap={20} size="large" />
+        <S.Buttons>
+          <S.Button onClick={() => navigate('/finding')}>Finding Passwords</S.Button>
+          <S.Button onClick={() => navigate('/signup')}>Sign up</S.Button>
+        </S.Buttons>
       </S.Container2>
-
-      <SocialLogo gap={20} size="large" />
-      <S.Buttons>
-        <S.Button onClick={() => navigate('/finding')}>Finding Passwords</S.Button>
-        <S.Button onClick={() => navigate('/signup')}>Sign up</S.Button>
-      </S.Buttons>
     </S.Container>
   );
 }

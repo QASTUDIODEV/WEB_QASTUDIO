@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
+import { defaultSignup } from '@/apis/auth/auth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -49,7 +50,7 @@ function SignupPage() {
   const [step, setStep] = useState(0);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [codeVerify, setCodeVerify] = useState<TCodeVerify>(undefined);
+  const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
   const navigate = useNavigate();
   const contentInputRef = useRef<HTMLInputElement | null>(null);
@@ -99,7 +100,8 @@ function SignupPage() {
   };
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    alert(data);
+    alert(data.email);
+    defaultSignup(data.email, data.password);
     navigate('/');
   };
 
@@ -111,7 +113,7 @@ function SignupPage() {
       if (step === 0 && touchedFields.email && !errors.email?.message) {
         handleSendCode();
       }
-      if (step === 1 && touchedFields.code && !errors.code?.message && !codeVerify) {
+      if (step === 1 && touchedFields.code && !errors.code?.message && !codeverify) {
         handleVerifyCode();
       }
       if (
@@ -121,7 +123,7 @@ function SignupPage() {
         touchedFields.repassword &&
         touchedFields.code &&
         passwordMatch &&
-        codeVerify &&
+        codeverify &&
         !errors.email?.message &&
         !errors.password?.message &&
         !errors.repassword?.message &&
@@ -168,14 +170,14 @@ function SignupPage() {
           btnName="Send"
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
-          valid={touchedFields.email && !errors.email?.message}
+          valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
         <InputModule
           top={false}
           touched={touchedFields.password}
-          valid={touchedFields.password && !errors.password?.message}
+          valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
           errorMessage={errors.password?.message}
           Name={'Password'}
           inputname={'password'}
@@ -185,7 +187,7 @@ function SignupPage() {
         <InputModule
           top={false}
           touched={touchedFields.repassword}
-          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
           errorMessage={errors.repassword?.message || errorMessage}
           Name={'Password'}
           inputname={'password'}
@@ -216,23 +218,23 @@ function SignupPage() {
           btnName="Send"
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
-          valid={touchedFields.email && !errors.email?.message}
+          valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
         <CodeModule
           touched={touchedFields.code}
-          valid={touchedFields.code && !errors.code?.message}
+          valid={touchedFields.code && !errors.code?.message ? 'true' : 'false'}
           errorMessage={errors.code?.message}
           Name={'Code'}
-          codeVerify={codeVerify}
+          codeverify={codeverify}
           handleVerifyCode={handleVerifyCode}
           {...register('code')}
         />
         <InputModule
           top={false}
           touched={touchedFields.password}
-          valid={touchedFields.password && !errors.password?.message}
+          valid={touchedFields.password && !errors.password?.message ? 'true' : 'false'}
           errorMessage={errors.password?.message}
           Name={'Password'}
           inputname={'password'}
@@ -242,7 +244,7 @@ function SignupPage() {
         <InputModule
           top={false}
           touched={touchedFields.repassword}
-          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+          valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch ? 'true' : 'false'}
           errorMessage={errors.repassword?.message || errorMessage}
           Name={'Password'}
           inputname={'password'}
@@ -259,7 +261,7 @@ function SignupPage() {
             !touchedFields.code ||
             !touchedFields.password ||
             !touchedFields.repassword ||
-            !codeVerify ||
+            !codeverify ||
             !!errors.code?.message ||
             !!errors.password?.message ||
             !!errors.repassword?.message
@@ -280,6 +282,9 @@ function SignupPage() {
   const renderStep2 = () => (
     <>
       <S.ProfileImg onClick={handleInputClick}>
+        <S.Backdrop>
+          <ProfileEdit />
+        </S.Backdrop>
         <Profile />
         <S.ProfileEditBtn>
           <ProfileEdit />
@@ -291,7 +296,7 @@ function SignupPage() {
         Name="Nickname"
         span="Nickname"
         touched={touchedFields.nickname}
-        valid={touchedFields.nickname && !errors.nickname?.message}
+        valid={touchedFields.nickname && !errors.nickname?.message ? 'true' : 'false'}
         errorMessage={errors.nickname?.message}
         {...register('nickname')}
       />
@@ -304,7 +309,7 @@ function SignupPage() {
 
   return (
     <S.Container>
-      <Logo style={{ width: '48px', height: '48px' }} />
+      <Logo className="logo" />
       <S.Form onKeyDown={handleKeyDown} onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && renderStep0()}
         {step === 1 && renderStep1()}

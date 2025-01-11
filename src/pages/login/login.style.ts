@@ -1,17 +1,47 @@
 import styled from 'styled-components';
 
+// const Container = styled.div`
+//   ${({ theme }) => theme.align.column_center};
+//   padding: 50px 120px;
+//   gap: 20px;
+//   border-radius: 16px;
+//   z-index: 1;
+//   background-color: ${({ theme }) => theme.colors.black};
+// `;
+
 const Container = styled.div`
   ${({ theme }) => theme.align.column_center};
-  padding: 50px 120px;
+  position: relative;
+  width: 490px;
+  max-height: 550px;
   gap: 20px;
   border-radius: 16px;
   z-index: 1;
   background-color: ${({ theme }) => theme.colors.black};
+  .logo {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    top: 30px;
+  }
+`;
+
+const Form = styled.form`
+  width: 100%;
+  gap: 20px;
+  ${({ theme }) => theme.align.column_center};
+  span {
+    ${({ theme }) => theme.text.medium_14};
+    width: 100%;
+  }
 `;
 const Container2 = styled.div`
   ${({ theme }) => theme.align.column_center};
-  gap: 30px;
+  gap: 15px;
   border-radius: 16px;
+  padding-top: 90px;
+  padding-bottom: 20px;
+  height: 100%;
 `;
 
 const Texts = styled.div`
@@ -24,17 +54,6 @@ const Title = styled.div`
 
 const Description = styled.div`
   ${({ theme }) => theme.text.medium_18};
-`;
-
-const Form = styled.form`
-  gap: 15px;
-  ${({ theme }) => theme.align.column_center};
-
-  width: 100%;
-
-  span {
-    ${({ theme }) => theme.text.medium_14};
-  }
 `;
 
 const Buttons = styled.div`

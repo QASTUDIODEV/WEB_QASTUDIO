@@ -8,12 +8,12 @@ interface IButtonProps {
   disabled?: boolean; //  비활성화 여부
   onClick?: () => void; // 클릭 이벤트
   type?: 'button' | 'submit' | 'reset';
-  codeVerify?: boolean;
-  valid?: boolean;
+  codeverify?: boolean;
+  valid?: string;
 }
-export default function AuthButton({ children, format = 'normal', disabled = false, onClick, type, codeVerify, valid }: IButtonProps) {
+export default function AuthButton({ children, format = 'normal', disabled = false, onClick, type, codeverify, valid }: IButtonProps) {
   return (
-    <S.StyledButton type={type} valid={valid} format={format} disabled={disabled} codeVerify={codeVerify} onClick={disabled ? undefined : onClick}>
+    <S.StyledButton type={type} valid={valid} format={format} disabled={disabled} $codeverify={codeverify} onClick={disabled ? undefined : onClick}>
       {children}
     </S.StyledButton>
   );
