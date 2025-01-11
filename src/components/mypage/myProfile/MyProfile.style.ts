@@ -35,7 +35,7 @@ const Title = styled.div`
 const ProfileWrapper = styled.div`
   display: flex;
   position: relative;
-  height: 320px;
+  height: 50%;
   border-radius: 12.8px;
   width: 100%;
   align-items: end;
@@ -62,12 +62,12 @@ const Profile = styled.div`
 const BannerImg = styled.div<TBannerImg>`
   border-radius: 12.8px;
   width: 100%;
-  height: 320px;
+  height: 100%;
   background-color: rgba(255, 255, 255, 0.2) !important;
   background: ${({ url }) =>
     url
       ? `linear-gradient(0deg, rgba(0, 7, 20, 0.8) 0%, rgba(0, 7, 20, 0) 100%), url(${url})`
-      : ' linear-gradient(rgba(0, 7, 20, 0) 0%, rgba(0, 7, 20, 0.9) 100%)'};
+      : 'linear-gradient(rgba(0, 7, 20, 0) 0%, rgba(0, 7, 20, 0.9) 100%)'};
   background-size: cover;
   background-position: center;
   &:hover {
