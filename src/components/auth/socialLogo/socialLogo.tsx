@@ -13,7 +13,7 @@ type TSocialLogo = {
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
   return (
-    <S.Logos gap={gap} size={size}>
+    <S.Logos $gap={gap} size={size}>
       {id ? (
         <>
           {id?.includes('google') && (
@@ -27,7 +27,7 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
             </S.Logo>
           )}
           {id?.includes('github') && (
-            <S.Logo color="black" isGithub={true} size={size} disabled={disable}>
+            <S.Logo color="black" $isgithub="true" size={size} disabled={disable}>
               <GithubLogo />
             </S.Logo>
           )}
@@ -40,7 +40,7 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
           <S.Logo color="#FEE500" size={size} disabled={disable}>
             <KakaoLogo />
           </S.Logo>
-          <S.Logo color="black" isGithub={true} size={size} disabled={disable}>
+          <S.Logo color="black" $isgithub="true" size={size} disabled={disable}>
             <GithubLogo />
           </S.Logo>
         </>

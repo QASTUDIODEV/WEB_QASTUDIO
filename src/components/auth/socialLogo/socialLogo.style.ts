@@ -2,13 +2,13 @@ import styled, { css } from 'styled-components';
 
 type TLogoProps = {
   color: string;
-  isGithub?: boolean;
+  $isgithub?: string;
   size: 'small' | 'large';
   disable?: boolean;
 };
 
 type TLogosProp = {
-  gap: number;
+  $gap: number;
   size: string;
 };
 
@@ -37,7 +37,7 @@ const sizeLogoType = {
 const Logos = styled.div<TLogosProp>`
   ${({ theme }) => theme.align.row_center};
   padding: 10px;
-  gap: ${({ gap }) => gap}px;
+  gap: ${({ $gap }) => $gap}px;
   height: ${({ size }) => (size === 'large' ? '100px' : '30px')};
 `;
 
@@ -49,8 +49,8 @@ const Logo = styled.button<TLogoProps>`
   border-radius: 99px;
   svg {
     ${({ size }) => sizeLogoType[size]}
-    width: ${({ isGithub, size }) => isGithub && (size === 'small' ? '18px' : '41px')};
-    height: ${({ isGithub, size }) => isGithub && (size === 'small' ? '18px' : '41px')};
+    width: ${({ $isgithub, size }) => $isgithub === 'true' && (size === 'small' ? '18px' : '41px')};
+    height: ${({ $isgithub, size }) => $isgithub === 'true' && (size === 'small' ? '18px' : '41px')};
   }
   &:disabled {
     cursor: default;
