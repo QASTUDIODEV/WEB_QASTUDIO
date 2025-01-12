@@ -41,6 +41,7 @@ const ProfileWrapper = styled.div`
   align-items: end;
   min-height: 155px;
   justify-content: space-between;
+  overflow-x: hidden;
 `;
 
 const Profile = styled.div`
