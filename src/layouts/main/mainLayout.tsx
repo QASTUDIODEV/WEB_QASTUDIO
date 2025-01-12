@@ -8,7 +8,9 @@ export default function MainLayout() {
   return (
     <S.Container>
       <Sidebar />
-      <Outlet />
+      <S.OutletWrapper>
+        <Outlet />
+      </S.OutletWrapper>
     </S.Container>
   );
 }
