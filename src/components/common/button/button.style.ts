@@ -108,7 +108,10 @@ export const StyledButton = styled.button<{
   justify-content: center;
   align-items: center;
   gap: 10px;
-
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
   ${({ type }) => buttonTypes[type]}
   ${({ color }) => buttonColors[color]}
   ${({ disabled }) => disabled && disabledStyles}
