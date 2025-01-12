@@ -39,6 +39,7 @@ const ProfileWrapper = styled.div`
   border-radius: 12.8px;
   width: 100%;
   align-items: end;
+  min-height: 155px;
   justify-content: space-between;
 `;
 

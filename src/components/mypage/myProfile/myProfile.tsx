@@ -131,7 +131,14 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
               </S.UserInfo>
             </S.ProfileUserInfo>
             <S.ButtonWrapper>
-              <Button type="small_square" color="default" disabled={!validateNickname(nickname)} icon={<Done />} iconPosition="left" onClick={handleDoneClick}>
+              <Button
+                type="small_square"
+                color="default"
+                disabled={validateNickname(nickname) !== ''}
+                icon={<Done />}
+                iconPosition="left"
+                onClick={handleDoneClick}
+              >
                 Done
               </Button>
             </S.ButtonWrapper>

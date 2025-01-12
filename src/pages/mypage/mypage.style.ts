@@ -10,6 +10,7 @@ const Container = styled.div`
   max-width: 1200px;
   gap: 20px;
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 const Title = styled.div`
   width: 79px;

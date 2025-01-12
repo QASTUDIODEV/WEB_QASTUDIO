@@ -9,6 +9,7 @@ const ProjectList = styled.div`
   border-radius: 12.8px;
   overflow-x: scroll;
   max-height: 280px;
+  gap: 10px;
 `;
 
 const Table = styled.table`
@@ -25,6 +26,7 @@ const TH = styled.th`
   text-align: left;
   height: 26px;
   padding-bottom: 16px;
+  white-space: nowrap;
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 
@@ -32,6 +34,7 @@ const Buttons = styled.div`
   display: flex;
   gap: 8px;
   flex: none;
+  margin-top: 5px;
   svg {
     width: 19.2px;
     height: 19.2px;
