@@ -86,6 +86,7 @@ const LRBox = styled.div<{ width: string }>`
   margin-top: 16px;
   height: 100%;
   width: ${(props) => props.width};
+  max-width: 100%;
 `;
 
 const InnerBox = styled.div`
@@ -118,7 +119,7 @@ const AccessRights = styled.div`
 `;
 const AccessBox = styled.div`
   display: flex;
-  margin: 10px; 20px;
+  margin: 10px 20px;
   flex-direction: column;
 `;
 export { AccessBox, AccessRights, Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };

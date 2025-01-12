@@ -5,7 +5,7 @@ const Container = styled.div`
   background: ${({ theme }) => theme.colors.primary.pri_900};
   width: 100%;
   flex: 1;
-  height: 100vh;
+  min-height: 100vh;
   padding: 5% 7.5% 3.125% 7.5%;
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@ const Box = styled.div<{ height: string }>`
 
 const Left = styled.div`
   width: 75%;
-  gap: 4.310344%;
+  gap: 40px;
   display: flex;
   flex-direction: column;
 `;
