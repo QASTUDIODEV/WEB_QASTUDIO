@@ -41,7 +41,6 @@ const ProfileWrapper = styled.div`
   align-items: end;
   min-height: 155px;
   justify-content: space-between;
-  overflow-x: hidden;
 `;
 
 const Profile = styled.div`
@@ -75,6 +74,11 @@ const BannerImg = styled.div<TBannerImg>`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const InputValidateWrapper = styled.div`
+  position: relative;
+  display: flex;
 `;
 
 const UserInfo = styled.div`
@@ -284,6 +288,18 @@ const ProfileUserInfo = styled.div`
   display: flex;
   gap: 15px;
 `;
+
+const SocialLogoWrapper = styled.div`
+  display: flex;
+  background-color: rgba(22, 24, 28, 1);
+  border: 0.8px solid rgba(8, 38, 89, 1);
+  border-radius: 6.4px;
+  padding: 8px;
+  position: absolute;
+  bottom: -55px;
+  left: 0;
+`;
+
 export {
   Account,
   AccoutWrapper,
@@ -292,6 +308,7 @@ export {
   ButtonWrapper,
   Container,
   Container2,
+  InputValidateWrapper,
   MessageWrapper,
   PlusWrapper,
   Profile,
@@ -303,6 +320,7 @@ export {
   ProjectNameTD,
   ProjectNum,
   Projects,
+  SocialLogoWrapper,
   Table,
   TBody,
   TD,
