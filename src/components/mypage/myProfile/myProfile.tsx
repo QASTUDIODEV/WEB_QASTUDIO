@@ -92,7 +92,7 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
               <input className="profile-image-upload" ref={profileInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
 
               <S.UserInfo>
-                <div style={{ position: 'relative', display: 'flex' }}>
+                <S.InputValidateWrapper>
                   {validateNickname(nickname) && (
                     <S.MessageWrapper>
                       {/* 수정 예정 */}
@@ -101,7 +101,7 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
                   )}
 
                   <Input value={nickname} width="268px" onChange={handleNicknameChange} />
-                </div>
+                </S.InputValidateWrapper>
                 <S.AccoutWrapper>
                   <S.Account>email.email.com</S.Account>
                   <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
@@ -109,21 +109,9 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
                     <S.PlusWrapper onClick={() => setShow(true)}>
                       <Plus />
                       {show && (
-                        <div
-                          style={{
-                            display: 'flex',
-                            backgroundColor: 'rgba(22, 24, 28, 1)',
-                            border: '0.8px solid rgba(8, 38, 89, 1)',
-                            borderRadius: '6.4px',
-                            padding: '8px',
-                            position: 'absolute',
-                            bottom: '-55px',
-                            left: '0',
-                          }}
-                          ref={contentRef}
-                        >
+                        <S.SocialLogoWrapper ref={contentRef}>
                           <SocialLogo gap={8} size="small" id={unlinkedSocials} />
-                        </div>
+                        </S.SocialLogoWrapper>
                       )}
                     </S.PlusWrapper>
                   </div>

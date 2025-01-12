@@ -15,7 +15,7 @@ function findUnlinkedSocials(linkedAccounts: TSocialPlatform[]): TSocialPlatform
 
 export default function MyPage() {
   const [isEdit, setIsEdit] = useState(false);
-  const [nickname, setNickname] = useState('기존 닉네임');
+  const [nickname, setNickname] = useState('기존닉네임');
   const socialLogin: TSocialPlatform[] = ['github'];
   const unlinkedSocials = findUnlinkedSocials(socialLogin);
 
