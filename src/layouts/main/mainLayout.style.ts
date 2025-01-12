@@ -6,6 +6,7 @@ const Container = styled.div`
 
   height: 100%;
   min-height: 100vh;
+  display: flex;
 `;
 
 export { Container };
