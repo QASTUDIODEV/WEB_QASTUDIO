@@ -18,26 +18,6 @@ const Form = styled.form`
     ${({ theme }) => theme.text.medium_14};
     width: 100%;
   }
-  button {
-    height: 40px;
-  }
-`;
-
-const Form2 = styled.form`
-  width: 300px;
-  gap: 20px;
-  position: relative;
-  ${({ theme }) => theme.align.column_center};
-  span {
-    ${({ theme }) => theme.text.medium_14};
-    width: 100%;
-  }
-  button {
-    height: 40px;
-  }
-  .profile-image-upload {
-    display: none;
-  }
 `;
 
 const BackButton = styled.button`
@@ -118,18 +98,6 @@ const Backdrop = styled.div`
   }
 `;
 
-const MessageWrapper = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const MessageWrapper2 = styled.div`
-  display: flex;
-  position: absolute;
-  top: 2px;
-  right: 0;
-`;
-
 const Inputs = styled.div`
   display: flex;
   width: 100%;
@@ -137,9 +105,4 @@ const Inputs = styled.div`
   gap: 10px;
 `;
 
-const Info = styled.div`
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-  font-size: 10px;
-  line-height: 15px;
-`;
-export { BackButton, Backdrop, Container, Form, Form2, Info, Inputs, MessageWrapper, MessageWrapper2, ProfileEditBtn, ProfileImg, Wrapper };
+export { BackButton, Backdrop, Container, Form, Inputs, ProfileEditBtn, ProfileImg, Wrapper };
