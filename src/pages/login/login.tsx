@@ -52,7 +52,7 @@ export default function LoginPage() {
             span="Email"
             top={true}
             touched={touchedFields.email}
-            valid={touchedFields.email && !errors.email?.message ? 'true' : 'false'}
+            valid={touchedFields.email && !errors.email?.message}
             errorMessage={errors.email?.message}
             {...register('email')}
           />
@@ -63,7 +63,7 @@ export default function LoginPage() {
             span="Password"
             top={false}
             touched={touchedFields.password}
-            valid={touchedFields.password && !errors.password ? 'true' : 'false'}
+            valid={touchedFields.password && !errors.password}
             errorMessage={errors.password?.message}
             {...register('password')}
           />
