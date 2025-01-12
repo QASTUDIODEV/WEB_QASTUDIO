@@ -7,9 +7,9 @@ const ProjectList = styled.div`
   margin-left: 20px;
   padding: 20px;
   border-radius: 12.8px;
-  overflow-x: scroll;
   max-height: 280px;
   gap: 10px;
+  overflow-x: scroll;
 `;
 
 const Table = styled.table`
