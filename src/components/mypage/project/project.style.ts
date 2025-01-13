@@ -25,7 +25,6 @@ const TH = styled.th`
   text-align: left;
   height: 26px;
   padding-bottom: 16px;
-
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 
@@ -49,10 +48,47 @@ const ProjectNameTD = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  max-width: 130px;
+  position: relative;
   ${({ theme }) => theme.text.medium_14}
+  &:hover .dropdown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
   .ProfileWrapper {
     width: 19.2px;
     height: 19.2px;
+  }
+  span {
+    max-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+  }
+  span:hover .dropdown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .dropdown {
+    display: flex;
+    visibility: hidden;
+    position: absolute;
+    word-break: break-all;
+    white-space: normal;
+    top: -10px;
+    left: 20px;
+    background-color: rgba(28, 37, 49, 1);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    width: max-content;
+    max-width: 40vw;
+    opacity: 0;
+    z-index: 1;
   }
 `;
 
