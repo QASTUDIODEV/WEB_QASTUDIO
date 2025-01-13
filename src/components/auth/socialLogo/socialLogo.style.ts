@@ -4,7 +4,7 @@ type TLogoProps = {
   $isgithub?: string;
   size: 'small' | 'large';
   disable?: boolean;
-  logotype: 'github' | 'kakao' | 'google';
+  $logotype: 'github' | 'kakao' | 'google';
 };
 
 type TLogosProp = {
@@ -56,7 +56,7 @@ const Logos = styled.div<TLogosProp>`
 const Logo = styled.button<TLogoProps>`
   ${({ theme }) => theme.align.row_center};
   ${({ size }) => sizeType[size]};
-  ${({ logotype }) => logoType[logotype]};
+  ${({ $logotype }) => logoType[$logotype]};
 
   border: none;
   border-radius: 99px;
