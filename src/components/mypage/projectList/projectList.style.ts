@@ -8,20 +8,27 @@ const ProjectList = styled.div`
   padding: 20px;
   border-radius: 12.8px;
   gap: 10px;
+  height: 283px;
   overflow-x: scroll;
   flex-direction: row;
-
-  @media (max-width: 1030px) {
+  @media (max-width: 1138px) {
+    height: 310px;
+  }
+  @media (max-width: 1109px) {
+    height: 340px;
+  }
+  @media (max-width: 1050px) {
     flex-direction: column;
-    height: auto;
+    height: 360px;
     justify-content: center;
     overflow-y: hidden;
   }
-  @media (min-width: 1122px) {
-    height: 280px;
-  }
   @media (max-width: 965px) {
     overflow-y: scroll;
+  }
+  @media (max-width: 750px) {
+    margin: 0;
+    width: 100%;
   }
 `;
 
@@ -29,8 +36,8 @@ const Table = styled.table`
   width: 100%;
   height: auto;
   table-layout: auto;
-  .right {
-    padding-right: 2rem;
+  .blank {
+    min-width: 2rem;
   }
 `;
 
@@ -39,9 +46,11 @@ const TH = styled.th`
   text-align: left;
   height: 26px;
   padding-bottom: 16px;
-  /* white-space: nowrap; */
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  @media (max-width: 1030px) {
+  @media (max-width: 1138px) {
+    text-align: center;
+  }
+  @media (max-width: 1050px) {
     text-align: center;
   }
 `;
@@ -55,7 +64,7 @@ const Buttons = styled.div`
     width: 19.2px;
     height: 19.2px;
   }
-  @media (max-width: 1030px) {
+  @media (max-width: 1050px) {
     align-self: center;
     gap: 30px;
   }

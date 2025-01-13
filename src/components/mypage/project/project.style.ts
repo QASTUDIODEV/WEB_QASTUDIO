@@ -32,6 +32,9 @@ const TD = styled.td`
   ${({ theme }) => theme.text.medium_14}
   height: 26px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
+  @media (max-width: 1138px) {
+    text-align: center;
+  }
 `;
 
 const Buttons = styled.div`
@@ -48,7 +51,7 @@ const ProjectNameTD = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  max-width: 130px;
+  width: 135px;
   position: relative;
   ${({ theme }) => theme.text.medium_14}
   &:hover .dropdown {
@@ -61,7 +64,7 @@ const ProjectNameTD = styled.div`
     height: 19.2px;
   }
   span {
-    max-width: 100px;
+    max-width: 105px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -79,8 +82,8 @@ const ProjectNameTD = styled.div`
     position: absolute;
     word-break: break-all;
     white-space: normal;
-    top: -10px;
-    left: 20px;
+    left: 23px;
+    border-radius: 100px;
     background-color: rgba(28, 37, 49, 1);
     color: white;
     padding: 10px;
@@ -94,6 +97,7 @@ const ProjectNameTD = styled.div`
 
 const TR = styled.tr`
   height: 26px;
+  cursor: pointer;
 `;
 
 const TBody = styled.tbody`

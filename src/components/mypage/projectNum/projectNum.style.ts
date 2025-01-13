@@ -7,8 +7,10 @@ const ProjectNum = styled.div`
   padding: 32px 24px;
   gap: 16.8px;
   border-radius: 12.8px;
-  max-width: 184px;
+  width: 184px;
   height: 210px;
+  align-items: flex-start;
+
   svg {
     width: 51.2px;
     height: 51.2px;
@@ -17,9 +19,22 @@ const ProjectNum = styled.div`
     font-size: 32px;
     font-weight: 700;
     color: #ffffff;
+    display: flex;
+    flex-direction: column;
   }
   span {
+    margin-top: 8px;
     font-size: 14.4px;
+  }
+  @media (max-width: 750px) {
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    height: auto;
+    .ProjectNumber {
+      flex-direction: column;
+      display: flex;
+    }
   }
 `;
 
