@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
 export const Background = styled.div`
-  background-color: inherit;
+  background-color: ${({ theme }) => theme.colors.primary.pri_900};
   padding: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  min-width: 900px;
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-family: Pretendard;
@@ -22,6 +24,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: inherit;
+  min-width: 700px;
 `;
 
 export const Header = styled.div`
