@@ -6,10 +6,13 @@ const Container = styled.div`
   height: 100%;
   min-height: 100vh;
   display: flex;
+  width: 100vw;
 `;
 
 const OutletWrapper = styled.div`
   flex: 1;
+  max-width: 100vw;
+  overflow-x: hidden;
 `;
 
 export { Container, OutletWrapper };
