@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenario/ButtonGroup/ButtonGroup.style';
@@ -13,12 +14,11 @@ import ExclamationCircle from '@/assets/icons/exclamation_circle.svg?react';
 import Play from '@/assets/icons/play.svg?react';
 import type { ICharacter } from '@/slices/scenarioSlice';
 import { edit, resetChecks } from '@/slices/scenarioSlice';
-import type { TAppDispatch, TRootState } from '@/store/store';
 
 export default function ButtonGroup() {
-  const dispatch = useDispatch<TAppDispatch>();
-  const isEdit: boolean = useSelector((state: TRootState) => state.scenario.isEdit);
-  const characters: ICharacter[] = useSelector((state: TRootState) => state.scenario.characters);
+  const dispatch = useDispatch();
+  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
+  const characters: ICharacter[] = useSelector((state) => state.scenario.characters);
 
   // 체크 여부 판단
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);

@@ -8,12 +8,10 @@ export const Background = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  min-width: 900px;
+  min-width: 1005px;
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
-    font-family: Pretendard;
     font-size: 18px;
-    font-style: normal;
     font-weight: 500;
     line-height: 150%;
     letter-spacing: 0.36px;
@@ -24,7 +22,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: inherit;
-  min-width: 700px;
 `;
 
 export const Header = styled.div`
@@ -35,7 +32,6 @@ export const Header = styled.div`
   h1 {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-size: 24px;
-    font-style: normal;
     font-weight: 500;
     line-height: 150%;
     letter-spacing: 0.48px;

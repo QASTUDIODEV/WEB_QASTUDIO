@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import CheckBox from '@/components/scenario/CheckBox/CheckBox';
 import * as S from '@/components/scenario/ScenarioItem/ScenarioItem.style';
@@ -7,7 +7,6 @@ import Calender from '@/assets/icons/calender.svg?react';
 import File from '@/assets/icons/file.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import type { IScenario } from '@/slices/scenarioSlice';
-import type { TRootState } from '@/store/store';
 
 interface IScenarioItemProps {
   scenarioId: number;
@@ -16,11 +15,12 @@ interface IScenarioItemProps {
 
 export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemProps) {
   //시나리오 가져오기
-  const scenario: IScenario | undefined = useSelector((state: TRootState) =>
+  const scenario: IScenario | undefined = useSelector((state) =>
     state.scenario.characters.find((char) => char.id === characterId)?.scenarios.find((scn) => scn.id === scenarioId),
   );
+
   //편집 상태 판단
-  const isEdit: boolean = useSelector((state: TRootState) => state.scenario.isEdit);
+  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
 
   if (!scenario) {
     return null;

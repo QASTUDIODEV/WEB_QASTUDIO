@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import * as S from '@/components/scenario/CharacterHeader/CharacterHeader.style';
 import CheckBox from '@/components/scenario/CheckBox/CheckBox';
@@ -10,20 +10,19 @@ import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
 import type { ICharacter } from '@/slices/scenarioSlice';
 import { toggleExpand } from '@/slices/scenarioSlice';
-import type { TAppDispatch, TRootState } from '@/store/store';
 
 interface ICharacterHeaderProps {
   characterId: number;
 }
 
 export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
-  const dispatch = useDispatch<TAppDispatch>();
+  const dispatch = useDispatch();
 
   //시나리오 가져오기
-  const character: ICharacter | undefined = useSelector((state: TRootState) => state.scenario.characters.find((char) => char.id === characterId));
+  const character: ICharacter | undefined = useSelector((state) => state.scenario.characters.find((char) => char.id === characterId));
 
   //편집 상태 판단
-  const isEdit: boolean = useSelector((state: TRootState) => state.scenario.isEdit);
+  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
 
   // 펼치기 토글 함수
   const handleExpandToggle = () => {
