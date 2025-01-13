@@ -7,7 +7,7 @@ import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 
 export default function ProjectList() {
   const projects = [
-    { name: 'UMC_PM_DAY', participants: 12, date: '2025.01.09', id: 1 },
+    { name: 'UMC_PM_DAYUMC_PM_DAYUMC_PM_DAYUMC_PM_DAYUMC_PM_DAY', participants: 12, date: '2025.01.09', id: 1 },
     { name: 'UMC_PM_DAY', participants: 23, date: '2025.01.09', id: 2 },
     { name: 'UMC_PM_DAY', participants: 102, date: '2025.01.09', id: 3 },
     { name: 'UMC_PM_DAY', participants: 243, date: '2025.01.09', id: 4 },
