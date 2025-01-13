@@ -12,6 +12,8 @@ type TSocialLogo = {
 };
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
+  const kakaoLoginUrl = `${import.meta.env.VITE_KAKAO_URL}?response_type=code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
+  // const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
   return (
     <S.Logos $gap={gap} size={size}>
       {id ? (
@@ -37,7 +39,14 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
           <S.Logo color="#ffffff" size={size} disabled={disable}>
             <GoogleLogo />
           </S.Logo>
-          <S.Logo color="#FEE500" size={size} disabled={disable}>
+          <S.Logo
+            color="#FEE500"
+            size={size}
+            disabled={disable}
+            onClick={() => {
+              location.href = kakaoLoginUrl;
+            }}
+          >
             <KakaoLogo />
           </S.Logo>
           <S.Logo color="black" $isgithub="true" size={size} disabled={disable}>

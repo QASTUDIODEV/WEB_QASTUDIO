@@ -5,6 +5,12 @@ const defaultSignup = async (email: string, password: string) => {
   return data;
 };
 
+const getKakaoOAuth = async (code: string) => {
+  const url = `${import.meta.env.VITE_API_BASE_URL}/auth/kakao-oauth?code=${code}`;
+  const { data } = await axiosInstance.get(url);
+  return data;
+};
+
 const authSendEmailCode = async (email: string) => {
   const { data } = await axiosInstance.post('/v0/auth/sign-up/email', { email });
   return data;
@@ -31,4 +37,4 @@ const uploadSingleImg = async (img: File) => {
   }
 };
 
-export { authSendEmailCode, defaultSignup, uploadSingleImg };
+export { authSendEmailCode, defaultSignup, getKakaoOAuth, uploadSingleImg };
