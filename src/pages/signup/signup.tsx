@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
-import { defaultSignup } from '@/apis/auth/auth';
+import { authSendEmailCode, defaultSignup, uploadSingleImg } from '@/apis/auth/auth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -46,7 +46,7 @@ function SignupPage() {
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
   });
-
+  const [isPending, setIsPending] = useState(false);
   const [step, setStep] = useState(0);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -80,12 +80,15 @@ function SignupPage() {
     contentInputRef.current?.click();
   };
 
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
+      setIsPending(true);
+      const res = await authSendEmailCode(watchedEmail);
+      setAuthCode(res.result.authCode);
       alert('해당 이메일로 인증 코드가 발송되었습니다');
+      setIsPending(false);
       setStep(1);
-      setAuthCode('1234'); //추후 API 요청해서 받아온 인증 값으로 변경 예정
     } else {
       alert('올바른 이메일을 입력해주세요');
     }
@@ -96,6 +99,27 @@ function SignupPage() {
       setCodeVerify(true);
     } else {
       setCodeVerify(false);
+    }
+  };
+
+  const handleImageUpload = async (blob: File) => {
+    if (!blob.type.startsWith('image/')) {
+      alert('이미지만 업로드 가능합니다');
+      return;
+    }
+    try {
+      const response = await uploadSingleImg(blob);
+      const imageUrl = response.imageUrl;
+      // console.log(imageUrl);
+    } catch {
+      // console.error('이미지 업로드 실패');
+    }
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // 사용자가 선택한 첫 번째 파일
+    if (file) {
+      await handleImageUpload(file);
     }
   };
 
@@ -171,6 +195,7 @@ function SignupPage() {
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
           valid={touchedFields.email && !errors.email?.message}
+          pending={isPending}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
@@ -301,7 +326,15 @@ function SignupPage() {
         errorMessage={errors.nickname?.message}
         {...register('nickname')}
       />
-      <input className="profile-image-upload" ref={contentInputRef} type="file" accept="image/*" tabIndex={-1} style={{ display: 'none' }} />
+      <input
+        className="profile-image-upload"
+        ref={contentInputRef}
+        type="file"
+        accept="image/*"
+        tabIndex={-1}
+        style={{ display: 'none' }}
+        onChange={handleInputChange}
+      />
       <AuthButton type="submit" format="normal" disabled={!isValid}>
         Sign up
       </AuthButton>

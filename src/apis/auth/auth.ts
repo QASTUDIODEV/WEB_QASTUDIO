@@ -5,4 +5,30 @@ const defaultSignup = async (email: string, password: string) => {
   return data;
 };
 
-export { defaultSignup };
+const authSendEmailCode = async (email: string) => {
+  const { data } = await axiosInstance.post('/v0/auth/sign-up/email', { email });
+  return data;
+};
+
+const uploadSingleImg = async (img: File) => {
+  const formData = new FormData();
+  formData.append('image', img);
+
+  try {
+    const { data } = await axiosInstance.post(
+      '/v0/s3/presigned/upload',
+      { formData },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    console.error('File upload failed:', error);
+    throw error;
+  }
+};
+
+export { authSendEmailCode, defaultSignup, uploadSingleImg };
