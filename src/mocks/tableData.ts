@@ -7,7 +7,7 @@ export const tableData = [
     state: 'Success',
     time: '2.5s',
     user: '핑퐁',
-    action: 'Run Scenario',
+    action: true,
   },
   {
     date: '2024. 12. 21',
@@ -17,7 +17,7 @@ export const tableData = [
     state: 'Success',
     time: '2.5s',
     user: '핑퐁',
-    action: 'Run Scenario',
+    action: true,
   },
   {
     date: '2024. 12. 21',
@@ -27,7 +27,7 @@ export const tableData = [
     state: 'Fail',
     time: '2.5s',
     user: '핑퐁',
-    action: 'Check the error',
+    action: false,
   },
   {
     date: '2024. 12. 21',
@@ -37,7 +37,7 @@ export const tableData = [
     state: 'Success',
     time: '3s',
     user: '핑퐁',
-    action: 'Run Scenario',
+    action: true,
   },
   {
     date: '2024. 12. 21',
@@ -47,7 +47,7 @@ export const tableData = [
     state: 'Fail',
     time: '5s',
     user: '핑퐁',
-    action: 'Check the error',
+    action: false,
   },
   {
     date: '2024. 12. 21',
@@ -57,6 +57,6 @@ export const tableData = [
     state: 'Success',
     time: '10s',
     user: '핑퐁',
-    action: 'Run Scenario',
+    action: true,
   },
 ];

@@ -59,9 +59,9 @@ export default function Table() {
       size: 400,
       header: 'Action',
       cell: (info) => (
-        <S.Action success={info.getValue() === 'Run Scenario'}>
-          <p>{info.getValue()}</p>
-          {info.getValue() === 'Run Scenario' ? <GreenArrow /> : <RedArrow />}
+        <S.Action success={info.getValue()}>
+          <p>{info.getValue() ? 'Run Scenario' : 'Check the error'}</p>
+          {info.getValue() ? <GreenArrow /> : <RedArrow />}
         </S.Action>
       ),
     }),
