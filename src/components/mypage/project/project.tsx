@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/mypage/project/project.style';
@@ -8,9 +8,10 @@ type TProject = {
   name: string;
   participants: number;
   date: string;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export default function Project({ id, name, participants, date }: TProject) {
+export default function Project({ id, name, participants, date, onClick }: TProject) {
   const spanRef = useRef<HTMLSpanElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -27,7 +28,7 @@ export default function Project({ id, name, participants, date }: TProject) {
   }, []);
 
   return (
-    <S.TR key={id}>
+    <S.TR key={id} onClick={onClick}>
       <S.TD>
         <S.ProjectNameTD>
           <div className="ProfileWrapper">
@@ -37,7 +38,9 @@ export default function Project({ id, name, participants, date }: TProject) {
           {isOverflowing && <div className="dropdown">{name}</div>}
         </S.ProjectNameTD>
       </S.TD>
+      <S.TD />
       <S.TD>{participants}</S.TD>
+      <S.TD />
       <S.TD>{date}</S.TD>
     </S.TR>
   );

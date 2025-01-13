@@ -35,7 +35,7 @@ const Title = styled.div`
 const ProfileWrapper = styled.div`
   display: flex;
   position: relative;
-  height: 50%;
+  height: 45%;
   border-radius: 12.8px;
   width: 100%;
   align-items: end;

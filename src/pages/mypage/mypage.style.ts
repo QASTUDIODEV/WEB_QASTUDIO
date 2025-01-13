@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   width: calc(100vw - 300px);
+  width: 100%;
   justify-self: center;
   height: 100vh;
   flex-direction: column;
@@ -33,6 +34,10 @@ const Projects = styled.div`
   display: flex;
   flex: 1;
   gap: 20px;
+  @media (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export { Container, Projects, Title };

@@ -6,8 +6,9 @@ export default function ProjectNum() {
   return (
     <S.ProjectNum>
       <Package />
-      <div className="ProjectNumber">3</div>
-      <span>Projects in progress</span>
+      <div className="ProjectNumber">
+        3<span>Projects in progress</span>
+      </div>
     </S.ProjectNum>
   );
 }
