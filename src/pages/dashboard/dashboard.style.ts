@@ -3,11 +3,10 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 25px;
   width: 100%;
   height: 100%;
-
-  padding: 50px 50px;
+  padding: 65px 60px;
 `;
 
 const ProjectTitleBox = styled.div`
@@ -27,28 +26,24 @@ const ProfileBox = styled.div`
 
 const InfoWrapper = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
+  flex-wrap: wrap;
 `;
 
 const TableWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-
-  span {
-    width: 100%;
-    height: 400px;
-    background-color: antiquewhite;
-  }
-
-  img {
-    width: 100%;
-  }
 `;
 
 const SearchBox = styled.div`
-  width: 180px;
+  width: 190px;
 `;
 
-export { Container, InfoWrapper, ProfileBox, ProjectTitleBox, SearchBox, TableWrapper };
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
+
+export { Container, ContentWrapper, InfoWrapper, ProfileBox, ProjectTitleBox, SearchBox, TableWrapper };
