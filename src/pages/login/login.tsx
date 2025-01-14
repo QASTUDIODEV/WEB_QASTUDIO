@@ -37,7 +37,7 @@ export default function LoginPage() {
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
       const { accessToken, refreshToken } = data.result;
-      localStorage.setItem('accessToken', accessToken); //추후 삭제 예정
+      localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       navigate('/project');
     },
@@ -59,7 +59,6 @@ export default function LoginPage() {
           <S.Description>Login and enjoy QASTUDIO more.</S.Description>
         </S.Texts>
         <S.Form onSubmit={handleSubmit(onSubmit)}>
-          {/* 유효성 검사에 따라 메시지 출력 */}
           <InputModule
             inputname="email"
             Name="Email"

@@ -144,10 +144,6 @@ function SignupPage() {
       ) {
         handleNextStep();
       }
-      // if (step === 2 && isValid) {
-      //   const nickname = getValues('nickname');
-      //   onSubmit({ email, password, nickname });
-      // }
     }
   };
 

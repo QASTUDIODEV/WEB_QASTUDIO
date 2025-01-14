@@ -26,9 +26,6 @@ export function renderStep2(step: number) {
   const {
     register,
     handleSubmit,
-    getValues,
-    control,
-    setValue,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -55,7 +52,7 @@ export function renderStep2(step: number) {
   const { mutate: uploadPresignedUrlMutate, isPending: uploadPresignedUrlPending } = useCustomMutation({
     mutationFn: ({ presignedUrl, blob }: { presignedUrl: string; blob: File }) => uploadPresignedUrl(presignedUrl, blob),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     },
     onError: (error) => {
       console.error(error);
@@ -88,9 +85,18 @@ export function renderStep2(step: number) {
     navigate('/login');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.code === 'Enter') {
+      e.preventDefault();
+      if (step === 2 && touchedFields.nickname && !errors.nickname?.message && !uploadSingleImgPending && !uploadPresignedUrlPending) {
+        handleSubmit(onSubmit);
+      }
+    }
+  };
+
   if (step !== 2) return null;
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
       <S.ProfileImg onClick={handleInputClick}>
         <S.Backdrop>
           <ProfileEdit />
