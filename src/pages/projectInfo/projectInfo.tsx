@@ -132,7 +132,7 @@ export default function ProjectInfoPage() {
         <S.Left>
           {state.isStructureVisible ? (
             <S.Box
-              height="58%"
+              height="60%"
               style={{
                 cursor: 'pointer',
               }}
