@@ -13,9 +13,10 @@ import { toggleExpand } from '@/slices/scenarioSlice';
 
 interface ICharacterHeaderProps {
   characterId: number;
+  idx: number;
 }
 
-export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
+export default function CharacterHeader({ characterId, idx }: ICharacterHeaderProps) {
   const dispatch = useDispatch();
 
   //시나리오 가져오기
@@ -54,7 +55,7 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit}>
+        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit} idx={idx}>
           <S.CharacterHeaderLeftSide>
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
               {character.isExpanded ? <ArrowUp /> : <ArrowDown />}

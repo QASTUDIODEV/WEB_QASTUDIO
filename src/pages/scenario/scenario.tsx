@@ -1,5 +1,5 @@
 import ButtonGroup from '@/components/scenario/ButtonGroup/ButtonGroup';
-import CharacterItem from '@/components/scenario/CharacterItem/CharacterItem';
+import CharacterList from '@/components/scenario/CharacterList/CharacterList';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
@@ -16,7 +16,7 @@ export default function ScenarioPage() {
         <ButtonGroup />
 
         <S.CharactersContainer>
-          <CharacterItem />
+          <CharacterList />
         </S.CharactersContainer>
       </S.Container>
 
