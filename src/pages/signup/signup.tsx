@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
-import { authSendEmailCode, defaultSignup, uploadSingleImg } from '@/apis/auth/auth';
+import { authSendEmailCode, defaultSignup } from '@/apis/auth/auth';
+import { uploadPresignedUrl, uploadSingleImg } from '@/apis/images/images';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -102,17 +103,19 @@ function SignupPage() {
     }
   };
 
+  // 아직 테스트는 못해봤습니다.... 토큰이 있어야 이미지 업로드가 가능한데 회원가입 도중 토큰이 심기지 않는데 어떻게 해야할지...^^
+  // 현재는 401 에러 뜹니당.....
   const handleImageUpload = async (blob: File) => {
     if (!blob.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
+
     try {
-      const response = await uploadSingleImg(blob);
-      const imageUrl = response.imageUrl;
-      // console.log(imageUrl);
-    } catch {
-      // console.error('이미지 업로드 실패');
+      const presignedUrl = await uploadSingleImg(blob.name);
+      const uploadResponse = await uploadPresignedUrl(presignedUrl, blob);
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
     }
   };
 
@@ -226,7 +229,7 @@ function SignupPage() {
       <OrDivider />
       <SocialLogo gap={20} size="large" />
       <S.BackButton onClick={() => navigate(-1)}>
-        <ArrowLeft style={{ width: '24px', height: '24px' }} />
+        <ArrowLeft />
         Back
       </S.BackButton>
     </>
@@ -335,7 +338,7 @@ function SignupPage() {
         style={{ display: 'none' }}
         onChange={handleInputChange}
       />
-      <AuthButton type="submit" format="normal" disabled={!isValid}>
+      <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid}>
         Sign up
       </AuthButton>
     </>

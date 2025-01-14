@@ -19,6 +19,7 @@ export default function KakaoOAuthHandler() {
   const code = url.get('code') || '';
 
   const { data: response, isLoading, isError, isSuccess } = useGetKakaoOAuth(code);
+
   useEffect(() => {
     if (isSuccess && response?.data) {
       console.log(response);

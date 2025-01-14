@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validate';
+import { defaultLogin } from '@/apis/auth/auth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -31,9 +32,10 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    // alert(data);
-    // 로그인 로직 추후 추가 예정
+  const onSubmit: SubmitHandler<TFormValues> = async (data) => {
+    const res = await defaultLogin(data.email, data.password);
+    // console.log(res);
+    // 이거 쿠키를 제가 심어야 하는건가요...
   };
 
   return (
@@ -68,8 +70,7 @@ export default function LoginPage() {
             {...register('password')}
           />
         </S.Form>
-        {/* 임시 버튼 */}
-        <AuthButton format="normal" disabled={!isValid} type={'submit'}>
+        <AuthButton format="normal" disabled={!isValid} onClick={handleSubmit(onSubmit)}>
           Login
         </AuthButton>
 

@@ -75,11 +75,11 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
             codeverify === false && <ValidationMessage message={'Invalid code.'} isError={true} />
           )}
         </S.MessageWrapper>
-        <div style={{ position: 'absolute', right: '-90px' }}>
+        <S.AuthButtonWrapper>
           <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeverify={codeverify}>
             Verify
           </AuthButton>
-        </div>
+        </S.AuthButtonWrapper>
       </S.Wrapper>
     );
   },
