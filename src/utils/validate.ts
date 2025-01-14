@@ -16,7 +16,6 @@ export const signupSchema = z.object({
     .nonempty('Required.'),
   repassword: z.string().min(8, '8-20 chars, letters, numbers, symbols.').max(20, '8-20 chars, letters, numbers, symbols.').nonempty('Required.'),
   code: z.string().nonempty('Required'),
-  nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
 });
 
 export const findingSchema = z.object({
@@ -41,4 +40,7 @@ export const loginSchema = z.object({
     .nonempty('Required.'),
 });
 
+export const userSettingSchema = z.object({
+  nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
+});
 //refine이 작동을 안함.. 이유는 모름... whyrano

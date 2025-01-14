@@ -3,6 +3,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 
 import { loginSchema } from '@/utils/validate';
 import { defaultLogin } from '@/apis/auth/auth';
@@ -32,10 +33,21 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
+  const { mutate: loginMutation, isPending } = useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
+    onSuccess: (data) => {
+      const { accessToken, refreshToken } = data.result;
+      localStorage.setItem('accessToken', accessToken); //추후 삭제 예정
+      localStorage.setItem('refreshToken', refreshToken);
+      navigate('/project');
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const onSubmit: SubmitHandler<TFormValues> = async (data) => {
-    const res = await defaultLogin(data.email, data.password);
-    // console.log(res);
-    // 이거 쿠키를 제가 심어야 하는건가요...
+    loginMutation({ email: data.email, password: data.password });
   };
 
   return (
@@ -70,7 +82,7 @@ export default function LoginPage() {
             {...register('password')}
           />
         </S.Form>
-        <AuthButton format="normal" disabled={!isValid} onClick={handleSubmit(onSubmit)}>
+        <AuthButton format="normal" disabled={!isValid || isPending} onClick={handleSubmit(onSubmit)}>
           Login
         </AuthButton>
 

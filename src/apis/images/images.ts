@@ -3,7 +3,17 @@ import axios from 'axios';
 import { axiosInstance } from '@/apis/axiosInstance';
 
 const uploadSingleImg = async (fileName: string) => {
-  const { data } = await axiosInstance.post('/v0/s3/presigned/upload', { fileName });
+  const token = localStorage.getItem('accessToken');
+  const { data } = await axiosInstance.post(
+    '/v0/s3/presigned/upload',
+    { fileName },
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
   return data;
 };
 

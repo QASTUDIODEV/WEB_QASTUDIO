@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -6,17 +6,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
 import { authSendEmailCode, defaultSignup } from '@/apis/auth/auth';
-import { uploadPresignedUrl, uploadSingleImg } from '@/apis/images/images';
+
+import { useCustomMutation } from '@/hooks/auth/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
 import OrDivider from '@/components/auth/orDivider/orDivider';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
-import Profile from '@/components/common/profile/profile';
+
+import { renderStep2 } from '../userSetting/userSetting';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
-import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/signup/signup.style';
 
 type TCodeVerify = undefined | boolean;
@@ -26,20 +27,17 @@ type TFormValues = {
   password: string;
   repassword: string;
   code: string;
-  nickname: string;
 };
 
 type TAPIFormValues = {
   email: string;
   password: string;
-  nickname: string;
 };
 
 function SignupPage() {
   const {
     register,
     handleSubmit,
-    getValues,
     control,
     setValue,
     formState: { isValid, errors, touchedFields },
@@ -47,14 +45,12 @@ function SignupPage() {
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
   });
-  const [isPending, setIsPending] = useState(false);
   const [step, setStep] = useState(0);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
   const navigate = useNavigate();
-  const contentInputRef = useRef<HTMLInputElement | null>(null);
 
   const watchedPassword = useWatch({
     control,
@@ -76,20 +72,34 @@ function SignupPage() {
     name: 'code',
   });
 
-  const handleInputClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // 클릭 시 기본 동작을 방지
-    contentInputRef.current?.click();
-  };
+  const { mutate: sendCodeMutation, isPending: codePending } = useCustomMutation({
+    mutationFn: async ({ email }: { email: string }) => authSendEmailCode(email),
+    onSuccess: (data) => {
+      setAuthCode(data.result.authCode);
+      alert('해당 이메일로 인증 코드가 발송되었습니다');
+      setStep(1);
+    },
+    onError: (error) => {
+      console.log('Error object:', error);
+      alert(error.response?.data.message);
+    },
+  });
+
+  const { mutate: signupMutation, isPending: signupPending } = useCustomMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) => defaultSignup({ email, password }),
+    onSuccess: (data) => {
+      setStep(2);
+    },
+    onError: (error) => {
+      console.log('Error object:', error);
+      alert(error.response?.data.message);
+    },
+  });
 
   const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
-      setIsPending(true);
-      const res = await authSendEmailCode(watchedEmail);
-      setAuthCode(res.result.authCode);
-      alert('해당 이메일로 인증 코드가 발송되었습니다');
-      setIsPending(false);
-      setStep(1);
+      sendCodeMutation({ email: watchedEmail });
     } else {
       alert('올바른 이메일을 입력해주세요');
     }
@@ -103,33 +113,9 @@ function SignupPage() {
     }
   };
 
-  // 아직 테스트는 못해봤습니다.... 토큰이 있어야 이미지 업로드가 가능한데 회원가입 도중 토큰이 심기지 않는데 어떻게 해야할지...^^
-  // 현재는 401 에러 뜹니당.....
-  const handleImageUpload = async (blob: File) => {
-    if (!blob.type.startsWith('image/')) {
-      alert('이미지만 업로드 가능합니다');
-      return;
-    }
-
-    try {
-      const presignedUrl = await uploadSingleImg(blob.name);
-      const uploadResponse = await uploadPresignedUrl(presignedUrl, blob);
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error);
-    }
-  };
-
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // 사용자가 선택한 첫 번째 파일
-    if (file) {
-      await handleImageUpload(file);
-    }
-  };
-
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    // alert(data.email);
-    defaultSignup(data.email, data.password);
-    navigate('/');
+    signupMutation({ email: data.email, password: data.password });
+    setStep(2);
   };
 
   const handleNextStep = () => setStep(2);
@@ -158,12 +144,10 @@ function SignupPage() {
       ) {
         handleNextStep();
       }
-      if (step === 2 && isValid) {
-        const email = getValues('email');
-        const password = getValues('password');
-        const nickname = getValues('nickname');
-        onSubmit({ email, password, nickname });
-      }
+      // if (step === 2 && isValid) {
+      //   const nickname = getValues('nickname');
+      //   onSubmit({ email, password, nickname });
+      // }
     }
   };
 
@@ -198,7 +182,7 @@ function SignupPage() {
           handleSendCode={handleSendCode}
           touched={touchedFields.email}
           valid={touchedFields.email && !errors.email?.message}
-          pending={isPending}
+          pending={codePending}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
@@ -282,7 +266,7 @@ function SignupPage() {
         <AuthButton
           type="button"
           format="normal"
-          onClick={handleNextStep}
+          onClick={handleSubmit(onSubmit)}
           disabled={
             !touchedFields.email ||
             !touchedFields.code ||
@@ -293,7 +277,8 @@ function SignupPage() {
             !!errors.email?.message ||
             !!errors.code?.message ||
             !!errors.password?.message ||
-            !!errors.repassword?.message
+            !!errors.repassword?.message ||
+            signupPending
           }
         >
           Sign up
@@ -308,50 +293,14 @@ function SignupPage() {
     </>
   );
 
-  const renderStep2 = () => (
-    <>
-      <S.ProfileImg onClick={handleInputClick}>
-        <S.Backdrop>
-          <ProfileEdit />
-        </S.Backdrop>
-        <Profile />
-        <S.ProfileEditBtn>
-          <ProfileEdit />
-        </S.ProfileEditBtn>
-      </S.ProfileImg>
-      <InputModule
-        top={true}
-        inputname="nickname"
-        Name="Nickname"
-        span="Nickname"
-        touched={touchedFields.nickname}
-        valid={touchedFields.nickname && !errors.nickname?.message}
-        errorMessage={errors.nickname?.message}
-        {...register('nickname')}
-      />
-      <input
-        className="profile-image-upload"
-        ref={contentInputRef}
-        type="file"
-        accept="image/*"
-        tabIndex={-1}
-        style={{ display: 'none' }}
-        onChange={handleInputChange}
-      />
-      <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid}>
-        Sign up
-      </AuthButton>
-    </>
-  );
-
   return (
     <S.Container>
       <Logo className="logo" />
       <S.Form onKeyDown={handleKeyDown} onSubmit={handleSubmit(onSubmit)}>
         {step === 0 && renderStep0()}
         {step === 1 && renderStep1()}
-        {step === 2 && renderStep2()}
       </S.Form>
+      {renderStep2(step)}
     </S.Container>
   );
 }
