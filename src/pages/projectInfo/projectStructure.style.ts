@@ -122,4 +122,21 @@ const AccessBox = styled.div`
   margin: 10px 20px;
   flex-direction: column;
 `;
+export const Scenario = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 1rem;
+  padding-top: 0;
+`;
+export const ScenarioText = styled.p`
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  font-family: Pretendard;
+  font-size: 9.6px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 14.4px */
+  letter-spacing: 0.192px;
+`;
 export { AccessBox, AccessRights, Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };
