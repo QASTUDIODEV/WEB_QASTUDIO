@@ -95,7 +95,6 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
                 <S.InputValidateWrapper>
                   {validateNickname(nickname) && (
                     <S.MessageWrapper>
-                      {/* 수정 예정 */}
                       <ValidataionMessage message={validateNickname(nickname)} isError={true} />
                     </S.MessageWrapper>
                   )}
@@ -106,14 +105,16 @@ export default function MyProfile({ isEdit, nickname, setNickname, setIsEdit, so
                   <S.Account>email.email.com</S.Account>
                   <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
                   <div ref={containerRef}>
-                    <S.PlusWrapper onClick={() => setShow(true)}>
-                      <Plus />
-                      {show && (
-                        <S.SocialLogoWrapper ref={contentRef}>
-                          <SocialLogo gap={8} size="small" id={unlinkedSocials} />
-                        </S.SocialLogoWrapper>
-                      )}
-                    </S.PlusWrapper>
+                    {unlinkedSocials.length > 0 && (
+                      <S.PlusWrapper onClick={() => setShow(true)}>
+                        <Plus />
+                        {show && (
+                          <S.SocialLogoWrapper ref={contentRef}>
+                            <SocialLogo gap={8} size="small" id={unlinkedSocials} />
+                          </S.SocialLogoWrapper>
+                        )}
+                      </S.PlusWrapper>
+                    )}
                   </div>
                 </S.AccoutWrapper>
               </S.UserInfo>
