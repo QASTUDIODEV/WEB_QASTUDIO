@@ -149,6 +149,13 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
             <FileBranch />
             <S.InnerBoxTitle>Scenario</S.InnerBoxTitle>
           </S.Wrap>
+          <S.Scenario>
+            <S.ScenarioText>1. 로그인 화면으로 이동한다.</S.ScenarioText>
+            <S.ScenarioText>2. 이메일, 비밀번호를 입력한다...</S.ScenarioText>
+            <S.ScenarioText>3. 시나리오 3</S.ScenarioText>
+            <S.ScenarioText>4. 시나리오 4</S.ScenarioText>
+            <S.ScenarioText>5. 시나리오 5</S.ScenarioText>
+          </S.Scenario>
         </S.LRBox>
       </S.InnerBox>
     </S.Box>
