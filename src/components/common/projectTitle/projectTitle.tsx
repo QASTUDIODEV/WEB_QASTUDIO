@@ -22,4 +22,6 @@ export default function ProjectTitle({ title = 'UNTITLED', profileImg = undefine
   );
 }
 
-// 사용 예시: <ProjectTitle title="My Mobile App" profileImg="/icons/logo.svg" device="mobile" stack="react" />
+// 사용 예시:
+// import ProjectTitle from '@/components/common/projectTitle/projectTitle';
+// <ProjectTitle title="UMC_PM_DAY" profileImg="/icons/logo.svg" device="mobile" stack="react" />
