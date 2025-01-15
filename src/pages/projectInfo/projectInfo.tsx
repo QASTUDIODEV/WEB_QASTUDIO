@@ -132,7 +132,7 @@ export default function ProjectInfoPage() {
         <S.Left>
           {state.isStructureVisible ? (
             <S.Box
-              height="60%"
+              height="58%"
               style={{
                 cursor: 'pointer',
               }}
@@ -147,7 +147,7 @@ export default function ProjectInfoPage() {
                 <div style={{ flex: 1 }}>
                   <S.Table>
                     <thead>
-                      <tr style={{ verticalAlign: 'middle' }}>
+                      <tr>
                         <S.TH>
                           <File /> Page
                         </S.TH>
@@ -198,7 +198,7 @@ export default function ProjectInfoPage() {
               onBackToSummary={() => dispatch({ type: 'TOGGLE_STRUCTURE' })}
             />
           )}
-          <S.Box height="33.6%">
+          <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
               <S.CharacterBox>
