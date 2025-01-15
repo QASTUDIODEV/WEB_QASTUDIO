@@ -11,7 +11,7 @@ export const CharacterHeader = styled.div<{ isChecked: boolean; isEdit: boolean;
   gap: 40px;
   align-self: stretch;
   justify-content: space-between;
-  border-radius: 4px;
+  border-radius: 8px;
   border-top: ${({ isEdit }) => (isEdit ? '1px solid rgba(217, 230, 255, 0.2)' : 'none')};
 
   background: ${({ idx, isChecked }) =>
