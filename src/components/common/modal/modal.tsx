@@ -11,15 +11,17 @@ import Delete from '@/assets/icons/delete.svg?react';
  * Modal 컴포넌트
  * @param children Modal 내부의 컨텐츠
  * @param title X버튼 옆 title
+ * @param isExitButtonVisible X버튼 존재 여부
  */
 
 type TModalProps = {
   title?: string;
   children: ReactNode;
   onClose: () => void;
+  isExitButtonVisible?: boolean;
 };
 
-export default function Modal({ children, onClose, title }: TModalProps) {
+export default function Modal({ children, onClose, title, isExitButtonVisible = true }: TModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const portal = usePortal('modal');
 
@@ -46,9 +48,11 @@ export default function Modal({ children, onClose, title }: TModalProps) {
           {/* Modal Header */}
           <S.TitleWrapper>
             <S.Title>{title}</S.Title>
-            <S.Button onClick={onClose}>
-              <Delete width={20} height={20} />
-            </S.Button>
+            {isExitButtonVisible && (
+              <S.Button onClick={onClose}>
+                <Delete width={20} height={20} />
+              </S.Button>
+            )}
           </S.TitleWrapper>
           {/* Modal Content */}
           {children}
