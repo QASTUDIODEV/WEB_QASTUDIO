@@ -25,9 +25,9 @@ const Wrapper = styled(motion.div)`
   border: 1px solid ${({ theme }) => theme.colors.primary.pri_700};
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
   color: ${({ theme }) => theme.colors.primary.pri_50};
+  overflow-y: auto;
 
   ${media.phone`
-    min-width: 300px;
     padding: 30px;
   `}
 `;
