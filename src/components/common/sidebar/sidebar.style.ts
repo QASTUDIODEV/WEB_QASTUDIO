@@ -9,7 +9,7 @@ export const SideBar = styled.div<{ hasScroll: boolean }>`
   overflow-y: auto;
   top: 0;
   color: #d6deec;
-  padding-bottom: ${(props) => (props.hasScroll ? '40px' : '0')};
+  scrollbar-width: none;
 `;
 
 export const Container = styled.div`
@@ -84,7 +84,27 @@ export const ProjectContent = styled.div<{ $isActive?: boolean }>`
   padding: 4.602% 0% 4.602% 15.625%;
   background: ${({ $isActive }) => ($isActive ? 'rgba(223, 232, 249, 0.1)' : 'transparent')};
 `;
-
+export const ModalBox = styled.div`
+  gap: 20px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+`;
+export const PostBox = styled.div`
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+`;
+export const ModalText = styled.p`
+  ${({ theme }) => theme.text.medium_22};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+`;
+export const BtnWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
 export const ProjectContentName = styled.p`
   margin: 0;
   ${({ theme }) => theme.text.medium_18};
@@ -98,15 +118,13 @@ export const ProjectContents = styled.div<{ $isOpen: boolean }>`
   max-height: ${(props) => (props.$isOpen ? '300px' : '0')};
   transition: max-height 0.3s ease-out;
 `;
-
+export const Position = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   color: inherit;
-`;
-
-export const FooterPadding = styled.div`
-  height: 40px;
-  background: none;
 `;
 
 export const Logout = styled.div`
@@ -119,5 +137,6 @@ export const Logout = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
+  margin-top: 100px;
   cursor: pointer;
 `;

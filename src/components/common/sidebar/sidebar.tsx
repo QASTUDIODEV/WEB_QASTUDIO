@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
+
+import Button from '../button/button';
+import Input from '../input/input';
 
 import Plus from '@/assets/icons/add.svg?react';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
+import Cam from '@/assets/icons/camera.svg?react';
+import Delete from '@/assets/icons/del_circle.svg?react';
 import SenarioLogo from '@/assets/icons/file_branch.svg?react';
 import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
@@ -41,29 +47,37 @@ export default function Sidebar() {
   ]);
 
   const [menuStates, setMenuStates] = useState<boolean[]>(new Array(projects.length).fill(false));
-  const [hasScroll, setHasScroll] = useState(false);
+  const [logoutPosition, setLogoutPosition] = useState<'absolute' | 'relative'>('absolute');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-
+  const projectRef = useRef(0);
+  const [modalShow, setModalShow] = useState(false);
   useEffect(() => {
-    const sidebar = sidebarRef.current;
-
-    const handleScroll = () => {
-      setHasScroll(true);
-    };
-
-    if (sidebar) {
-      sidebar.addEventListener('scroll', handleScroll);
+    if (projectRef.current >= 3) {
+      setLogoutPosition('relative');
+    } else {
+      setLogoutPosition('absolute');
     }
-
-    return () => {
-      if (sidebar) {
-        sidebar.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
+  }, [menuStates]);
+  const showModal = () => {
+    setModalShow(true);
+  };
+  const hideModal = () => {
+    setModalShow(false);
+  };
   const toggleMenu = (index: number) => {
-    setMenuStates((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
+    setMenuStates((prevStates) => {
+      return prevStates.map((state, i) => {
+        if (i === index) {
+          if (!state) {
+            projectRef.current = projectRef.current + 1;
+          } else {
+            projectRef.current = projectRef.current - 1;
+          }
+          return !state;
+        }
+        return state;
+      });
+    });
   };
 
   const addProject = () => {
@@ -82,7 +96,7 @@ export default function Sidebar() {
   };
 
   return (
-    <S.SideBar ref={sidebarRef} hasScroll={hasScroll}>
+    <S.SideBar ref={sidebarRef}>
       <S.Container>
         <Logo width={32} height={32} />
         <S.StyledNavLink to={`/mypage`}>
@@ -99,7 +113,59 @@ export default function Sidebar() {
       </S.Container>
       <S.Projects>
         <S.ProjectText>Projects</S.ProjectText>
-        <Plus onClick={addProject} />
+        <Plus
+          onClick={() => {
+            addProject();
+            showModal();
+          }}
+        />
+        {modalShow && (
+          <Modal
+            title="Create Project"
+            children={
+              <S.ModalBox>
+                <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
+                <S.PostBox>
+                  <S.ModalText>Project Image</S.ModalText>
+                  <Cam />
+                </S.PostBox>
+                <S.PostBox>
+                  <S.ModalText>Project Name</S.ModalText>
+                  <Input placeholder="Enter project title." />
+                </S.PostBox>
+                <S.PostBox>
+                  <S.ModalText>Project URL</S.ModalText>
+                  <Input placeholder="Enter the deployed project URL" />
+                </S.PostBox>
+                <S.PostBox>
+                  <S.ModalText>Share this project</S.ModalText>
+                  <S.BtnWrapper>
+                    <Input placeholder="Invite others by email" />
+                    <Button type="normal" color="blue">
+                      Share
+                    </Button>
+                  </S.BtnWrapper>
+                  <S.BtnWrapper>
+                    <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
+                      dfsfd@gmail.com
+                    </Button>
+                    <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
+                      ek5348@naver.com
+                    </Button>
+                  </S.BtnWrapper>
+                </S.PostBox>
+                <S.PostBox>
+                  <S.Position>
+                    <Button type="normal" color="blue">
+                      Create
+                    </Button>
+                  </S.Position>
+                </S.PostBox>
+              </S.ModalBox>
+            }
+            onClose={hideModal}
+          />
+        )}
       </S.Projects>
 
       {projects.map((project, index) => (
@@ -141,11 +207,10 @@ export default function Sidebar() {
           </S.ProjectContents>
         </div>
       ))}
-      <S.Logout onClick={handleLogout}>
+      <S.Logout style={{ position: logoutPosition }} onClick={handleLogout}>
         Logout
         <Out />
       </S.Logout>
-      {hasScroll && <S.FooterPadding />}
     </S.SideBar>
   );
 }
