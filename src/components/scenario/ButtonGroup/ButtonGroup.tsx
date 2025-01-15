@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
-import * as S from '@/components/scenario/ButtonGroup/ButtonGroup.style';
-import CheckBox from '@/components/scenario/CheckBox/CheckBox';
+import * as S from '@/components/scenario/buttonGroup/buttonGroup.style';
+import CheckBox from '@/components/scenario/checkBox/sheckBox';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/del.svg?react';
@@ -12,13 +12,12 @@ import Done from '@/assets/icons/done.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import ExclamationCircle from '@/assets/icons/exclamation_circle.svg?react';
 import Play from '@/assets/icons/play.svg?react';
-import type { ICharacter } from '@/slices/scenarioSlice';
+import { setOpen } from '@/slices/modalSlice.ts';
 import { edit, resetChecks } from '@/slices/scenarioSlice';
 
 export default function ButtonGroup() {
   const dispatch = useDispatch();
-  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
-  const characters: ICharacter[] = useSelector((state) => state.scenario.characters);
+  const { isEdit, characters } = useSelector((state) => state.scenario);
 
   // 체크 여부 판단
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
@@ -57,6 +56,7 @@ export default function ButtonGroup() {
   // + Scenario 버튼 클릭 함수
   const handleAddClick = (): void => {
     // 시나리오 추가 모달 띄우기
+    dispatch(setOpen());
   };
 
   return (

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface IScenario {
+interface IScenario {
   id: number;
   name: string;
   createdBy: string;
@@ -8,7 +8,7 @@ export interface IScenario {
   isChecked: boolean;
 }
 
-export interface ICharacter {
+interface ICharacter {
   id: number;
   title: string;
   isChecked: boolean;
@@ -18,7 +18,7 @@ export interface ICharacter {
   scenarios: IScenario[];
 }
 
-export interface IScenarioSlice {
+interface IScenarioSlice {
   isEdit: boolean;
   characters: ICharacter[];
 }
@@ -54,11 +54,11 @@ const characterSlice = createSlice({
   name: 'character',
   initialState,
   reducers: {
-    //편짐 상태
+    // 편집 상태
     edit: (state) => {
       state.isEdit = !state.isEdit;
     },
-    //전체 선택/선택해제
+    // 전체 선택/선택해제
     toggleAll: (state) => {
       const allChecked: boolean = state.characters.every((character) => character.isChecked); //전체 체크 여부
       state.characters.forEach((character) => {
@@ -68,7 +68,7 @@ const characterSlice = createSlice({
         });
       });
     },
-    //역할 선택/선택해제
+    // 역할 선택/선택해제
     toggleCharacter: (state, action) => {
       const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
       if (character) {
@@ -79,7 +79,7 @@ const characterSlice = createSlice({
         });
       }
     },
-    //시나리오 선택/선택해제
+    // 시나리오 선택/선택해제
     toggleScenario: (state, action) => {
       const { characterId, scenarioId }: { characterId: number; scenarioId: number } = action.payload;
       const character: ICharacter | undefined = state.characters.find((char) => char.id === characterId);
@@ -94,14 +94,14 @@ const characterSlice = createSlice({
         }
       }
     },
-    //확장 상태
+    // 확장 상태
     toggleExpand: (state, action) => {
       const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
       if (character) {
         character.isExpanded = !character.isExpanded;
       }
     },
-    //체크 리셋
+    // 체크 리셋
     resetChecks: (state) => {
       state.characters.forEach((character) => {
         character.isChecked = false;

@@ -1,14 +1,13 @@
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
-import * as S from '@/components/scenario/CharacterHeader/CharacterHeader.style';
-import CheckBox from '@/components/scenario/CheckBox/CheckBox';
+import * as S from '@/components/scenario/characterHeader/characterHeader.style';
+import CheckBox from '@/components/scenario/checkBox/sheckBox';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
-import type { ICharacter } from '@/slices/scenarioSlice';
 import { toggleExpand } from '@/slices/scenarioSlice';
 
 interface ICharacterHeaderProps {
@@ -20,7 +19,7 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
   const dispatch = useDispatch();
 
   //시나리오 가져오기
-  const character: ICharacter | undefined = useSelector((state) => state.scenario.characters.find((char) => char.id === characterId));
+  const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterId));
 
   //편집 상태 판단
   const isEdit: boolean = useSelector((state) => state.scenario.isEdit);

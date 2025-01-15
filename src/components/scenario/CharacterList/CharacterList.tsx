@@ -1,13 +1,11 @@
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 
-import CharacterHeader from '@/components/scenario/CharacterHeader/CharacterHeader';
-import * as S from '@/components/scenario/CharacterList/CharacterList.style';
-import ScenarioItem from '@/components/scenario/ScenarioItem/ScenarioItem';
-
-import type { ICharacter } from '@/slices/scenarioSlice';
+import CharacterHeader from '@/components/scenario/characterHeader/characterHeader';
+import * as S from '@/components/scenario/characterList/characterList.style';
+import ScenarioItem from '@/components/scenario/scenarioItem/scenarioItem';
 
 export default function CharacterList() {
-  const characters: ICharacter[] = useSelector((state) => state.scenario.characters);
+  const characters = useSelector((state) => state.scenario.characters);
 
   return (
     <div>
