@@ -6,7 +6,7 @@ const Container = styled.div`
   width: 100%;
   flex: 1;
   height: 100vh;
-  padding: 4.5% 7.5% 3.125% 7.5%;
+  padding: 5.8% 7.5% 3.125% 7.5%;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -138,17 +138,17 @@ const TextBold = styled.p`
 const SemiBox = styled.div`
   display: flex;
   height: 100%;
-  margin-top: 32px;
+  margin-top: 37px;
 `;
 
 const InnerBox = styled.div`
   box-sizing: border-box;
   background: rgba(217, 230, 255, 0.05);
   border-radius: 6.4px;
-  padding: 5.6px 8px;
+  padding: 7px 10px;
   position: relative;
   margin-top: 25px;
-  height: 227px;
+  height: 220px;
   overflow-y: auto;
   overflow-x: hidden;
 `;
@@ -263,6 +263,9 @@ export const Table = styled.table`
     border-top-right-radius: 99px;
     border-bottom-right-radius: 99px;
   }
+  svg {
+    vertical-align: text-bottom;
+  }
 `;
 
 export const TH = styled.th`
@@ -272,7 +275,6 @@ export const TH = styled.th`
   ${({ theme }) => theme.text.medium_18};
   color: ${({ theme }) => theme.colors.primary.pri_50};
   text-align: left;
-  flex-direction: row;
 `;
 export const TR = styled.tr`
   border-radius: 99px;
