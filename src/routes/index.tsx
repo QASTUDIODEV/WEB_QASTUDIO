@@ -26,10 +26,6 @@ export const router = createBrowserRouter([
     element: <GoogleOAuthHandler />,
   },
   {
-    path: '/auth/kakao-oauth',
-    element: <GoogleOAuthHandler />,
-  },
-  {
     path: '/auth/basic-oauth',
     element: <BasicOAuthHandler />,
   },

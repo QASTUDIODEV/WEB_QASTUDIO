@@ -3,16 +3,25 @@ import styled from 'styled-components';
 const Container = styled.div`
   ${({ theme }) => theme.align.column_center};
   position: relative;
-  padding: 50px 120px;
-  gap: 30px;
+  width: 490px;
+  max-height: 550px;
+  padding: 30px 110px;
+  gap: 20px;
   border-radius: 16px;
   z-index: 1;
   background-color: ${({ theme }) => theme.colors.black};
+  .logo {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    top: 30px;
+  }
 `;
 
 const Form = styled.form`
-  width: 300px;
-  gap: 30px;
+  width: 100%;
+  gap: 20px;
+  padding-top: 60px;
   ${({ theme }) => theme.align.column_center};
   span {
     ${({ theme }) => theme.text.medium_14};
