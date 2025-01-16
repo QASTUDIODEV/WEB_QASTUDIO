@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { uploadPresignedUrl, uploadSingleImg } from '@/apis/images/images';
-
-import { useCustomMutation } from '@/hooks/auth/useCustomMutation';
+import { useGetPresignedUrl } from '@/hooks/common/useGetPresignedURL';
+import { useUploadPresignedUrl } from '@/hooks/common/useUploadPresignedURL';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -21,7 +20,6 @@ type TFormValues = {
 };
 
 export function renderStep2(step: number) {
-  const [url, setUrl] = useState('');
   const navigate = useNavigate();
   const {
     register,
@@ -39,25 +37,8 @@ export function renderStep2(step: number) {
     contentInputRef.current?.click();
   };
 
-  const { mutate: uploadSingleImgMutate, isPending: uploadSingleImgPending } = useCustomMutation({
-    mutationFn: ({ imgName }: { imgName: string }) => uploadSingleImg(imgName),
-    onSuccess: (data) => {
-      setUrl(data.result.url);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  const { mutate: uploadPresignedUrlMutate, isPending: uploadPresignedUrlPending } = useCustomMutation({
-    mutationFn: ({ presignedUrl, blob }: { presignedUrl: string; blob: File }) => uploadPresignedUrl(presignedUrl, blob),
-    onSuccess: (data) => {
-      // console.log(data);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { uploadSingleImgMutate, uploadSingleImgPending, presignedUrl } = useGetPresignedUrl();
+  const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
 
   const handleImageUpload = async (blob: File) => {
     if (!blob.type.startsWith('image/')) {
@@ -67,7 +48,7 @@ export function renderStep2(step: number) {
 
     try {
       uploadSingleImgMutate({ imgName: blob.name });
-      uploadPresignedUrlMutate({ presignedUrl: url, blob: blob });
+      uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }

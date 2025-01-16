@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema } from '@/utils/validate';
 import { authSendEmailCode, defaultSignup } from '@/apis/auth/auth';
 
-import { useCustomMutation } from '@/hooks/auth/useCustomMutation';
+import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
