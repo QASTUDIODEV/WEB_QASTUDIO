@@ -9,6 +9,6 @@ type TInputProps = {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({ value, placeholder = '입력하세요', width = '820px', onChange }: TInputProps) {
+export default function Input({ value, placeholder = '입력하세요', width = '860px', onChange }: TInputProps) {
   return <S.InputWrapper value={value} placeholder={placeholder} width={width} onChange={onChange} />;
 }
