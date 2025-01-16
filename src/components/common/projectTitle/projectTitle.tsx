@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { DEVICE, STACK } from '@/enums/enums';
+
+import { getIcon } from '@/utils/getIcon';
+
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/projectTitle/projectTitle.style';
 
@@ -15,35 +19,17 @@ type TProjectTitleProps = {
   device: DEVICE;
   stack: STACK;
 };
-
-export enum STACK {
-  NEXT = 'next',
-  REACT = 'react',
-  JS = 'js',
-}
-
-export enum DEVICE {
-  PC = 'pc',
-  MOBILE = 'mobile',
-}
-
 // 아이콘 맵핑
-const stackIconMap: Record<string, React.FunctionComponent> = {
+export const stackIconMap: Record<STACK, React.FunctionComponent> = {
   [STACK.NEXT]: NextJSIcon,
   [STACK.REACT]: ReactIcon,
   [STACK.JS]: JSIcon,
 };
 
-const deviceIconMap: Record<string, React.FunctionComponent> = {
+export const deviceIconMap: Record<DEVICE, React.FunctionComponent> = {
   [DEVICE.PC]: Web,
   [DEVICE.MOBILE]: Mobile,
 };
-
-// 아이콘 반환 함수
-function getIcon(map: Record<string, React.FunctionComponent>, key: string): React.ReactNode {
-  const Icon = map[key];
-  return Icon ? <Icon /> : null;
-}
 
 export default function ProjectTitle({ title = 'UNTITLED', profileImg, device = DEVICE.PC, stack = STACK.NEXT }: TProjectTitleProps) {
   return (
@@ -59,4 +45,6 @@ export default function ProjectTitle({ title = 'UNTITLED', profileImg, device = 
 }
 
 //사용예시:
+//import { DEVICE, STACK } from '@/enums/enums';
+//import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 //<ProjectTitle title="UMC_PM_DAY" device={DEVICE.MOBILE} stack={STACK.JS} />
