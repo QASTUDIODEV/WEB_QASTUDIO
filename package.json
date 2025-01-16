@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "@reduxjs/toolkit": "^2.5.0",
     "@tanstack/react-query": "^5.62.11",
     "@tanstack/react-query-devtools": "^5.62.11",

@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
 
 type TLogoProps = {
-  color: string;
   $isgithub?: string;
   size: 'small' | 'large';
   disable?: boolean;
+  $logotype: 'github' | 'kakao' | 'google';
 };
 
 type TLogosProp = {
@@ -34,17 +34,30 @@ const sizeLogoType = {
   `,
 };
 
+const logoType = {
+  kakao: css`
+    background-color: #fee500;
+  `,
+  github: css`
+    background-color: black;
+  `,
+  google: css`
+    background-color: #ffffff;
+  `,
+};
+
 const Logos = styled.div<TLogosProp>`
   ${({ theme }) => theme.align.row_center};
   padding: 10px;
   gap: ${({ $gap }) => $gap}px;
-  height: ${({ size }) => (size === 'large' ? '100px' : '30px')};
+  height: ${({ size }) => (size === 'large' ? '60px' : '30px')};
 `;
 
 const Logo = styled.button<TLogoProps>`
-  background-color: ${(props) => props.color};
   ${({ theme }) => theme.align.row_center};
-  ${({ size }) => sizeType[size]}
+  ${({ size }) => sizeType[size]};
+  ${({ $logotype }) => logoType[$logotype]};
+
   border: none;
   border-radius: 99px;
   svg {
