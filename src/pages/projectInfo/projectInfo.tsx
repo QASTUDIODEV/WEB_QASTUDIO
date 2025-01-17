@@ -1,6 +1,8 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 import Button from '@/components/common/button/button';
+import Input from '@/components/common/input/input';
+import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -9,6 +11,7 @@ import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Book from '@/assets/icons/book.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
+import Delete from '@/assets/icons/del_circle.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import File from '@/assets/icons/files.svg?react';
 import NextJs from '@/assets/icons/nextjs.svg?react';
@@ -84,6 +87,13 @@ export default function ProjectInfoPage() {
       Master: false,
     },
   ];
+  const [modalShow, setModalShow] = useState(false);
+  const showModal = () => {
+    setModalShow(true);
+  };
+  const hideModal = () => {
+    setModalShow(false);
+  };
 
   return (
     <S.Container>
@@ -136,12 +146,61 @@ export default function ProjectInfoPage() {
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => dispatch({ type: 'TOGGLE_STRUCTURE' })}
             >
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
               <S.Wrapper top="16px" right="24px">
-                <Plus />
+                <Plus
+                  onClick={() => {
+                    showModal();
+                  }}
+                />
+                {modalShow && (
+                  <Modal
+                    title="Create Project"
+                    children={
+                      <S.ModalBox>
+                        <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
+                        <S.PostBox>
+                          <S.ModalText>Project Image</S.ModalText>
+                        </S.PostBox>
+                        <S.PostBox>
+                          <S.ModalText>Project Name</S.ModalText>
+                          <Input placeholder="Enter project title." />
+                        </S.PostBox>
+                        <S.PostBox>
+                          <S.ModalText>Project URL</S.ModalText>
+                          <Input placeholder="Enter the deployed project URL" />
+                        </S.PostBox>
+                        <S.PostBox>
+                          <S.ModalText>Share this project</S.ModalText>
+                          <S.BtnWrapper>
+                            <Input placeholder="Invite others by email" />
+                            <Button type="normal" color="blue">
+                              Share
+                            </Button>
+                          </S.BtnWrapper>
+                          <S.BtnWrapper>
+                            <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
+                              dfsfd@gmail.com
+                            </Button>
+                            <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
+                              ek5348@naver.com
+                            </Button>
+                          </S.BtnWrapper>
+                        </S.PostBox>
+                        <S.PostBox>
+                          <S.Position>
+                            <Button type="normal" color="blue">
+                              Create
+                            </Button>
+                          </S.Position>
+                        </S.PostBox>
+                      </S.ModalBox>
+                    }
+                    onClose={hideModal}
+                  />
+                )}
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
@@ -161,7 +220,13 @@ export default function ProjectInfoPage() {
                     </thead>
                     <tbody>
                       {data.page.map((page, index) => (
-                        <S.TR key={index}>
+                        <S.TR
+                          key={index}
+                          onClick={() => {
+                            dispatch({ type: 'TOGGLE_STRUCTURE' });
+                            dispatch({ type: 'SET_PAGE', payload: page });
+                          }}
+                        >
                           <S.TD>{page}</S.TD>
                           <S.TD>{data.path[index]}</S.TD>
                           <S.TD>
