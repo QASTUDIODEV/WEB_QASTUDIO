@@ -5,7 +5,7 @@ import * as S from '@/pages/scenario/scenario.style';
 export default function ScenarioPage() {
   return (
     <S.Container>
-      <Input />
+      <Input type="normal" placeholder="ㅎㅇ" />
     </S.Container>
   );
 }
