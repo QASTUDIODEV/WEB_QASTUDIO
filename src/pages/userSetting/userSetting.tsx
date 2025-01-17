@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
+import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 import { userSettingSchema } from '@/utils/validate';
 
 import { useGetPresignedUrl } from '@/hooks/common/useGetPresignedURL';
@@ -37,7 +39,7 @@ export function renderStep2(step: number) {
     contentInputRef.current?.click();
   };
 
-  const { uploadSingleImgMutate, uploadSingleImgPending, presignedUrl } = useGetPresignedUrl();
+  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
   const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
 
   const handleImageUpload = async (blob: File) => {
@@ -47,8 +49,8 @@ export function renderStep2(step: number) {
     }
 
     try {
-      uploadSingleImgMutate({ imgName: blob.name });
-      uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
+      const presignedUrl = await getPresignedUrl(blob.name);
+      await uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }

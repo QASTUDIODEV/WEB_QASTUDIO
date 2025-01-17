@@ -1,6 +1,6 @@
 import { uploadPresignedUrl } from '@/apis/images/images';
 
-import { useCustomMutation } from './useCustomMutation';
+import { useCustomMutation } from '../common/useCustomMutation';
 
 type TUploadPresignedUrlParams = {
   _presignedUrl: string;
