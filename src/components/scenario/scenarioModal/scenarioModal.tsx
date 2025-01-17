@@ -36,7 +36,7 @@ export default function ScenarioModal() {
   };
 
   return (
-    <Modal title={modalStep === 1 ? 'Create Character' : 'Scenario Created'} onClose={() => dispatch(setOpen())}>
+    <Modal title={'Create Character'} onClose={() => dispatch(setOpen())}>
       {modalStep === 1 ? (
         // 역할 선택 단계
         <S.ModalContainer>
@@ -46,15 +46,15 @@ export default function ScenarioModal() {
           </div>
 
           <S.InputWrapper>
-            <S.InputTitle>Name</S.InputTitle>
+            <S.SubTitle>Name</S.SubTitle>
             <Input placeholder="Define the target character in one sentence." type="normal" />
           </S.InputWrapper>
           <S.InputWrapper>
-            <S.InputTitle>Description</S.InputTitle>
+            <S.SubTitle>Description</S.SubTitle>
             <Input placeholder="Explain the character's purpose for using the project." type="normal" />
           </S.InputWrapper>
           <S.InputWrapper>
-            <S.InputTitle>Access page</S.InputTitle>
+            <S.SubTitle>Access page</S.SubTitle>
             <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
           </S.InputWrapper>
 
@@ -76,16 +76,45 @@ export default function ScenarioModal() {
         </S.ModalContainer>
       ) : (
         // 역할 확인 상태
-        <S.ModalContainer>
-          <div />
+        <S.ConfirmModalContainer>
+          <S.DescriptionContainer>
+            <S.DescriptionItem>
+              <S.SubTitle>Character</S.SubTitle>
+              <S.DescriptionContent>사용자</S.DescriptionContent>
+            </S.DescriptionItem>
+            <S.DescriptionItem>
+              <S.SubTitle>Description</S.SubTitle>
+              <S.DescriptionContent>로그인을 하는 사용자</S.DescriptionContent>
+            </S.DescriptionItem>
+            <S.DescriptionItem>
+              <S.SubTitle>Access control</S.SubTitle>
+              <S.DescriptionContent>/, /roadmap</S.DescriptionContent>
+            </S.DescriptionItem>
+          </S.DescriptionContainer>
+
+          <S.ScenarioContainer>
+            <S.SubTitle>Main Senario</S.SubTitle>
+            <S.MainScenarioWrapper>
+              <S.ScenarioDescription>1. 로그인 페이지에 접근한다.</S.ScenarioDescription>
+              <S.ScenarioDescription>2. 이메일 입력란에 이메일을 입력한다. </S.ScenarioDescription>
+              <S.ScenarioDescription>3. 비밀번호 입력란에 비밀번호를 입력한다.</S.ScenarioDescription>
+              <S.ScenarioDescription>4. 확인 버튼을 클릭한다.</S.ScenarioDescription>
+            </S.MainScenarioWrapper>
+          </S.ScenarioContainer>
+
           <S.ButtonContainer>
+            <S.LongButtonWrapper>
+              <Button color="mint" onClick={() => setModalStep(1)}>
+                Edit and Request
+              </Button>
+            </S.LongButtonWrapper>
             <S.ButtonWrapper>
               <Button color="blue" onClick={() => dispatch(setOpen())}>
                 Close
               </Button>
             </S.ButtonWrapper>
           </S.ButtonContainer>
-        </S.ModalContainer>
+        </S.ConfirmModalContainer>
       )}
     </Modal>
   );
