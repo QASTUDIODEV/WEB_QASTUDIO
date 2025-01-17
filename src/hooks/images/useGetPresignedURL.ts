@@ -3,13 +3,13 @@ import { uploadSingleImg } from '@/apis/images/images';
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 export const useGetPresignedUrl = () => {
-  const { mutate: uploadSingleImgMutate, isPending: uploadSingleImgPending } = useCustomMutation({
+  const { mutate: uploadSingleImgMutate } = useCustomMutation({
     mutationFn: ({ imgName }: { imgName: string }) => uploadSingleImg(imgName),
     onSuccess: (data) => {
-      console.log(data.result.url);
-      return data.result.url; // 반환된 값은 URL이어야 합니다.
+      return data.result.url;
     },
     onError: (error) => {
+      alert('이미지 업로드에 실패하였습니다');
       console.error(error);
     },
   });
@@ -27,6 +27,5 @@ export const useGetPresignedUrl = () => {
   };
   return {
     getPresignedUrl,
-    uploadSingleImgPending,
   };
 };
