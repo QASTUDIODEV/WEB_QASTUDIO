@@ -43,4 +43,8 @@ export const loginSchema = z.object({
 export const userSettingSchema = z.object({
   nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
 });
+
+export const myPageScehma = z.object({
+  nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
+});
 //refine이 작동을 안함.. 이유는 모름... whyrano

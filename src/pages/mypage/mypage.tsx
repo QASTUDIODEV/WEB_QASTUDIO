@@ -5,6 +5,7 @@ import ProjectList from '@/components/mypage/projectList/projectList';
 import ProjectNum from '@/components/mypage/projectNum/projectNum';
 
 import * as S from './mypage.style';
+import { useGetUserInfo } from '../../hooks/userController/userController';
 
 type TSocialPlatform = 'github' | 'kakao' | 'google';
 
