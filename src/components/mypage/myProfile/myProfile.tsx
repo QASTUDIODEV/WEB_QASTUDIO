@@ -3,6 +3,9 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TMyProfileValues, TSocialPlatform } from '@/types/mypage/mypage';
+
+import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { myPageScehma } from '@/utils/validate';
 
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
@@ -21,36 +24,23 @@ import Done from '@/assets/icons/done.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
-type TSocialPlatform = 'github' | 'kakao' | 'google';
-
-type TMyProfile = {
-  isEdit: boolean;
-  nickname: string;
-  setNickname: React.Dispatch<React.SetStateAction<string>>;
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
-  socialLogin: TSocialPlatform[];
-  unlinkedSocials: TSocialPlatform[];
-};
-
-type TFormValues = {
-  nickname: string;
-  profileImage: string;
-  bannerImage: string;
-};
-
-export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSocials, nickname }: TMyProfile) {
+export default function MyProfile() {
+  const [isEdit, setIsEdit] = useState(false);
   const { userData } = useGetUserInfo();
+  const socialLogin: TSocialPlatform[] = ['github', 'kakao']; // 수정 예정
+  const unlinkedSocials = findUnlinkedSocials(socialLogin);
+
   const {
     register,
     handleSubmit,
     control,
     setValue,
     formState: { errors, touchedFields },
-  } = useForm<TFormValues>({
+  } = useForm<TMyProfileValues>({
     mode: 'onChange',
     resolver: zodResolver(myPageScehma),
     defaultValues: {
-      nickname: nickname,
+      nickname: '닉네임',
       profileImage: '',
       bannerImage: '',
     },
@@ -78,7 +68,7 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
-  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
+  const { getPresignedUrl } = useGetPresignedUrl();
   const { uploadPresignedUrlMutate } = useUploadPresignedUrl();
 
   const handleInputClick = (type: 'banner' | 'profile') => {
@@ -92,7 +82,6 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
     }
     try {
       const imgUrl = await getPresignedUrl(file.name);
-      console.log(imgUrl);
       await uploadPresignedUrlMutate({ _presignedUrl: imgUrl, blob: file });
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
@@ -113,7 +102,7 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
     }
   };
 
-  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+  const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
   };
 

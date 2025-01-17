@@ -75,7 +75,6 @@ export default function ProjectList() {
       </div>
 
       <S.Buttons>
-        {/* 이전/다음 페이지가 없는 경우 #DFE8F9 10%로 설정 */}
         {havePrevious ? <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} /> : <ArrowLeft stroke={'#e9e8f91a'} />}
         {haveNext ? <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} /> : <ArrowRight stroke={'#e9e8f91a'} />}
       </S.Buttons>
