@@ -18,6 +18,7 @@ type TModuleProps = {
   inputname: string;
   top: boolean;
   pending?: boolean;
+  value?: string;
 };
 
 type TCodeModuleProps = {
@@ -32,7 +33,7 @@ type TCodeModuleProps = {
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, touched, valid, errorMessage, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, touched, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
@@ -44,6 +45,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             isValid={touched ? valid : true}
             errorMessage={errorMessage}
             touched={touched}
+            value={value}
             top={top}
             ref={ref}
             {...rest}

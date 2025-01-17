@@ -10,12 +10,11 @@ import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 import { useGetUserInfo } from '@/hooks/userController/userController';
 
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
-import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Button from '@/components/common/button/button';
-import Input from '@/components/common/input/input';
 import Profile from '@/components/common/profile/profile';
 
 import * as S from './MyProfile.style';
+import { InputModule } from '../../auth/module/module';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Done from '@/assets/icons/done.svg?react';
@@ -46,12 +45,12 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors, touchedFields },
+    formState: { errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(myPageScehma),
     defaultValues: {
-      nickname: '',
+      nickname: nickname,
       profileImage: '',
       bannerImage: '',
     },
@@ -65,6 +64,11 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
   const watchedProfileUrl = useWatch({
     control,
     name: 'profileImage',
+  });
+
+  const watchedNickname = useWatch({
+    control,
+    name: 'nickname',
   });
 
   const inputRefs = {
@@ -143,14 +147,16 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
                 </S.ProfileImg>
                 <input ref={inputRefs.profile} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'profile')} />
                 <S.UserInfo>
-                  <S.InputValidateWrapper>
-                    {errors.nickname?.message && (
-                      <S.MessageWrapper>
-                        <ValidataionMessage message={errors.nickname?.message} isError />
-                      </S.MessageWrapper>
-                    )}
-                    <Input width="268px" {...register('nickname')} />
-                  </S.InputValidateWrapper>
+                  <InputModule
+                    touched={touchedFields.nickname}
+                    valid={!errors.nickname?.message}
+                    errorMessage={errors.nickname?.message}
+                    Name={'Nickname'}
+                    inputname={'normal'}
+                    value={watchedNickname} //수정 예정
+                    top={true}
+                    {...register('nickname')}
+                  />
                   <S.AccoutWrapper>
                     <S.Account>email.email.com</S.Account>
                     <SocialLogo gap={8} size="small" id={socialLogin} disable />
@@ -170,7 +176,7 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
                 </S.UserInfo>
               </S.ProfileUserInfo>
               <S.ButtonWrapper>
-                <Button type="small_square" color="default" disabled={!!errors.nickname} icon={<Done />} onClick={handleSubmit(onSubmit)}>
+                <Button type="small_square" color="default" disabled={!!errors.nickname?.message} icon={<Done />} onClick={handleSubmit(onSubmit)}>
                   Done
                 </Button>
               </S.ButtonWrapper>
@@ -187,7 +193,7 @@ export default function MyProfile({ isEdit, setIsEdit, socialLogin, unlinkedSoci
                   <Profile profileImg={watchedProfileUrl} />
                 </S.ProfileImg>
                 <S.UserInfo>
-                  <span>{nickname}</span>
+                  <span>{watchedNickname}</span>
                   <S.AccoutWrapper>
                     <S.Account>email.email.com</S.Account>
                     <SocialLogo gap={8} size="small" disable id={socialLogin} />
