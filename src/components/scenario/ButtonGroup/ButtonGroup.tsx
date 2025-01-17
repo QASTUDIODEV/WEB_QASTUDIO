@@ -53,9 +53,9 @@ export default function ButtonGroup() {
     // 시나리오 시작 페이지로 이동하기
   };
 
-  // + Scenario 버튼 클릭 함수
+  // + Character 버튼 클릭 함수
   const handleAddClick = (): void => {
-    // 시나리오 추가 모달 띄우기
+    // 역할 추가 모달 띄우기
     dispatch(setOpen());
   };
 
@@ -91,7 +91,7 @@ export default function ButtonGroup() {
             Edit
           </Button>
           <Button type="normal" color="default" disabled={false} icon={<Add />} iconPosition="left" onClick={handleAddClick}>
-            Scenario
+            Character
           </Button>
         </S.ButtonGroup>
       )}

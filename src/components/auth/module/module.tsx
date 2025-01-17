@@ -4,6 +4,7 @@ import AuthButton from '@/components/auth/authButton/authButton';
 import AuthInput from '@/components/auth/authInput/authInput';
 import CodeInput from '@/components/auth/codeInput/codeInput';
 import ValidationMessage from '@/components/auth/validationMessage/validationMessage';
+import Input from '@/components/common/input/input';
 
 import * as S from './module.style';
 
@@ -36,7 +37,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
       <S.Wrapper>
         {span && <span>{span}</span>}
         <S.Wrapper2>
-          <AuthInput
+          <Input
             placeholder={Name}
             type={inputname}
             autoComplete={inputname}

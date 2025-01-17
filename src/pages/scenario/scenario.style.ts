@@ -65,35 +65,3 @@ export const PageNumber = styled.div`
   border-radius: 4px;
   background: rgba(217, 230, 255, 0.2);
 `;
-
-// 모달
-export const ModalContainer = styled.div`
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 1000px;
-`;
-
-export const description = styled.div`
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%;
-  letter-spacing: 0.48px;
-`;
-
-export const InputTitle = styled.p`
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 150%;
-  letter-spacing: 0.44px;
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-export const ButtonWrapper = styled.div`
-  width: 104px;
-`;
