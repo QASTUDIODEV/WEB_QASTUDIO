@@ -1,10 +1,10 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
+
+import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
-import CharacterModal from '@/components/projectInfo/characterModal/characterModal';
-import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
-import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Goto from '@/assets/icons/arrow_goto.svg?react';
@@ -20,6 +20,7 @@ import Rights from '@/assets/icons/shield.svg?react';
 import Web from '@/assets/icons/web.svg?react';
 import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
+import { openModal } from '@/slices/modalSlice.ts';
 
 const initialState = {
   isStructureVisible: true,
@@ -53,13 +54,9 @@ function reducer(state: typeof initialState, action: TAction) {
   }
 }
 export default function ProjectInfoPage() {
-  const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 관리
-  const [inviteModal, setInviteModal] = useState(false);
-  const [characterModal, setCharacterModal] = useState(false);
-  const toggleModal = () => setModalOpen((prev) => !prev);
-  const toggleInviteModal = () => setInviteModal((prev) => !prev);
-  const toggleCharacterModal = () => setCharacterModal((prev) => !prev);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const modalDispatch = useDispatch();
+
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
     path: ['/', '/login', '/roadmap', '/mypage', '/mypage'],
@@ -148,8 +145,7 @@ export default function ProjectInfoPage() {
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
               <S.Wrapper top="16px" right="24px">
-                <Plus onClick={toggleModal} />
-                {isModalOpen && <CreatePageModal onClose={toggleModal} />}
+                <Plus onClick={() => modalDispatch(openModal(MODAL_TYPES.CreatePageModal))} />
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
@@ -235,10 +231,9 @@ export default function ProjectInfoPage() {
                   <S.Medium18Text>2</S.Medium18Text>
                 </S.rowBox>
               </S.CharacterBox>
-              <S.CharacterAddBox onClick={toggleCharacterModal}>
+              <S.CharacterAddBox onClick={() => modalDispatch(openModal(MODAL_TYPES.CharacterModal))}>
                 <Plus />
               </S.CharacterAddBox>
-              {characterModal && <CharacterModal onClose={toggleCharacterModal} />}
             </S.Character>
           </S.Box>
         </S.Left>
@@ -260,10 +255,9 @@ export default function ProjectInfoPage() {
               </S.Member>
             ))}
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={toggleInviteModal}>
+              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={() => modalDispatch(openModal(MODAL_TYPES.InviteModal))}>
                 Invite
               </Button>
-              {inviteModal && <InviteModal onClose={toggleInviteModal} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>
