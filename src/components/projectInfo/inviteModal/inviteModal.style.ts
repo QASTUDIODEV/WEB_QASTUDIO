@@ -29,6 +29,8 @@ export const BtnWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  max-width: 860px;
+  overflow: auto;
 `;
 export const Position = styled.div`
   display: flex;
