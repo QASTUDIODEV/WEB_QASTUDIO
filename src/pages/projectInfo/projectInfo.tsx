@@ -1,9 +1,10 @@
 import { useReducer, useState } from 'react';
 
 import Button from '@/components/common/button/button';
-import Input from '@/components/common/input/input';
-import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
+import CharacterModal from '@/components/projectInfo/characterModal/characterModal';
+import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
+import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Goto from '@/assets/icons/arrow_goto.svg?react';
@@ -11,7 +12,6 @@ import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Book from '@/assets/icons/book.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
-import Delete from '@/assets/icons/del_circle.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import File from '@/assets/icons/files.svg?react';
 import NextJs from '@/assets/icons/nextjs.svg?react';
@@ -52,8 +52,13 @@ function reducer(state: typeof initialState, action: TAction) {
       return state;
   }
 }
-
 export default function ProjectInfoPage() {
+  const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 관리
+  const [inviteModal, setInviteModal] = useState(false);
+  const [characterModal, setCharacterModal] = useState(false);
+  const toggleModal = () => setModalOpen((prev) => !prev);
+  const toggleInviteModal = () => setInviteModal((prev) => !prev);
+  const toggleCharacterModal = () => setCharacterModal((prev) => !prev);
   const [state, dispatch] = useReducer(reducer, initialState);
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
@@ -87,13 +92,6 @@ export default function ProjectInfoPage() {
       Master: false,
     },
   ];
-  const [modalShow, setModalShow] = useState(false);
-  const showModal = () => {
-    setModalShow(true);
-  };
-  const hideModal = () => {
-    setModalShow(false);
-  };
 
   return (
     <S.Container>
@@ -150,57 +148,8 @@ export default function ProjectInfoPage() {
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
               <S.Wrapper top="16px" right="24px">
-                <Plus
-                  onClick={() => {
-                    showModal();
-                  }}
-                />
-                {modalShow && (
-                  <Modal
-                    title="Create Project"
-                    children={
-                      <S.ModalBox>
-                        <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
-                        <S.PostBox>
-                          <S.ModalText>Project Image</S.ModalText>
-                        </S.PostBox>
-                        <S.PostBox>
-                          <S.ModalText>Project Name</S.ModalText>
-                          <Input placeholder="Enter project title." />
-                        </S.PostBox>
-                        <S.PostBox>
-                          <S.ModalText>Project URL</S.ModalText>
-                          <Input placeholder="Enter the deployed project URL" />
-                        </S.PostBox>
-                        <S.PostBox>
-                          <S.ModalText>Share this project</S.ModalText>
-                          <S.BtnWrapper>
-                            <Input placeholder="Invite others by email" />
-                            <Button type="normal" color="blue">
-                              Share
-                            </Button>
-                          </S.BtnWrapper>
-                          <S.BtnWrapper>
-                            <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
-                              dfsfd@gmail.com
-                            </Button>
-                            <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
-                              ek5348@naver.com
-                            </Button>
-                          </S.BtnWrapper>
-                        </S.PostBox>
-                        <S.PostBox>
-                          <S.Position>
-                            <Button type="normal" color="blue">
-                              Create
-                            </Button>
-                          </S.Position>
-                        </S.PostBox>
-                      </S.ModalBox>
-                    }
-                    onClose={hideModal}
-                  />
-                )}
+                <Plus onClick={toggleModal} />
+                {isModalOpen && <CreatePageModal onClose={toggleModal} />}
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
@@ -286,9 +235,10 @@ export default function ProjectInfoPage() {
                   <S.Medium18Text>2</S.Medium18Text>
                 </S.rowBox>
               </S.CharacterBox>
-              <S.CharacterAddBox>
+              <S.CharacterAddBox onClick={toggleCharacterModal}>
                 <Plus />
               </S.CharacterAddBox>
+              {characterModal && <CharacterModal onClose={toggleCharacterModal} />}
             </S.Character>
           </S.Box>
         </S.Left>
@@ -310,9 +260,10 @@ export default function ProjectInfoPage() {
               </S.Member>
             ))}
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left">
+              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={toggleInviteModal}>
                 Invite
               </Button>
+              {inviteModal && <InviteModal onClose={toggleInviteModal} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>

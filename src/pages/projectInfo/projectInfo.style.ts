@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  width: 100%;
+  min-width: 1080px;
   flex: 1;
   height: 100vh;
   padding: 5.8% 7.5% 3.125% 7.5%;
@@ -20,6 +20,8 @@ const Profile = styled.div`
 `;
 
 const ProfileWrapper = styled.div`
+  min-width: 25.6px;
+  min-height: 25.6px;
   width: 25.6px;
   height: 25.6px;
 `;
