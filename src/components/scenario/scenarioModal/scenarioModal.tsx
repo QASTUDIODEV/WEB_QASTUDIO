@@ -46,7 +46,7 @@ export default function ScenarioModal() {
   };
 
   return (
-    <Modal title={'Create Character'} onClose={() => dispatch(setOpen())}>
+    <Modal title={'Create Character'}>
       {modalStep === 1 ? (
         // 역할 선택 단계
         <form onSubmit={handleSubmit(handleCreate)}>
