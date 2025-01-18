@@ -109,7 +109,7 @@ export default function ScenarioModal() {
           </S.DescriptionContainer>
 
           <S.ScenarioContainer>
-            <S.SubTitle>Main Senario</S.SubTitle>
+            <S.SubTitle>Scenario</S.SubTitle>
             <S.MainScenarioWrapper>
               <S.ScenarioDescription>1. 로그인 페이지에 접근한다.</S.ScenarioDescription>
               <S.ScenarioDescription>2. 이메일 입력란에 이메일을 입력한다. </S.ScenarioDescription>
@@ -126,7 +126,7 @@ export default function ScenarioModal() {
             </S.LongButtonWrapper>
             <S.ButtonWrapper>
               <Button color="blue" onClick={() => dispatch(setOpen())}>
-                Close
+                Save
               </Button>
             </S.ButtonWrapper>
           </S.ButtonContainer>

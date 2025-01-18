@@ -3,18 +3,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import modalReducer from '@/slices/modalSlice.ts';
 import scenarioReducer from '@/slices/scenarioSlice';
 
-function createStore() {
-  const store = configureStore({
-    reducer: {
-      modal: modalReducer,
-      scenario: scenarioReducer,
-    },
-  });
-
-  return store;
-}
-
-const store = createStore();
+const store = configureStore({
+  reducer: {
+    modal: modalReducer,
+    scenario: scenarioReducer,
+  },
+});
 
 export default store;
 
