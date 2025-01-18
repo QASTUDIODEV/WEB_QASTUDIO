@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { userSettingSchema } from '@/utils/validate';
+
 import { useGetPresignedUrl } from '@/hooks/common/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/common/useUploadPresignedURL';
 
