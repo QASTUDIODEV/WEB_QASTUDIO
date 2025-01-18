@@ -29,6 +29,7 @@ const Wrapper = styled(motion.div)`
 
   ${media.phone`
     padding: 30px;
+    min-width: 95%;
   `}
 `;
 
