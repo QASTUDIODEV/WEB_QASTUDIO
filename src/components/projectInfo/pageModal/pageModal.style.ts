@@ -56,6 +56,7 @@ export const Btn = styled.div<{ disabled?: boolean }>`
   width: 100%;
   border-radius: 4px;
   background: #d9e6ff1a;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   padding: 16px 20px;
