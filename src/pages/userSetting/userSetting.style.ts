@@ -52,4 +52,31 @@ const Backdrop = styled.div`
   }
 `;
 
-export { Backdrop, ProfileEditBtn, ProfileImg };
+const Form = styled.form`
+  width: 300px;
+  display: flex;
+  ${({ theme }) => theme.align.column_center}
+  gap:20px;
+  gap: 20px;
+  padding-top: 60px;
+  ${({ theme }) => theme.align.column_center};
+`;
+
+const Container = styled.div`
+  ${({ theme }) => theme.align.column_center};
+  position: relative;
+  max-height: 550px;
+  height: 500px;
+  padding: 30px 80px;
+  gap: 20px;
+  border-radius: 16px;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.black};
+  .logo {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    top: 30px;
+  }
+`;
+export { Backdrop, Container, Form, ProfileEditBtn, ProfileImg };
