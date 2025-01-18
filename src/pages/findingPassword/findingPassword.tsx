@@ -79,9 +79,11 @@ export default function FindingPassword() {
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
     const { email, password } = data;
     console.log(email, password);
+
     // alert(email);
     // alert(password);
     navigate('/');
+    // 로그인 로직 추후 추가 예정
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

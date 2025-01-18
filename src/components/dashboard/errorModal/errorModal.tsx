@@ -9,9 +9,13 @@ const res = {
   message: '404',
 };
 
-export default function ErrorModal() {
+type TErrorProps = {
+  onClose: () => void;
+};
+
+export default function ErrorModal({ onClose }: TErrorProps) {
   return (
-    <Modal title={res.title}>
+    <Modal title={res.title} onClose={onClose}>
       <S.Container>
         <p>Screen Shot</p>
         <S.ResultContainer>

@@ -27,6 +27,7 @@ type TCodeModuleProps = {
   Name: string;
   codeverify: boolean | undefined;
   handleVerifyCode: () => void;
+  // ref: any;
 };
 
 // InputModule 컴포넌트
