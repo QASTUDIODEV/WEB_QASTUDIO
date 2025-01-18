@@ -77,11 +77,12 @@ export default function FindingPassword() {
   };
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    const { email, password } = data;
+    // const { email, password } = data;
+    console.log(data);
     // alert(email);
     // alert(password);
     navigate('/');
+    // 로그인 로직 추후 추가 예정
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

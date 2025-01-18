@@ -1,20 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import modalReducer from '@/slices/modalSlice.ts';
+import modalReducer from '@/slices/modalSlice';
 
-function createStore() {
-  const store = configureStore({
-    reducer: {
-      modal: modalReducer,
-    },
-  });
-
-  return store;
-}
-
-const store = createStore();
-
-export default store;
+const store = configureStore({
+  reducer: {
+    modal: modalReducer,
+  },
+});
 
 export type TRootState = ReturnType<typeof store.getState>;
 export type TAppDispatch = typeof store.dispatch;
+
+export default store;
