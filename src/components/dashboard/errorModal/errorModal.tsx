@@ -1,17 +1,17 @@
-import { useDispatch } from 'react-redux';
-
 import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
 
 import * as S from './errorModal.style';
 
-import { setOpen } from '@/slices/modalSlice';
+const res = {
+  title: 'UMC_PM_DAY',
+  code: 404,
+  message: '404',
+};
 
 export default function ErrorModal() {
-  const dispatch = useDispatch();
-
   return (
-    <Modal title={'UMC_PM_DAY'} onClose={() => dispatch(setOpen())}>
+    <Modal title={res.title}>
       <S.Container>
         <p>Screen Shot</p>
         <S.ResultContainer>
@@ -21,11 +21,11 @@ export default function ErrorModal() {
           <S.ResultWrapper>
             <S.ErrorWrapper>
               <p>Error Code</p>
-              <S.ResultBox>404</S.ResultBox>
+              <S.ResultBox>{res.code}</S.ResultBox>
             </S.ErrorWrapper>
             <S.ErrorWrapper>
               <p>Error Message</p>
-              <S.MessageBox>404</S.MessageBox>
+              <S.MessageBox>{res.message}</S.MessageBox>
             </S.ErrorWrapper>
             <S.ButtonBox>
               <Button color={'blue'} onClick={() => {}}>
