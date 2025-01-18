@@ -68,7 +68,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
   };
   return (
-    <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
+    <Modal title={`Create New Page ${modalStep}/2`}>
       {modalStep === 1 ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.ModalBox>
