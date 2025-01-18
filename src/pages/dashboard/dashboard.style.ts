@@ -3,7 +3,8 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  justify-content: center;
+  gap: 5%;
   width: 100%;
   height: 100%;
   padding: 65px 60px;
@@ -43,7 +44,7 @@ const SearchBox = styled.div`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 5%;
 `;
 
 export { Container, ContentWrapper, InfoWrapper, ProfileBox, ProjectTitleBox, SearchBox, TableWrapper };
