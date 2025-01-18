@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import { useDispatch } from '@/hooks/common/useCustomRedux';
 
-import ErrorModal from '@/components/dashboard/errorModal/errorModal.tsx';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
 import * as S from '@/components/dashboard/table/table.style';
 
@@ -15,13 +15,12 @@ import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
 import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
 import type { TTableData } from '@/mocks/tableData';
 import { tableData } from '@/mocks/tableData';
-import { setOpen } from '@/slices/modalSlice';
+import { openModal } from '@/slices/modalSlice';
 
 const columnHelper = createColumnHelper<TTableData>();
 
 export default function Table() {
   const navigate = useNavigate();
-  const { isOpen } = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
   const [data] = useState(tableData);
@@ -35,7 +34,7 @@ export default function Table() {
       // 성공의 경우 경로 수정
       navigate('/project/scenario/1');
     } else {
-      dispatch(setOpen());
+      dispatch(openModal(MODAL_TYPES.ErrorModal));
     }
   };
 
@@ -139,7 +138,7 @@ export default function Table() {
         </S.PageNumberWrapper>
       </S.TableContainer>
       {/* 에러 모달*/}
-      {isOpen && <ErrorModal />}
+      {/*{isOpen && <ErrorModal />}*/}
     </>
   );
 }
