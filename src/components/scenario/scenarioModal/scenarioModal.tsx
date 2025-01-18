@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
@@ -16,6 +17,14 @@ export default function ScenarioModal() {
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
   const [options, setOptions] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+  });
 
   // 역할 생성 함수
   const handleCreate = () => {
@@ -39,41 +48,47 @@ export default function ScenarioModal() {
     <Modal title={'Create Character'} onClose={() => dispatch(setOpen())}>
       {modalStep === 1 ? (
         // 역할 선택 단계
-        <S.ModalContainer>
-          <div>
-            <S.description>Define users for the registered project.</S.description>
-            <S.description>QASTUDIO will create a suitable scenario for you.</S.description>
-          </div>
+        <form onSubmit={handleSubmit(handleCreate)}>
+          <S.ModalContainer>
+            <div>
+              <S.description>Define users for the registered project.</S.description>
+              <S.description>QASTUDIO will create a suitable scenario for you.</S.description>
+            </div>
 
-          <S.InputWrapper>
-            <S.SubTitle>Name</S.SubTitle>
-            <Input placeholder="Define the target character in one sentence." type="normal" />
-          </S.InputWrapper>
-          <S.InputWrapper>
-            <S.SubTitle>Description</S.SubTitle>
-            <Input placeholder="Explain the character's purpose for using the project." type="normal" />
-          </S.InputWrapper>
-          <S.InputWrapper>
-            <S.SubTitle>Access page</S.SubTitle>
-            <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
-          </S.InputWrapper>
+            <S.InputWrapper>
+              <S.SubTitle>Name</S.SubTitle>
+              <Input placeholder="Define the target character in one sentence." type="normal" {...register('name', { required: 'Name is required' })} />
+            </S.InputWrapper>
+            <S.InputWrapper>
+              <S.SubTitle>Description</S.SubTitle>
+              <Input
+                placeholder="Explain the character's purpose for using the project."
+                type="normal"
+                {...register('description', { required: 'Description is required' })}
+              />
+            </S.InputWrapper>
+            <S.InputWrapper>
+              <S.SubTitle>Access page</S.SubTitle>
+              <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
+            </S.InputWrapper>
 
-          <S.TagContainer>
-            {selectedOptions.map((option) => (
-              <Button key={option} type="tag" color="mint" icon={<DelCircle />} iconPosition="right" onClick={() => handleRemove(option)}>
-                {option}
-              </Button>
-            ))}
-          </S.TagContainer>
+            <S.TagContainer>
+              {selectedOptions.map((option) => (
+                <Button key={option} type="tag" color="mint" icon={<DelCircle />} iconPosition="right" onClick={() => handleRemove(option)}>
+                  {option}
+                </Button>
+              ))}
+            </S.TagContainer>
 
-          <S.ButtonContainer>
-            <S.ButtonWrapper>
-              <Button color="blue" onClick={handleCreate}>
-                Create
-              </Button>
-            </S.ButtonWrapper>
-          </S.ButtonContainer>
-        </S.ModalContainer>
+            <S.ButtonContainer>
+              <S.ButtonWrapper>
+                <Button color="blue" onClick={handleCreate} disabled={!isValid || selectedOptions.length === 0}>
+                  Create
+                </Button>
+              </S.ButtonWrapper>
+            </S.ButtonContainer>
+          </S.ModalContainer>
+        </form>
       ) : (
         // 역할 확인 상태
         <S.ConfirmModalContainer>
