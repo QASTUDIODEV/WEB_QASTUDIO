@@ -1,19 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
 
-import Button from '../button/button';
-import Input from '../input/input';
+import ProjectModal from './projectModal/projectModal';
 
 import Plus from '@/assets/icons/add.svg?react';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
-import Cam from '@/assets/icons/camera.svg?react';
-import Delete from '@/assets/icons/del_circle.svg?react';
 import SenarioLogo from '@/assets/icons/file_branch.svg?react';
 import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
@@ -119,53 +115,7 @@ export default function Sidebar() {
             showModal();
           }}
         />
-        {modalShow && (
-          <Modal
-            title="Create Project"
-            children={
-              <S.ModalBox>
-                <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
-                <S.PostBox>
-                  <S.ModalText>Project Image</S.ModalText>
-                  <Cam />
-                </S.PostBox>
-                <S.PostBox>
-                  <S.ModalText>Project Name</S.ModalText>
-                  <Input placeholder="Enter project title." />
-                </S.PostBox>
-                <S.PostBox>
-                  <S.ModalText>Project URL</S.ModalText>
-                  <Input placeholder="Enter the deployed project URL" />
-                </S.PostBox>
-                <S.PostBox>
-                  <S.ModalText>Share this project</S.ModalText>
-                  <S.BtnWrapper>
-                    <Input placeholder="Invite others by email" />
-                    <Button type="normal" color="blue">
-                      Share
-                    </Button>
-                  </S.BtnWrapper>
-                  <S.BtnWrapper>
-                    <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
-                      dfsfd@gmail.com
-                    </Button>
-                    <Button type="tag" color="mint" icon={<Delete />} iconPosition="right">
-                      ek5348@naver.com
-                    </Button>
-                  </S.BtnWrapper>
-                </S.PostBox>
-                <S.PostBox>
-                  <S.Position>
-                    <Button type="normal" color="blue">
-                      Create
-                    </Button>
-                  </S.Position>
-                </S.PostBox>
-              </S.ModalBox>
-            }
-            onClose={hideModal}
-          />
-        )}
+        {modalShow && <ProjectModal onClose={hideModal} />}
       </S.Projects>
 
       {projects.map((project, index) => (
