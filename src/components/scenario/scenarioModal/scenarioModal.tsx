@@ -27,8 +27,9 @@ export default function ScenarioModal() {
   });
 
   // 역할 생성 함수
-  const handleCreate = () => {
+  const handleCreate = (data: any) => {
     //역할 생성
+    console.log(data);
     setModalStep(2);
   };
 
@@ -82,7 +83,7 @@ export default function ScenarioModal() {
 
             <S.ButtonContainer>
               <S.ButtonWrapper>
-                <Button color="blue" onClick={handleCreate} disabled={!isValid || selectedOptions.length === 0}>
+                <Button color="blue" onClick={handleSubmit(handleCreate)} disabled={!isValid || selectedOptions.length === 0}>
                   Create
                 </Button>
               </S.ButtonWrapper>
