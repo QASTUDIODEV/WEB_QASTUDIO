@@ -15,11 +15,11 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     openModal: (state, action) => {
-      state.modalType = action.payload; // 모달 타입 설정
+      state.modalType = action.payload;
       state.isOpen = true;
     },
     closeModal: (state) => {
-      state.modalType = ''; // 모달 타입 초기화
+      state.modalType = '';
       state.isOpen = false;
     },
   },
