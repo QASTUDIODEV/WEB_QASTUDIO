@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
-import { authSendEmailCode, defaultSignup } from '@/apis/auth/auth';
+import { authSendEmailCode, defaultLogin, defaultSignup } from '@/apis/auth/auth';
 
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
@@ -85,13 +85,31 @@ function SignupPage() {
     },
   });
 
-  const { mutate: signupMutation, isPending: signupPending } = useCustomMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => defaultSignup({ email, password }),
+  const { mutate: loginMutation, isPending } = useCustomMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
-      setStep(2);
+      const { accessToken, refreshToken } = data.result;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      navigate('/signup/userSetting');
     },
     onError: (error) => {
-      console.error('Error object:', error);
+      console.error(error);
+    },
+  });
+
+  let lastSignupData = { email: watchedEmail, password: watchedPassword };
+
+  const { mutate: signupMutation, isPending: signupPending } = useCustomMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) => {
+      lastSignupData = { email, password };
+      return defaultSignup({ email, password });
+    },
+    onSuccess: (data) => {
+      loginMutation(lastSignupData);
+    },
+    onError: (error) => {
+      console.error('Signup error:', error);
     },
   });
 
@@ -191,7 +209,6 @@ function SignupPage() {
               {...register('code')}
             />
           )}
-
           <InputModule
             top={false}
             touched={touchedFields.password}
