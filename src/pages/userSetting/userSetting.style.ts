@@ -52,4 +52,11 @@ const Backdrop = styled.div`
   }
 `;
 
-export { Backdrop, ProfileEditBtn, ProfileImg };
+const Form = styled.form`
+  width: 300px;
+  display: flex;
+  ${({ theme }) => theme.align.column_center}
+  gap:20px;
+`;
+
+export { Backdrop, Form, ProfileEditBtn, ProfileImg };
