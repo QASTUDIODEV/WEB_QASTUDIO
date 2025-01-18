@@ -6,10 +6,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   width: 100%;
-
-  margin-top: 20px;
+  margin-top: 15px;
 
   p {
     ${({ theme }) => theme.text.medium_18};
@@ -20,7 +18,7 @@ const ResultContainer = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const ScreenShotWrapper = styled.div`
@@ -37,7 +35,7 @@ const ScreenShotBox = styled.div`
   background-color: #353535;
   border-radius: 13px;
   width: 100%;
-  height: 465px;
+  height: 450px;
 `;
 
 const ResultWrapper = styled.div`
