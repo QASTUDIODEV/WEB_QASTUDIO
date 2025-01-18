@@ -2,7 +2,7 @@ import * as S from '@/components/auth/socialLogo/socialLogo.style';
 
 import GithubLogo from '@/assets/icons/githubLogo.svg?react';
 import GoogleLogo from '@/assets/icons/googleLogo.svg?react';
-import KakaoLogo from '@/assets/icons/KakaoLogo.svg?react';
+import KakaoLogo from '@/assets/icons/kakaoLogo.svg?react';
 
 type TSocialLogo = {
   gap: number;
