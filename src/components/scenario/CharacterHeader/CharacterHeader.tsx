@@ -36,7 +36,7 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
   return (
     <>
       {isEdit ? (
-        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit}>
+        <S.CharacterHeader $isChecked={character.isChecked && true} $isEdit={isEdit}>
           <S.CharacterHeaderLeftSide>
             <CheckBox characterId={characterId} />
             <UserProfile />
@@ -54,7 +54,7 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader isChecked={character.isChecked} isEdit={isEdit} idx={idx}>
+        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} idx={idx}>
           <S.CharacterHeaderLeftSide>
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
               {character.isExpanded ? <ArrowUp /> : <ArrowDown />}

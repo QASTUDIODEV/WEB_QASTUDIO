@@ -25,7 +25,7 @@ export default function Dropdown({ options, onSelect, placeholder }: IDropdownPr
         {placeholder}
         {isOpen ? <ArrowDown /> : <ArrowUp />}
       </S.DropdownHeader>
-      <S.DropdownList isOpen={isOpen}>
+      <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
           <S.DropdownListItem key={index} onClick={() => handleSelect(option)}>
             {option}

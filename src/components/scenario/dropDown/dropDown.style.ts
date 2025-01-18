@@ -22,7 +22,7 @@ export const DropdownHeader = styled.div`
   align-items: center;
 `;
 
-export const DropdownList = styled.ul<{ isOpen: boolean }>`
+export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   position: absolute;
   top: 100%;
   left: 0;
@@ -34,7 +34,7 @@ export const DropdownList = styled.ul<{ isOpen: boolean }>`
   z-index: 1000;
   overflow-y: auto;
   max-height: 128px;
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   flex-direction: column;
 `;
 
