@@ -14,7 +14,7 @@ type TCharacterModalProps = {
 
 export default function CharacterModal({ onClose }: TCharacterModalProps) {
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
-  const [options, setOptions] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
+  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
 
   // 역할 생성 함수

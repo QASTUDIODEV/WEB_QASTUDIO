@@ -23,7 +23,7 @@ type TFormData = {
   scenarios: { value: string }[];
 };
 export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
-  const [options, setOptions] = useState<string[]>(['origin', 'admin', 'guest']);
+  const [options] = useState<string[]>(['origin', 'admin', 'guest']);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
 
@@ -68,7 +68,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
   };
   return (
-    <Modal title={`Create New Page ${modalStep}/2`}>
+    <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
       {modalStep === 1 ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.ModalBox>
