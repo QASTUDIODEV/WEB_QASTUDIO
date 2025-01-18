@@ -1,5 +1,8 @@
+import { DEVICE, STACK } from '@/enums/enums';
+
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 
+import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
 import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
@@ -15,7 +18,7 @@ export default function ScenarioPage() {
       {isOpen && <ScenarioModal />}
       <S.Container>
         <S.Header>
-          <h1>UMC_PM_DAY</h1>
+          <ProjectTitle title="UMC_PM_DAY" device={DEVICE.MOBILE} stack={STACK.JS} />
         </S.Header>
 
         <ButtonGroup />
