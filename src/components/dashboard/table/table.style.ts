@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const TableContainer = styled.div`
   ${({ theme }) => theme.align.column_center};
-  gap: 12px;
+  gap: 15px;
   width: 100%;
 
   ${({ theme }) => theme.text.medium_14};
