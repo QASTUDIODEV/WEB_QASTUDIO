@@ -7,7 +7,7 @@ type TProgressBarProps = {
 export default function ProgressBar({ percent }: TProgressBarProps) {
   return (
     <S.Container>
-      <S.Filler percent={percent} />
+      <S.Filler $percent={percent} />
       <S.PercentageText>{`${percent}%`}</S.PercentageText>
     </S.Container>
   );

@@ -62,7 +62,7 @@ export default function Table() {
     columnHelper.accessor('state', {
       header: 'State',
       size: 200,
-      cell: (info) => <S.State success={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
+      cell: (info) => <S.State $isSuccess={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
     }),
     columnHelper.accessor('time', {
       header: 'Time',
@@ -78,7 +78,7 @@ export default function Table() {
       size: 400,
       header: 'Action',
       cell: (info) => (
-        <S.Action success={info.getValue()} onClick={() => handleModal(info.getValue())}>
+        <S.Action $isSuccess={info.getValue()} onClick={() => handleModal(info.getValue())}>
           <p>{info.getValue() ? 'Run Scenario' : 'Check the error'}</p>
           {info.getValue() ? <GreenArrow /> : <RedArrow />}
         </S.Action>
