@@ -89,13 +89,13 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
         </S.BtnWrapper>
         <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />
         {/* 이메일 태그 리스트 */}
-        <S.BtnWrapper>
+        <S.tagWrapper>
           {emails.map((email) => (
             <Button key={email} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(email)}>
               {email}
             </Button>
           ))}
-        </S.BtnWrapper>
+        </S.tagWrapper>
         {/* Create 버튼 */}
         <S.Position>
           <Button type="normal" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
