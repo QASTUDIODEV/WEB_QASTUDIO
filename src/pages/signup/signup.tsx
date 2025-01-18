@@ -76,7 +76,6 @@ function SignupPage() {
     mutationFn: async ({ email }: { email: string }) => authSendEmailCode(email),
     onSuccess: (data) => {
       setAuthCode(data.result.authCode);
-      alert('해당 이메일로 인증 코드가 발송되었습니다');
       setStep(1);
     },
     onError: (error) => {
@@ -100,8 +99,6 @@ function SignupPage() {
     setValue('code', '');
     if (!errors.email?.message) {
       sendCodeMutation({ email: watchedEmail });
-    } else {
-      alert('올바른 이메일을 입력해주세요');
     }
   };
 

@@ -77,7 +77,7 @@ export function renderStep2(step: number) {
 
   if (step !== 2) return null;
   return (
-    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
+    <S.Form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
       <S.ProfileImg onClick={handleInputClick}>
         <S.Backdrop>
           <ProfileEdit />
@@ -109,6 +109,6 @@ export function renderStep2(step: number) {
       <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadPresignedUrlPending}>
         Sign up
       </AuthButton>
-    </form>
+    </S.Form>
   );
 }
