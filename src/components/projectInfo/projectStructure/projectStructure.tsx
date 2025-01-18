@@ -1,6 +1,5 @@
 import Button from '@/components/common/button/button';
-
-import * as S from '@/pages/projectInfo/projectStructure.style.ts';
+import * as S from '@/components/projectInfo/projectStructure/projectStructure.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch.svg?react';

@@ -7,6 +7,7 @@ import Profile from '@/components/common/profile/profile';
 import CharacterModal from '@/components/projectInfo/characterModal/characterModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
+import ProjectStructure from '@/components/projectInfo/projectStructure/projectStructure';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Goto from '@/assets/icons/arrow_goto.svg?react';
@@ -21,7 +22,6 @@ import Page from '@/assets/icons/page.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
 import Web from '@/assets/icons/web.svg?react';
 import * as S from '@/pages/projectInfo/projectInfo.style';
-import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { setOpen } from '@/slices/modalSlice.ts';
 
 const initialState = {
