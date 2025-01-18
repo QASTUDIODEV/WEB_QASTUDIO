@@ -1,4 +1,4 @@
-import jsxA11y from 'eslint-plugin-jsx-a11y'
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default {
   plugins: {
@@ -21,7 +21,7 @@ export default {
     'jsx-a11y/no-static-element-interactions': 'off',
 
     // console.log(), console.warn(), console.error()를 사용할 때 경고를 표시합니다.
-    'no-console': 'warn',
+    // 'no-console': 'warn',
 
     // 가능한 경우 dot notation을 사용하도록 경고를 표시합니다.
     'dot-notation': 'warn',
@@ -31,4 +31,4 @@ export default {
 
     '@typescript-eslint/no-explicit-any': 'off',
   },
-}
+};
