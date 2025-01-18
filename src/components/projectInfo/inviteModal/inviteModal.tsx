@@ -52,7 +52,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
   };
 
   return (
-    <Modal title="Invite Member" onClose={onClose}>
+    <Modal title="Invite Member">
       <S.ModalBox>
         <S.ModalText>Enter the new member's email.</S.ModalText>
         <S.ModalText>Share this project</S.ModalText>
