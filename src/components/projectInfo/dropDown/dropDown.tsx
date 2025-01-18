@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import * as S from '@/components/projectInfo/dropDown/dropdown.style';
+import * as S from '@/components/projectInfo/dropDown/dropDown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
