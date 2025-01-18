@@ -23,6 +23,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
   const {
     control,
     setValue,
+    watch,
     getValues,
     formState: { errors },
   } = useForm<TFormData>({
@@ -32,8 +33,10 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
     },
   });
 
+  const emailValue = watch('email'); // 이메일 값 실시간 추적
+
   const handleAddEmail = () => {
-    const email = getValues('email').trim();
+    const email = emailValue.trim();
     if (email && !emails.includes(email)) {
       setEmails((prev) => [...prev, email]);
       setValue('email', ''); // 입력 필드 초기화
@@ -76,9 +79,9 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
             color="gray"
             onClick={handleAddEmail}
             disabled={
+              !emailValue.trim() || // 값이 비어 있으면 비활성화
               !!errors.email || // 유효성 검사 에러가 있으면 비활성화
-              !getValues('email').trim() || // 값이 비어 있으면 비활성화
-              emails.includes(getValues('email').trim()) // 이미 추가된 이메일이면 비활성화
+              emails.includes(emailValue.trim()) // 이미 추가된 이메일이면 비활성화
             }
           >
             Share
