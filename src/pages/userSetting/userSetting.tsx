@@ -62,7 +62,7 @@ export default function UserSetting() {
     }
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     navigate('/');
   };
 
