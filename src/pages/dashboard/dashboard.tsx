@@ -1,3 +1,7 @@
+import { useState } from 'react';
+
+import useDebounce from '@/hooks/common/useDebounce';
+
 import Profile from '@/components/common/profile/profile';
 import SearchBar from '@/components/common/searchBar/searchBar';
 import PercentLabel from '@/components/dashboard/percentLabel/percentLabel';
@@ -12,6 +16,10 @@ import * as S from '@/pages/dashboard/dashboard.style';
 
 export default function DashboardPage() {
   const title = 'UMC_PM_DAY';
+  const [search, setSearch] = useState<string>('');
+  const debouncedSearch = useDebounce(search, 500);
+
+  console.log(debouncedSearch);
 
   return (
     <S.Container>
@@ -41,7 +49,7 @@ export default function DashboardPage() {
         </S.InfoWrapper>
         <S.TableWrapper>
           <S.SearchBox>
-            <SearchBar placeholder={'Search by name'} />
+            <SearchBar placeholder={'Search by name'} value={search} onChange={(e) => setSearch(e.target.value)} />
           </S.SearchBox>
           <Table />
         </S.TableWrapper>
