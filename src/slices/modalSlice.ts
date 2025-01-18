@@ -1,26 +1,31 @@
+import type React from 'react';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-interface IModalSlice {
-  isOpen: boolean;
+interface IModalState {
+  modals: Array<React.FC<{ onClose: () => void }>>;
 }
-const initialState: IModalSlice = {
-  isOpen: false,
+
+const initialState: IModalState = {
+  modals: [],
 };
 
 const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    setOpen: (state) => {
-      state.isOpen = true;
+    openModal: (state, action: PayloadAction<React.FC<{ onClose: () => void }>>) => {
+      state.modals.push(action.payload);
     },
-    setClose: (state) => {
-      state.isOpen = false;
+    closeModal: (state, action: PayloadAction<number>) => {
+      state.modals.splice(action.payload, 1);
+    },
+    clearModals: (state) => {
+      state.modals = [];
     },
   },
 });
 
-export const { setOpen, setClose } = modalSlice.actions;
-
+export const { openModal, closeModal, clearModals } = modalSlice.actions;
 const modalReducer = modalSlice.reducer;
 export default modalReducer;
