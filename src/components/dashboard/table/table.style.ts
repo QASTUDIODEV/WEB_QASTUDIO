@@ -1,0 +1,142 @@
+import styled from 'styled-components';
+
+const TableContainer = styled.div`
+  ${({ theme }) => theme.align.column_center};
+  gap: 12px;
+  width: 100%;
+
+  ${({ theme }) => theme.text.medium_14};
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: max(100%, 1100px);
+  margin: 0 auto;
+
+  border-collapse: separate;
+  border-spacing: 0 1px;
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+`;
+
+const TableHeader = styled.thead`
+  tr {
+    background: linear-gradient(76deg, #001945 0%, #000714 100.13%);
+
+    th:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      border-left: 1px solid rgba(32, 75, 153, 0.2);
+    }
+
+    th:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+      border-right: 1px solid rgba(32, 75, 153, 0.2);
+    }
+  }
+`;
+
+const Th = styled.th`
+  padding: 15px 30px;
+
+  text-align: left;
+
+  border-top: 1px solid rgba(32, 75, 153, 0.2);
+  border-bottom: 1px solid rgba(32, 75, 153, 0.2);
+`;
+
+const Tr = styled.tr`
+  ${({ theme }) => theme.text.medium_14};
+  background: linear-gradient(76deg, #001945 0%, #000714 100.13%);
+  border-radius: 6px;
+  overflow: hidden;
+
+  &:nth-child(odd) {
+    background: none;
+  }
+
+  &:nth-child(even) {
+    background: linear-gradient(76deg, #001945 0%, #000714 100.13%);
+  }
+
+  &:first-child td:first-child {
+    border-top-left-radius: 6px;
+  }
+  &:first-child td:last-child {
+    border-top-right-radius: 6px;
+  }
+  &:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+  }
+  &:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+  }
+`;
+
+const Td = styled.td`
+  ${({ theme }) => theme.text.medium_14};
+  padding: 15px 30px;
+
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+`;
+
+const State = styled.span<{ success: boolean }>`
+  ${({ theme }) => theme.text.medium_14};
+  color: ${({ theme, success }) => (success ? theme.colors.success.success_500 : theme.colors.error.error_500)};
+`;
+
+const Action = styled.button<{ success: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${({ theme, success }) => (success ? theme.colors.success.success_700 : theme.colors.error.error_400)};
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
+
+const PageNumberWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  height: 25px;
+`;
+
+const PageBtnBox = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 100%;
+  padding: 2px 9px;
+
+  ${({ theme }) => theme.text.medium_14};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  background-color: transparent;
+
+  &:hover {
+    background: rgba(217, 230, 255, 0.2);
+    border-radius: 3px;
+  }
+`;
+
+const ArrowBox = styled(PageBtnBox)`
+  padding: 0;
+`;
+
+export { Action, ArrowBox, PageBtnBox, PageNumberWrapper, State, Table, TableContainer, TableHeader, TableWrapper, Td, Th, Tr };
