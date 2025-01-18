@@ -1,4 +1,6 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
+
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import Profile from '@/components/common/profile/profile';
@@ -20,6 +22,7 @@ import Rights from '@/assets/icons/shield.svg?react';
 import Web from '@/assets/icons/web.svg?react';
 import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
+import { setOpen } from '@/slices/modalSlice.ts';
 
 const initialState = {
   isStructureVisible: true,
@@ -53,12 +56,8 @@ function reducer(state: typeof initialState, action: TAction) {
   }
 }
 export default function ProjectInfoPage() {
-  const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 관리
-  const [inviteModal, setInviteModal] = useState(false);
-  const [characterModal, setCharacterModal] = useState(false);
-  const toggleModal = () => setModalOpen((prev) => !prev);
-  const toggleInviteModal = () => setInviteModal((prev) => !prev);
-  const toggleCharacterModal = () => setCharacterModal((prev) => !prev);
+  const dispatchModal = useDispatch();
+  const { isOpen } = useSelector((state) => state.modal);
   const [state, dispatch] = useReducer(reducer, initialState);
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
@@ -148,8 +147,12 @@ export default function ProjectInfoPage() {
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
               <S.Wrapper top="16px" right="24px">
-                <Plus onClick={toggleModal} />
-                {isModalOpen && <CreatePageModal onClose={toggleModal} />}
+                <Plus
+                  onClick={() => {
+                    dispatchModal(setOpen());
+                  }}
+                />
+                {isOpen && <CreatePageModal />}
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
@@ -235,10 +238,14 @@ export default function ProjectInfoPage() {
                   <S.Medium18Text>2</S.Medium18Text>
                 </S.rowBox>
               </S.CharacterBox>
-              <S.CharacterAddBox onClick={toggleCharacterModal}>
+              <S.CharacterAddBox
+                onClick={() => {
+                  dispatchModal(setOpen());
+                }}
+              >
                 <Plus />
               </S.CharacterAddBox>
-              {characterModal && <CharacterModal onClose={toggleCharacterModal} />}
+              {isOpen && <CharacterModal />}
             </S.Character>
           </S.Box>
         </S.Left>
@@ -260,10 +267,18 @@ export default function ProjectInfoPage() {
               </S.Member>
             ))}
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={toggleInviteModal}>
+              <Button
+                type="normal"
+                color="default"
+                icon={<Plus />}
+                iconPosition="left"
+                onClick={() => {
+                  dispatchModal(setOpen());
+                }}
+              >
                 Invite
               </Button>
-              {inviteModal && <InviteModal onClose={toggleInviteModal} />}
+              {isOpen && <InviteModal />}
             </S.Wrapper>
           </S.Box>
         </S.Right>

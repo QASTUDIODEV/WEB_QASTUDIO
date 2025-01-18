@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
+import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+
 import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -11,10 +13,8 @@ import * as S from '@/components/projectInfo/pageModal/pageModal.style';
 import Plus from '@/assets/icons/add.svg?react';
 import PlusDark from '@/assets/icons/add_dark.svg?react';
 import DelCircle from '@/assets/icons/del_circle.svg?react';
+import { setOpen } from '@/slices/modalSlice.ts';
 
-type TCreatePageModalProps = {
-  onClose: () => void; // 모달 닫기 함수
-};
 type TFormData = {
   pageName: string;
   pageDescription: string;
@@ -22,7 +22,8 @@ type TFormData = {
   accessControl: string[];
   scenarios: { value: string }[];
 };
-export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
+export default function CreatePageModal() {
+  const dispatchModal = useDispatch();
   const [options, setOptions] = useState<string[]>(['origin', 'admin', 'guest']);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
@@ -57,11 +58,6 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
     if (!selectedOptions.includes(value)) {
       setSelectedOptions((prev) => [...prev, value]);
     }
-  };
-  const handleCreate = () => {
-    // const scenarios = getValues('scenarios'); 나중에 활용 예정
-    // console.log('Scenarios:', scenarios);
-    onClose(); // 모달 닫기
   };
   // 선택된 옵션 제거 함수
   const handleRemove = (value: string) => {
@@ -251,7 +247,14 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
             </S.Btn>
           </S.PostBox>
           <S.Position2>
-            <Button type="normal" color="blue" disabled={!isValid} onClick={handleCreate}>
+            <Button
+              type="normal"
+              color="blue"
+              disabled={!isValid}
+              onClick={() => {
+                dispatchModal(setOpen());
+              }}
+            >
               Create
             </Button>
           </S.Position2>

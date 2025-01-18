@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import Modal from '@/components/common/modal/modal';
@@ -7,12 +9,10 @@ import * as S from '@/components/projectInfo/characterModal/characterModal.style
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 
 import DelCircle from '@/assets/icons/del_circle.svg?react';
+import { setOpen } from '@/slices/modalSlice.ts';
 
-type TCharacterModalProps = {
-  onClose: () => void;
-};
-
-export default function CharacterModal({ onClose }: TCharacterModalProps) {
+export default function CharacterModal() {
+  const dispatchModal = useDispatch();
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
   const [options, setOptions] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
@@ -36,7 +36,7 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
   };
 
   return (
-    <Modal title={'Create Character'} onClose={onClose}>
+    <Modal title={'Create Character'}>
       {modalStep === 1 ? (
         // 역할 선택 단계
         <S.ModalContainer>
@@ -104,12 +104,12 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
 
           <S.ButtonContainer>
             <S.LongButtonWrapper>
-              <Button color="mint" onClick={onClose}>
+              <Button color="mint" onClick={() => dispatchModal(setOpen())}>
                 Edit and Request
               </Button>
             </S.LongButtonWrapper>
             <S.ButtonWrapper>
-              <Button color="blue" onClick={onClose}>
+              <Button color="blue" onClick={() => dispatchModal(setOpen())}>
                 Close
               </Button>
             </S.ButtonWrapper>

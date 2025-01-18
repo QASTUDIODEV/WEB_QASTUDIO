@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { loginSchema } from '@/utils/validate';
+
+import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -8,16 +13,16 @@ import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/projectInfo/inviteModal/inviteModal.style';
 
 import Delcircle from '@/assets/icons/del_circle.svg?react';
+import { setOpen } from '@/slices/modalSlice.ts';
 
-type TInviteModalProps = {
-  onClose: () => void; // 모달 닫기 함수
-};
+const emailSchema = loginSchema.pick({ email: true });
 
 type TFormData = {
   email: string;
 };
 
-export default function InviteModal({ onClose }: TInviteModalProps) {
+export default function InviteModal() {
+  const dispatchModal = useDispatch();
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
 
   const {
@@ -27,6 +32,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
     formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       email: '',
     },
@@ -44,11 +50,6 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
 
   const handleRemoveEmail = (emailToRemove: string) => {
     setEmails((prev) => prev.filter((email) => email !== emailToRemove));
-  };
-
-  const handleCreate = () => {
-    // console.log('Emails:', emails); 나중에 지울게용
-    onClose(); // 모달 닫기
   };
 
   return (
@@ -97,7 +98,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
         </S.tagWrapper>
         {/* Create 버튼 */}
         <S.Position>
-          <Button type="normal" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
+          <Button type="normal" color="blue" onClick={() => dispatchModal(setOpen())} disabled={emails.length === 0}>
             Create
           </Button>
         </S.Position>
