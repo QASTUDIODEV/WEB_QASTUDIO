@@ -4,7 +4,9 @@ import modalReducer from '@/slices/modalSlice.ts';
 
 function createStore() {
   const store = configureStore({
-    reducer: modalReducer,
+    reducer: {
+      modal: modalReducer,
+    },
   });
 
   return store;

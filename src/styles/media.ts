@@ -4,7 +4,7 @@ import { css } from 'styled-components';
 type TDeviceType = 'desktop' | 'tablet' | 'phone';
 
 const sizes: Record<TDeviceType, number> = {
-  desktop: 1200,
+  desktop: 1024,
   tablet: 768,
   phone: 600,
 };
