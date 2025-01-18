@@ -11,7 +11,7 @@ export const useUploadPresignedUrl = () => {
   const { mutate: uploadPresignedUrlMutate, isPending: uploadPresignedUrlPending } = useCustomMutation({
     mutationFn: ({ _presignedUrl, blob }: TUploadPresignedUrlParams) => uploadPresignedUrl(_presignedUrl, blob),
     onSuccess: (data) => {
-      // console.log(data);
+      console.log(data);
     },
     onError: (error) => {
       console.error(error);

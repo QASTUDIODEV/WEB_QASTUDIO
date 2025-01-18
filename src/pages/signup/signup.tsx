@@ -38,7 +38,7 @@ function SignupPage() {
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors, touchedFields },
+    formState: { errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
@@ -85,7 +85,7 @@ function SignupPage() {
     },
   });
 
-  const { mutate: loginMutation, isPending } = useCustomMutation({
+  const { mutate: loginMutation } = useCustomMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
       const { accessToken, refreshToken } = data.result;
@@ -105,7 +105,7 @@ function SignupPage() {
       lastSignupData = { email, password };
       return defaultSignup({ email, password });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       loginMutation(lastSignupData);
     },
     onError: (error) => {
