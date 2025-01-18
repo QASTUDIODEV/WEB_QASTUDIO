@@ -1,24 +1,25 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
-import { clearModals, closeModal } from '@/slices/modalSlice';
-import type { TRootState } from '@/store/store';
+import ErrorModal from '@/components/dashboard/errorModal/errorModal.tsx';
+
+import { closeModal, selectModal } from '@/slices/modalSlice';
+
+export const MODAL_TYPES = {
+  ErrorModal: 'ErrorModal',
+};
+
+export const MODAL_COMPONENTS = {
+  [MODAL_TYPES.ErrorModal]: ErrorModal,
+};
 
 export default function ModalProvider() {
-  const { modals } = useSelector((state: TRootState) => state.modal);
+  const { modalType, isOpen } = useSelector(selectModal);
   const dispatch = useDispatch();
-  const location = useLocation();
 
-  useEffect(() => {
-    dispatch(clearModals());
-  }, [location, dispatch]);
+  if (!isOpen) return null;
 
-  return (
-    <>
-      {modals.map((Modal, index) => (
-        <Modal key={index} onClose={() => dispatch(closeModal(index))} />
-      ))}
-    </>
-  );
+  const ModalComponent = MODAL_COMPONENTS[modalType];
+  if (!ModalComponent) return null;
+
+  return <ModalComponent onClose={() => dispatch(closeModal())} />;
 }
