@@ -15,6 +15,7 @@ import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
 import ScenarioPage from '@/pages/scenario/scenario';
 import ScenarioActPage from '@/pages/scenarioAct/scenarioAct';
 import SignupPage from '@/pages/signup/signup';
+import UserSetting from '@/pages/userSetting/userSetting';
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: '/finding',
         element: <FindingPassword />,
+      },
+      {
+        path: '/signup/userSetting',
+        element: <UserSetting />,
       },
     ],
   },
