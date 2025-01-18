@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import * as S from '@/components/scenario/characterHeader/characterHeader.style';
-import CheckBox from '@/components/scenario/checkBox/sheckBox';
+import CheckBox from '@/components/scenario/checkBox/checkBox';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';

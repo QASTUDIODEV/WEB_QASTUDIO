@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenario/buttonGroup/buttonGroup.style';
-import CheckBox from '@/components/scenario/checkBox/sheckBox';
+import CheckBox from '@/components/scenario/checkBox/checkBox';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/del.svg?react';

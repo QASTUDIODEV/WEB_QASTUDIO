@@ -1,6 +1,6 @@
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 
-import CheckBox from '@/components/scenario/checkBox/sheckBox';
+import CheckBox from '@/components/scenario/checkBox/checkBox';
 import * as S from '@/components/scenario/scenarioItem/scenarioItem.style';
 
 import Calender from '@/assets/icons/calender.svg?react';
