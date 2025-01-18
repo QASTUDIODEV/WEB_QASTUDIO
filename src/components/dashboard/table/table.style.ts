@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const TableContainer = styled.div`
   ${({ theme }) => theme.align.column_center};
-  gap: 12px;
+  gap: 15px;
   width: 100%;
 
   ${({ theme }) => theme.text.medium_14};
@@ -92,17 +92,17 @@ const Td = styled.td`
   }
 `;
 
-const State = styled.span<{ success: boolean }>`
+const State = styled.span<{ $isSuccess: boolean }>`
   ${({ theme }) => theme.text.medium_14};
-  color: ${({ theme, success }) => (success ? theme.colors.success.success_500 : theme.colors.error.error_500)};
+  color: ${({ theme, $isSuccess }) => ($isSuccess ? theme.colors.success.success_500 : theme.colors.error.error_500)};
 `;
 
-const Action = styled.button<{ success: boolean }>`
+const Action = styled.button<{ $isSuccess: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  color: ${({ theme, success }) => (success ? theme.colors.success.success_700 : theme.colors.error.error_400)};
+  color: ${({ theme, $isSuccess }) => ($isSuccess ? theme.colors.success.success_700 : theme.colors.error.error_400)};
   border: none;
   background: none;
   cursor: pointer;

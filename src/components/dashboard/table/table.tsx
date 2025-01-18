@@ -62,7 +62,7 @@ export default function Table() {
     columnHelper.accessor('state', {
       header: 'State',
       size: 200,
-      cell: (info) => <S.State success={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
+      cell: (info) => <S.State $isSuccess={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
     }),
     columnHelper.accessor('time', {
       header: 'Time',
@@ -78,7 +78,7 @@ export default function Table() {
       size: 400,
       header: 'Action',
       cell: (info) => (
-        <S.Action success={info.getValue()} onClick={() => handleModal(info.getValue())}>
+        <S.Action $isSuccess={info.getValue()} onClick={() => handleModal(info.getValue())}>
           <p>{info.getValue() ? 'Run Scenario' : 'Check the error'}</p>
           {info.getValue() ? <GreenArrow /> : <RedArrow />}
         </S.Action>
@@ -96,49 +96,45 @@ export default function Table() {
   });
 
   return (
-    <>
-      <S.TableContainer>
-        <S.TableWrapper>
-          <S.Table>
-            <S.TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <S.Th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
-                  ))}
-                </tr>
-              ))}
-            </S.TableHeader>
+    <S.TableContainer>
+      <S.TableWrapper>
+        <S.Table>
+          <S.TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <S.Th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
+                ))}
+              </tr>
+            ))}
+          </S.TableHeader>
 
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <S.Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
-                  ))}
-                </S.Tr>
-              ))}
-            </tbody>
-          </S.Table>
-        </S.TableWrapper>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <S.Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
+                ))}
+              </S.Tr>
+            ))}
+          </tbody>
+        </S.Table>
+      </S.TableWrapper>
 
-        <S.PageNumberWrapper>
-          <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
-            <PreArrow />
-          </S.ArrowBox>
-          {table.getPageOptions().map((page) => (
-            <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)}>
-              {page + 1}
-            </S.PageBtnBox>
-          ))}
+      <S.PageNumberWrapper>
+        <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
+          <PreArrow />
+        </S.ArrowBox>
+        {table.getPageOptions().map((page) => (
+          <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)}>
+            {page + 1}
+          </S.PageBtnBox>
+        ))}
 
-          <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
-            <NextArrow />
-          </S.ArrowBox>
-        </S.PageNumberWrapper>
-      </S.TableContainer>
-      {/* 에러 모달*/}
-      {/*{isOpen && <ErrorModal />}*/}
-    </>
+        <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
+          <NextArrow />
+        </S.ArrowBox>
+      </S.PageNumberWrapper>
+    </S.TableContainer>
   );
 }

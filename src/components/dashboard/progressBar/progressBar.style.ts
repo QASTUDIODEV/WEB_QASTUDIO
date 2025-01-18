@@ -14,8 +14,8 @@ const Container = styled.div`
   background: transparent;
 `;
 
-const Filler = styled.div<{ percent: number }>`
-  width: ${(props) => props.percent}%;
+const Filler = styled.div<{ $percent: number }>`
+  width: ${(props) => props.$percent}%;
   height: 100%;
 
   background-color: ${({ theme }) => theme.colors.point.point_2};
