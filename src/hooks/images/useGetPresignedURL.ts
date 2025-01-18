@@ -3,7 +3,7 @@ import { uploadSingleImg } from '@/apis/images/images';
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 export const useGetPresignedUrl = () => {
-  const { mutate: uploadSingleImgMutate } = useCustomMutation({
+  const { mutate: uploadSingleImgMutate, isPending: uploadSingleImgPending } = useCustomMutation({
     mutationFn: ({ imgName }: { imgName: string }) => uploadSingleImg(imgName),
     onSuccess: (data) => {
       return data.result.url;
@@ -27,5 +27,6 @@ export const useGetPresignedUrl = () => {
   };
   return {
     getPresignedUrl,
+    uploadSingleImgPending,
   };
 };

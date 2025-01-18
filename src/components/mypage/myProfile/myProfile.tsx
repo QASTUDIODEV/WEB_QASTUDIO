@@ -10,7 +10,6 @@ import { myPageScehma } from '@/utils/validate';
 
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
-import { useGetUserInfo } from '@/hooks/userController/userController';
 
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import Button from '@/components/common/button/button';
@@ -26,7 +25,7 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  const { userData } = useGetUserInfo();
+  // const { userData } = useGetUserInfo();
   const socialLogin: TSocialPlatform[] = ['github', 'kakao']; // 수정 예정
   const unlinkedSocials = findUnlinkedSocials(socialLogin);
 
@@ -103,6 +102,7 @@ export default function MyProfile() {
   };
 
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
+    console.log(data);
     setIsEdit(false);
   };
 

@@ -3,12 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 import { userSettingSchema } from '@/utils/validate';
 
-import { useGetPresignedUrl } from '@/hooks/common/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/common/useUploadPresignedURL';
+import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
+import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
