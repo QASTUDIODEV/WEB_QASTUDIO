@@ -12,8 +12,6 @@ import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
 import Profile from '@/components/common/profile/profile';
 
-import { userSettingSchema } from '../../utils/validate';
-
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
