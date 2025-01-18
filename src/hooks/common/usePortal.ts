@@ -6,16 +6,20 @@ export function usePortal(id: string) {
   const rootElemRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const currentElem = rootElemRef.current;
+    let currentElem = document.getElementById(id);
+
     if (!currentElem) {
       const newElem = document.createElement('div');
       newElem.setAttribute('id', id);
       document.body.appendChild(newElem);
       rootElemRef.current = newElem;
+    } else {
+      rootElemRef.current = currentElem as HTMLDivElement;
     }
+
     return () => {
-      if (currentElem) {
-        document.body.removeChild(currentElem);
+      if (rootElemRef.current && !document.getElementById(id)) {
+        document.body.removeChild(rootElemRef.current);
       }
     };
   }, [id]);
