@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
@@ -13,8 +13,11 @@ import PreArrow from '@/assets/icons/arrow_left.svg?react';
 import NextArrow from '@/assets/icons/arrow_right.svg?react';
 import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
 import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
+import type { TTableData } from '@/mocks/tableData';
 import { tableData } from '@/mocks/tableData';
 import { setOpen } from '@/slices/modalSlice';
+
+const columnHelper = createColumnHelper<TTableData>();
 
 export default function Table() {
   const navigate = useNavigate();
@@ -22,7 +25,6 @@ export default function Table() {
 
   const dispatch = useDispatch();
   const [data] = useState(tableData);
-  const columnHelper = createColumnHelper();
   const [pagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -36,11 +38,6 @@ export default function Table() {
       dispatch(setOpen());
     }
   };
-
-  // 상태 변경 후 isOpen 확인
-  useEffect(() => {
-    console.log('Modal state updated:', isOpen);
-  }, [isOpen]);
 
   const columns = [
     columnHelper.accessor('date', {
@@ -90,6 +87,7 @@ export default function Table() {
     }),
   ];
 
+  /*TODO: 페이지네이션은 실제 데이터 연동하면서 진행하겠습니다 (현재 버튼을 눌러도 이동 X)*/
   const table = useReactTable({
     data,
     columns,
