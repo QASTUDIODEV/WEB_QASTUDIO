@@ -32,7 +32,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange', // 실시간으로 상태를 업데이트
     defaultValues: {
@@ -91,7 +91,9 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                 render={({ field }) => (
                   <>
                     <Input placeholder="Enter page name to add." type="normal" {...field} errorMessage={errors.pageName?.message} touched={!!errors.pageName} />
-                    <ValidataionMessage message={errors.pageName?.message || ''} isError={!!errors.pageName} />
+                    {touchedFields.pageName && errors.pageName?.message && (
+                      <ValidataionMessage message={errors.pageName?.message || ''} isError={!!errors.pageName} />
+                    )}
                   </>
                 )}
               />
@@ -122,7 +124,9 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                       errorMessage={errors.pageDescription?.message}
                       touched={!!errors.pageDescription}
                     />
-                    <ValidataionMessage message={errors.pageDescription?.message || ''} isError={!!errors.pageDescription} />
+                    {touchedFields.pageDescription && errors.pageDescription?.message && (
+                      <ValidataionMessage message={errors.pageDescription?.message || ''} isError={!!errors.pageDescription} />
+                    )}
                   </>
                 )}
               />
@@ -140,14 +144,16 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                     message: 'Page Path is required',
                   },
                   pattern: {
-                    value: /^\/[a-zA-Z0-9-_]+$/,
+                    value: /^\/([a-zA-Z0-9-_]+)?$/,
                     message: 'Path must start with / and contain valid characters',
                   },
                 }}
                 render={({ field }) => (
                   <>
                     <Input placeholder="Enter the page path." type="normal" {...field} errorMessage={errors.pagePath?.message} touched={!!errors.pagePath} />
-                    <ValidataionMessage message={errors.pagePath?.message || ''} isError={!!errors.pagePath} />
+                    {touchedFields.pagePath && errors.pagePath?.message && (
+                      <ValidataionMessage message={errors.pagePath?.message || ''} isError={!!errors.pagePath} />
+                    )}
                   </>
                 )}
               />
@@ -224,20 +230,20 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                     )}
                   />
                 </S.InputWrapper>
-                <ValidataionMessage message={errors.scenarios?.[index]?.value?.message || ''} isError={!!errors.scenarios?.[index]?.value} />
+                {touchedFields.scenarios?.[index]?.value && errors.scenarios?.[index]?.value?.message && (
+                  <ValidataionMessage message={errors.scenarios?.[index]?.value?.message || ''} isError={!!errors.scenarios?.[index]?.value} />
+                )}
               </>
             ))}
             <S.Btn
               disabled={
-                !fields[fields.length - 1] || // 마지막 필드가 존재하지 않으면 비활성화
-                !getValues(`scenarios.${fields.length - 1}.value`) || // 마지막 필드의 값이 비어 있으면 비활성화
-                getValues(`scenarios.${fields.length - 1}.value`).length < 3 // 마지막 필드의 값이 3자 미만이면 비활성화
+                !fields[fields.length - 1] || !getValues(`scenarios.${fields.length - 1}.value`) || getValues(`scenarios.${fields.length - 1}.value`).length < 3
               }
               onClick={() => append({ value: '' })} // 새로운 필드 추가
             >
-              {!fields[fields.length - 1] || // 마지막 필드가 존재하지 않으면 비활성화
-              !getValues(`scenarios.${fields.length - 1}.value`) || // 마지막 필드의 값이 비어 있으면 비활성화
-              getValues(`scenarios.${fields.length - 1}.value`).length < 3 ? ( // 마지막 필드의 값이 3자 미만이면 비활성화
+              {!fields[fields.length - 1] ||
+              !getValues(`scenarios.${fields.length - 1}.value`) ||
+              getValues(`scenarios.${fields.length - 1}.value`).length < 3 ? (
                 <PlusDark />
               ) : (
                 <Plus />

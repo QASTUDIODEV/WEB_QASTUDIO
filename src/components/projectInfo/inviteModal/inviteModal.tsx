@@ -24,8 +24,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
     control,
     setValue,
     watch,
-    getValues,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -48,7 +47,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
   };
 
   const handleCreate = () => {
-    console.log('Emails:', emails); // 입력된 이메일 리스트 출력
+    // console.log('Emails:', emails); 나중에 지울게용
     onClose(); // 모달 닫기
   };
 
@@ -70,7 +69,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} touched={touchedFields.email} />
               </>
             )}
           />
@@ -87,7 +86,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
             Share
           </Button>
         </S.BtnWrapper>
-        <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />
+        {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
         {/* 이메일 태그 리스트 */}
         <S.tagWrapper>
           {emails.map((email) => (
