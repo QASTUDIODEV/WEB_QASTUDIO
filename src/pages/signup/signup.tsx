@@ -88,6 +88,7 @@ function SignupPage() {
   const { mutate: signupMutation, isPending: signupPending } = useCustomMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultSignup({ email, password }),
     onSuccess: (data) => {
+      console.log(data);
       setStep(2);
     },
     onError: (error) => {
