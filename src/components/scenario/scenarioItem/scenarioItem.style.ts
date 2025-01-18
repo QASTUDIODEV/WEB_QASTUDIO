@@ -30,4 +30,5 @@ export const Elapsed = styled.div`
   height: 100%;
   align-items: center;
   gap: 8px;
+  width: 200px;
 `;
