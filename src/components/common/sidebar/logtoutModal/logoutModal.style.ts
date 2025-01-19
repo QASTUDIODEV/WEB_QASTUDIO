@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const ModalBox = styled.div`
-  width: 860px;
-  gap: 20px;
+  width: 760px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
 `;
