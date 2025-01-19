@@ -133,6 +133,11 @@ const AccoutWrapper = styled.div`
   height: 26px;
   width: 100%;
   align-items: center;
+  .socialLogoWrapper {
+    @media (max-width: 625px) {
+      display: none;
+    }
+  }
 `;
 
 const ProjectNum = styled.div`
@@ -187,6 +192,10 @@ const Table = styled.table`
 const ButtonWrapper = styled.div`
   z-index: 2;
   align-self: end;
+
+  @media (max-width: 565px) {
+    display: none;
+  }
 `;
 
 const TH = styled.th`
