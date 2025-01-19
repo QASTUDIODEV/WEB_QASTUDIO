@@ -1,6 +1,6 @@
 import type { SubmitHandler } from 'react-hook-form';
-// import useForm from '@/hooks/auth/useForm';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -16,15 +16,18 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
+import { login } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
   password: string;
 };
 export default function LoginPage() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
+    control,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -33,12 +36,16 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
+  const watchedEmail = useWatch({
+    control,
+    name: 'email',
+  });
+
   const { mutate: loginMutation, isPending } = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
       const { accessToken, refreshToken } = data.result;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken }));
       navigate('/project');
     },
     onError: (error) => {

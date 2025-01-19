@@ -23,4 +23,9 @@ const defaultLogin = async ({ email, password }: TLoginValues): Promise<TLoginRe
   return data;
 };
 
-export { authSendEmailCode, defaultLogin, defaultSignup, getKakaoOAuth };
+const refresh = async () => {
+  const { data } = await axiosInstance.post('refresh'); // 아직 동작 안합니당...
+  return data;
+};
+
+export { authSendEmailCode, defaultLogin, defaultSignup, getKakaoOAuth, refresh };
