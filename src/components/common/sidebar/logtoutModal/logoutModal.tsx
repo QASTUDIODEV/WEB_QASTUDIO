@@ -16,18 +16,16 @@ export default function LogoutModal({ onClose }: TLogoutModalProps) {
     onClose();
   };
   return (
-    <Modal title="Are you sure to log out?" onClose={onClose}>
+    <Modal title="Are you sure you want to log out?" onClose={onClose}>
       <S.ModalBox>
-        <S.Position>
-          <S.BtnWrapper>
-            <Button type="normal" color="white_square" onClick={onClose}>
-              No
-            </Button>
-            <Button type="normal" color="blue" onClick={handleLogout}>
-              Yes
-            </Button>
-          </S.BtnWrapper>
-        </S.Position>
+        <S.BtnWrapper>
+          <Button type="normal" color="white_square" onClick={onClose}>
+            No
+          </Button>
+          <Button type="normal" color="blue" onClick={handleLogout}>
+            Yes
+          </Button>
+        </S.BtnWrapper>
       </S.ModalBox>
     </Modal>
   );
