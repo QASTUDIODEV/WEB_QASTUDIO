@@ -61,7 +61,7 @@ export default function UserSetting() {
     try {
       const data = await getPresignedUrl(file.name);
       await uploadPresignedUrlAsync(data.url, file);
-      setValue('profileImage', 'https://qastudio-s3.s3.ap-northeast-2.amazonaws.com/' + data.keyName);
+      setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }

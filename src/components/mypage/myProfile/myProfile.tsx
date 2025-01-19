@@ -94,9 +94,9 @@ export default function MyProfile() {
       const data = await handleImageUpload(file);
 
       if (type === 'banner' && data !== undefined) {
-        setValue('bannerImage', 'https://qastudio-s3.s3.ap-northeast-2.amazonaws.com/' + data.keyName);
+        setValue('bannerImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
       } else if (type === 'profile' && data !== undefined) {
-        setValue('profileImage', 'https://qastudio-s3.s3.ap-northeast-2.amazonaws.com/' + data.keyName);
+        setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
       }
     }
   };
