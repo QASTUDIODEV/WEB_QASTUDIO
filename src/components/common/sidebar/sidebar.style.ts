@@ -13,7 +13,8 @@ export const SideBar = styled.div`
   color: #d6deec;
   scrollbar-width: none;
   ${media.desktop`
-    overflow: hidden;
+    position: fixed;
+    z-index: 800;
     min-width: 96px;
     max-width: 96px;
     transition: .6s;
@@ -53,6 +54,16 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 50px 10.938% 0 10.938%;
+  ${media.desktop`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+  ${SideBar}:hover &{
+    display: flex;
+    align-items: stretch;
+  }
+  `}
 `;
 
 export const Profile = styled.div`
@@ -102,6 +113,16 @@ export const SemiBox = styled.div`
   align-items: center;
   width: 100%;
   gap: 4.05%;
+  ${media.desktop`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+  ${SideBar}:hover &{
+    display: flex;
+    flex-direction: row;
+  }
+  `}
 `;
 
 export const ProjectName = styled.p`
@@ -178,10 +199,13 @@ export const ProjectBox = styled.div`
   flex-direction: column;
   margin-bottom: 100px;
   ${media.desktop`
-    div {
     display: flex;
     flex-direction: column;
     align-items: center;
+  
+  ${SideBar}:hover &{
+    display: flex;
+    align-items: stretch;
   }
   `}
 `;
