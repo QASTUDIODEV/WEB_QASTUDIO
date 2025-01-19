@@ -148,7 +148,9 @@ export default function MyProfile() {
                   />
                   <S.AccoutWrapper>
                     <S.Account>email.email.com</S.Account>
-                    <SocialLogo gap={8} size="small" id={socialLogin} />
+                    <div className="socialLogoWrapper">
+                      <SocialLogo gap={8} size="small" id={socialLogin} />
+                    </div>
                     <div ref={containerRef}>
                       {unlinkedSocials.length > 0 && (
                         <S.PlusWrapper onClick={() => setShow(true)}>
