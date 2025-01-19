@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
@@ -42,18 +42,9 @@ export default function Sidebar() {
   ]);
 
   const [menuStates, setMenuStates] = useState<boolean[]>(new Array(projects.length).fill(false));
-  const [logoutPosition, setLogoutPosition] = useState<'absolute' | 'relative'>('absolute');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-  const projectRef = useRef(0);
   const [modalShow, setModalShow] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
-  useEffect(() => {
-    if (projectRef.current >= 3) {
-      setLogoutPosition('relative');
-    } else {
-      setLogoutPosition('absolute');
-    }
-  }, [menuStates]);
   const showModal = () => {
     setModalShow(true);
   };
@@ -70,11 +61,6 @@ export default function Sidebar() {
     setMenuStates((prevStates) => {
       return prevStates.map((state, i) => {
         if (i === index) {
-          if (!state) {
-            projectRef.current = projectRef.current + 1;
-          } else {
-            projectRef.current = projectRef.current - 1;
-          }
           return !state;
         }
         return state;
@@ -94,75 +80,78 @@ export default function Sidebar() {
 
   return (
     <S.SideBar ref={sidebarRef}>
-      <S.Container>
-        <Logo width={32} height={32} />
-        <S.StyledNavLink to={`/mypage`}>
-          <S.Profile>
-            <S.SemiBox>
-              <S.ProfileWrapper>
-                <Profile />
-              </S.ProfileWrapper>
-              <S.ProfileName>{userProfile.name}</S.ProfileName>
-            </S.SemiBox>
-            <ArrowRight />
-          </S.Profile>
-        </S.StyledNavLink>
-      </S.Container>
-      <S.Projects>
-        <S.ProjectText>Projects</S.ProjectText>
-        <Plus
-          onClick={() => {
-            addProject();
-            showModal();
-          }}
-        />
-        {modalShow && <ProjectModal onClose={hideModal} />}
-      </S.Projects>
-
-      {projects.map((project, index) => (
-        <div key={project.id}>
-          <S.Project onClick={() => toggleMenu(index)}>
-            <S.SemiBox>
-              <S.ProfileWrapper>
-                <Profile />
-              </S.ProfileWrapper>
-              <S.ProjectName>{project.name}</S.ProjectName>
-            </S.SemiBox>
-            {menuStates[index] ? <ArrowUp /> : <ArrowDown />}
-          </S.Project>
-          <S.ProjectContents $isOpen={menuStates[index]}>
-            <S.StyledNavLink to={`/project/dashboard/${project.id}`}>
-              {({ isActive }) => (
-                <S.ProjectContent $isActive={isActive}>
-                  <DashboardLogo />
-                  <S.ProjectContentName>Dashboard</S.ProjectContentName>
-                </S.ProjectContent>
-              )}
+      <S.LogoutBox>
+        <S.ProjectBox>
+          <S.Container>
+            <Logo width={32} height={32} />
+            <S.StyledNavLink to={`/mypage`}>
+              <S.Profile>
+                <S.SemiBox>
+                  <S.ProfileWrapper className="show project">
+                    <Profile />
+                  </S.ProfileWrapper>
+                  <S.ProfileName className="menu">{userProfile.name}</S.ProfileName>
+                </S.SemiBox>
+                <ArrowRight className="menu" />
+              </S.Profile>
             </S.StyledNavLink>
-            <S.StyledNavLink to={`/project/information/${project.id}`}>
-              {({ isActive }) => (
-                <S.ProjectContent $isActive={isActive}>
-                  <InformationLogo />
-                  <S.ProjectContentName>Information</S.ProjectContentName>
-                </S.ProjectContent>
-              )}
-            </S.StyledNavLink>
-            <S.StyledNavLink to={`/project/scenario/${project.id}`}>
-              {({ isActive }) => (
-                <S.ProjectContent $isActive={isActive}>
-                  <SenarioLogo />
-                  <S.ProjectContentName>Scenario</S.ProjectContentName>
-                </S.ProjectContent>
-              )}
-            </S.StyledNavLink>
-          </S.ProjectContents>
-        </div>
-      ))}
-      <S.Logout style={{ position: logoutPosition }} onClick={logoutShow}>
-        Logout
-        <Out />
-      </S.Logout>
-      {logoutModal && <LogoutModal onClose={logoutHide} />}
+          </S.Container>
+          <S.Projects className="menu">
+            <S.ProjectText>Projects</S.ProjectText>
+            <Plus
+              onClick={() => {
+                addProject();
+                showModal();
+              }}
+            />
+            {modalShow && <ProjectModal onClose={hideModal} />}
+          </S.Projects>
+          {projects.map((project, index) => (
+            <div key={project.id}>
+              <S.Project onClick={() => toggleMenu(index)}>
+                <S.SemiBox>
+                  <S.ProfileWrapper className="show content">
+                    <Profile />
+                  </S.ProfileWrapper>
+                  <S.ProjectName className="menu">{project.name}</S.ProjectName>
+                </S.SemiBox>
+                {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
+              </S.Project>
+              <S.ProjectContents $isOpen={menuStates[index]} className="menu">
+                <S.StyledNavLink to={`/project/dashboard/${project.id}`}>
+                  {({ isActive }) => (
+                    <S.ProjectContent $isActive={isActive}>
+                      <DashboardLogo />
+                      <S.ProjectContentName>Dashboard</S.ProjectContentName>
+                    </S.ProjectContent>
+                  )}
+                </S.StyledNavLink>
+                <S.StyledNavLink to={`/project/information/${project.id}`}>
+                  {({ isActive }) => (
+                    <S.ProjectContent $isActive={isActive}>
+                      <InformationLogo />
+                      <S.ProjectContentName>Information</S.ProjectContentName>
+                    </S.ProjectContent>
+                  )}
+                </S.StyledNavLink>
+                <S.StyledNavLink to={`/project/scenario/${project.id}`}>
+                  {({ isActive }) => (
+                    <S.ProjectContent $isActive={isActive}>
+                      <SenarioLogo />
+                      <S.ProjectContentName>Scenario</S.ProjectContentName>
+                    </S.ProjectContent>
+                  )}
+                </S.StyledNavLink>
+              </S.ProjectContents>
+            </div>
+          ))}
+        </S.ProjectBox>
+        <S.Logout onClick={logoutShow}>
+          <p className="menu">Logout</p>
+          <Out />
+        </S.Logout>
+        {logoutModal && <LogoutModal onClose={logoutHide} />}
+      </S.LogoutBox>
     </S.SideBar>
   );
 }
