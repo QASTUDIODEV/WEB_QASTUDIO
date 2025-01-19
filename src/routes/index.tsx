@@ -1,4 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom';
+import type { PropsWithChildren } from 'react';
+import { useSelector } from 'react-redux';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider/modalProvider';
 
@@ -18,6 +20,14 @@ import ScenarioPage from '@/pages/scenario/scenario';
 import ScenarioActPage from '@/pages/scenarioAct/scenarioAct';
 import SignupPage from '@/pages/signup/signup';
 import UserSetting from '@/pages/userSetting/userSetting';
+import { selectAuth } from '@/slices/authSlice';
+
+function ProtectedRoute({ children }: PropsWithChildren) {
+  const { isAuthenticated } = useSelector(selectAuth);
+  return isAuthenticated ? children : <Navigate to="/" />;
+}
+
+// 개발 편의를 위해 지금은 ProtectedRoute를 씌어놓지는 않겠습니다..!
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +52,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [{ index: true, element: <MyPage /> }],
   },
 

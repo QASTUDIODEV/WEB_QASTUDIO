@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -17,6 +18,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
+import { login } from '@/slices/authSlice';
 
 type TCodeVerify = undefined | boolean;
 
@@ -33,6 +35,8 @@ type TAPIFormValues = {
 };
 
 function SignupPage() {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -89,8 +93,7 @@ function SignupPage() {
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
       const { accessToken, refreshToken } = data.result;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken }));
       navigate('/signup/userSetting');
     },
     onError: (error) => {
