@@ -10,18 +10,18 @@ import Dropdown from '@/components/scenario/dropDown/dropDown';
 import * as S from '@/components/scenario/scenarioModal/scenarioModal.style';
 
 import DelCircle from '@/assets/icons/del_circle.svg?react';
-import { setOpen } from '@/slices/modalSlice.ts';
+import { closeModal } from '@/slices/modalSlice.ts';
 
 export default function ScenarioModal() {
   const dispatch = useDispatch();
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
-  const [options, setOptions] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
+  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm({
     mode: 'onChange',
   });
@@ -125,7 +125,7 @@ export default function ScenarioModal() {
               </Button>
             </S.LongButtonWrapper>
             <S.ButtonWrapper>
-              <Button color="blue" onClick={() => dispatch(setOpen())}>
+              <Button color="blue" onClick={() => dispatch(closeModal())}>
                 Save
               </Button>
             </S.ButtonWrapper>

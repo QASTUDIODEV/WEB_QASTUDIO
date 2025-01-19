@@ -12,7 +12,7 @@ import Done from '@/assets/icons/done.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import ExclamationCircle from '@/assets/icons/exclamation_circle.svg?react';
 import Play from '@/assets/icons/play.svg?react';
-import { setOpen } from '@/slices/modalSlice.ts';
+import { openModal } from '@/slices/modalSlice.ts';
 import { edit, resetChecks } from '@/slices/scenarioSlice';
 
 export default function ButtonGroup() {
@@ -56,7 +56,7 @@ export default function ButtonGroup() {
   // + Character 버튼 클릭 함수
   const handleAddClick = (): void => {
     // 역할 추가 모달 띄우기
-    dispatch(setOpen());
+    dispatch(openModal('scenarioModal'));
   };
 
   return (
