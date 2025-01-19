@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { refresh } from './auth/auth';
@@ -24,7 +23,6 @@ axiosInstance.interceptors.request.use(
   },
 );
 
-const navigate = useNavigate();
 let isRedirecting = false;
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -40,7 +38,7 @@ axiosInstance.interceptors.response.use(
             console.log('refreshToken이 만료되었습니다. 다시 로그인해주세요.');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('accessToken');
-            navigate('/');
+            window.location.href = '/';
           } else {
             console.log('알 수 없는 오류가 발생했습니다.', response.status);
           }
@@ -48,7 +46,7 @@ axiosInstance.interceptors.response.use(
           console.log('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
           if (!isRedirecting) {
             isRedirecting = true;
-            navigate('/');
+            window.location.href = '/';
           }
         }
       }
