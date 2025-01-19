@@ -177,7 +177,15 @@ export const ProjectBox = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 100px;
+  ${media.desktop`
+    div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  `}
 `;
+
 export const LogoutBox = styled.div`
   display: flex;
   height: 100%;

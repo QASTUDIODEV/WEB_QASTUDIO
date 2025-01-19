@@ -108,45 +108,47 @@ export default function Sidebar() {
             />
             {modalShow && <ProjectModal onClose={hideModal} />}
           </S.Projects>
-          {projects.map((project, index) => (
-            <div key={project.id}>
-              <S.Project onClick={() => toggleMenu(index)}>
-                <S.SemiBox>
-                  <S.ProfileWrapper className="show content">
-                    <Profile />
-                  </S.ProfileWrapper>
-                  <S.ProjectName className="menu">{project.name}</S.ProjectName>
-                </S.SemiBox>
-                {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
-              </S.Project>
-              <S.ProjectContents $isOpen={menuStates[index]} className="menu">
-                <S.StyledNavLink to={`/project/dashboard/${project.id}`}>
-                  {({ isActive }) => (
-                    <S.ProjectContent $isActive={isActive}>
-                      <DashboardLogo />
-                      <S.ProjectContentName>Dashboard</S.ProjectContentName>
-                    </S.ProjectContent>
-                  )}
-                </S.StyledNavLink>
-                <S.StyledNavLink to={`/project/information/${project.id}`}>
-                  {({ isActive }) => (
-                    <S.ProjectContent $isActive={isActive}>
-                      <InformationLogo />
-                      <S.ProjectContentName>Information</S.ProjectContentName>
-                    </S.ProjectContent>
-                  )}
-                </S.StyledNavLink>
-                <S.StyledNavLink to={`/project/scenario/${project.id}`}>
-                  {({ isActive }) => (
-                    <S.ProjectContent $isActive={isActive}>
-                      <SenarioLogo />
-                      <S.ProjectContentName>Scenario</S.ProjectContentName>
-                    </S.ProjectContent>
-                  )}
-                </S.StyledNavLink>
-              </S.ProjectContents>
-            </div>
-          ))}
+          <div>
+            {projects.map((project, index) => (
+              <div key={project.id}>
+                <S.Project onClick={() => toggleMenu(index)}>
+                  <S.SemiBox>
+                    <S.ProfileWrapper className="show content">
+                      <Profile />
+                    </S.ProfileWrapper>
+                    <S.ProjectName className="menu">{project.name}</S.ProjectName>
+                  </S.SemiBox>
+                  {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
+                </S.Project>
+                <S.ProjectContents $isOpen={menuStates[index]} className="menu">
+                  <S.StyledNavLink to={`/project/dashboard/${project.id}`}>
+                    {({ isActive }) => (
+                      <S.ProjectContent $isActive={isActive}>
+                        <DashboardLogo />
+                        <S.ProjectContentName>Dashboard</S.ProjectContentName>
+                      </S.ProjectContent>
+                    )}
+                  </S.StyledNavLink>
+                  <S.StyledNavLink to={`/project/information/${project.id}`}>
+                    {({ isActive }) => (
+                      <S.ProjectContent $isActive={isActive}>
+                        <InformationLogo />
+                        <S.ProjectContentName>Information</S.ProjectContentName>
+                      </S.ProjectContent>
+                    )}
+                  </S.StyledNavLink>
+                  <S.StyledNavLink to={`/project/scenario/${project.id}`}>
+                    {({ isActive }) => (
+                      <S.ProjectContent $isActive={isActive}>
+                        <SenarioLogo />
+                        <S.ProjectContentName>Scenario</S.ProjectContentName>
+                      </S.ProjectContent>
+                    )}
+                  </S.StyledNavLink>
+                </S.ProjectContents>
+              </div>
+            ))}
+          </div>
         </S.ProjectBox>
         <S.Logout onClick={logoutShow}>
           <p className="menu">Logout</p>
