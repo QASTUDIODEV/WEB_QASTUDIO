@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { queryClient } from './apis/queryClient';
 import App from './App.tsx';
+import AuthHandler from './pages/auth/authHandler.tsx';
 
 import store from '@/store/store.ts';
 import GlobalStyle from '@/styles/global.ts';
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
         <ThemeProvider theme={theme}>
           <ReactQueryDevtools initialIsOpen={false} />
           <GlobalStyle />
+          <AuthHandler />
           <App />
         </ThemeProvider>
       </QueryClientProvider>

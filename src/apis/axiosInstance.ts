@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       if (error.response.data.message === 'Unauthorized') {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken !== undefined) {
+        if (refreshToken !== null) {
           const response = await refresh();
           if (response.status === 200) {
             console.log('refreshToken이 재발급 되었습니다');

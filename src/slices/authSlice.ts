@@ -38,10 +38,14 @@ const authSlice = createSlice({
       localStorage.removeItem('refreshToken');
       (state.isAuthenticated = false), (state.email = null), (state.accessToken = null), (state.refreshToken = null);
     },
+    refreshToken: (state: TAuthState, action) => {
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      state.accessToken = action.payload.accessToken;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, refreshToken } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;
