@@ -83,7 +83,9 @@ export default function Sidebar() {
       <S.LogoutBox>
         <S.ProjectBox>
           <S.Container>
-            <Logo width={32} height={32} />
+            <S.StyledNavLink to={`/project`}>
+              <Logo width={32} height={32} />
+            </S.StyledNavLink>
             <S.StyledNavLink to={`/mypage`}>
               <S.Profile>
                 <S.SemiBox>
