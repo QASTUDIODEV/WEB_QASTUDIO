@@ -50,18 +50,18 @@ export default function UserSetting() {
   });
 
   const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
-  const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
+  const { uploadPresignedUrlAsync, uploadPresignedUrlPending } = useUploadPresignedUrl();
 
-  const handleImageUpload = async (blob: File) => {
-    if (!blob.type.startsWith('image/')) {
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
 
     try {
-      const presignedUrl = await getPresignedUrl(blob.name);
-      await uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
-      setValue('profileImage', presignedUrl);
+      const data = await getPresignedUrl(file.name);
+      await uploadPresignedUrlAsync(data.url, file);
+      setValue('profileImage', 'https://qastudio-s3.s3.ap-northeast-2.amazonaws.com/' + data.keyName);
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }
@@ -83,7 +83,7 @@ export default function UserSetting() {
   });
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    userSettingMutation({ nickname: data.nickname, profileImage: data.profileImage });
+    userSettingMutation({ nickname: data.nickname, profileImage: watchedImage });
     navigate('/project');
   };
 

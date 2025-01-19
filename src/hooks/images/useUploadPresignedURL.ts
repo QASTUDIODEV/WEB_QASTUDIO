@@ -18,8 +18,20 @@ export const useUploadPresignedUrl = () => {
     },
   });
 
+  const uploadPresignedUrlAsync = async (_presignedUrl: string, blob: File) => {
+    return new Promise<void>((resolve, reject) => {
+      uploadPresignedUrlMutate(
+        { _presignedUrl, blob },
+        {
+          onSuccess: () => resolve(),
+          onError: (error) => reject(error),
+        },
+      );
+    });
+  };
+
   return {
-    uploadPresignedUrlMutate,
+    uploadPresignedUrlAsync,
     uploadPresignedUrlPending,
   };
 };
