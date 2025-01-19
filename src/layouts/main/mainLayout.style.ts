@@ -13,6 +13,9 @@ const OutletWrapper = styled.div`
   flex: 1;
   max-width: 100vw;
   overflow-x: hidden;
+  @media (max-width: 1024px) {
+    margin-left: 96px;
+  }
 `;
 
 export { Container, OutletWrapper };
