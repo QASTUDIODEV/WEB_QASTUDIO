@@ -1,6 +1,15 @@
 import { axiosInstance } from '@/apis/axiosInstance';
 
-import type { TLoginResponse, TLoginValues, TMailSendCode, TMailSendCodeResponse, TSignupResponse, TSignupValues } from '../../types/auth/auth';
+import type {
+  TLoginResponse,
+  TLoginValues,
+  TMailSendCode,
+  TMailSendCodeResponse,
+  TSignupResponse,
+  TSignupValues,
+  TUserSettingResponse,
+  TUserSettingValues,
+} from '../../types/auth/auth';
 
 const defaultSignup = async ({ email, password }: TSignupValues): Promise<TSignupResponse> => {
   const { data } = await axiosInstance.post('/v0/auth/sign-up', { email, password });
@@ -23,9 +32,14 @@ const defaultLogin = async ({ email, password }: TLoginValues): Promise<TLoginRe
   return data;
 };
 
+const userSetting = async ({ nickname, profileImage }: TUserSettingValues): Promise<TUserSettingResponse> => {
+  const { data } = await axiosInstance.post('v0/users/profile', { nickname, profileImage });
+  return data;
+};
+
 const refresh = async () => {
   const { data } = await axiosInstance.post('refresh'); // 아직 동작 안합니당...
   return data;
 };
 
-export { authSendEmailCode, defaultLogin, defaultSignup, getKakaoOAuth, refresh };
+export { authSendEmailCode, defaultLogin, defaultSignup, getKakaoOAuth, refresh, userSetting };
