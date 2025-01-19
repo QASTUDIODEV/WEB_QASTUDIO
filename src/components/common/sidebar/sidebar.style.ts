@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const SideBar = styled.div`
   min-width: 280px;
   height: 100vh;
@@ -10,16 +12,51 @@ export const SideBar = styled.div`
   top: 0;
   color: #d6deec;
   scrollbar-width: none;
+  ${media.desktop`
+    overflow: hidden;
+    min-width: 96px;
+    max-width: 96px;
+    transition: .6s;
+    &:hover {
+      min-width: 320px;
+      .menu {
+        display: flex;
+      }
+      .show.project {
+        margin-bottom: 0;
+      }
+      .show.content {
+        margin-bottom: 0;
+      }
+    }
+    .menu {
+      display: none;
+    }
+    .show {
+      /* min-width: 40px;
+      min-height: 40px; */
+      min-width: 40px;
+      max-width: 40px;
+      min-height: 40px;
+      max-height: 40px;
+    }
+    .show.project {
+      margin-bottom: 80px;
+    }
+    .show.content {
+      margin-bottom: 40px;
+    }
+  `}
 `;
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15.313% 10.938% 0 10.938%;
+  padding: 50px 10.938% 0 10.938%;
 `;
 
 export const Profile = styled.div`
-  padding-top: 14.0625%;
+  padding-top: 50px;
   display: flex;
   align-items: center;
   gap: 2.5%;
@@ -37,9 +74,9 @@ export const ProfileWrapper = styled.div`
 `;
 
 export const Projects = styled.div`
-  margin-top: 26.09%;
+  margin-top: 80px;
   padding: 0 10.938%;
-  padding-bottom: 10.625%;
+  padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,9 +171,31 @@ export const Logout = styled.div`
   gap: 10px;
   display: inline-flex;
   align-items: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin-top: 100px;
   cursor: pointer;
+`;
+export const ProjectBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+  ${media.desktop`
+    div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  `}
+`;
+
+export const LogoutBox = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  ${media.desktop`
+    height: 100%;
+    align-items: center;
+    &:hover{
+      align-items: stretch;
+    }
+  `}
 `;
