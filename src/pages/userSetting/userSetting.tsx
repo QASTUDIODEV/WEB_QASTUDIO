@@ -3,15 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useGetPresignedUrl } from '@/hooks/common/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/common/useUploadPresignedURL';
+import { userSettingSchema } from '@/utils/validate';
+
+import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
+import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
 import Profile from '@/components/common/profile/profile';
 
-import { userSettingSchema } from '../../utils/validate';
-
+import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
 
@@ -19,7 +20,7 @@ type TFormValues = {
   nickname: string;
 };
 
-export function renderStep2(step: number) {
+export default function UserSetting() {
   const navigate = useNavigate();
   const {
     register,
@@ -37,7 +38,7 @@ export function renderStep2(step: number) {
     contentInputRef.current?.click();
   };
 
-  const { uploadSingleImgMutate, uploadSingleImgPending, presignedUrl } = useGetPresignedUrl();
+  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
   const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
 
   const handleImageUpload = async (blob: File) => {
@@ -47,8 +48,8 @@ export function renderStep2(step: number) {
     }
 
     try {
-      uploadSingleImgMutate({ imgName: blob.name });
-      uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
+      const presignedUrl = await getPresignedUrl(blob.name);
+      await uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }
@@ -61,54 +62,55 @@ export function renderStep2(step: number) {
     }
   };
 
-  //무슨 api를 사용해야할 지 몰라 일단 비워뒀습니다
-  const onSubmit = (data: any) => {
-    navigate('/login');
+  const onSubmit = () => {
+    navigate('/');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 2 && touchedFields.nickname && !errors.nickname?.message && !uploadSingleImgPending && !uploadPresignedUrlPending) {
+      if (touchedFields.nickname && !errors.nickname?.message && !uploadSingleImgPending && !uploadPresignedUrlPending) {
         handleSubmit(onSubmit);
       }
     }
   };
 
-  if (step !== 2) return null;
   return (
-    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
-      <S.ProfileImg onClick={handleInputClick}>
-        <S.Backdrop>
-          <ProfileEdit />
-        </S.Backdrop>
-        <Profile />
-        <S.ProfileEditBtn>
-          <ProfileEdit />
-        </S.ProfileEditBtn>
-      </S.ProfileImg>
-      <InputModule
-        top={true}
-        inputname="nickname"
-        Name="Nickname"
-        span="Nickname"
-        touched={touchedFields.nickname}
-        valid={touchedFields.nickname && !errors.nickname?.message}
-        errorMessage={errors.nickname?.message}
-        {...register('nickname')}
-      />
-      <input
-        className="profile-image-upload"
-        ref={contentInputRef}
-        type="file"
-        accept="image/*"
-        tabIndex={-1}
-        style={{ display: 'none' }}
-        onChange={handleInputChange}
-      />
-      <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadPresignedUrlPending}>
-        Sign up
-      </AuthButton>
-    </form>
+    <S.Container>
+      <Logo className="logo" />
+      <S.Form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
+        <S.ProfileImg onClick={handleInputClick}>
+          <S.Backdrop>
+            <ProfileEdit />
+          </S.Backdrop>
+          <Profile />
+          <S.ProfileEditBtn>
+            <ProfileEdit />
+          </S.ProfileEditBtn>
+        </S.ProfileImg>
+        <InputModule
+          top={true}
+          inputname="nickname"
+          Name="Nickname"
+          span="Nickname"
+          touched={touchedFields.nickname}
+          valid={touchedFields.nickname && !errors.nickname?.message}
+          errorMessage={errors.nickname?.message}
+          {...register('nickname')}
+        />
+        <input
+          className="profile-image-upload"
+          ref={contentInputRef}
+          type="file"
+          accept="image/*"
+          tabIndex={-1}
+          style={{ display: 'none' }}
+          onChange={handleInputChange}
+        />
+        <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadPresignedUrlPending}>
+          Sign up
+        </AuthButton>
+      </S.Form>
+    </S.Container>
   );
 }

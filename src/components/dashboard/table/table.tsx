@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import { useDispatch } from '@/hooks/common/useCustomRedux';
 
-import ErrorModal from '@/components/dashboard/errorModal/errorModal.tsx';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
 import * as S from '@/components/dashboard/table/table.style';
 
@@ -15,13 +15,12 @@ import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
 import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
 import type { TTableData } from '@/mocks/tableData';
 import { tableData } from '@/mocks/tableData';
-import { setOpen } from '@/slices/modalSlice';
+import { openModal } from '@/slices/modalSlice';
 
 const columnHelper = createColumnHelper<TTableData>();
 
 export default function Table() {
   const navigate = useNavigate();
-  const { isOpen } = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
   const [data] = useState(tableData);
@@ -35,7 +34,7 @@ export default function Table() {
       // 성공의 경우 경로 수정
       navigate('/project/scenario/1');
     } else {
-      dispatch(setOpen());
+      dispatch(openModal(MODAL_TYPES.ErrorModal));
     }
   };
 
@@ -63,7 +62,7 @@ export default function Table() {
     columnHelper.accessor('state', {
       header: 'State',
       size: 200,
-      cell: (info) => <S.State success={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
+      cell: (info) => <S.State $isSuccess={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
     }),
     columnHelper.accessor('time', {
       header: 'Time',
@@ -79,7 +78,7 @@ export default function Table() {
       size: 400,
       header: 'Action',
       cell: (info) => (
-        <S.Action success={info.getValue()} onClick={() => handleModal(info.getValue())}>
+        <S.Action $isSuccess={info.getValue()} onClick={() => handleModal(info.getValue())}>
           <p>{info.getValue() ? 'Run Scenario' : 'Check the error'}</p>
           {info.getValue() ? <GreenArrow /> : <RedArrow />}
         </S.Action>
@@ -97,49 +96,45 @@ export default function Table() {
   });
 
   return (
-    <>
-      <S.TableContainer>
-        <S.TableWrapper>
-          <S.Table>
-            <S.TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <S.Th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
-                  ))}
-                </tr>
-              ))}
-            </S.TableHeader>
+    <S.TableContainer>
+      <S.TableWrapper>
+        <S.Table>
+          <S.TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <S.Th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
+                ))}
+              </tr>
+            ))}
+          </S.TableHeader>
 
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <S.Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
-                  ))}
-                </S.Tr>
-              ))}
-            </tbody>
-          </S.Table>
-        </S.TableWrapper>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <S.Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
+                ))}
+              </S.Tr>
+            ))}
+          </tbody>
+        </S.Table>
+      </S.TableWrapper>
 
-        <S.PageNumberWrapper>
-          <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
-            <PreArrow />
-          </S.ArrowBox>
-          {table.getPageOptions().map((page) => (
-            <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)}>
-              {page + 1}
-            </S.PageBtnBox>
-          ))}
+      <S.PageNumberWrapper>
+        <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
+          <PreArrow />
+        </S.ArrowBox>
+        {table.getPageOptions().map((page) => (
+          <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)}>
+            {page + 1}
+          </S.PageBtnBox>
+        ))}
 
-          <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
-            <NextArrow />
-          </S.ArrowBox>
-        </S.PageNumberWrapper>
-      </S.TableContainer>
-      {/* 에러 모달*/}
-      {isOpen && <ErrorModal />}
-    </>
+        <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
+          <NextArrow />
+        </S.ArrowBox>
+      </S.PageNumberWrapper>
+    </S.TableContainer>
   );
 }

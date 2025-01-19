@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import modalReducer from '@/slices/modalSlice.ts';
+import modalReducer from '@/slices/modalSlice';
 import scenarioReducer from '@/slices/scenarioSlice';
 
 const store = configureStore({

@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import ModalProvider from '@/components/common/modalProvider/modalProvider';
+
 import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
 import AddProjectPage from '@/pages/addProject/addProject';
@@ -15,6 +17,7 @@ import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
 import ScenarioPage from '@/pages/scenario/scenario';
 import ScenarioActPage from '@/pages/scenarioAct/scenarioAct';
 import SignupPage from '@/pages/signup/signup';
+import UserSetting from '@/pages/userSetting/userSetting';
 
 export const router = createBrowserRouter([
   {
@@ -45,7 +48,12 @@ export const router = createBrowserRouter([
 
   {
     path: `/`,
-    element: <AuthLayout />,
+    element: (
+      <>
+        <AuthLayout />
+        <ModalProvider />
+      </>
+    ),
     children: [
       { index: true, element: <LoginPage /> },
       {
@@ -56,11 +64,20 @@ export const router = createBrowserRouter([
         path: '/finding',
         element: <FindingPassword />,
       },
+      {
+        path: '/signup/userSetting',
+        element: <UserSetting />,
+      },
     ],
   },
   {
     path: '/project',
-    element: <MainLayout />,
+    element: (
+      <>
+        <MainLayout />
+        <ModalProvider />
+      </>
+    ),
     children: [
       { index: true, element: <AddProjectPage /> },
       {

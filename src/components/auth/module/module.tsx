@@ -1,7 +1,6 @@
 import React from 'react';
 
 import AuthButton from '@/components/auth/authButton/authButton';
-import AuthInput from '@/components/auth/authInput/authInput';
 import CodeInput from '@/components/auth/codeInput/codeInput';
 import ValidationMessage from '@/components/auth/validationMessage/validationMessage';
 import Input from '@/components/common/input/input';
@@ -19,6 +18,7 @@ type TModuleProps = {
   inputname: string;
   top: boolean;
   pending?: boolean;
+  value?: string;
 };
 
 type TCodeModuleProps = {
@@ -28,11 +28,12 @@ type TCodeModuleProps = {
   Name: string;
   codeverify: boolean | undefined;
   handleVerifyCode: () => void;
+  // ref: any;
 };
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, touched, valid, errorMessage, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, touched, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
@@ -44,6 +45,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             isValid={touched ? valid : true}
             errorMessage={errorMessage}
             touched={touched}
+            value={value}
             top={top}
             ref={ref}
             {...rest}

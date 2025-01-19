@@ -1,34 +1,29 @@
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { usePortal } from '@/hooks/common/usePortal';
+import { createPortal } from 'react-dom';
 
 import * as S from '@/components/common/modal/modal.style';
 
 import Delete from '@/assets/icons/delete.svg?react';
-import { setClose } from '@/slices/modalSlice';
-import type { TRootState } from '@/store/store.ts';
 
 type TModalProps = {
+  isOpen?: boolean;
   title?: string;
   children: ReactNode;
   isExitButtonVisible?: boolean;
+  onClose: () => void;
 };
 
-export default function Modal({ children, title, isExitButtonVisible = true }: TModalProps) {
-  const { isOpen } = useSelector((state: TRootState) => state.modal);
-  const [isVisible, setIsVisible] = useState(false);
-  const dispatch = useDispatch();
-  const portal = usePortal('modal');
+export default function Modal({ isOpen = true, children, title, onClose, isExitButtonVisible = true }: TModalProps) {
+  const [isVisible, setIsVisible] = useState(isOpen);
 
   useEffect(() => {
     setIsVisible(isOpen);
   }, [isOpen]);
 
-  return portal(
+  return createPortal(
     isVisible && (
-      <S.Container onClick={() => dispatch(setClose())}>
+      <S.Container onClick={onClose}>
         <S.Wrapper
           viewport={{ once: true }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -45,7 +40,7 @@ export default function Modal({ children, title, isExitButtonVisible = true }: T
           <S.TitleWrapper>
             <S.Title>{title}</S.Title>
             {isExitButtonVisible && (
-              <S.Button onClick={() => dispatch(setClose())}>
+              <S.Button onClick={onClose}>
                 <Delete width={20} height={20} />
               </S.Button>
             )}
@@ -54,5 +49,6 @@ export default function Modal({ children, title, isExitButtonVisible = true }: T
         </S.Wrapper>
       </S.Container>
     ),
+    document.getElementById('modal')!,
   );
 }
