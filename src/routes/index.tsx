@@ -52,7 +52,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [{ index: true, element: <MyPage /> }],
   },
 
