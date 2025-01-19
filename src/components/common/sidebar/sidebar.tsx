@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
 
+import LogoutModal from './logtoutModal/logoutModal';
 import ProjectModal from './projectModal/projectModal';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -29,7 +29,6 @@ type TProject = {
 };
 
 export default function Sidebar() {
-  const navigate = useNavigate();
   const userProfile: TUserProfile = {
     id: 1,
     name: 'eunji',
@@ -47,6 +46,7 @@ export default function Sidebar() {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const projectRef = useRef(0);
   const [modalShow, setModalShow] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
   useEffect(() => {
     if (projectRef.current >= 3) {
       setLogoutPosition('relative');
@@ -59,6 +59,12 @@ export default function Sidebar() {
   };
   const hideModal = () => {
     setModalShow(false);
+  };
+  const logoutShow = () => {
+    setLogoutModal(true);
+  };
+  const logoutHide = () => {
+    setLogoutModal(false);
   };
   const toggleMenu = (index: number) => {
     setMenuStates((prevStates) => {
@@ -84,11 +90,6 @@ export default function Sidebar() {
     };
     setProjects((prevProjects) => [...prevProjects, newProject]);
     setMenuStates((prevStates) => [...prevStates, false]);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/', { replace: true });
   };
 
   return (
@@ -157,10 +158,11 @@ export default function Sidebar() {
           </S.ProjectContents>
         </div>
       ))}
-      <S.Logout style={{ position: logoutPosition }} onClick={handleLogout}>
+      <S.Logout style={{ position: logoutPosition }} onClick={logoutShow}>
         Logout
         <Out />
       </S.Logout>
+      {logoutModal && <LogoutModal onClose={logoutHide} />}
     </S.SideBar>
   );
 }

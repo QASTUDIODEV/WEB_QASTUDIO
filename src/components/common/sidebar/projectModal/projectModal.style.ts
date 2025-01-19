@@ -35,6 +35,7 @@ export const ProjectText = styled.p`
   color: #d6deec;
 `;
 export const Position = styled.div`
+  padding-top: 25px;
   display: flex;
   justify-content: flex-end;
 `;

@@ -27,7 +27,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
     control,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -87,8 +87,9 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               </>
             )}
           />
-
-          <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />
+          {touchedFields.projectName && errors.projectName?.message && (
+            <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />
+          )}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project URL</S.ModalText>
@@ -114,7 +115,9 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               </>
             )}
           />
-          <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />
+          {touchedFields.projectUrl && errors.projectUrl?.message && (
+            <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />
+          )}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Share this project</S.ModalText>
@@ -124,7 +127,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               control={control}
               rules={{
                 pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                   message: 'Invalid email address',
                 },
               }}
@@ -136,7 +139,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               Share
             </Button>
           </S.BtnWrapper>
-          <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />
+          {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
           <S.tagWrapper>
             {emails.map((email) => (
               <Button key={email} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(email)}>

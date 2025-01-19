@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const SideBar = styled.div<{ hasScroll: boolean }>`
+export const SideBar = styled.div`
   min-width: 280px;
   height: 100vh;
   background: ${({ theme }) => `linear-gradient(76.11deg, ${theme.colors.primary.pri_700} 0%, ${theme.colors.primary.pri_900} 100.13%)`};
