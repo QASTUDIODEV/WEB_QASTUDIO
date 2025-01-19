@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
+
+import LogoutModal from './logtoutModal/logoutModal';
+import ProjectModal from './projectModal/projectModal';
 
 import Plus from '@/assets/icons/add.svg?react';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
@@ -27,7 +29,6 @@ type TProject = {
 };
 
 export default function Sidebar() {
-  const navigate = useNavigate();
   const userProfile: TUserProfile = {
     id: 1,
     name: 'eunji',
@@ -41,29 +42,44 @@ export default function Sidebar() {
   ]);
 
   const [menuStates, setMenuStates] = useState<boolean[]>(new Array(projects.length).fill(false));
-  const [hasScroll, setHasScroll] = useState(false);
+  const [logoutPosition, setLogoutPosition] = useState<'absolute' | 'relative'>('absolute');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-
+  const projectRef = useRef(0);
+  const [modalShow, setModalShow] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
   useEffect(() => {
-    const sidebar = sidebarRef.current;
-
-    const handleScroll = () => {
-      setHasScroll(true);
-    };
-
-    if (sidebar) {
-      sidebar.addEventListener('scroll', handleScroll);
+    if (projectRef.current >= 3) {
+      setLogoutPosition('relative');
+    } else {
+      setLogoutPosition('absolute');
     }
-
-    return () => {
-      if (sidebar) {
-        sidebar.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
+  }, [menuStates]);
+  const showModal = () => {
+    setModalShow(true);
+  };
+  const hideModal = () => {
+    setModalShow(false);
+  };
+  const logoutShow = () => {
+    setLogoutModal(true);
+  };
+  const logoutHide = () => {
+    setLogoutModal(false);
+  };
   const toggleMenu = (index: number) => {
-    setMenuStates((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
+    setMenuStates((prevStates) => {
+      return prevStates.map((state, i) => {
+        if (i === index) {
+          if (!state) {
+            projectRef.current = projectRef.current + 1;
+          } else {
+            projectRef.current = projectRef.current - 1;
+          }
+          return !state;
+        }
+        return state;
+      });
+    });
   };
 
   const addProject = () => {
@@ -76,13 +92,8 @@ export default function Sidebar() {
     setMenuStates((prevStates) => [...prevStates, false]);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/', { replace: true });
-  };
-
   return (
-    <S.SideBar ref={sidebarRef} hasScroll={hasScroll}>
+    <S.SideBar ref={sidebarRef}>
       <S.Container>
         <Logo width={32} height={32} />
         <S.StyledNavLink to={`/mypage`}>
@@ -99,7 +110,13 @@ export default function Sidebar() {
       </S.Container>
       <S.Projects>
         <S.ProjectText>Projects</S.ProjectText>
-        <Plus onClick={addProject} />
+        <Plus
+          onClick={() => {
+            addProject();
+            showModal();
+          }}
+        />
+        {modalShow && <ProjectModal onClose={hideModal} />}
       </S.Projects>
 
       {projects.map((project, index) => (
@@ -141,11 +158,11 @@ export default function Sidebar() {
           </S.ProjectContents>
         </div>
       ))}
-      <S.Logout onClick={handleLogout}>
+      <S.Logout style={{ position: logoutPosition }} onClick={logoutShow}>
         Logout
         <Out />
       </S.Logout>
-      {hasScroll && <S.FooterPadding />}
+      {logoutModal && <LogoutModal onClose={logoutHide} />}
     </S.SideBar>
   );
 }
