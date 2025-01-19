@@ -9,35 +9,35 @@ function AuthHandler() {
   const dispatch = useDispatch();
   const { refreshToken: currentRefreshToken } = useSelector(selectAuth);
 
-  useEffect(() => {
-    if (!currentRefreshToken) return;
+  // useEffect(() => {
+  //   if (!currentRefreshToken) return;
 
-    const refreshTokens = async () => {
-      try {
-        const newTokens = await refresh();
-        dispatch(
-          refreshToken({
-            accessToken: newTokens,
-          }),
-        );
-      } catch (error) {
-        console.error('Token refresh failed:', error);
-        alert('Your session has expired. Please log in again.');
-        dispatch(logout());
-      }
-    };
+  //   const refreshTokens = async () => {
+  //     try {
+  //       const newTokens = await refresh();
+  //       dispatch(
+  //         refreshToken({
+  //           accessToken: newTokens,
+  //         }),
+  //       );
+  //     } catch (error) {
+  //       console.error('Token refresh failed:', error);
+  //       alert('Your session has expired. Please log in again.');
+  //       dispatch(logout());
+  //     }
+  //   };
 
-    const intervalId = setInterval(
-      () => {
-        refreshTokens().catch((error) => console.error('Unexpected error during token refresh:', error));
-      },
-      4 * 60 * 1000,
-    );
+  //   const intervalId = setInterval(
+  //     () => {
+  //       refreshTokens().catch((error) => console.error('Unexpected error during token refresh:', error));
+  //     },
+  //     4 * 60 * 1000,
+  //   );
 
-    refreshTokens().catch((error) => console.error('Unexpected error during initial token refresh:', error));
+  //   refreshTokens().catch((error) => console.error('Unexpected error during initial token refresh:', error));
 
-    return () => clearInterval(intervalId);
-  }, [currentRefreshToken, dispatch]);
+  //   return () => clearInterval(intervalId);
+  // }, [currentRefreshToken, dispatch]);
 
   return null;
 }
