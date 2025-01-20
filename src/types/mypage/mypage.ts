@@ -1,4 +1,6 @@
-export type TSocialPlatform = 'GITHUB' | 'KAKAO' | 'GOOGLE' | 'LOCAL';
+import type { SOCIAL } from '@/enums/enums';
+
+export type TSocialPlatform = SOCIAL[];
 
 export type TMyProfileValues = {
   nickname: string;

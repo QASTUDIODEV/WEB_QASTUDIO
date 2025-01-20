@@ -1,7 +1,9 @@
-type TSocialPlatform = 'GITHUB' | 'KAKAO' | 'GOOGLE' | 'LOCAL';
+import { SOCIAL } from '@/enums/enums';
+
+type TSocialPlatform = SOCIAL;
 
 function findUnlinkedSocials(linkedAccounts: TSocialPlatform[]): TSocialPlatform[] {
-  const allSocialPlatforms: TSocialPlatform[] = ['GITHUB', 'KAKAO', 'GOOGLE', 'LOCAL'];
+  const allSocialPlatforms: TSocialPlatform[] = Object.values(SOCIAL);
   if (!Array.isArray(linkedAccounts)) {
     return allSocialPlatforms;
   }

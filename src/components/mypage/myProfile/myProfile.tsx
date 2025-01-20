@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
-import type { TMyProfileValues, TSocialPlatform } from '@/types/mypage/mypage';
-import type { TGetUserInfoResponse } from '@/types/userController/userController';
-import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+import type { TMyProfileValues } from '@/types/mypage/mypage';
+import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { getImageUrl } from '@/utils/getImageUrl';
 import { myPageScehma } from '@/utils/validate';
-import { getUserInfo, patchUserInfo } from '@/apis/userController/userController';
+import { patchUserInfo } from '@/apis/userController/userController';
 
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
+import useGetUserInfo from '@/hooks/mypage/useGetUserInfo';
 
 import { InputModule } from '@/components/auth/module/module';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -31,15 +31,10 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  const { data: userData, isLoading } = useQuery<TGetUserInfoResponse, Error>({
-    queryKey: QUERY_KEYS.GET_USER_INFO,
-    queryFn: async () => {
-      return await getUserInfo();
-    },
-  });
+  const { data: userData, isLoading } = useGetUserInfo();
   const queryClient = useQueryClient();
 
-  const socialLogin: TSocialPlatform[] = userData?.result.account as TSocialPlatform[];
+  const socialLogin: SOCIAL[] = userData?.result.account as SOCIAL[];
   const unlinkedSocials = findUnlinkedSocials(socialLogin);
 
   const {
