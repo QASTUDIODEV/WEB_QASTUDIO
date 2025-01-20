@@ -4,8 +4,10 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TChangePasswordValues } from '@/types/auth/auth';
+
 import { findingSchema } from '@/utils/validate';
-import { authSendEmailCode } from '@/apis/auth/auth';
+import { changePassword, findingSendEmailCode } from '@/apis/auth/auth';
 
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
@@ -48,6 +50,7 @@ export default function FindingPassword() {
   const [AuthCode, setAuthCode] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -71,9 +74,8 @@ export default function FindingPassword() {
     name: 'code',
   });
 
-  // 아직 API가 없어서 임시로 만들어둔 코드
   const { mutate: sendCodeMutation, isPending: codePending } = useCustomMutation({
-    mutationFn: async ({ email }: { email: string }) => authSendEmailCode(email), // 현재 사용 못합니다.
+    mutationFn: async ({ email }: { email: string }) => findingSendEmailCode(email), // 현재 사용 못합니다.
     onSuccess: (data) => {
       setAuthCode(data.result.authCode);
       setStep(1);
@@ -82,6 +84,17 @@ export default function FindingPassword() {
     onError: (error) => {
       console.log('Error object:', error);
       setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
+    },
+  });
+
+  const { mutate: changePasswordMutation, isPending: passwordPending } = useCustomMutation({
+    mutationFn: async ({ email, newPassword }: TChangePasswordValues) => changePassword({ email, newPassword }), // 현재 사용 못합니다.
+    onSuccess: () => {
+      navigate('/');
+    },
+    onError: (error) => {
+      console.log('Error object:', error);
+      setPasswordErrorMessage(error.response?.data.message || 'An error occurred.');
     },
   });
 
@@ -94,8 +107,7 @@ export default function FindingPassword() {
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
     const { email, password } = data;
-    console.log(email, password);
-    navigate('/');
+    changePasswordMutation({ email: email, newPassword: password });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -149,6 +161,16 @@ export default function FindingPassword() {
     setStep(0);
   }, []);
 
+  useEffect(() => {
+    setCodeVerify(undefined);
+    setEmailErrorMessage(undefined);
+    setStep(0);
+  }, [watchedEmail]);
+
+  useEffect(() => {
+    setPasswordErrorMessage(undefined);
+  }, [watchedPassword, watchedRepassword]);
+
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
@@ -164,6 +186,7 @@ export default function FindingPassword() {
               disabled={codePending}
               handleSendCode={handleSendCode}
               touched={touchedFields.email}
+              pending={codePending}
               valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
               errorMessage={errors.email?.message || emailErrorMessage}
               {...register('email')}
@@ -186,8 +209,8 @@ export default function FindingPassword() {
             <InputModule
               top={false}
               touched={touchedFields.password}
-              valid={touchedFields.password && !errors.password?.message}
-              errorMessage={errors.password?.message}
+              valid={touchedFields.password && !errors.password?.message && !passwordErrorMessage}
+              errorMessage={errors.password?.message || passwordErrorMessage}
               Name={'Password'}
               inputname={'password'}
               span={'New Password'}
@@ -203,7 +226,7 @@ export default function FindingPassword() {
               span={'Re-enter Password'}
               {...register('repassword')}
             />
-            <AuthButton disabled={!isValid || !passwordMatch}>Go to the login</AuthButton>
+            <AuthButton disabled={!isValid || !passwordMatch || passwordPending}>Go to the login</AuthButton>
           </>
         )}
       </S.Form>
