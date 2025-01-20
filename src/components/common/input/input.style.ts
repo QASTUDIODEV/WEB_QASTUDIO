@@ -47,6 +47,7 @@ const MessageWrapper2 = styled.div`
   position: absolute;
   top: -24px;
   right: 0;
+  z-index: 1;
 `;
 
 const NormalInputWrapper = styled.input<{ $width?: string }>`

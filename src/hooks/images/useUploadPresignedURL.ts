@@ -1,3 +1,5 @@
+import { toast } from 'sonner';
+
 import { uploadPresignedUrl } from '@/apis/images/images';
 
 import { useCustomMutation } from '../common/useCustomMutation';
@@ -18,8 +20,23 @@ export const useUploadPresignedUrl = () => {
     },
   });
 
+  const uploadPresignedUrlAsync = async (_presignedUrl: string, blob: File) => {
+    return new Promise<void>((resolve, reject) => {
+      uploadPresignedUrlMutate(
+        { _presignedUrl, blob },
+        {
+          onSuccess: () => resolve(),
+          onError: (error) => {
+            toast.error('파일 업로드에 실패했습니다. 다시 시도해주세요.');
+            reject(error);
+          },
+        },
+      );
+    });
+  };
+
   return {
-    uploadPresignedUrlMutate,
+    uploadPresignedUrlAsync,
     uploadPresignedUrlPending,
   };
 };

@@ -2,77 +2,91 @@ import styled from 'styled-components';
 
 const ProjectList = styled.div`
   display: flex;
-  background: #d9e6ff1a;
   flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  background: #d9e6ff1a;
   margin-left: 20px;
   padding: 20px;
   border-radius: 12.8px;
   gap: 10px;
   height: 283px;
-  overflow-x: scroll;
-  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+
   @media (max-width: 1138px) {
     height: 310px;
   }
-  @media (max-width: 1109px) {
+  @media (max-width: 1129px) {
     height: 340px;
   }
-  @media (max-width: 1050px) {
+  @media (max-width: 1088px), (max-width: 1050px), (max-width: 1025px), (max-width: 1025px) {
     flex-direction: column;
-    height: 360px;
-    justify-content: center;
-    overflow-y: hidden;
+    height: 380px;
+    overflow-x: hidden;
   }
-  @media (max-width: 965px) {
-    overflow-y: scroll;
+  @media (max-width: 1024px) {
+    height: 340px;
   }
-  @media (max-width: 750px) {
-    margin: 0;
+  @media (max-width: 847px) {
     width: 100%;
+    margin: 0;
   }
 `;
 
 const Table = styled.table`
   width: 100%;
-  height: auto;
   table-layout: auto;
+  overflow-y: hidden;
   .blank {
     min-width: 2rem;
   }
+
+  @media (max-width: 1050px) {
+    max-height: 80%;
+    overflow-x: scroll;
+  }
+`;
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
+  flex: 1;
+  overflow-y: hidden;
 `;
 
 const TH = styled.th`
-  ${({ theme }) => theme.text.medium_18}
+  ${({ theme }) => theme.text.medium_18};
   text-align: left;
   height: 26px;
   padding-bottom: 16px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  @media (max-width: 1138px) {
+
+  @media (max-width: 1138px), (max-width: 1050px) {
     text-align: center;
-  }
-  @media (max-width: 1050px) {
-    text-align: center;
+    padding: 10px;
   }
 `;
 
 const Buttons = styled.div`
   display: flex;
   gap: 8px;
-  flex: none;
   margin-top: 5px;
+
   svg {
     width: 19.2px;
     height: 19.2px;
   }
-  @media (max-width: 1050px) {
-    align-self: center;
+
+  @media (max-width: 1087px) {
+    justify-content: center;
     gap: 30px;
+    width: 100%;
   }
 `;
 
 const TBody = styled.tbody`
-  height: auto;
   gap: 8px;
 `;
 
-export { Buttons, ProjectList, Table, TBody, TH };
+export { Buttons, ProjectList, Table, TableWrapper, TBody, TH };

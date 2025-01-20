@@ -68,7 +68,7 @@ export default function MyProfile() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   const { getPresignedUrl } = useGetPresignedUrl();
-  const { uploadPresignedUrlMutate } = useUploadPresignedUrl();
+  const { uploadPresignedUrlAsync } = useUploadPresignedUrl();
 
   const handleInputClick = (type: 'banner' | 'profile') => {
     inputRefs[type].current?.click();
@@ -80,8 +80,9 @@ export default function MyProfile() {
       return;
     }
     try {
-      const imgUrl = await getPresignedUrl(file.name);
-      await uploadPresignedUrlMutate({ _presignedUrl: imgUrl, blob: file });
+      const data = await getPresignedUrl(file.name);
+      await uploadPresignedUrlAsync(data.url, file);
+      return data;
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }
@@ -90,13 +91,12 @@ export default function MyProfile() {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'banner' | 'profile') => {
     const file = e.target.files?.[0];
     if (file) {
-      await handleImageUpload(file);
+      const data = await handleImageUpload(file);
 
-      const fileUrl = URL.createObjectURL(file);
-      if (type === 'banner') {
-        setValue('bannerImage', fileUrl);
-      } else if (type === 'profile') {
-        setValue('profileImage', fileUrl);
+      if (type === 'banner' && data !== undefined) {
+        setValue('bannerImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
+      } else if (type === 'profile' && data !== undefined) {
+        setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
       }
     }
   };
@@ -148,7 +148,9 @@ export default function MyProfile() {
                   />
                   <S.AccoutWrapper>
                     <S.Account>email.email.com</S.Account>
-                    <SocialLogo gap={8} size="small" id={socialLogin} disable />
+                    <div className="socialLogoWrapper">
+                      <SocialLogo gap={8} size="small" id={socialLogin} />
+                    </div>
                     <div ref={containerRef}>
                       {unlinkedSocials.length > 0 && (
                         <S.PlusWrapper onClick={() => setShow(true)}>
@@ -185,7 +187,9 @@ export default function MyProfile() {
                   <span>{watchedNickname}</span>
                   <S.AccoutWrapper>
                     <S.Account>email.email.com</S.Account>
-                    <SocialLogo gap={8} size="small" disable id={socialLogin} />
+                    <div className="socialLogoWrapper">
+                      <SocialLogo gap={8} size="small" disable={true} id={socialLogin} />
+                    </div>
                   </S.AccoutWrapper>
                 </S.UserInfo>
               </S.ProfileUserInfo>

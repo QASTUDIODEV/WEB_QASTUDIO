@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
+import { userSetting } from '@/apis/auth/auth';
 
+import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
 
@@ -18,6 +21,7 @@ import * as S from '@/pages/userSetting/userSetting.style';
 
 type TFormValues = {
   nickname: string;
+  profileImage: string;
 };
 
 export default function UserSetting() {
@@ -25,6 +29,8 @@ export default function UserSetting() {
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -38,18 +44,24 @@ export default function UserSetting() {
     contentInputRef.current?.click();
   };
 
-  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
-  const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
+  const watchedImage = useWatch({
+    control,
+    name: 'profileImage',
+  });
 
-  const handleImageUpload = async (blob: File) => {
-    if (!blob.type.startsWith('image/')) {
+  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
+  const { uploadPresignedUrlAsync, uploadPresignedUrlPending } = useUploadPresignedUrl();
+
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
 
     try {
-      const presignedUrl = await getPresignedUrl(blob.name);
-      await uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
+      const data = await getPresignedUrl(file.name);
+      await uploadPresignedUrlAsync(data.url, file);
+      setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
     }
@@ -62,8 +74,17 @@ export default function UserSetting() {
     }
   };
 
-  const onSubmit = () => {
-    navigate('/');
+  const { mutate: userSettingMutation } = useCustomMutation({
+    mutationFn: ({ nickname, profileImage }: { nickname: string; profileImage: string }) => userSetting({ nickname, profileImage }),
+    onSuccess: () => {},
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+    userSettingMutation({ nickname: data.nickname, profileImage: watchedImage });
+    navigate('/project');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,7 +104,7 @@ export default function UserSetting() {
           <S.Backdrop>
             <ProfileEdit />
           </S.Backdrop>
-          <Profile />
+          <Profile profileImg={watchedImage} />
           <S.ProfileEditBtn>
             <ProfileEdit />
           </S.ProfileEditBtn>
