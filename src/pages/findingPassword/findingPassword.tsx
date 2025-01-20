@@ -4,11 +4,10 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TChangePasswordValues } from '@/types/auth/auth';
-
 import { findingSchema } from '@/utils/validate';
-import { changePassword, findingSendEmailCode } from '@/apis/auth/auth';
+import { findingSendEmailCode } from '@/apis/auth/auth';
 
+import useChagePassword from '@/hooks/auth/useChangePassword';
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
@@ -87,27 +86,27 @@ export default function FindingPassword() {
     },
   });
 
-  const { mutate: changePasswordMutation, isPending: passwordPending } = useCustomMutation({
-    mutationFn: async ({ email, newPassword }: TChangePasswordValues) => changePassword({ email, newPassword }), // 현재 사용 못합니다.
-    onSuccess: () => {
-      navigate('/');
-    },
-    onError: (error) => {
-      console.log('Error object:', error);
-      setPasswordErrorMessage(error.response?.data.message || 'An error occurred.');
-    },
-  });
+  const { mutate: changePasswordMutation } = useChagePassword();
+
+  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
+    const { email, password } = data;
+
+    changePasswordMutation(
+      { email, newPassword: password },
+      {
+        onError: (error: any) => {
+          const errorPasswordMessage = error?.response?.data?.message || '비밀번호 변경 중 오류가 발생했습니다.';
+          setPasswordErrorMessage(errorPasswordMessage);
+        },
+      },
+    );
+  };
 
   const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
       sendCodeMutation({ email: watchedEmail });
     }
-  };
-
-  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    const { email, password } = data;
-    changePasswordMutation({ email: email, newPassword: password });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -234,7 +233,7 @@ export default function FindingPassword() {
               span={'Re-enter Password'}
               {...register('repassword')}
             />
-            <AuthButton disabled={!isValid || !passwordMatch || passwordPending || !!passwordErrorMessage}>Go to the login</AuthButton>
+            <AuthButton disabled={!isValid || !passwordMatch || !!passwordErrorMessage}>Go to the login</AuthButton>
           </>
         )}
       </S.Form>
