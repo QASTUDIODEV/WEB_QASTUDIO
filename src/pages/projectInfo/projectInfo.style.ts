@@ -13,9 +13,12 @@ const Container = styled.div`
   overflow: auto;
   min-width: 410px;
   ${media.desktop`
-    margin-bottom: 40px;
+    margin-bottom: 50px;
+    .show {
+      opacity: 0;
+    }
   `}
-  @media (max-width: 550px) {
+  @media (max-width: 610px) {
     .buttonShow {
       opacity: 0;
     }
@@ -71,7 +74,7 @@ export const Member = styled.div`
   cursor: pointer;
   margin-bottom: 20px;
   ${media.desktop`
-    width: 80%;
+    width: 70%;
   `}
 `;
 const Box = styled.div<{ height: string }>`
@@ -105,6 +108,7 @@ const Right = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 2.94112%;
+  min-width: 168px;
   ${media.desktop`
     width: 100%;
     margin: 40px 0 0 0;
@@ -153,11 +157,11 @@ const Text = styled.p`
   scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
-  @media (max-width: 803px) {
+  @media (max-width: 840px) {
     width: 70%;
   }
-  @media (max-width: 485px) {
-    width: 65%;
+  @media (max-width: 610px) {
+    width: 60%;
   }
 `;
 
@@ -244,7 +248,7 @@ export const Wrapper = styled.div<TWrapperProps>`
 `;
 
 export const Input = styled.textarea`
-  width: 85%;
+  width: 80%;
   height: 51%;
   color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
@@ -258,6 +262,12 @@ export const Input = styled.textarea`
   background: rgba(217, 230, 255, 0.05);
   border: none;
   scrollbar-width: none;
+  @media (max-width: 840px) {
+    width: 70%;
+  }
+  @media (max-width: 610px) {
+    width: 60%;
+  }
 `;
 type TText = {
   color?: string;

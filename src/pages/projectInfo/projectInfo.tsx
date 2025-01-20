@@ -250,11 +250,11 @@ export default function ProjectInfoPage() {
                   {a.Master && <Crown />}
                 </S.MemberBox>
                 <S.ArrowWrapper>
-                  <ArrowRight />
+                  <ArrowRight className="show" />
                 </S.ArrowWrapper>
               </S.Member>
             ))}
-            <S.Wrapper bottom="16px" right="24px" className="buttonShow">
+            <S.Wrapper bottom="16px" right="24px">
               <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={() => modalDispatch(openModal(MODAL_TYPES.InviteModal))}>
                 Invite
               </Button>
