@@ -31,11 +31,7 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  const {
-    data: userData,
-    isLoading,
-    isPending,
-  } = useQuery<TGetUserInfoResponse, Error>({
+  const { data: userData, isLoading } = useQuery<TGetUserInfoResponse, Error>({
     queryKey: QUERY_KEYS.GET_USER_INFO,
     queryFn: async () => {
       return await getUserInfo();
