@@ -1,4 +1,4 @@
-export type TSocialPlatform = 'github' | 'kakao' | 'google';
+export type TSocialPlatform = 'GITHUB' | 'KAKAO' | 'GOOGLE' | 'LOCAL';
 
 export type TMyProfileValues = {
   nickname: string;

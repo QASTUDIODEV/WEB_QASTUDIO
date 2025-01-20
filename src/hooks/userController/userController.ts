@@ -10,10 +10,13 @@ export function useGetUserInfo() {
     data: userData,
     isLoading,
     error,
+    isPending,
   } = useQuery<TGetUserInfoResponse, Error>({
     queryKey: QUERY_KEYS.GET_USER_INFO,
-    queryFn: getUserInfo,
+    queryFn: async () => {
+      return await getUserInfo();
+    },
   });
 
-  return { userData, isLoading, error };
+  return { userData, isLoading, error, isPending };
 }

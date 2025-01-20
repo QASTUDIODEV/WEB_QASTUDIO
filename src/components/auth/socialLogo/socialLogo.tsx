@@ -8,7 +8,7 @@ type TSocialLogo = {
   gap: number;
   size: 'small' | 'large';
   disable?: boolean;
-  id?: ('github' | 'kakao' | 'google')[] | null;
+  id?: ('GITHUB' | 'KAKAO' | 'GOOGLE' | 'LOCAL')[];
 };
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
@@ -18,17 +18,17 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
     <S.Logos $gap={gap} size={size}>
       {id ? (
         <>
-          {id?.includes('google') && (
+          {id?.includes('GOOGLE') && (
             <S.Logo $logotype="google" size={size} disabled={disable}>
               <GoogleLogo />
             </S.Logo>
           )}
-          {id?.includes('kakao') && (
+          {id?.includes('KAKAO') && (
             <S.Logo $logotype="kakao" size={size} disabled={disable}>
               <KakaoLogo />
             </S.Logo>
           )}
-          {id?.includes('github') && (
+          {id?.includes('GITHUB') && (
             <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable}>
               <GithubLogo />
             </S.Logo>

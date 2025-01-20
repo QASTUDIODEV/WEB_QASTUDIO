@@ -6,13 +6,13 @@ export type TGetUserInfoResponse = TCommonResponse<{
   email: string;
   profileImage: string;
   bannerImage: string;
-  account: 'KAKAO' | 'GITHUB' | 'GOOGLE'[];
+  account: 'KAKAO' | 'GITHUB' | 'GOOGLE' | 'LOCAL'[] | undefined;
 }>;
 
 export type TPatchUserInfoValues = {
   nickname: string;
-  profileImage: string;
-  bannerImage: string;
+  profileImage?: string;
+  bannerImage?: string;
 };
 
 export type TPatchUserInfoResponse = TCommonResponse<{
