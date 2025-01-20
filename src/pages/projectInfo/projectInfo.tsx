@@ -97,7 +97,7 @@ export default function ProjectInfoPage() {
           <Profile />
         </S.ProfileWrapper>
         <S.ProfileName>UMC_PM_DAY</S.ProfileName>
-        <S.Wrapper top="5.6px" right="0">
+        <S.Wrapper top="5.6px" right="0" className="buttonShow">
           <Button type="normal" color="default" icon={<Goto />} iconPosition="right">
             Go to Site
           </Button>
@@ -254,7 +254,7 @@ export default function ProjectInfoPage() {
                 </S.ArrowWrapper>
               </S.Member>
             ))}
-            <S.Wrapper bottom="16px" right="24px">
+            <S.Wrapper bottom="16px" right="24px" className="buttonShow">
               <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={() => modalDispatch(openModal(MODAL_TYPES.InviteModal))}>
                 Invite
               </Button>
