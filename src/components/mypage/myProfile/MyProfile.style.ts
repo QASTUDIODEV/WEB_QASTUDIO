@@ -88,6 +88,7 @@ const UserInfo = styled.div`
   bottom: 10px;
   padding: 16px 0;
   gap: 6.4px;
+  max-width: 60%;
   span {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-size: 38.4px;
@@ -126,6 +127,9 @@ const PlusWrapper = styled.button`
     width: 10.97px;
     height: 10.97px;
   }
+  @media (max-width: 625px) {
+    display: none;
+  }
 `;
 
 const AccoutWrapper = styled.div`
@@ -133,6 +137,11 @@ const AccoutWrapper = styled.div`
   height: 26px;
   width: 100%;
   align-items: center;
+  .socialLogoWrapper {
+    @media (max-width: 690px) {
+      display: none;
+    }
+  }
 `;
 
 const ProjectNum = styled.div`
@@ -187,6 +196,10 @@ const Table = styled.table`
 const ButtonWrapper = styled.div`
   z-index: 2;
   align-self: end;
+  padding: 5px 0;
+  @media (max-width: 560px) {
+    display: none;
+  }
 `;
 
 const TH = styled.th`
@@ -194,7 +207,6 @@ const TH = styled.th`
   text-align: left;
   height: 26px;
   padding-bottom: 16px;
-
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 
@@ -235,8 +247,8 @@ const TBody = styled.tbody`
 `;
 
 const ProfileImg = styled.div`
-  width: 112px;
-  height: 112px;
+  min-width: 112px;
+  min-height: 112px;
   border-radius: 100%;
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
@@ -287,6 +299,7 @@ const Container2 = styled.div`
 const ProfileUserInfo = styled.div`
   display: flex;
   gap: 15px;
+  width: 100%;
 `;
 
 const SocialLogoWrapper = styled.div`

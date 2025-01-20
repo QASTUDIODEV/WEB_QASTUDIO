@@ -48,7 +48,7 @@ export default function ProjectList() {
 
   return (
     <S.ProjectList>
-      <div style={{ flex: '1' }}>
+      <S.TableWrapper>
         <S.Table>
           <thead>
             <tr>
@@ -72,12 +72,14 @@ export default function ProjectList() {
             ))}
           </S.TBody>
         </S.Table>
-      </div>
+      </S.TableWrapper>
 
-      <S.Buttons>
-        {havePrevious ? <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} /> : <ArrowLeft stroke={'#e9e8f91a'} />}
-        {haveNext ? <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} /> : <ArrowRight stroke={'#e9e8f91a'} />}
-      </S.Buttons>
+      <div>
+        <S.Buttons>
+          {havePrevious ? <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} /> : <ArrowLeft stroke={'#e9e8f91a'} />}
+          {haveNext ? <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} /> : <ArrowRight stroke={'#e9e8f91a'} />}
+        </S.Buttons>
+      </div>
     </S.ProjectList>
   );
 }

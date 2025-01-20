@@ -26,7 +26,7 @@ const ProjectNum = styled.div`
     margin-top: 8px;
     font-size: 14.4px;
   }
-  @media (max-width: 750px) {
+  @media (max-width: 847px) {
     width: 100%;
     align-items: center;
     flex-direction: row;
