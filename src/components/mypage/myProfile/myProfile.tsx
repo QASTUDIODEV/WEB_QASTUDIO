@@ -154,10 +154,6 @@ export default function MyProfile() {
   };
 
   useEffect(() => {
-    setValue('nickname', userData?.result.nickname as string);
-    setValue('bannerImage', userData?.result.bannerImage as string);
-    setValue('profileImage', userData?.result.profileImage as string);
-
     const handleInteraction = (e: Event) => {
       const target = e.target as HTMLElement;
       if (!containerRef.current?.contains(target) && !contentRef.current?.contains(target)) {
@@ -170,9 +166,13 @@ export default function MyProfile() {
     };
   }, []);
 
-  if (isLoading || isPending) {
-    return <S.LoadingOverlay>로딩중</S.LoadingOverlay>;
-  }
+  useEffect(() => {
+    if (userData) {
+      setValue('nickname', userData.result.nickname);
+      setValue('profileImage', userData.result.profileImage);
+      setValue('bannerImage', userData.result.bannerImage);
+    }
+  }, [userData, setValue]);
 
   return (
     <>
