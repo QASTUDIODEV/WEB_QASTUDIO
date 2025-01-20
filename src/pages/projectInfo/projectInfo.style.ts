@@ -1,15 +1,28 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  min-width: 1080px;
   flex: 1;
   height: 100vh;
   padding: 5.8% 7.5% 3.125% 7.5%;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  min-width: 410px;
+  ${media.desktop`
+    margin-bottom: 50px;
+    .show {
+      opacity: 0;
+    }
+  `}
+  @media (max-width: 610px) {
+    .buttonShow {
+      opacity: 0;
+    }
+  }
 `;
 const Profile = styled.div`
   display: flex;
@@ -51,15 +64,18 @@ export const MemberName = styled.p`
   max-width: 83%;
 `;
 export const ArrowWrapper = styled.div`
+  min-width: 10%;
   flex-shrink: 0;
   flex: 1;
-  width: 10%;
 `;
 export const Member = styled.div`
   ${({ theme }) => theme.align.row_space_between};
   gap: 2.5%;
   cursor: pointer;
   margin-bottom: 20px;
+  ${media.desktop`
+    width: 70%;
+  `}
 `;
 const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
@@ -78,15 +94,26 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  ${media.desktop`
+    width: 100%;
+    
+  `}
 `;
 
 const Right = styled.div`
   width: 22.06%;
+  overflow: hidden;
   gap: 40px;
   margin-top: 0;
   display: flex;
   flex-direction: column;
   margin-left: 2.94112%;
+  min-width: 168px;
+  ${media.desktop`
+    width: 100%;
+    margin: 40px 0 0 0;
+    overflow: auto;
+  `}
 `;
 
 const Title = styled.p`
@@ -97,7 +124,13 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  @media (max-width: 530px) {
+    width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 `;
 
 const TextLight = styled.p`
@@ -124,6 +157,12 @@ const Text = styled.p`
   scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
+  @media (max-width: 840px) {
+    width: 70%;
+  }
+  @media (max-width: 610px) {
+    width: 60%;
+  }
 `;
 
 const TextBold = styled.p`
@@ -141,6 +180,10 @@ const SemiBox = styled.div`
   display: flex;
   height: 100%;
   margin-top: 37px;
+  ${media.desktop`
+    width: 100%;
+    flex-wrap: wrap;
+    `}
 `;
 
 const InnerBox = styled.div`
@@ -151,8 +194,10 @@ const InnerBox = styled.div`
   position: relative;
   margin-top: 25px;
   height: 220px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: scroll;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 const CharacterAddBox = styled.div`
@@ -203,8 +248,8 @@ export const Wrapper = styled.div<TWrapperProps>`
 `;
 
 export const Input = styled.textarea`
-  width: 85%;
-  height: 51%;
+  width: 80%;
+  height: 57%;
   color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
   font-size: 14.4px;
@@ -217,6 +262,12 @@ export const Input = styled.textarea`
   background: rgba(217, 230, 255, 0.05);
   border: none;
   scrollbar-width: none;
+  @media (max-width: 840px) {
+    width: 70%;
+  }
+  @media (max-width: 610px) {
+    width: 60%;
+  }
 `;
 type TText = {
   color?: string;
@@ -232,11 +283,15 @@ export const Medium18Text = styled.p<TText>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 80%;
+  max-width: 85%;
 `;
 export const Medium14Text = styled.p<TText>`
   color: ${(props) => props.color};
   ${({ theme }) => theme.text.medium_14};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85%;
 `;
 export const TableWrapper = styled.div`
   display: flex;
@@ -267,6 +322,14 @@ export const Table = styled.table`
   }
   svg {
     vertical-align: text-bottom;
+  }
+  @media (max-width: 1379px) {
+    min-width: 700px;
+    overflow: scroll;
+  }
+  @media (max-width: 900px) {
+    min-width: 700px;
+    overflow: scroll;
   }
 `;
 
