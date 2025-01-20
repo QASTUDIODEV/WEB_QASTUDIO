@@ -7,7 +7,7 @@ type TProject = {
   id: number;
   name: string;
   participants: number;
-  date: string;
+  date: Date;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
@@ -27,6 +27,7 @@ export default function Project({ id, name, participants, date, onClick }: TProj
     return () => window.removeEventListener('resize', checkOverflow);
   }, []);
 
+  const formattedDate = date.toLocaleDateString();
   return (
     <S.TR key={id} onClick={onClick}>
       <S.TD>
@@ -41,7 +42,7 @@ export default function Project({ id, name, participants, date, onClick }: TProj
       <S.TD />
       <S.TD>{participants}</S.TD>
       <S.TD />
-      <S.TD>{date}</S.TD>
+      <S.TD>{formattedDate}</S.TD>
     </S.TR>
   );
 }

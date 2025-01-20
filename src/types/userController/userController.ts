@@ -36,7 +36,7 @@ export type TUserProjectListResponse = {
 };
 
 export type TGetUserProjectsResponse = TCommonResponse<{
-  userProjectList: TUserProjectListResponse;
+  userProjectList: TUserProjectListResponse[];
   listSize: number;
   totalPage: number;
   totalElements: number;

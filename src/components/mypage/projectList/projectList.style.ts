@@ -73,11 +73,6 @@ const Buttons = styled.div`
   gap: 8px;
   margin-top: 5px;
 
-  svg {
-    width: 19.2px;
-    height: 19.2px;
-  }
-
   @media (max-width: 1087px) {
     justify-content: center;
     gap: 30px;
@@ -89,4 +84,14 @@ const TBody = styled.tbody`
   gap: 8px;
 `;
 
-export { Buttons, ProjectList, Table, TableWrapper, TBody, TH };
+const Button = styled.div<{ $disable: boolean }>`
+  &:hover {
+    cursor: ${(props) => (props.$disable ? 'default' : 'pointer')};
+  }
+  svg {
+    width: 19.2px;
+    height: 19.2px;
+  }
+`;
+
+export { Button, Buttons, ProjectList, Table, TableWrapper, TBody, TH };
