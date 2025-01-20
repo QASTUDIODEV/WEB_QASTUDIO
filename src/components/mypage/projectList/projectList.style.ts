@@ -101,4 +101,14 @@ const Button = styled.div<{ $disable: boolean }>`
   }
 `;
 
-export { Button, Buttons, ProjectList, Table, TableWrapper, TH };
+const Button = styled.div<{ $disable: boolean }>`
+  &:hover {
+    cursor: ${(props) => (props.$disable ? 'default' : 'pointer')};
+  }
+  svg {
+    width: 19.2px;
+    height: 19.2px;
+  }
+`;
+
+export { Button, Buttons, ProjectList, Table, TableWrapper, TBody, TH };
