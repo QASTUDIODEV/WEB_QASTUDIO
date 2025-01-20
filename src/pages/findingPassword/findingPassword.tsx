@@ -119,7 +119,15 @@ export default function FindingPassword() {
       if (step === 1 && !errors.code?.message && touchedFields.code) {
         setStep(2);
       }
-      if (step === 2 && !errors.password?.message && !errors.repassword?.message && touchedFields.password && touchedFields.repassword && passwordMatch) {
+      if (
+        step === 2 &&
+        !errors.password?.message &&
+        !errors.repassword?.message &&
+        touchedFields.password &&
+        touchedFields.repassword &&
+        passwordMatch &&
+        !passwordErrorMessage
+      ) {
         const email = watchedEmail;
         const password = watchedPassword;
         onSubmit({ email, password });
@@ -226,7 +234,7 @@ export default function FindingPassword() {
               span={'Re-enter Password'}
               {...register('repassword')}
             />
-            <AuthButton disabled={!isValid || !passwordMatch || passwordPending}>Go to the login</AuthButton>
+            <AuthButton disabled={!isValid || !passwordMatch || passwordPending || !!passwordErrorMessage}>Go to the login</AuthButton>
           </>
         )}
       </S.Form>
