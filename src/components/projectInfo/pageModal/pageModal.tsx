@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
-import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
+import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 import * as S from '@/components/projectInfo/pageModal/pageModal.style';
