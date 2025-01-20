@@ -1,4 +1,4 @@
-import * as S from '@/components/auth/validationMessage/validationMessage.style';
+import * as S from '@/components/common/input/validationMessage.style';
 
 import Valid from '@/assets/icons/check_circle.svg?react';
 import Wrong from '@/assets/icons/wrong.svg?react';
