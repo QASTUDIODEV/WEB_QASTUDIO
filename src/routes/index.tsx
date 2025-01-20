@@ -38,7 +38,12 @@ export const router = createBrowserRouter([
   },
   {
     path: '/scenario/:projectId/:scenarioId',
-    element: <ScenarioActPage />,
+    element: (
+      <>
+        <ScenarioActPage />
+        <ModalProvider />
+      </>
+    ),
   },
   {
     path: '/mypage',
