@@ -124,7 +124,7 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   @media (max-width: 530px) {
     width: 50%;
     white-space: nowrap;
@@ -249,7 +249,7 @@ export const Wrapper = styled.div<TWrapperProps>`
 
 export const Input = styled.textarea`
   width: 80%;
-  height: 51%;
+  height: 57%;
   color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
   font-size: 14.4px;
