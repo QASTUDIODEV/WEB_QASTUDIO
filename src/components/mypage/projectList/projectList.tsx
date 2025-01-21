@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
@@ -14,7 +14,10 @@ import * as S from './projectList.style';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function ProjectList() {
+type TProjectListProps = {
+  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+};
+export default function ProjectList({ setProjectNum }: TProjectListProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const { data } = useQuery({
@@ -24,7 +27,7 @@ export default function ProjectList() {
   });
 
   const projectsData = data?.result.userProjectList;
-
+  setProjectNum(data?.result.totalElements || 0);
   const goToNextPage = () => {
     if (!data?.result.isLast) {
       setCurrentPage((prevPage) => prevPage + 1);
