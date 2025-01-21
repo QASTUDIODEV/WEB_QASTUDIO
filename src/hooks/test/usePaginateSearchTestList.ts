@@ -10,7 +10,8 @@ import { useCoreQuery } from '../common/customQuery';
 // 테스트 검색 API
 export default function usePaginateSearchTestList({ projectId, date, state, pageName, page, testName }: TSearchTestListRequest) {
   return useCoreQuery(
-    [QUERY_KEYS.DASHBOARD.TEST.LIST(projectId), testName, date, state, pageName, page],
+    QUERY_KEYS.DASHBOARD.TEST.LIST({ projectId, date, state, pageName, page, testName }),
+
     () => searchTestList({ projectId, date, state, pageName, page, testName }),
     {
       placeholderData: keepPreviousData,

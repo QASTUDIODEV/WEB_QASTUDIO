@@ -9,7 +9,11 @@ import { useCoreQuery } from '../common/customQuery';
 
 // 테스트 리스트 조회 API
 export default function usePaginateTestList({ projectId, date, state, pageName, page }: TGetTestListRequest) {
-  return useCoreQuery([QUERY_KEYS.DASHBOARD.TEST.LIST(projectId), date, state, pageName, page], () => getTestList({ projectId, date, state, pageName, page }), {
-    placeholderData: keepPreviousData,
-  });
+  return useCoreQuery(
+    QUERY_KEYS.DASHBOARD.TEST.LIST({ projectId, date, state, pageName, page }),
+    () => getTestList({ projectId, date, state, pageName, page }),
+    {
+      placeholderData: keepPreviousData,
+    },
+  );
 }
