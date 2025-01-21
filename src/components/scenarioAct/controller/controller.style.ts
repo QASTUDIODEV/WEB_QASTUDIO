@@ -14,6 +14,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   ${({ theme }) => theme.text.bold_24};
+  border-bottom: 1px solid rgba(217, 230, 255, 0.1);
 `;
 export const CharacterHeader = styled.div`
   padding: 10px 30px;
