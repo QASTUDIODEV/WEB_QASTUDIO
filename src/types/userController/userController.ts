@@ -34,7 +34,7 @@ export type TUserProjectListResponse = {
   projectId: number;
   projectName: string;
   participant: number;
-  lastModifiedDate: Date;
+  lastModifiedDate: string;
 };
 
 export type TGetUserProjectsResponse = TCommonResponse<{

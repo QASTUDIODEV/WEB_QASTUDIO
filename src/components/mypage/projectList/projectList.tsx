@@ -26,13 +26,13 @@ export default function ProjectList() {
   const projectsData = data?.result.userProjectList;
 
   const goToNextPage = () => {
-    if (data?.result.isLast) {
+    if (!data?.result.isLast) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const goToPreviousPage = () => {
-    if (data?.result.isFirst) {
+    if (!data?.result.isFirst) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };

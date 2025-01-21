@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
@@ -118,7 +119,7 @@ export default function MyProfile() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['getUserInfo'],
+        queryKey: QUERY_KEYS.GET_USER_INFO,
       });
       setIsEdit(false);
       console.log(data);
@@ -144,7 +145,6 @@ export default function MyProfile() {
     } else {
       updateData.bannerImage = userData.result.bannerImage.split('aws.com/')[1];
     }
-
     patchUserInfoMutation(updateData);
   };
 
@@ -189,7 +189,6 @@ export default function MyProfile() {
                   ) : (
                     <Profile profileImg={watchedProfileUrl} />
                   )}
-
                   <S.ProfileEditBtn>
                     <ProfileEdit />
                   </S.ProfileEditBtn>
@@ -202,7 +201,7 @@ export default function MyProfile() {
                     errorMessage={errors.nickname?.message}
                     Name={'Nickname'}
                     inputname={'normal'}
-                    value={watchedNickname} //수정 예정
+                    value={watchedNickname}
                     top={true}
                     {...register('nickname')}
                   />
