@@ -3,6 +3,7 @@ import { useState } from 'react';
 import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
+import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 
 interface IDropdownProps {
   options: string[];
@@ -28,7 +29,7 @@ export default function CharacterSelectDropdown({ options, onSelect }: IDropdown
   return (
     <S.Container $isOpen={isOpen}>
       <S.Content onClick={toggleDropdown} $isOpen={isOpen}>
-        {selectedOption} <ArrowDown />
+        {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Content>
 
       {isOpen && (
