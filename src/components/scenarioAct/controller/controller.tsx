@@ -7,6 +7,9 @@ import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
 
 export default function Controller() {
+  const onSelect = () => {
+    console.log('ㅅㅌ됨');
+  };
   return (
     <S.Container>
       <S.Header>
@@ -15,7 +18,7 @@ export default function Controller() {
       </S.Header>
       <S.CharacterHeader>
         <p>Character</p>
-        <CharacterSelectDropdown />
+        <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
       </S.CharacterHeader>
       <S.ScenarioLIst>
         <ScenarioDropdown />
