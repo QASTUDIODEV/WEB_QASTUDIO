@@ -4,7 +4,6 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
-import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
@@ -119,7 +118,7 @@ export default function MyProfile() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.GET_USER_INFO,
+        queryKey: ['mypage'],
       });
       setIsEdit(false);
       console.log(data);
