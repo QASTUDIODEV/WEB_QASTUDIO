@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
-import { getImageUrl } from '@/utils/getImageUrl';
 import { myPageScehma } from '@/utils/validate';
+import { queryClient } from '@/apis/queryClient';
 import { patchUserInfo } from '@/apis/userController/userController';
 
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
@@ -32,7 +31,8 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
   const { data: userData, isLoading } = useGetUserInfo();
-  const queryClient = useQueryClient();
+  const [profilePreview, setProfilePreview] = useState<string>('');
+  const [bannerPreview, setBannerPreview] = useState<string>('');
 
   const socialLogin: SOCIAL[] = userData?.result.account as SOCIAL[];
   const unlinkedSocials = findUnlinkedSocials(socialLogin);
@@ -93,12 +93,14 @@ export default function MyProfile() {
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'banner' | 'profile') => {
     const file = e.target.files?.[0];
+
     if (file) {
       const data = await handleImageUpload(file);
-
       if (type === 'banner' && data !== undefined) {
+        setBannerPreview(data.keyName);
         setValue('bannerImage', data.keyName);
       } else if (type === 'profile' && data !== undefined) {
+        setProfilePreview(data.keyName);
         setValue('profileImage', data.keyName);
       }
     }
@@ -128,6 +130,8 @@ export default function MyProfile() {
 
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
+    setBannerPreview('');
+    setProfilePreview('');
     const updateData: { nickname: string; profileImage?: string; bannerImage?: string } = { nickname: data.nickname };
 
     if (watchedProfileUrl !== userData?.result.profileImage) {
@@ -170,12 +174,22 @@ export default function MyProfile() {
       {isEdit ? (
         <S.ProfileWrapper>
           <input ref={inputRefs.banner} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'banner')} />
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={getImageUrl(watchedBannerUrl)} />
+          {bannerPreview ? (
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} />
+          ) : (
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+          )}
+
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
                 <S.ProfileImg onClick={() => handleInputClick('profile')}>
-                  <Profile profileImg={getImageUrl(watchedProfileUrl)} />
+                  {profilePreview ? (
+                    <Profile profileImg={import.meta.env.VITE_API_IMAGE_ACCESS + profilePreview} />
+                  ) : (
+                    <Profile profileImg={watchedProfileUrl} />
+                  )}
+
                   <S.ProfileEditBtn>
                     <ProfileEdit />
                   </S.ProfileEditBtn>
@@ -222,12 +236,12 @@ export default function MyProfile() {
         </S.ProfileWrapper>
       ) : (
         <S.ProfileWrapper>
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={getImageUrl(userData?.result.bannerImage || null)} />
+          <S.BannerImg onClick={() => handleInputClick('banner')} url={userData?.result.bannerImage} />
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
                 <S.ProfileImg>
-                  <Profile profileImg={getImageUrl(userData?.result.profileImage || null)} />
+                  <Profile profileImg={userData?.result.profileImage} />
                 </S.ProfileImg>
                 <S.UserInfo>
                   <span>{userData?.result.nickname}</span>
