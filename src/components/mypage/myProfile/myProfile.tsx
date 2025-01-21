@@ -11,8 +11,7 @@ import { myPageScehma } from '@/utils/validate';
 
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
-import useGetUserInfo from '@/hooks/mypage/useGetUserInfo';
-import useUserInfo from '@/hooks/mypage/useGetUserInfo copy';
+import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 import { InputModule } from '@/components/auth/module/module';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -28,7 +27,8 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  const { data: userData, isLoading } = useGetUserInfo();
+  const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
+  const { data: userData, isLoading } = useGetUserInfo;
   const [profilePreview, setProfilePreview] = useState<string>('');
   const [bannerPreview, setBannerPreview] = useState<string>('');
 
@@ -104,8 +104,6 @@ export default function MyProfile() {
       }
     }
   };
-
-  const { usePatchUserInfo } = useUserInfo();
 
   const { mutate: patchUserInfoMutation } = usePatchUserInfo;
 

@@ -11,8 +11,8 @@ export type TGetUserInfoResponse = TCommonResponse<{
 
 export type TPatchUserInfoValues = {
   nickname: string;
-  profileImage: string;
-  bannerImage: string;
+  profileImage?: string;
+  bannerImage?: string;
 };
 
 export type TPatchUserInfoResponse = TCommonResponse<{
