@@ -4,18 +4,14 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
-import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { myPageScehma } from '@/utils/validate';
-import { queryClient } from '@/apis/queryClient';
-import { patchUserInfo } from '@/apis/userController/userController';
 
-import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
-import useGetUserInfo from '@/hooks/mypage/useGetUserInfo';
+import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 import { InputModule } from '@/components/auth/module/module';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
@@ -31,7 +27,8 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  const { data: userData, isLoading } = useGetUserInfo();
+  const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
+  const { data: userData, isLoading } = useGetUserInfo;
   const [profilePreview, setProfilePreview] = useState<string>('');
   const [bannerPreview, setBannerPreview] = useState<string>('');
 
@@ -68,6 +65,7 @@ export default function MyProfile() {
     banner: useRef<HTMLInputElement | null>(null),
     profile: useRef<HTMLInputElement | null>(null),
   };
+
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
@@ -107,27 +105,7 @@ export default function MyProfile() {
     }
   };
 
-  const { mutate: patchUserInfoMutation } = useCustomMutation({
-    mutationFn: async ({ nickname, profileImage, bannerImage }: { nickname: string; profileImage?: string; bannerImage?: string }) => {
-      const updateData: { nickname: string; profileImage?: string; bannerImage?: string } = {
-        nickname: nickname,
-      };
-      if (profileImage) updateData.profileImage = profileImage;
-      if (bannerImage) updateData.bannerImage = bannerImage;
-
-      return patchUserInfo(updateData);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.GET_USER_INFO,
-      });
-      setIsEdit(false);
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log('Error object:', error);
-    },
-  });
+  const { mutate: patchUserInfoMutation } = usePatchUserInfo;
 
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
