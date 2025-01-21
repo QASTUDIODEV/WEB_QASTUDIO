@@ -1,9 +1,12 @@
 import { SOCIAL } from '@/enums/enums';
 
-type TSocialPlatform = SOCIAL[];
+type TSocialPlatform = SOCIAL;
 
-function findUnlinkedSocials(linkedAccounts: SOCIAL[]): SOCIAL[] {
-  const allSocialPlatforms: TSocialPlatform = [SOCIAL.GITHUB, SOCIAL.GOOGLE, SOCIAL.KAKAO];
+function findUnlinkedSocials(linkedAccounts: TSocialPlatform[]): TSocialPlatform[] {
+  const allSocialPlatforms: TSocialPlatform[] = Object.values(SOCIAL);
+  if (!Array.isArray(linkedAccounts)) {
+    return allSocialPlatforms;
+  }
   return allSocialPlatforms.filter((platform) => !linkedAccounts.includes(platform));
 }
 
