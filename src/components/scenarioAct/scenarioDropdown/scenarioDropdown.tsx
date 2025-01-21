@@ -16,7 +16,7 @@ export default function ScenarioDropdown() {
 
   return (
     <S.Container>
-      <S.ScenarioHeader onClick={toggleDropdown}>
+      <S.ScenarioHeader onClick={toggleDropdown} $isOpen={isOpen}>
         {isOpen ? <ArrowUp /> : <ArrowDown />}
         <S.Title>Memo</S.Title>
         <Play />

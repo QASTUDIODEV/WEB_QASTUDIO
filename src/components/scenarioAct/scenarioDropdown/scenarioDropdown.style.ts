@@ -6,7 +6,7 @@ export const Container = styled.div`
   width: 100%;
 `;
 
-export const ScenarioHeader = styled.div`
+export const ScenarioHeader = styled.div<{ $isOpen: boolean }>`
   height: 56px;
   box-sizing: border-box;
   width: 100%;
@@ -15,6 +15,11 @@ export const ScenarioHeader = styled.div`
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+  ${({ $isOpen }) =>
+    $isOpen &&
+    `
+      background: linear-gradient(76deg, #001945 0%, #000714 100.13%);
+    `}
 `;
 
 export const Title = styled.div`
