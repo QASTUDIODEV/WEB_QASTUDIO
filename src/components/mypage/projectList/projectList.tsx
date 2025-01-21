@@ -50,7 +50,7 @@ export default function ProjectList() {
               <S.TH>Last Modified Date</S.TH>
             </tr>
           </thead>
-          <S.TBody>
+          <tbody>
             {projectsData?.map((project: TUserProjectListResponse) => (
               <Project
                 key={project.projectId}
@@ -61,7 +61,7 @@ export default function ProjectList() {
                 onClick={() => navigate(`/project/information/${project.projectId}`)}
               />
             ))}
-          </S.TBody>
+          </tbody>
         </S.Table>
       </S.TableWrapper>
 
