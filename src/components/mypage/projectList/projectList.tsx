@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
@@ -27,7 +27,11 @@ export default function ProjectList({ setProjectNum }: TProjectListProps) {
   });
 
   const projectsData = data?.result.userProjectList;
-  setProjectNum(data?.result.totalElements || 0);
+
+  useEffect(() => {
+    setProjectNum(data?.result.totalElements || 0);
+  }, [data]);
+
   const goToNextPage = () => {
     if (!data?.result.isLast) {
       setCurrentPage((prevPage) => prevPage + 1);
