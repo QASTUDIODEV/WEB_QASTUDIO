@@ -3,20 +3,26 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TMyProfileValues, TSocialPlatform } from '@/types/mypage/mypage';
+import type { TMyProfileValues } from '@/types/mypage/mypage';
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { myPageScehma } from '@/utils/validate';
+import { queryClient } from '@/apis/queryClient';
+import { patchUserInfo } from '@/apis/userController/userController';
 
+import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
 import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
+import useGetUserInfo from '@/hooks/mypage/useGetUserInfo';
 
+import { InputModule } from '@/components/auth/module/module';
 import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import Button from '@/components/common/button/button';
 import Profile from '@/components/common/profile/profile';
 
 import * as S from './MyProfile.style';
-import { InputModule } from '../../auth/module/module';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Done from '@/assets/icons/done.svg?react';
@@ -25,8 +31,11 @@ import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
-  // const { userData } = useGetUserInfo();
-  const socialLogin: TSocialPlatform[] = ['github', 'kakao']; // 수정 예정
+  const { data: userData, isLoading } = useGetUserInfo();
+  const [profilePreview, setProfilePreview] = useState<string>('');
+  const [bannerPreview, setBannerPreview] = useState<string>('');
+
+  const socialLogin: SOCIAL[] = userData?.result.account as SOCIAL[];
   const unlinkedSocials = findUnlinkedSocials(socialLogin);
 
   const {
@@ -38,11 +47,6 @@ export default function MyProfile() {
   } = useForm<TMyProfileValues>({
     mode: 'onChange',
     resolver: zodResolver(myPageScehma),
-    defaultValues: {
-      nickname: '닉네임',
-      profileImage: '',
-      bannerImage: '',
-    },
   });
 
   const watchedBannerUrl = useWatch({
@@ -90,20 +94,58 @@ export default function MyProfile() {
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'banner' | 'profile') => {
     const file = e.target.files?.[0];
+
     if (file) {
       const data = await handleImageUpload(file);
-
       if (type === 'banner' && data !== undefined) {
-        setValue('bannerImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
+        setBannerPreview(data.keyName);
+        setValue('bannerImage', data.keyName);
       } else if (type === 'profile' && data !== undefined) {
-        setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
+        setProfilePreview(data.keyName);
+        setValue('profileImage', data.keyName);
       }
     }
   };
 
+  const { mutate: patchUserInfoMutation } = useCustomMutation({
+    mutationFn: async ({ nickname, profileImage, bannerImage }: { nickname: string; profileImage?: string; bannerImage?: string }) => {
+      const updateData: { nickname: string; profileImage?: string; bannerImage?: string } = {
+        nickname: nickname,
+      };
+      if (profileImage) updateData.profileImage = profileImage;
+      if (bannerImage) updateData.bannerImage = bannerImage;
+
+      return patchUserInfo(updateData);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.GET_USER_INFO,
+      });
+      setIsEdit(false);
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log('Error object:', error);
+    },
+  });
+
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
-    console.log(data);
     setIsEdit(false);
+    setBannerPreview('');
+    setProfilePreview('');
+    const updateData: { nickname: string; profileImage?: string; bannerImage?: string } = { nickname: data.nickname };
+
+    if (watchedProfileUrl !== userData?.result.profileImage) {
+      updateData.profileImage = watchedProfileUrl;
+    } else {
+      updateData.profileImage = userData.result.profileImage.split('aws.com/')[1];
+    }
+    if (watchedBannerUrl !== userData?.result.bannerImage) {
+      updateData.bannerImage = watchedBannerUrl;
+    } else {
+      updateData.bannerImage = userData.result.bannerImage.split('aws.com/')[1];
+    }
+    patchUserInfoMutation(updateData);
   };
 
   useEffect(() => {
@@ -119,17 +161,34 @@ export default function MyProfile() {
     };
   }, []);
 
+  useEffect(() => {
+    if (userData) {
+      setValue('nickname', userData.result.nickname);
+      setValue('profileImage', userData.result.profileImage);
+      setValue('bannerImage', userData.result.bannerImage);
+    }
+  }, [userData, setValue]);
+
   return (
     <>
       {isEdit ? (
         <S.ProfileWrapper>
           <input ref={inputRefs.banner} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'banner')} />
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+          {bannerPreview ? (
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} />
+          ) : (
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+          )}
+
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
                 <S.ProfileImg onClick={() => handleInputClick('profile')}>
-                  <Profile profileImg={watchedProfileUrl} />
+                  {profilePreview ? (
+                    <Profile profileImg={import.meta.env.VITE_API_IMAGE_ACCESS + profilePreview} />
+                  ) : (
+                    <Profile profileImg={watchedProfileUrl} />
+                  )}
                   <S.ProfileEditBtn>
                     <ProfileEdit />
                   </S.ProfileEditBtn>
@@ -142,12 +201,12 @@ export default function MyProfile() {
                     errorMessage={errors.nickname?.message}
                     Name={'Nickname'}
                     inputname={'normal'}
-                    value={watchedNickname} //수정 예정
+                    value={watchedNickname}
                     top={true}
                     {...register('nickname')}
                   />
                   <S.AccoutWrapper>
-                    <S.Account>email.email.com</S.Account>
+                    <S.Account>{userData?.result.email}</S.Account>
                     <div className="socialLogoWrapper">
                       <SocialLogo gap={8} size="small" id={socialLogin} />
                     </div>
@@ -167,7 +226,7 @@ export default function MyProfile() {
                 </S.UserInfo>
               </S.ProfileUserInfo>
               <S.ButtonWrapper>
-                <Button type="small_square" color="default" disabled={!!errors.nickname?.message} icon={<Done />} onClick={handleSubmit(onSubmit)}>
+                <Button type="small_square" color="default" disabled={!!errors.nickname?.message || isLoading} icon={<Done />} onClick={handleSubmit(onSubmit)}>
                   Done
                 </Button>
               </S.ButtonWrapper>
@@ -176,17 +235,17 @@ export default function MyProfile() {
         </S.ProfileWrapper>
       ) : (
         <S.ProfileWrapper>
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+          <S.BannerImg onClick={() => handleInputClick('banner')} url={userData?.result.bannerImage} />
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
                 <S.ProfileImg>
-                  <Profile profileImg={watchedProfileUrl} />
+                  <Profile profileImg={userData?.result.profileImage} />
                 </S.ProfileImg>
                 <S.UserInfo>
-                  <span>{watchedNickname}</span>
+                  <span>{userData?.result.nickname}</span>
                   <S.AccoutWrapper>
-                    <S.Account>email.email.com</S.Account>
+                    <S.Account>{userData?.result.email}</S.Account>
                     <div className="socialLogoWrapper">
                       <SocialLogo gap={8} size="small" disable={true} id={socialLogin} />
                     </div>

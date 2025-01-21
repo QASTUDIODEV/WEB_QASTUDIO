@@ -10,6 +10,14 @@ export enum STACK {
   JS = 'js',
 }
 
+//소셜 로그인
+export enum SOCIAL {
+  KAKAO = 'KAKAO',
+  GITHUB = 'GITHUB',
+  LOCAL = 'LOCAL',
+  GOOGLE = 'GOOGLE',
+}
+
 export enum TEST_STATE {
   FAIL = 'FAIL',
   SUCCESS = 'SUCCESS',
