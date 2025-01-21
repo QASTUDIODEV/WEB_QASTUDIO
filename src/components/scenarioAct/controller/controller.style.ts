@@ -8,6 +8,7 @@ export const Container = styled.div`
   ${({ theme }) => theme.text.medium_20};
   height: 100%;
 `;
+
 export const Header = styled.div`
   padding: 20px 30px;
   display: flex;
@@ -25,4 +26,8 @@ export const ButtonContainer = styled.div`
   position: absolute;
   bottom: 31px;
   right: 30px;
+`;
+
+export const ScenarioLIst = styled.div`
+  display: flex;
 `;
