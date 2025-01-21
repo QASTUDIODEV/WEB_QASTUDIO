@@ -6,12 +6,14 @@ interface IScenario {
   createdBy: string;
   createdAt: string;
   isChecked: boolean;
+  isSelected: boolean;
 }
 
 interface ICharacter {
   id: number;
   title: string;
   isChecked: boolean;
+  isSelected: boolean;
   createdBy: string;
   createdAt: string;
   isExpanded: boolean;
@@ -30,22 +32,24 @@ const initialState: IScenarioSlice = {
       id: 1,
       title: '역할 1',
       isChecked: false,
+      isSelected: false,
       createdBy: 'User 1',
       createdAt: '8 hours ago',
       isExpanded: false,
       scenarios: [
-        { id: 1, name: 'Scenario 1', createdBy: 'User 1', createdAt: 'a few seconds ago', isChecked: false },
-        { id: 2, name: 'Scenario 2', createdBy: 'User 2', createdAt: 'a minute ago', isChecked: false },
+        { id: 1, name: 'Scenario 1', createdBy: 'User 1', createdAt: 'a few seconds ago', isChecked: false, isSelected: false },
+        { id: 2, name: 'Scenario 2', createdBy: 'User 2', createdAt: 'a minute ago', isChecked: false, isSelected: false },
       ],
     },
     {
       id: 2,
       title: '역할 2',
       isChecked: false,
+      isSelected: false,
       createdBy: 'User 3',
       createdAt: '18 hours ago',
       isExpanded: false,
-      scenarios: [{ id: 3, name: 'Scenario 3', createdBy: 'User 3', createdAt: 'a few seconds ago', isChecked: false }],
+      scenarios: [{ id: 3, name: 'Scenario 3', createdBy: 'User 3', createdAt: 'a few seconds ago', isChecked: false, isSelected: false }],
     },
   ],
 };
@@ -58,7 +62,7 @@ const characterSlice = createSlice({
     edit: (state) => {
       state.isEdit = !state.isEdit;
     },
-    // 전체 선택/선택해제
+    // 전체 체크/체크해제
     toggleAll: (state) => {
       const allChecked: boolean = state.characters.every((character) => character.isChecked); //전체 체크 여부
       state.characters.forEach((character) => {
@@ -68,7 +72,7 @@ const characterSlice = createSlice({
         });
       });
     },
-    // 역할 선택/선택해제
+    // 역할 체크/체크해제
     toggleCharacter: (state, action) => {
       const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
       if (character) {
@@ -79,7 +83,7 @@ const characterSlice = createSlice({
         });
       }
     },
-    // 시나리오 선택/선택해제
+    // 시나리오 체크/체크해제
     toggleScenario: (state, action) => {
       const { characterId, scenarioId }: { characterId: number; scenarioId: number } = action.payload;
       const character: ICharacter | undefined = state.characters.find((char) => char.id === characterId);
@@ -110,8 +114,38 @@ const characterSlice = createSlice({
         });
       });
     },
+    // 선택
+    selectEntity: (state, action) => {
+      const { characterId, scenarioId = null }: { characterId: number | null; scenarioId: number | null } = action.payload;
+
+      // 모든 캐릭터와 시나리오의 isSelected를 초기화
+      state.characters.forEach((character) => {
+        character.isSelected = false; // 캐릭터 선택 초기화
+        character.scenarios.forEach((scenario) => {
+          scenario.isSelected = false; // 시나리오 선택 초기화
+        });
+      });
+
+      // 캐릭터 선택
+      if (characterId !== null && scenarioId === null) {
+        const character = state.characters.find((char) => char.id === characterId);
+        if (character) {
+          character.isSelected = true;
+        }
+      }
+
+      // 시나리오 선택
+      if (scenarioId !== null) {
+        state.characters.forEach((character) => {
+          const scenario = character.scenarios.find((scn) => scn.id === scenarioId);
+          if (scenario) {
+            scenario.isSelected = true;
+          }
+        });
+      }
+    },
   },
 });
 
-export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks } = characterSlice.actions;
+export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = characterSlice.actions;
 export default characterSlice.reducer;

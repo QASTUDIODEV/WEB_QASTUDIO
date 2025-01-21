@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
+import ValidataionMessage from '@/components/common/input/validationMessage';
+
 import * as S from './authInput.style';
-import ValidataionMessage from '../validationMessage/validationMessage';
 
 import Eyes from '@/assets/icons/eyes.svg?react';
 

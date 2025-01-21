@@ -17,3 +17,8 @@ export enum SOCIAL {
   LOCAL = 'LOCAL',
   GOOGLE = 'GOOGLE',
 }
+
+export enum TEST_STATE {
+  FAIL = 'FAIL',
+  SUCCESS = 'SUCCESS',
+}

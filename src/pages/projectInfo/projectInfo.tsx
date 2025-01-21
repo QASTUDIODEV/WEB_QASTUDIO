@@ -97,7 +97,7 @@ export default function ProjectInfoPage() {
           <Profile />
         </S.ProfileWrapper>
         <S.ProfileName>UMC_PM_DAY</S.ProfileName>
-        <S.Wrapper top="5.6px" right="0">
+        <S.Wrapper top="5.6px" right="0" className="buttonShow">
           <Button type="normal" color="default" icon={<Goto />} iconPosition="right">
             Go to Site
           </Button>
@@ -250,7 +250,7 @@ export default function ProjectInfoPage() {
                   {a.Master && <Crown />}
                 </S.MemberBox>
                 <S.ArrowWrapper>
-                  <ArrowRight />
+                  <ArrowRight className="show" />
                 </S.ArrowWrapper>
               </S.Member>
             ))}
