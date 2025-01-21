@@ -1,6 +1,8 @@
 import { axiosInstance } from '@/apis/axiosInstance';
 
 import type {
+  TChangePasswordResponse,
+  TChangePasswordValues,
   TLoginResponse,
   TLoginValues,
   TMailSendCode,
@@ -42,4 +44,13 @@ const refresh = async () => {
   return data;
 };
 
-export { authSendEmailCode, defaultLogin, defaultSignup, getKakaoOAuth, refresh, userSetting };
+const findingSendEmailCode = async (email: TMailSendCode): Promise<TMailSendCodeResponse> => {
+  const { data } = await axiosInstance.post('/api/v0/auth/update/password/email', { email });
+  return data;
+};
+
+const changePassword = async ({ email, newPassword }: TChangePasswordValues): Promise<TChangePasswordResponse> => {
+  const { data } = await axiosInstance.post('/api/v0/auth/update/password', { email: email, newPassword: newPassword });
+  return data;
+};
+export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, getKakaoOAuth, refresh, userSetting };

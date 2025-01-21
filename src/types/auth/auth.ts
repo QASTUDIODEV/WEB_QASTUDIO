@@ -27,6 +27,10 @@ export type TUserSettingValues = {
   profileImage: string;
 };
 
+export type TChangePasswordValues = {
+  email: string;
+  newPassword: string;
+};
 export type TMailSendCode = string;
 
 export type TSignupResponse = { isSuccess: boolean; code: string; message: string };
@@ -38,3 +42,5 @@ export type TMailSendCodeResponse = TCommonResponse<{
 export type TLoginResponse = TCommonResponse<{ accessToken: string; refreshToken: string; type: string }>;
 
 export type TUserSettingResponse = { isSuccess: boolean; code: string; message: string };
+
+export type TChangePasswordResponse = { isSuccess: boolean; code: string; message: string };
