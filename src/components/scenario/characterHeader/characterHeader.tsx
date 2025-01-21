@@ -44,11 +44,11 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
-              <Calender />
+              <UserCircle />
               <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
@@ -64,11 +64,11 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
-              <Calender />
+              <UserCircle />
               <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>

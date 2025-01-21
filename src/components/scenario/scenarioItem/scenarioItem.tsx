@@ -34,11 +34,11 @@ export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemP
           </S.ScenarioItemLeftSide>
           <S.ScenarioRightSide>
             <S.Creater>
-              <Calender width={24} height={24} />
+              <UserCircle />
               <p>{scenario.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{scenario.createdAt}</p>
             </S.Elapsed>
           </S.ScenarioRightSide>
@@ -51,11 +51,11 @@ export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemP
           </S.ScenarioItemLeftSide>
           <S.ScenarioRightSide>
             <S.Creater>
-              <Calender width={24} height={24} />
+              <UserCircle />
               <p>{scenario.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{scenario.createdAt}</p>
             </S.Elapsed>
           </S.ScenarioRightSide>
