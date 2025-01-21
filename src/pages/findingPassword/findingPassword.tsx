@@ -74,7 +74,7 @@ export default function FindingPassword() {
   });
 
   const { mutate: sendCodeMutation, isPending: codePending } = useCustomMutation({
-    mutationFn: async ({ email }: { email: string }) => findingSendEmailCode(email), // 현재 사용 못합니다.
+    mutationFn: async ({ email }: { email: string }) => findingSendEmailCode(email),
     onSuccess: (data) => {
       setAuthCode(data.result.authCode);
       setStep(1);
