@@ -11,10 +11,11 @@ export const Container = styled.div<{ $isOpen: boolean }>`
     $isOpen &&
     `
       border-radius: 8px 8px 0px 0px;
+      border-bottom:none;
     `}
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<{ $isOpen: boolean }>`
   display: flex;
   padding: 10px;
   height: 47px;
@@ -27,17 +28,19 @@ export const Content = styled.div`
 export const Dropdown = styled.div`
   position: absolute;
   top: calc(100%);
-  left: 0;
-  right: 0;
+  left: -0.5px;
+  right: -0.5px;
+  width: 160px;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0px 0px 8px 8px;
   border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  border-top: none;
 `;
 
 export const Option = styled.div<{ $isSelected: boolean }>`
   padding: 10px;
   cursor: pointer;
+  border-radius: 8px;
   background: ${({ $isSelected }) => ($isSelected ? 'rgba(255, 255, 255, 0.10);' : 'inherit')};
 `;
