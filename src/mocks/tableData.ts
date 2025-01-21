@@ -71,3 +71,5 @@ export const tableData: TTableData[] = [
     action: true,
   },
 ];
+
+export const pageData = ['(1) 회원가입', '(2) 로그인', '(3) 메인'];

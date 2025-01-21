@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
@@ -17,10 +18,15 @@ import { edit, resetChecks } from '@/slices/scenarioSlice';
 
 export default function ButtonGroup() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isEdit, characters } = useSelector((state) => state.scenario);
 
   // 체크 여부 판단
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
+
+  // 선택된 역할 || 시나리오
+  const selectedCharacter = characters.find((character) => character.isSelected);
+  const selectedScenario = characters.flatMap((character) => character.scenarios).find((scenario) => scenario.isSelected);
 
   // Delete 버튼 클릭 함수
   const handleDeleteClick = (): void => {
@@ -50,7 +56,13 @@ export default function ButtonGroup() {
 
   // Play 버튼 클릭 함수
   const handlePlayClick = (): void => {
-    // 시나리오 시작 페이지로 이동하기
+    console.log(selectedCharacter?.id, selectedScenario?.id);
+    navigate(`/scenarioAct/123`, {
+      state: {
+        characterId: selectedCharacter?.id || null,
+        scenarioId: selectedScenario?.id || null,
+      },
+    });
   };
 
   // + Character 버튼 클릭 함수

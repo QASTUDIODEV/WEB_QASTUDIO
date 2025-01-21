@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
     element: <KakaoOAuthHandler />,
   },
   {
-    path: '/scenario/:projectId/:scenarioId',
+    path: '/scenarioAct/:projectId',
     element: (
       <>
         <ScenarioActPage />
