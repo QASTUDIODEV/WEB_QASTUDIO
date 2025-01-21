@@ -30,4 +30,5 @@ export const ButtonContainer = styled.div`
 
 export const ScenarioLIst = styled.div`
   display: flex;
+  flex-direction: column;
 `;

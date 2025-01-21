@@ -16,11 +16,14 @@ export default function Controller() {
         <Delete />
         <p>프로젝트 이름</p>
       </S.Header>
+
       <S.CharacterHeader>
         <p>Character</p>
         <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
       </S.CharacterHeader>
+
       <S.ScenarioLIst>
+        <ScenarioDropdown />
         <ScenarioDropdown />
       </S.ScenarioLIst>
 

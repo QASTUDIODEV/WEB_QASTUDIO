@@ -13,6 +13,7 @@ export default function ScenarioDropdown() {
         <S.Title>Memo</S.Title>
         <Play />
       </S.ScenarioHeader>
+
       <S.ActionList>
         <S.ActionDescription># 사용자가 로그인 페이지로 이동하고 로그인한다.</S.ActionDescription>
         <ActionItem />
