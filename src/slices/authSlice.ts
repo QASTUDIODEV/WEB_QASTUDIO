@@ -6,12 +6,16 @@ type TAuthState = {
   email: string | null;
   accessToken: string | null;
   refreshToken: string | null;
+  nickname: string | null;
+  profile: string | null;
 };
 
 type TLoginPayload = {
   email: string;
   accessToken: string;
   refreshToken: string;
+  nickname: string;
+  profile: string;
 };
 
 const initialState = {
@@ -19,6 +23,8 @@ const initialState = {
   email: null,
   accessToken: null,
   refreshToken: null,
+  profile: null,
+  nickname: null,
 };
 
 const authSlice = createSlice({
@@ -32,11 +38,18 @@ const authSlice = createSlice({
       state.email = action.payload.email;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.profile = action.payload.profile;
+      state.nickname = action.payload.nickname;
     },
     logout: (state: TAuthState) => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      (state.isAuthenticated = false), (state.email = null), (state.accessToken = null), (state.refreshToken = null);
+      (state.isAuthenticated = false),
+        (state.email = null),
+        (state.accessToken = null),
+        (state.refreshToken = null),
+        (state.nickname = null),
+        (state.profile = null);
     },
     refreshToken: (state: TAuthState, action) => {
       localStorage.setItem('accessToken', action.payload.accessToken);

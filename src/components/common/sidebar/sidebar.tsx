@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/sidebar.style';
@@ -15,6 +16,7 @@ import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import Out from '@/assets/icons/logout.svg?react';
+import { selectAuth } from '@/slices/authSlice';
 
 type TUserProfile = {
   id: number;
@@ -29,9 +31,11 @@ type TProject = {
 };
 
 export default function Sidebar() {
+  const auth = useSelector(selectAuth);
+  const nickname = auth.nickname;
   const userProfile: TUserProfile = {
     id: 1,
-    name: 'eunji',
+    name: nickname || '',
     profileImg: '/path/to/my-profile.jpg',
   };
 

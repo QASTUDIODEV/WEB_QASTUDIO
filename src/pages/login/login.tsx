@@ -45,8 +45,9 @@ export default function LoginPage() {
   const { mutate: loginMutation, isPending } = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
-      const { accessToken, refreshToken } = data.result;
-      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken }));
+      const { token, nickname, profile } = data.result;
+      const { type, accessToken, refreshToken } = token;
+      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profile: profile }));
       navigate('/project');
     },
     onError: (error) => {
