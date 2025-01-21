@@ -1,4 +1,10 @@
-import type { TGetUserInfoResponse, TPatchUserInfoResponse, TPatchUserInfoValues } from '@/types/userController/userController';
+import type {
+  TGetUserInfoResponse,
+  TGetUserProjectsResponse,
+  TGetUserProjectsValues,
+  TPatchUserInfoResponse,
+  TPatchUserInfoValues,
+} from '@/types/userController/userController';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -13,4 +19,8 @@ const patchUserInfo = async ({ nickname, profileImage, bannerImage }: TPatchUser
   return data;
 };
 
-export default { getUserInfo, patchUserInfo };
+const getUserProjectList = async ({ page }: TGetUserProjectsValues): Promise<TGetUserProjectsResponse> => {
+  const { data } = await axiosInstance.get(`/api/v0/users/projects?page=${page}`);
+  return data;
+};
+export default { getUserInfo, patchUserInfo, getUserProjectList };

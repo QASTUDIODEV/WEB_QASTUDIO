@@ -9,9 +9,9 @@ export default function CharacterList() {
 
   return (
     <div>
-      {characters.map((character, idx) => (
+      {characters.map((character) => (
         <S.CharacterItem key={character.id}>
-          <CharacterHeader characterId={character.id} idx={idx} />
+          <CharacterHeader characterId={character.id} />
           {character.isExpanded &&
             character.scenarios.map((scenario) => <ScenarioItem key={scenario.id} characterId={character.id} scenarioId={scenario.id} />)}
         </S.CharacterItem>

@@ -8,14 +8,13 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
-import { toggleExpand } from '@/slices/scenarioSlice';
+import { selectEntity, toggleExpand } from '@/slices/scenarioSlice';
 
 interface ICharacterHeaderProps {
   characterId: number;
-  idx: number;
 }
 
-export default function CharacterHeader({ characterId, idx }: ICharacterHeaderProps) {
+export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
   const dispatch = useDispatch();
 
   //시나리오 가져오기
@@ -27,6 +26,11 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
   // 펼치기 토글 함수
   const handleExpandToggle = () => {
     dispatch(toggleExpand(characterId));
+  };
+
+  //선택 함수
+  const handleSelect = () => {
+    dispatch(selectEntity({ characterId, scenarioId: null }));
   };
 
   if (!character) {
@@ -44,17 +48,17 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
-              <Calender />
+              <UserCircle />
               <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} idx={idx}>
+        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} $isSelected={character.isSelected} onClick={handleSelect}>
           <S.CharacterHeaderLeftSide>
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
               {character.isExpanded ? <ArrowUp /> : <ArrowDown />}
@@ -64,11 +68,11 @@ export default function CharacterHeader({ characterId, idx }: ICharacterHeaderPr
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
-              <Calender />
+              <UserCircle />
               <p>{character.createdBy}</p>
             </S.Creater>
             <S.Elapsed>
-              <UserCircle />
+              <Calender />
               <p>{character.createdAt}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>

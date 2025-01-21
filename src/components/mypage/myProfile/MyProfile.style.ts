@@ -32,6 +32,20 @@ const Title = styled.div`
   text-decoration-skip-ink: none;
 `;
 
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+`;
 const ProfileWrapper = styled.div`
   display: flex;
   position: relative;
@@ -249,6 +263,8 @@ const TBody = styled.tbody`
 const ProfileImg = styled.div`
   min-width: 112px;
   min-height: 112px;
+  max-width: 112px;
+  max-height: 112px;
   border-radius: 100%;
   background-color: #505050;
   ${({ theme }) => theme.align.row_center};
@@ -322,6 +338,7 @@ export {
   Container,
   Container2,
   InputValidateWrapper,
+  LoadingOverlay,
   MessageWrapper,
   PlusWrapper,
   Profile,

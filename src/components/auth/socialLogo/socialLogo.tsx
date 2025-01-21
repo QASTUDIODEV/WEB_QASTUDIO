@@ -1,3 +1,5 @@
+import { SOCIAL } from '@/enums/enums';
+
 import * as S from '@/components/auth/socialLogo/socialLogo.style';
 
 import GithubLogo from '@/assets/icons/githubLogo.svg?react';
@@ -8,7 +10,7 @@ type TSocialLogo = {
   gap: number;
   size: 'small' | 'large';
   disable?: boolean;
-  id?: ('github' | 'kakao' | 'google')[] | null;
+  id?: SOCIAL[];
 };
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
@@ -18,17 +20,17 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
     <S.Logos $gap={gap} size={size}>
       {id ? (
         <>
-          {id?.includes('google') && (
+          {id?.includes(SOCIAL.GOOGLE) && (
             <S.Logo $logotype="google" size={size} disabled={disable}>
               <GoogleLogo />
             </S.Logo>
           )}
-          {id?.includes('kakao') && (
+          {id?.includes(SOCIAL.KAKAO) && (
             <S.Logo $logotype="kakao" size={size} disabled={disable}>
               <KakaoLogo />
             </S.Logo>
           )}
-          {id?.includes('github') && (
+          {id?.includes(SOCIAL.GITHUB) && (
             <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable}>
               <GithubLogo />
             </S.Logo>
