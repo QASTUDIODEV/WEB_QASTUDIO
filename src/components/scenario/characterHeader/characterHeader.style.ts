@@ -4,7 +4,7 @@ export const CharacterHeaderLeftSide = styled.div`
   display: flex;
   gap: 8px;
 `;
-export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolean; idx?: number }>`
+export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolean; $isSelected?: boolean }>`
   display: flex;
   padding: 30px 20px;
   align-items: center;
@@ -12,10 +12,10 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
   align-self: stretch;
   justify-content: space-between;
   border-radius: 8px;
+  cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
   border-top: ${({ $isEdit }) => ($isEdit ? '1px solid rgba(217, 230, 255, 0.2)' : 'none')};
-
-  background: ${({ idx, $isChecked }) =>
-    $isChecked ? 'rgba(217, 230, 255, 0.05)' : idx === 0 ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : 'inherit'};
+  background: ${({ $isSelected, $isChecked }) =>
+    $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
 `;
 
 export const CharacterHeaderRightSide = styled.div`

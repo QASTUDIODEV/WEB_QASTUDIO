@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
-export const ScenarioItem = styled.div<{ isChecked: boolean }>`
+export const ScenarioItem = styled.div<{ $isChecked: boolean; $isSelected?: boolean; $isEdit?: boolean }>`
   display: flex;
   justify-content: space-between;
   padding: 30px 50px;
   border-radius: 4px;
-  background: ${({ isChecked }) => (isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit')};
+  background: ${({ $isSelected, $isChecked }) =>
+    $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
+  cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
 `;
 
 export const ScenarioItemLeftSide = styled.div`
