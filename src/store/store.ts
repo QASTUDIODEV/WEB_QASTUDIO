@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage';
 
 import authReducer from '@/slices/authSlice';
 import modalReducer from '@/slices/modalSlice';
+import scenarioActReducer from '@/slices/scenarioActSlice';
 import scenarioReducer from '@/slices/scenarioSlice';
 
 const rootReducer = combineReducers({
   modal: modalReducer,
   scenario: scenarioReducer,
+  scenarioAct: scenarioActReducer,
   auth: authReducer,
 });
 
