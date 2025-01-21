@@ -3,24 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
+import { STATE } from '@/constants/state/state.ts';
+
 import { useDispatch } from '@/hooks/common/useCustomRedux';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
+import SelectBox from '@/components/dashboard/selectBox/selectBox';
 import * as S from '@/components/dashboard/table/table.style';
 
+import DownArrow from '@/assets/icons/arrow_down.svg?react';
 import PreArrow from '@/assets/icons/arrow_left.svg?react';
 import NextArrow from '@/assets/icons/arrow_right.svg?react';
 import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
 import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
+import UpArrow from '@/assets/icons/arrow_up.svg?react';
 import type { TTableData } from '@/mocks/tableData';
-import { tableData } from '@/mocks/tableData';
+import { pageData, tableData } from '@/mocks/tableData';
 import { openModal } from '@/slices/modalSlice';
 
 const columnHelper = createColumnHelper<TTableData>();
 
 export default function Table() {
   const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState({
+    state: false,
+    page: false,
+    date: false,
+  });
 
   const dispatch = useDispatch();
   const [data] = useState(tableData);
@@ -40,7 +50,19 @@ export default function Table() {
 
   const columns = [
     columnHelper.accessor('date', {
-      header: 'Date',
+      header: () => (
+        <S.ButtonHeader
+          onClick={() =>
+            setIsClicked((prev) => ({
+              ...prev,
+              date: !prev.date,
+            }))
+          }
+        >
+          <p>Date</p>
+          {isClicked.date ? <UpArrow /> : <DownArrow />}
+        </S.ButtonHeader>
+      ),
       cell: (info) => info.getValue(),
       size: 400,
     }),
@@ -50,7 +72,22 @@ export default function Table() {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('page', {
-      header: 'Page',
+      header: () => (
+        <S.HeaderWrapper>
+          <S.ButtonHeader
+            onClick={() =>
+              setIsClicked((prev) => ({
+                ...prev,
+                page: !prev.page,
+              }))
+            }
+          >
+            <p>Page</p>
+            {isClicked.page ? <UpArrow /> : <DownArrow />}
+          </S.ButtonHeader>
+          {isClicked.page && <SelectBox selectList={pageData} />}
+        </S.HeaderWrapper>
+      ),
       size: 200,
       cell: (info) => info.getValue(),
     }),
@@ -60,7 +97,22 @@ export default function Table() {
       cell: (info) => <ProgressBar percent={info.getValue()} />,
     }),
     columnHelper.accessor('state', {
-      header: 'State',
+      header: () => (
+        <S.HeaderWrapper>
+          <S.ButtonHeader
+            onClick={() =>
+              setIsClicked((prev) => ({
+                ...prev,
+                state: !prev.state,
+              }))
+            }
+          >
+            <p>State</p>
+            {isClicked.state ? <UpArrow /> : <DownArrow />}
+          </S.ButtonHeader>
+          {isClicked.state && <SelectBox selectList={STATE} />}
+        </S.HeaderWrapper>
+      ),
       size: 200,
       cell: (info) => <S.State $isSuccess={info.getValue() === 'Success'}>{info.getValue()}</S.State>,
     }),

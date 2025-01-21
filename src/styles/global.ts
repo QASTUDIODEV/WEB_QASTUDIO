@@ -3,6 +3,7 @@ import { normalize } from 'styled-normalize';
 
 const GlobalStyle = createGlobalStyle`
     ${normalize}
+
     @font-face {
         font-family: 'Pretendard';
         src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -28,6 +29,10 @@ const GlobalStyle = createGlobalStyle`
     button {
         cursor: pointer;
         border: none;
+    }
+
+    li, ul {
+        list-style: none none;
     }
 `;
 

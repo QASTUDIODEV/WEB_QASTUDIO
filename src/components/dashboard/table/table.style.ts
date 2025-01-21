@@ -42,7 +42,6 @@ const TableHeader = styled.thead`
 
 const Th = styled.th`
   padding: 15px 30px;
-
   text-align: left;
 
   border-top: 1px solid rgba(32, 75, 153, 0.2);
@@ -139,4 +138,20 @@ const ArrowBox = styled(PageBtnBox)`
   padding: 0;
 `;
 
-export { Action, ArrowBox, PageBtnBox, PageNumberWrapper, State, Table, TableContainer, TableHeader, TableWrapper, Td, Th, Tr };
+const HeaderWrapper = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const ButtonHeader = styled.button`
+  width: 100%;
+
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: transparent;
+  ${({ theme }) => theme.text.medium_14};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+`;
+
+export { Action, ArrowBox, ButtonHeader, HeaderWrapper, PageBtnBox, PageNumberWrapper, State, Table, TableContainer, TableHeader, TableWrapper, Td, Th, Tr };
