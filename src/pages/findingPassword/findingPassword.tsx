@@ -64,7 +64,7 @@ export default function FindingPassword() {
       { email, newPassword: password },
       {
         onError: (error: any) => {
-          const errorPasswordMessage = error?.response?.data?.message || '비밀번호 변경 중 오류가 발생했습니다.';
+          const errorPasswordMessage = error?.response?.data?.message || 'An error occurred.';
           setPasswordErrorMessage(errorPasswordMessage);
         },
       },
