@@ -9,3 +9,8 @@ export enum STACK {
   REACT = 'react',
   JS = 'js',
 }
+
+export enum TEST_STATE {
+  FAIL = 'FAIL',
+  SUCCESS = 'SUCCESS',
+}
