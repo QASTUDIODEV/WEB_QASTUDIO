@@ -8,6 +8,7 @@ import { STATE } from '@/constants/state/state.ts';
 import { useDispatch } from '@/hooks/common/useCustomRedux';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
+import Calendar from '@/components/dashboard/calendar/calendar.tsx';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
 import SelectBox from '@/components/dashboard/selectBox/selectBox';
 import * as S from '@/components/dashboard/table/table.style';
@@ -51,17 +52,21 @@ export default function Table() {
   const columns = [
     columnHelper.accessor('date', {
       header: () => (
-        <S.ButtonHeader
-          onClick={() =>
-            setIsClicked((prev) => ({
-              ...prev,
-              date: !prev.date,
-            }))
-          }
-        >
-          <p>Date</p>
-          {isClicked.date ? <UpArrow /> : <DownArrow />}
-        </S.ButtonHeader>
+        <S.HeaderWrapper>
+          <S.ButtonHeader
+            onClick={() =>
+              setIsClicked((prev) => ({
+                ...prev,
+                date: !prev.date,
+              }))
+            }
+          >
+            <p>Date</p>
+            {isClicked.date ? <UpArrow /> : <DownArrow />}
+          </S.ButtonHeader>
+
+          {isClicked.date && <Calendar />}
+        </S.HeaderWrapper>
       ),
       cell: (info) => info.getValue(),
       size: 400,
