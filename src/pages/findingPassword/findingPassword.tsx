@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -12,6 +12,8 @@ import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
+
+import FindingPasswordStep1 from '../../components/findingPassword/findingPasswordStep1';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
@@ -34,7 +36,6 @@ type TAPIFormValues = {
 export default function FindingPassword() {
   const {
     register,
-    handleSubmit,
     control,
     setValue,
     formState: { errors, touchedFields, isValid },
@@ -52,7 +53,8 @@ export default function FindingPassword() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
-
+  const methods = useForm();
+  const { handleSubmit } = methods;
   const watchedPassword = useWatch({
     control,
     name: 'password',
@@ -181,62 +183,66 @@ export default function FindingPassword() {
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
-      <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}>
-        {(step === 0 || step === 1) && (
-          <>
-            <InputModule
-              top={true}
-              inputname="email"
-              Name="Email"
-              span="Email"
-              btnName="Send"
-              disabled={codePending}
-              handleSendCode={handleSendCode}
-              touched={touchedFields.email}
-              pending={codePending}
-              valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
-              errorMessage={errors.email?.message || emailErrorMessage}
-              {...register('email')}
+      <FormProvider {...methods}>
+        {/* <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}> */}
+        <S.Form onKeyDown={(e) => handleKeyDown(e)}>
+          {(step === 0 || step === 1) && (
+            <>
+              {/* <FindingPasswordStep1 setStep={setStep} /> */}
+              <InputModule
+                top={true}
+                inputname="email"
+                Name="Email"
+                span="Email"
+                btnName="Send"
+                disabled={codePending}
+                handleSendCode={handleSendCode}
+                touched={touchedFields.email}
+                pending={codePending}
+                valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+                errorMessage={errors.email?.message || emailErrorMessage}
+                {...register('email')}
+              />
+            </>
+          )}
+          {step === 1 && (
+            <CodeModule
+              touched={touchedFields.code}
+              valid={touchedFields.code && !errors.code?.message}
+              errorMessage={errors.code?.message}
+              Name={'Code'}
+              codeverify={codeverify}
+              handleVerifyCode={handleVerifyCode}
+              {...register('code')}
             />
-          </>
-        )}
-        {step === 1 && (
-          <CodeModule
-            touched={touchedFields.code}
-            valid={touchedFields.code && !errors.code?.message}
-            errorMessage={errors.code?.message}
-            Name={'Code'}
-            codeverify={codeverify}
-            handleVerifyCode={handleVerifyCode}
-            {...register('code')}
-          />
-        )}
-        {step === 2 && (
-          <>
-            <InputModule
-              top={false}
-              touched={touchedFields.password}
-              valid={touchedFields.password && !errors.password?.message && !passwordErrorMessage}
-              errorMessage={errors.password?.message || passwordErrorMessage}
-              Name={'Password'}
-              inputname={'password'}
-              span={'New Password'}
-              {...register('password')}
-            />
-            <InputModule
-              top={false}
-              touched={touchedFields.repassword}
-              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
-              errorMessage={errors.repassword?.message || errorMessage}
-              Name={'Password'}
-              inputname={'password'}
-              span={'Re-enter Password'}
-              {...register('repassword')}
-            />
-            <AuthButton disabled={!isValid || !passwordMatch || !!passwordErrorMessage}>Go to the login</AuthButton>
-          </>
-        )}
-      </S.Form>
+          )}
+          {step === 2 && (
+            <>
+              <InputModule
+                top={false}
+                touched={touchedFields.password}
+                valid={touchedFields.password && !errors.password?.message && !passwordErrorMessage}
+                errorMessage={errors.password?.message || passwordErrorMessage}
+                Name={'Password'}
+                inputname={'password'}
+                span={'New Password'}
+                {...register('password')}
+              />
+              <InputModule
+                top={false}
+                touched={touchedFields.repassword}
+                valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+                errorMessage={errors.repassword?.message || errorMessage}
+                Name={'Password'}
+                inputname={'password'}
+                span={'Re-enter Password'}
+                {...register('repassword')}
+              />
+              <AuthButton disabled={!isValid || !passwordMatch || !!passwordErrorMessage}>Go to the login</AuthButton>
+            </>
+          )}
+        </S.Form>
+      </FormProvider>
 
       <S.BackButton onClick={() => navigate(-1)}>
         <ArrowLeft style={{ width: '24px', height: '24px' }} />
