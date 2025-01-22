@@ -10,6 +10,7 @@ import AddProjectPage from '@/pages/addProject/addProject';
 import DashboardPage from '@/pages/dashboard/dashboard';
 import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
+import LoginRedirect from '@/pages/loginRedirect/loginRedirect';
 import MyPage from '@/pages/mypage/mypage';
 import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
 import ScenarioPage from '@/pages/scenario/scenario';
@@ -39,7 +40,10 @@ export const router = createBrowserRouter([
     ),
     children: [{ index: true, element: <MyPage /> }],
   },
-
+  {
+    path: '/login/success',
+    element: <LoginRedirect />,
+  },
   {
     path: `/`,
     element: (

@@ -4,6 +4,7 @@ import { refresh } from './auth/auth';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(

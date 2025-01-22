@@ -14,6 +14,9 @@ type TSocialLogo = {
 };
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
+  const handleKakaoLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/kakao`;
+  };
   return (
     <S.Logos $gap={gap} size={size}>
       {id ? (
@@ -40,7 +43,7 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
             <GoogleLogo />
           </S.Logo>
 
-          <S.Logo $logotype="kakao" size={size} disabled={disable}>
+          <S.Logo $logotype="kakao" size={size} disabled={disable} onClick={handleKakaoLogin}>
             <KakaoLogo />
           </S.Logo>
 
