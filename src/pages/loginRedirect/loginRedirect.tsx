@@ -3,31 +3,27 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import getCookie from '@/utils/getCookie';
 
-const LOGIN_HANDLED_KEY = 'loginHandled';
-const ACCESS_TOKEN_KEY = 'accessToken';
-const REFRESH_TOKEN_KEY = 'refreshToken';
-
 function LoginRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    if (!sessionStorage.getItem(LOGIN_HANDLED_KEY)) {
+    if (!sessionStorage.getItem('loginHandled')) {
       const urlParams = new URLSearchParams(location.search);
       const nickname = urlParams.get('nickname');
+      const accessToken = getCookie('accessToken');
+      const refreshToken = getCookie('refreshToken');
+
+      if (accessToken && refreshToken) {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
 
       if (!nickname) {
-        // sessionStorage.setItem(LOGIN_HANDLED_KEY, 'true');
+        sessionStorage.setItem('loginHandled', 'true');
         navigate('/signup/userSetting');
         return;
       } else if (nickname !== '') {
-        sessionStorage.setItem(LOGIN_HANDLED_KEY, 'true');
-        const accessToken = getCookie(ACCESS_TOKEN_KEY);
-        const refreshToken = getCookie(REFRESH_TOKEN_KEY);
-        console.log();
-        if (accessToken && refreshToken) {
-          localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-          localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-        }
+        sessionStorage.setItem('loginHandled', 'true');
         navigate('/project');
         return;
       } else {

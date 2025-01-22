@@ -3,7 +3,6 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import getCookie from '@/utils/getCookie';
 import { userSettingSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
@@ -35,13 +34,7 @@ export default function UserSetting() {
   });
 
   const contentInputRef = useRef<HTMLInputElement | null>(null);
-  const accessToken = getCookie('accessToken');
-  const refreshToken = getCookie('refreshToken');
 
-  if (accessToken && refreshToken) {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-  }
   const handleInputClick = (e: React.MouseEvent) => {
     e.preventDefault(); // 클릭 시 기본 동작을 방지
     contentInputRef.current?.click();
