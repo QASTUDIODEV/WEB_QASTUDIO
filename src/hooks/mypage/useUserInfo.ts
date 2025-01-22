@@ -13,7 +13,6 @@ export default function useUserInfo() {
         queryKey: QUERY_KEYS.GET_USER_INFO,
       });
     },
-    onError: () => {},
   });
   return { useGetUserInfo, usePatchUserInfo };
 }

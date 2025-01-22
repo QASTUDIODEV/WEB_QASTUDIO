@@ -6,15 +6,15 @@ import { useCoreMutation } from '../common/customQuery';
 
 export default function useUserAuth() {
   const navigate = useNavigate();
-  const useSendSignupCode = useCoreMutation(authSendEmailCode, {});
-  const useDefaultLogin = useCoreMutation(defaultLogin, {});
-  const useDefaultSignup = useCoreMutation(defaultSignup, {});
+  const useSendSignupCode = useCoreMutation(authSendEmailCode);
+  const useDefaultLogin = useCoreMutation(defaultLogin);
+  const useDefaultSignup = useCoreMutation(defaultSignup);
   const useChangePassword = useCoreMutation(changePassword, {
     onSuccess: () => {
       navigate('/');
     },
   });
-  const useSendFindingCode = useCoreMutation(findingSendEmailCode, {});
+  const useSendFindingCode = useCoreMutation(findingSendEmailCode);
   const useSettingUserInfo = useCoreMutation(userSetting, {
     onSuccess: () => {
       navigate('/project');
