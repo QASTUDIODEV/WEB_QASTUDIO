@@ -59,10 +59,15 @@ const authSlice = createSlice({
       state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
     },
+    reset: () => {
+      initialState;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+    },
   },
 });
 
-export const { login, logout, refreshToken, changeUserInfo } = authSlice.actions;
+export const { login, logout, refreshToken, changeUserInfo, reset } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;
