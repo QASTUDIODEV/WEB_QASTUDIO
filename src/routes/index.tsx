@@ -7,10 +7,6 @@ import ModalProvider from '@/components/common/modalProvider/modalProvider';
 import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
 import AddProjectPage from '@/pages/addProject/addProject';
-import BasicOAuthHandler from '@/pages/auth/basicOAuth';
-import GithubOAuthHandler from '@/pages/auth/githubOAuth';
-import GoogleOAuthHandler from '@/pages/auth/googleOAuth';
-import KakaoOAuthHandler from '@/pages/auth/kakaoOAuth';
 import DashboardPage from '@/pages/dashboard/dashboard';
 import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
@@ -30,22 +26,6 @@ function ProtectedRoute({ children }: PropsWithChildren) {
 // 개발 편의를 위해 지금은 ProtectedRoute를 씌어놓지는 않겠습니다..!
 
 export const router = createBrowserRouter([
-  {
-    path: '/auth/github-oauth',
-    element: <GithubOAuthHandler />,
-  },
-  {
-    path: '/auth/google-oauth',
-    element: <GoogleOAuthHandler />,
-  },
-  {
-    path: '/auth/basic-oauth',
-    element: <BasicOAuthHandler />,
-  },
-  {
-    path: '/auth/kakao-oauth',
-    element: <KakaoOAuthHandler />,
-  },
   {
     path: '/scenarioAct/:projectId',
     element: <ScenarioActPage />,
