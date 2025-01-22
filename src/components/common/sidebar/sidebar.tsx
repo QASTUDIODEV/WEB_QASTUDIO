@@ -33,10 +33,11 @@ type TProject = {
 export default function Sidebar() {
   const auth = useSelector(selectAuth);
   const nickname = auth.nickname;
+  const profile = auth.profileImage;
   const userProfile: TUserProfile = {
     id: 1,
     name: nickname || '',
-    profileImg: '/path/to/my-profile.jpg',
+    profileImg: profile || '',
   };
 
   const [projects, setProjects] = useState<TProject[]>([
@@ -94,7 +95,7 @@ export default function Sidebar() {
               <S.Profile>
                 <S.SemiBox>
                   <S.ProfileWrapper className="show project">
-                    <Profile />
+                    <Profile profileImg={profile || ''} />
                   </S.ProfileWrapper>
                   <S.ProfileName className="menu">{userProfile.name}</S.ProfileName>
                 </S.SemiBox>

@@ -7,7 +7,7 @@ type TAuthState = {
   accessToken: string | null;
   refreshToken: string | null;
   nickname: string | null;
-  profile: string | null;
+  profileImage: string | null;
 };
 
 type TLoginPayload = {
@@ -15,7 +15,7 @@ type TLoginPayload = {
   accessToken: string;
   refreshToken: string;
   nickname: string;
-  profile: string;
+  profileImage: string;
 };
 
 const initialState = {
@@ -23,7 +23,7 @@ const initialState = {
   email: null,
   accessToken: null,
   refreshToken: null,
-  profile: null,
+  profileImage: null,
   nickname: null,
 };
 
@@ -38,7 +38,7 @@ const authSlice = createSlice({
       state.email = action.payload.email;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
-      state.profile = action.payload.profile;
+      state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
     },
     logout: (state: TAuthState) => {
@@ -49,11 +49,16 @@ const authSlice = createSlice({
         (state.accessToken = null),
         (state.refreshToken = null),
         (state.nickname = null),
-        (state.profile = null);
+        (state.profileImage = null);
     },
     refreshToken: (state: TAuthState, action) => {
       localStorage.setItem('accessToken', action.payload.accessToken);
       state.accessToken = action.payload.accessToken;
+    },
+    changeUserInfo: (state: TAuthState, action) => {
+      //feature/#107 머지 후 수정하겠습니다
+      state.profileImage = action.payload.profileImage;
+      state.nickname = action.payload.nickname;
     },
   },
 });

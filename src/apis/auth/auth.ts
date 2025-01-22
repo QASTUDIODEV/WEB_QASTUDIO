@@ -18,9 +18,17 @@ const defaultSignup = async ({ email, password }: TSignupValues): Promise<TSignu
   return data;
 };
 
-const getKakaoOAuth = async (code: string) => {
-  const url = `${import.meta.env.VITE_API_BASE_URL}/api/auth/kakao-oauth?code=${code}`;
-  const { data } = await axiosInstance.get(url);
+const getKakaoOAuth = async () => {
+  const { data } = await axiosInstance.get('/api/v0/auth/login/kakao');
+  return data;
+};
+const getGoogleOAuth = async () => {
+  const { data } = await axiosInstance.get('/api/v0/auth/login/google');
+  return data;
+};
+
+const getGithubOAuth = async () => {
+  const { data } = await axiosInstance.get('/api/v0/auth/login/github');
   return data;
 };
 
@@ -53,4 +61,15 @@ const changePassword = async ({ email, newPassword }: TChangePasswordValues): Pr
   const { data } = await axiosInstance.post('/api/v0/auth/update/password', { email: email, newPassword: newPassword });
   return data;
 };
-export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, getKakaoOAuth, refresh, userSetting };
+export {
+  authSendEmailCode,
+  changePassword,
+  defaultLogin,
+  defaultSignup,
+  findingSendEmailCode,
+  getGithubOAuth,
+  getGoogleOAuth,
+  getKakaoOAuth,
+  refresh,
+  userSetting,
+};

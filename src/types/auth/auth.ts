@@ -45,7 +45,7 @@ export type TToken = {
   refreshToken: string;
 };
 
-export type TLoginResponse = TCommonResponse<{ token: TToken; nickname: string; profile: string }>;
+export type TLoginResponse = TCommonResponse<{ token: TToken; nickname: string; profileImage: string }>;
 
 export type TUserSettingResponse = { isSuccess: boolean; code: string; message: string };
 
