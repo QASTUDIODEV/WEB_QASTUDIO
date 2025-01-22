@@ -15,6 +15,7 @@ interface IScenario {
   scenarioId: number;
   name: string;
   isOpen: boolean;
+  lastActionId: number | null;
   actions: IAction[];
 }
 
@@ -33,6 +34,7 @@ const initialState: IScenarioActSlice = {
       scenarioId: 1,
       name: 'Scenario 1',
       isOpen: false,
+      lastActionId: 1,
       actions: [
         {
           actionId: 1,
@@ -54,6 +56,7 @@ const initialState: IScenarioActSlice = {
       scenarioId: 2,
       name: 'Scenario 2',
       isOpen: false,
+      lastActionId: 3,
       actions: [
         {
           actionId: 3,
