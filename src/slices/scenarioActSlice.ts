@@ -1,12 +1,14 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { ACTION_STATE } from '@/enums/enums';
+
 interface IAction {
   actionId: number;
   name: string;
   locator: string;
   action: string;
-  state: 'error' | 'success' | 'unverified';
+  state: ACTION_STATE;
 }
 
 interface IScenario {
@@ -22,6 +24,7 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
 }
 
+// 초기 상태
 const initialState: IScenarioActSlice = {
   characterId: 1,
   title: '역할 1',
@@ -31,15 +34,35 @@ const initialState: IScenarioActSlice = {
       name: 'Scenario 1',
       isOpen: false,
       actions: [
-        { actionId: 1, name: '액션1', locator: 'css_selector', action: 'testuser1@example.com', state: 'error' },
-        { actionId: 2, name: '액션2', locator: 'css_selector', action: 'testuser2@example.com', state: 'success' },
+        {
+          actionId: 1,
+          name: '액션1',
+          locator: 'css_selector',
+          action: 'testuser1@example.com',
+          state: ACTION_STATE.ERROR,
+        },
+        {
+          actionId: 2,
+          name: '액션2',
+          locator: 'css_selector',
+          action: 'testuser2@example.com',
+          state: ACTION_STATE.SUCCESS,
+        },
       ],
     },
     {
       scenarioId: 2,
       name: 'Scenario 2',
       isOpen: false,
-      actions: [{ actionId: 3, name: '액션3', locator: 'css_selector', action: 'testuser3@example.com', state: 'unverified' }],
+      actions: [
+        {
+          actionId: 3,
+          name: '액션3',
+          locator: 'css_selector',
+          action: 'testuser3@example.com',
+          state: ACTION_STATE.UNVERIFIED,
+        },
+      ],
     },
   ],
 };
@@ -60,15 +83,8 @@ const scenarioActSlice = createSlice({
         }
       });
     },
-
-    // 시나리오 초기화
-    resetScenarios: (state) => {
-      state.scenarios.forEach((scenario) => {
-        scenario.isOpen = false; // 모든 시나리오의 선택 상태를 초기화
-      });
-    },
   },
 });
 
-export const { openScenario, resetScenarios } = scenarioActSlice.actions;
+export const { openScenario } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

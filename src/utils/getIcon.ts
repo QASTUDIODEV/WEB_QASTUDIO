@@ -6,4 +6,10 @@ export function getIcon<T extends string>(map: Record<T, React.FunctionComponent
   return Icon ? React.createElement(Icon) : null;
 }
 
-// getIcon(deviceIconMap, device)
+/* 사용예시:
+const iconMap = {
+  [ACTION_STATE.SUCCESS]: CheckCircle,
+  [ACTION_STATE.ERROR]: FailCircle,
+  [ACTION_STATE.UNVERIFIED]: null, 
+};
+getIcon(iconMap, action.state) */
