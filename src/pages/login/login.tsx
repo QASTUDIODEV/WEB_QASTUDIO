@@ -1,12 +1,12 @@
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 
 import { loginSchema } from '@/utils/validate';
-import { defaultLogin } from '@/apis/auth/auth';
+
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -28,7 +28,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    control,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -37,26 +36,22 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const watchedEmail = useWatch({
-    control,
-    name: 'email',
-  });
+  const { useDefaultLogin } = useUserAuth();
 
-  const { mutate: loginMutation, isPending } = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
-    onSuccess: (data) => {
-      const { token, nickname, profileImage } = data.result;
-      const { accessToken, refreshToken } = token;
-      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
-      navigate('/project');
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { mutate: loginMutate, isPending } = useDefaultLogin;
 
-  const onSubmit: SubmitHandler<TFormValues> = async (data) => {
-    loginMutation({ email: data.email, password: data.password });
+  const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    loginMutate(
+      { email: submitData.email, password: submitData.password },
+      {
+        onSuccess: (data, variables) => {
+          navigate('/project');
+          const { token, nickname, profileImage } = data.result;
+          const { accessToken, refreshToken } = token;
+          dispatch(login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
+        },
+      },
+    );
   };
 
   return (

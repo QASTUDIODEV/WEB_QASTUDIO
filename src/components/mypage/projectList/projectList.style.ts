@@ -21,7 +21,7 @@ const ProjectList = styled.div`
   @media (max-width: 1129px) {
     height: 340px;
   }
-  @media (max-width: 1088px), (max-width: 1050px), (max-width: 1025px), (max-width: 1025px) {
+  @media (max-width: 1088px) {
     flex-direction: column;
     height: 380px;
     overflow-x: hidden;
@@ -29,8 +29,19 @@ const ProjectList = styled.div`
   @media (max-width: 1024px) {
     height: 340px;
   }
-  @media (max-width: 847px) {
+  @media (max-width: 934px) {
     width: 100%;
+    height: 320px;
+    margin: 0;
+  }
+  @media (max-width: 914px) {
+    width: 100%;
+    height: 360px;
+    margin: 0;
+  }
+  @media (max-width: 870px) {
+    width: 100%;
+    height: 380px;
     margin: 0;
   }
 `;
@@ -80,10 +91,6 @@ const Buttons = styled.div`
   }
 `;
 
-const TBody = styled.tbody`
-  gap: 8px;
-`;
-
 const Button = styled.div<{ $disable: boolean }>`
   &:hover {
     cursor: ${(props) => (props.$disable ? 'default' : 'pointer')};
@@ -94,4 +101,4 @@ const Button = styled.div<{ $disable: boolean }>`
   }
 `;
 
-export { Button, Buttons, ProjectList, Table, TableWrapper, TBody, TH };
+export { Button, Buttons, ProjectList, Table, TableWrapper, TH };

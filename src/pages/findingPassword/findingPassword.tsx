@@ -7,7 +7,7 @@ import type { z } from 'zod';
 
 import { findingSchema } from '@/utils/validate';
 
-import useChagePassword from '@/hooks/auth/useChangePassword';
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import FindingPasswordStep1 from '@/components/findingPassword/findingPasswordStep1';
 import FindingPasswordStep2 from '@/components/findingPassword/findingPasswordStep2';
@@ -34,8 +34,8 @@ export default function FindingPassword() {
   const navigate = useNavigate();
   const methods = useForm<TField>();
   const { handleSubmit } = methods;
-
-  const { mutate: changePasswordMutation } = useChagePassword();
+  const { useChangePassword } = useUserAuth();
+  const { mutate: changePasswordMutation } = useChangePassword;
 
   const watchedPassword = useWatch({
     control,
@@ -61,9 +61,9 @@ export default function FindingPassword() {
     const { email, password } = data;
 
     changePasswordMutation(
-      { email, newPassword: password },
+      { email: email, newPassword: password },
       {
-        onError: (error: any) => {
+        onError: (error) => {
           const errorPasswordMessage = error?.response?.data?.message || 'An error occurred.';
           setPasswordErrorMessage(errorPasswordMessage);
         },

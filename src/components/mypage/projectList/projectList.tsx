@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
-import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { getUserProjectList } from '@/apis/userController/userController';
+import useProjects from '@/hooks/project/useProject';
 
 import Project from '@/components/mypage/project/project';
 
@@ -14,16 +12,20 @@ import * as S from './projectList.style';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function ProjectList() {
+type TProjectListProps = {
+  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+};
+export default function ProjectList({ setProjectNum }: TProjectListProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const { data } = useQuery({
-    queryKey: QUERY_KEYS.GET_USER_PROJECT_LIST(currentPage),
-    queryFn: () => getUserProjectList({ page: currentPage }),
-    placeholderData: keepPreviousData,
-  });
+  const { useGetMypageProjects } = useProjects(currentPage);
+  const { data } = useGetMypageProjects;
 
   const projectsData = data?.result.userProjectList;
+
+  useEffect(() => {
+    setProjectNum(data?.result.totalElements || 0);
+  }, [data]);
 
   const goToNextPage = () => {
     if (!data?.result.isLast) {
@@ -50,7 +52,7 @@ export default function ProjectList() {
               <S.TH>Last Modified Date</S.TH>
             </tr>
           </thead>
-          <S.TBody>
+          <tbody>
             {projectsData?.map((project: TUserProjectListResponse) => (
               <Project
                 key={project.projectId}
@@ -61,7 +63,7 @@ export default function ProjectList() {
                 onClick={() => navigate(`/project/information/${project.projectId}`)}
               />
             ))}
-          </S.TBody>
+          </tbody>
         </S.Table>
       </S.TableWrapper>
 

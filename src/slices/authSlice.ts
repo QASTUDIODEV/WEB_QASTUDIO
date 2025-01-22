@@ -56,14 +56,13 @@ const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
     },
     changeUserInfo: (state: TAuthState, action) => {
-      //feature/#107 머지 후 수정하겠습니다
       state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
     },
   },
 });
 
-export const { login, logout, refreshToken } = authSlice.actions;
+export const { login, logout, refreshToken, changeUserInfo } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;
