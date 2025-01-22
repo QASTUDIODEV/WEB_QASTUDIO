@@ -6,7 +6,7 @@ export const Container = styled.div`
   width: 100%;
 `;
 
-export const ScenarioHeader = styled.div<{ $isOpen: boolean }>`
+export const ScenarioHeader = styled.div<{ $isOpen: boolean | undefined }>`
   height: 56px;
   box-sizing: border-box;
   width: 100%;
@@ -29,12 +29,12 @@ export const Title = styled.div`
 `;
 
 export const ActionList = styled.div`
-  padding: 8px 30px;
   border-radius: 0 0 8px 8px;
 `;
 
 export const ActionDescription = styled.div`
   ${({ theme }) => theme.text.medium_18};
   color: ${({ theme }) => theme.colors.point.point_1};
-  margin-bottom: 8px;
+  padding: 8px 30px;
+  background-color: rgba(217, 230, 255, 0.05);
 `;

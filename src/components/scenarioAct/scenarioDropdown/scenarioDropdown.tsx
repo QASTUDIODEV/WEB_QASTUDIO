@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
 import * as S from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown.style';
@@ -6,29 +6,37 @@ import * as S from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown.s
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Play from '@/assets/icons/play.svg?react';
+import { openScenario } from '@/slices/scenarioActSlice';
 
-export default function ScenarioDropdown() {
-  const [isOpen, setIsOpen] = useState(false); // 열림/닫힘 상태 관리
+interface IScenarioDropdownProp {
+  scenarioId: number;
+}
+
+export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) {
+  const dispatch = useDispatch();
+  const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
 
   const toggleDropdown = () => {
-    setIsOpen((prev) => !prev);
+    dispatch(openScenario(scenarioId));
   };
 
   return (
     <S.Container>
-      <S.ScenarioHeader onClick={toggleDropdown} $isOpen={isOpen}>
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
-        <S.Title>Memo</S.Title>
+      <S.ScenarioHeader onClick={toggleDropdown} $isOpen={scenario?.isOpen}>
+        {scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}
+        <S.Title>{scenario?.name || '타이틀'}</S.Title>
         <Play />
       </S.ScenarioHeader>
 
-      {isOpen && (
-        <S.ActionList>
+      {scenario?.isOpen && (
+        <div>
           <S.ActionDescription># 사용자가 로그인 페이지로 이동하고 로그인한다.</S.ActionDescription>
-          <ActionItem />
-          <ActionItem />
-          <ActionItem />
-        </S.ActionList>
+          <S.ActionList>
+            {scenario.actions.map((act) => (
+              <ActionItem key={act.actionId} scenarioId={scenarioId} actionId={act.actionId} />
+            ))}
+          </S.ActionList>
+        </div>
       )}
     </S.Container>
   );

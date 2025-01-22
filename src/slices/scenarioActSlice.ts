@@ -1,54 +1,74 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-interface ICharacter {
-  id: number;
-  title: string;
-  isSelected: boolean;
-  scenarios: IScenario[];
-}
-
-interface IScenario {
-  id: number;
-  name: string;
-  isSelected: boolean;
-  actions: IAction[];
-}
-
 interface IAction {
-  id: number;
+  actionId: number;
   name: string;
   locator: string;
   action: string;
+  state: 'error' | 'success' | 'unverified';
 }
 
-interface IScenarioSlice {
-  characters: ICharacter[];
+interface IScenario {
+  scenarioId: number;
+  name: string;
+  isOpen: boolean;
+  actions: IAction[];
 }
 
-const initialState: IScenarioSlice = {
-  characters: [
+interface IScenarioActSlice {
+  characterId: number;
+  title: string;
+  scenarios: IScenario[];
+}
+
+const initialState: IScenarioActSlice = {
+  characterId: 1,
+  title: '역할 1',
+  scenarios: [
     {
-      id: 1,
-      title: '역할 1',
-      isSelected: false,
-      scenarios: [
-        { id: 1, name: 'Scenario 1', isSelected: false, actions: [{ id: 1, name: '액션1', locator: 'css_selector', action: 'testuser1@example.com' }] },
-        { id: 2, name: 'Scenario 2', isSelected: false, actions: [{ id: 2, name: '액션2', locator: 'css_selector', action: 'testuser2@example.com' }] },
+      scenarioId: 1,
+      name: 'Scenario 1',
+      isOpen: false,
+      actions: [
+        { actionId: 1, name: '액션1', locator: 'css_selector', action: 'testuser1@example.com', state: 'error' },
+        { actionId: 2, name: '액션2', locator: 'css_selector', action: 'testuser2@example.com', state: 'success' },
       ],
+    },
+    {
+      scenarioId: 2,
+      name: 'Scenario 2',
+      isOpen: false,
+      actions: [{ actionId: 3, name: '액션3', locator: 'css_selector', action: 'testuser3@example.com', state: 'unverified' }],
     },
   ],
 };
 
 const scenarioActSlice = createSlice({
-  name: 'character',
+  name: 'scenarioAct',
   initialState,
   reducers: {
-    // 편집 상태
-    edit: (state) => {
-      console.log('hi');
+    // 시나리오 선택
+    openScenario: (state, action: PayloadAction<number>) => {
+      state.scenarios.forEach((scenario) => {
+        if (scenario.scenarioId === action.payload) {
+          // 이미 열려 있다면 닫음
+          scenario.isOpen = !scenario.isOpen;
+        } else {
+          // 다른 시나리오 닫기
+          scenario.isOpen = false;
+        }
+      });
+    },
+
+    // 시나리오 초기화
+    resetScenarios: (state) => {
+      state.scenarios.forEach((scenario) => {
+        scenario.isOpen = false; // 모든 시나리오의 선택 상태를 초기화
+      });
     },
   },
 });
 
-export const { edit } = scenarioActSlice.actions;
+export const { openScenario, resetScenarios } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;
