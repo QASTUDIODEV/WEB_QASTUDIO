@@ -92,8 +92,17 @@ function SignupPage() {
   const { mutate: loginMutation } = useCustomMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
     onSuccess: (data) => {
-      const { accessToken, refreshToken } = data.result;
-      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken }));
+      const { accessToken, refreshToken } = data.result.token;
+
+      dispatch(
+        login({
+          email: watchedEmail,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          nickname: data.result.nickname,
+          profileImage: data.result.profileImage,
+        }),
+      );
       navigate('/signup/userSetting');
     },
     onError: (error) => {
