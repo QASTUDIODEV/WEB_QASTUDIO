@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema } from '@/utils/validate';
 import { authSendEmailCode, defaultLogin, defaultSignup } from '@/apis/auth/auth';
 
+import useUserAuth from '@/hooks/auth/useUserAuth';
 import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
@@ -76,59 +77,25 @@ function SignupPage() {
     name: 'code',
   });
 
-  const { mutate: sendCodeMutation, isPending: codePending } = useCustomMutation({
-    mutationFn: async ({ email }: { email: string }) => authSendEmailCode(email),
-    onSuccess: (data) => {
-      setAuthCode(data.result.authCode);
-      setStep(1);
-      setEmailErrorMessage(undefined);
-    },
-    onError: (error) => {
-      console.log('Error object:', error);
-      setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
-    },
-  });
+  const { useDefaultSignup, useSendSignupCode } = useUserAuth();
+  const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
 
-  const { mutate: loginMutation } = useCustomMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
-    onSuccess: (data) => {
-      const { accessToken, refreshToken } = data.result.token;
-
-      dispatch(
-        login({
-          email: watchedEmail,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          nickname: data.result.nickname,
-          profileImage: data.result.profileImage,
-        }),
-      );
-      navigate('/signup/userSetting');
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  let lastSignupData = { email: watchedEmail, password: watchedPassword };
-
-  const { mutate: signupMutation, isPending: signupPending } = useCustomMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => {
-      lastSignupData = { email, password };
-      return defaultSignup({ email, password });
-    },
-    onSuccess: () => {
-      loginMutation(lastSignupData);
-    },
-    onError: (error) => {
-      console.error('Signup error:', error);
-    },
-  });
+  // const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode({
+  //   onSuccess: (data) => {
+  //     setAuthCode(data.result.authCode);
+  //     setStep(1);
+  //     setEmailErrorMessage(undefined);
+  //   },
+  //   onError: (error) => {
+  //     console.log('Error object:', error);
+  //     setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
+  //   },
+  // });
 
   const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
-      sendCodeMutation({ email: watchedEmail });
+      // sendCodeMutate(watchedEmail);
     }
   };
 
@@ -141,7 +108,7 @@ function SignupPage() {
   };
 
   const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    signupMutation({ email: data.email, password: data.password });
+    signupMutate({ email: data.email, password: data.password });
     navigate('/signup/userSetting');
   };
 
@@ -205,7 +172,7 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             touched={touchedFields.email}
-            pending={codePending}
+            // pending={codePending}
             valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}

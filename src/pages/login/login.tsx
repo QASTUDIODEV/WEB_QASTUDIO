@@ -1,12 +1,11 @@
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm, useWatch } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 
 import { loginSchema } from '@/utils/validate';
-import { defaultLogin } from '@/apis/auth/auth';
+
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -16,7 +15,6 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
-import { login } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
@@ -24,11 +22,9 @@ type TFormValues = {
 };
 
 export default function LoginPage() {
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
-    control,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -37,26 +33,12 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const watchedEmail = useWatch({
-    control,
-    name: 'email',
-  });
+  const { useDefaultLogin } = useUserAuth();
 
-  const { mutate: loginMutation, isPending } = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
-    onSuccess: (data) => {
-      const { token, nickname, profileImage } = data.result;
-      const { accessToken, refreshToken } = token;
-      dispatch(login({ email: watchedEmail, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
-      navigate('/project');
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { mutate: loginMutate, isPending } = useDefaultLogin;
 
   const onSubmit: SubmitHandler<TFormValues> = async (data) => {
-    loginMutation({ email: data.email, password: data.password });
+    loginMutate({ email: data.email, password: data.password });
   };
 
   return (
