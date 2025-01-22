@@ -9,6 +9,12 @@ export enum STACK {
   REACT = 'react',
   JS = 'js',
 }
+// 액션 상태
+export enum ACTION_STATE {
+  SUCCESS = 'success',
+  ERROR = 'error',
+  UNVERIFIED = 'null',
+}
 
 //소셜 로그인
 export enum SOCIAL {
