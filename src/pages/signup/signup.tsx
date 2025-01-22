@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
-import { authSendEmailCode, defaultLogin, defaultSignup } from '@/apis/auth/auth';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
-import { useCustomMutation } from '@/hooks/common/useCustomMutation';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { CodeModule, InputModule } from '@/components/auth/module/module';
@@ -19,7 +16,6 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
-import { login } from '@/slices/authSlice';
 
 type TCodeVerify = undefined | boolean;
 
@@ -36,7 +32,9 @@ type TAPIFormValues = {
 };
 
 function SignupPage() {
-  const dispatch = useDispatch();
+  const { useDefaultSignup, useSendSignupCode, useDefaultLogin } = useUserAuth();
+  const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
+  const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode;
 
   const {
     register,
@@ -48,12 +46,16 @@ function SignupPage() {
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
   });
+
   const [step, setStep] = useState(0);
-  const [passwordMatch, setPasswordMatch] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
+
   const [AuthCode, setAuthCode] = useState('');
+
+  const [errorMessage, setErrorMessage] = useState('');
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | undefined>(undefined);
+
+  const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
+  const [passwordMatch, setPasswordMatch] = useState(false);
 
   const navigate = useNavigate();
 
@@ -77,25 +79,19 @@ function SignupPage() {
     name: 'code',
   });
 
-  const { useDefaultSignup, useSendSignupCode } = useUserAuth();
-  const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
-
-  // const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode({
-  //   onSuccess: (data) => {
-  //     setAuthCode(data.result.authCode);
-  //     setStep(1);
-  //     setEmailErrorMessage(undefined);
-  //   },
-  //   onError: (error) => {
-  //     console.log('Error object:', error);
-  //     setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
-  //   },
-  // });
-
   const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
-      // sendCodeMutate(watchedEmail);
+      sendCodeMutate(watchedEmail, {
+        onSuccess: (data) => {
+          setAuthCode(data.result.authCode);
+          setStep(1);
+          setEmailErrorMessage(undefined);
+        },
+        onError: (error) => {
+          setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
+        },
+      });
     }
   };
 
@@ -107,8 +103,16 @@ function SignupPage() {
     }
   };
 
-  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
-    signupMutate({ email: data.email, password: data.password });
+  const onSubmit: SubmitHandler<TAPIFormValues> = (submitData) => {
+    signupMutate(
+      { email: submitData.email, password: submitData.password },
+      {
+        onSuccess: (_, variables) => {
+          const { mutate: loginMutate } = useDefaultLogin;
+          loginMutate({ email: variables.email, password: variables.password });
+        },
+      },
+    );
     navigate('/signup/userSetting');
   };
 
@@ -172,7 +176,7 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             touched={touchedFields.email}
-            // pending={codePending}
+            pending={codePending}
             valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}

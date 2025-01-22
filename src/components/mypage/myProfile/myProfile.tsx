@@ -9,8 +9,7 @@ import type { SOCIAL } from '@/enums/enums';
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { myPageScehma } from '@/utils/validate';
 
-import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
+import { useImage } from '@/hooks/images/useImage';
 import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 import { InputModule } from '@/components/auth/module/module';
@@ -26,9 +25,16 @@ import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 export default function MyProfile() {
-  const [isEdit, setIsEdit] = useState(false);
+  const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
+
   const { data: userData, isLoading } = useGetUserInfo;
+  const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
+  const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
+  const { mutate: patchUserInfoMutation } = usePatchUserInfo;
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [show, setShow] = useState(false);
   const [profilePreview, setProfilePreview] = useState<string>('');
   const [bannerPreview, setBannerPreview] = useState<string>('');
 
@@ -68,44 +74,50 @@ export default function MyProfile() {
 
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [show, setShow] = useState(false);
-  const { getPresignedUrl } = useGetPresignedUrl();
-  const { uploadPresignedUrlAsync } = useUploadPresignedUrl();
 
   const handleInputClick = (type: 'banner' | 'profile') => {
     inputRefs[type].current?.click();
   };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (file: File, type: string) => {
     if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
-    try {
-      const data = await getPresignedUrl(file.name);
-      await uploadPresignedUrlAsync(data.url, file);
-      return data;
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error);
-    }
+    getPresignedUrlMutate(
+      { fileName: file.name },
+      {
+        onSuccess: (presignedUrlData) => {
+          uploadImageToPresignedUrlMutate(
+            {
+              url: presignedUrlData.result.url,
+              file: file,
+            },
+            {
+              onSuccess: () => {
+                setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + presignedUrlData.result.keyName);
+                if (type === 'banner' && presignedUrlData !== undefined) {
+                  setBannerPreview(presignedUrlData.result.keyName);
+                  setValue('bannerImage', presignedUrlData.result.keyName);
+                } else if (type === 'profile' && presignedUrlData !== undefined) {
+                  setProfilePreview(presignedUrlData.result.keyName);
+                  setValue('profileImage', presignedUrlData.result.keyName);
+                }
+              },
+            },
+          );
+        },
+      },
+    );
   };
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'banner' | 'profile') => {
     const file = e.target.files?.[0];
 
     if (file) {
-      const data = await handleImageUpload(file);
-      if (type === 'banner' && data !== undefined) {
-        setBannerPreview(data.keyName);
-        setValue('bannerImage', data.keyName);
-      } else if (type === 'profile' && data !== undefined) {
-        setProfilePreview(data.keyName);
-        setValue('profileImage', data.keyName);
-      }
+      handleImageUpload(file, type);
     }
   };
-
-  const { mutate: patchUserInfoMutation } = usePatchUserInfo;
 
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
@@ -115,12 +127,12 @@ export default function MyProfile() {
 
     if (watchedProfileUrl !== userData?.result.profileImage) {
       updateData.profileImage = watchedProfileUrl;
-    } else {
+    } else if (userData?.result.profileImage) {
       updateData.profileImage = userData.result.profileImage.split('aws.com/')[1];
     }
     if (watchedBannerUrl !== userData?.result.bannerImage) {
       updateData.bannerImage = watchedBannerUrl;
-    } else {
+    } else if (userData?.result.bannerImage) {
       updateData.bannerImage = userData.result.bannerImage.split('aws.com/')[1];
     }
     patchUserInfoMutation(updateData);

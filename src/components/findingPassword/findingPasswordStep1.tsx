@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { findingSendEmailCode } from '@/apis/auth/auth';
-
-import { useCustomMutation } from '@/hooks/common/useCustomMutation';
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import * as S from './findingPasswordStep.style';
 import { CodeModule, InputModule } from '../auth/module/module';
@@ -33,24 +31,22 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
     control,
     name: 'code',
   });
-
-  const { mutate: sendCodeMutation, isPending: codePending } = useCustomMutation({
-    mutationFn: async ({ email }: { email: string }) => findingSendEmailCode(email),
-    onSuccess: (data) => {
-      setAuthCode(data.result.authCode);
-      setStep(1);
-      setEmailErrorMessage(undefined);
-    },
-    onError: (error) => {
-      console.log('Error object:', error);
-      setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
-    },
-  });
+  const { useSendFindingCode } = useUserAuth();
+  const { mutate: sendCodeMutate, isPending: codePending } = useSendFindingCode;
 
   const handleSendCode = async () => {
     setValue('code', '');
     if (!errors.email?.message) {
-      sendCodeMutation({ email: watchedEmail });
+      sendCodeMutate(watchedEmail, {
+        onSuccess: (data) => {
+          setAuthCode(data.result.authCode);
+          setStep(1);
+          setEmailErrorMessage(undefined);
+        },
+        onError: (error) => {
+          setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
+        },
+      });
     }
   };
 

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
-import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { getUserProjectList } from '@/apis/userController/userController';
+import useProjects from '@/hooks/project/useProject';
 
 import Project from '@/components/mypage/project/project';
 
@@ -20,11 +18,8 @@ type TProjectListProps = {
 export default function ProjectList({ setProjectNum }: TProjectListProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const { data } = useQuery({
-    queryKey: QUERY_KEYS.GET_USER_PROJECT_LIST(currentPage),
-    queryFn: () => getUserProjectList({ page: currentPage }),
-    placeholderData: keepPreviousData,
-  });
+  const { useGetMypageProjects } = useProjects(currentPage);
+  const { data } = useGetMypageProjects;
 
   const projectsData = data?.result.userProjectList;
 

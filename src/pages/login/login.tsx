@@ -1,5 +1,6 @@
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -15,6 +16,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
+import { login } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
@@ -22,6 +24,7 @@ type TFormValues = {
 };
 
 export default function LoginPage() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -37,8 +40,18 @@ export default function LoginPage() {
 
   const { mutate: loginMutate, isPending } = useDefaultLogin;
 
-  const onSubmit: SubmitHandler<TFormValues> = async (data) => {
-    loginMutate({ email: data.email, password: data.password });
+  const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    loginMutate(
+      { email: submitData.email, password: submitData.password },
+      {
+        onSuccess: (data, variables) => {
+          navigate('/project');
+          const { token, nickname, profileImage } = data.result;
+          const { accessToken, refreshToken } = token;
+          dispatch(login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
+        },
+      },
+    );
   };
 
   return (

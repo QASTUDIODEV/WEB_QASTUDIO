@@ -73,7 +73,7 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
     return (
       <S.Wrapper>
         <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeverify ? true : false) : false) : undefined} ref={ref} {...rest} />
-        <S.MessageWrapper>
+        <S.MessageWrapper2>
           {touched && errorMessage ? (
             <ValidationMessage message={errorMessage} isError={!valid} />
           ) : codeverify ? (
@@ -81,7 +81,7 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
           ) : (
             codeverify === false && <ValidationMessage message={'Invalid code.'} isError={true} />
           )}
-        </S.MessageWrapper>
+        </S.MessageWrapper2>
         <S.AuthButtonWrapper>
           <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeverify={codeverify}>
             Verify

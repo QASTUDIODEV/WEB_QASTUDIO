@@ -1,24 +1,22 @@
 import axios from 'axios';
 
+import type {
+  TGetSinglePresignedUrlResponse,
+  TGetSinglePresignedUrlValue,
+  TUploadImageToPresignedUrlResponse,
+  TUploadImageToPresignedUrlValue,
+} from '@/types/images/images';
+
 import { axiosInstance } from '@/apis/axiosInstance';
 
-const uploadSingleImg = async (fileName: string) => {
-  const token = localStorage.getItem('accessToken');
-  const { data } = await axiosInstance.post(
-    '/api/v0/s3/presigned/upload',
-    { fileName },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+const getSinglePresignedUrl = async (fileName: TGetSinglePresignedUrlValue): Promise<TGetSinglePresignedUrlResponse> => {
+  const { data } = await axiosInstance.post('/api/v0/s3/presigned/upload', fileName);
   return data;
 };
 
-const uploadPresignedUrl = async (url: string, file: File) => {
-  const data = axios.put(url, file);
+const uploadImageToPresignedUrl = async ({ url, file }: TUploadImageToPresignedUrlValue): Promise<TUploadImageToPresignedUrlResponse> => {
+  const { data } = await axios.put(url, file);
   return data;
 };
 
-export { uploadPresignedUrl, uploadSingleImg };
+export { getSinglePresignedUrl, uploadImageToPresignedUrl };
