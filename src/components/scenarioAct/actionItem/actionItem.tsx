@@ -40,7 +40,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       <S.Content>
         <Globe />
         <S.ActionName>{action?.name || '액션'}</S.ActionName>
-        <Button>Navigate</Button>
+        <S.ActionType>{action?.actionType}</S.ActionType>
       </S.Content>
       {action?.state && getIcon(iconMap, action.state)}
       {isLastAction &&

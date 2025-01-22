@@ -1,22 +1,26 @@
-import { useSelector } from '@/hooks/common/useCustomRedux';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
 import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 import * as S from '@/components/scenarioAct/controller/controller.style';
+import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
 import ScenarioDropdown from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
+import { openModal } from '@/slices/modalSlice';
 
 export default function Controller() {
+  const dispatch = useDispatch();
   //시나리오 가져오기
   const scenario = useSelector((state) => state.scenarioAct);
-
+  const { isOpen } = useSelector((state) => state.modal);
   const onSelect = () => {
     console.log('ㅅㅌ됨');
   };
   return (
     <S.Container>
+      {isOpen && <ScenarioActModal />}
       <S.Header>
         <Delete />
         <p>프로젝트 이름</p>
@@ -34,7 +38,7 @@ export default function Controller() {
       </S.ScenarioLIst>
 
       <S.ButtonContainer>
-        <Button type="normal" color="gray" icon={<Add />} iconPosition="left">
+        <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => dispatch(openModal('scenarioModal'))}>
           Scenario
         </Button>
       </S.ButtonContainer>

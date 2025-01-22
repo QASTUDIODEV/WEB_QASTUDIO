@@ -44,3 +44,9 @@ export const UnderIcon = styled.div`
   bottom: -20px;
   left: 0;
 `;
+
+export const ActionType = styled.div`
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+`;
