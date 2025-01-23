@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -16,6 +17,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
+import { login } from '@/slices/authSlice.ts';
 
 type TCodeVerify = undefined | boolean;
 
@@ -33,8 +35,10 @@ type TAPIFormValues = {
 
 function SignupPage() {
   const { useDefaultSignup, useSendSignupCode, useDefaultLogin } = useUserAuth();
+  const { mutate: loginMutate } = useDefaultLogin;
   const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
   const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode;
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -108,12 +112,22 @@ function SignupPage() {
       { email: submitData.email, password: submitData.password },
       {
         onSuccess: (_, variables) => {
-          const { mutate: loginMutate } = useDefaultLogin;
-          loginMutate({ email: variables.email, password: variables.password });
+          loginMutate(
+            { email: variables.email, password: variables.password },
+            {
+              onSuccess: (data) => {
+                const { token, nickname, profileImage } = data.result;
+                const { accessToken, refreshToken } = token;
+                dispatch(
+                  login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }),
+                );
+                navigate('/signup/userSetting');
+              },
+            },
+          );
         },
       },
     );
-    navigate('/signup/userSetting');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
