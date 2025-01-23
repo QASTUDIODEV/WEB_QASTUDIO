@@ -50,7 +50,7 @@ const MessageWrapper2 = styled.div`
   z-index: 1;
 `;
 
-const NormalInputWrapper = styled.input<{ $width?: string }>`
+const NormalInputWrapper = styled.input`
   ${({ theme }) => theme.text.medium_20};
   color: ${({ theme }) => theme.colors.primary.pri_50};
   height: 64px;
@@ -65,6 +65,19 @@ const NormalInputWrapper = styled.input<{ $width?: string }>`
   }
 `;
 
-export {};
+const ThinInputWrapper = styled.input`
+  ${({ theme }) => theme.text.medium_20};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(153, 153, 153, 0.5);
+  background-color: inherit;
+  box-sizing: border-box;
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray.gray_300};
+  }
+`;
 
-export { Container, Eyes, Input, InputWrapper, MessageWrapper, MessageWrapper2, NormalInputWrapper };
+export { Container, Eyes, Input, InputWrapper, MessageWrapper, MessageWrapper2, NormalInputWrapper, ThinInputWrapper };
