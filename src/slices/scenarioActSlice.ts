@@ -41,7 +41,7 @@ const initialState: IScenarioActSlice = {
           actionId: 1,
           name: '액션1',
           actionType: ACTION_TYPE.NAVIGATE,
-          state: ACTION_STATE.ERROR,
+          state: ACTION_STATE.SUCCESS,
           locator: 'css_selector',
           action: 'testuser1@example.com',
         },
