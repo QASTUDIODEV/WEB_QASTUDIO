@@ -36,13 +36,15 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const isLastAction = lastActionId === actionId;
 
   return (
-    <S.Container state={action?.state || ACTION_STATE.UNVERIFIED} isLastAction={isLastAction}>
-      <S.Content>
-        <Globe />
-        <S.ActionName>{action?.name || '액션'}</S.ActionName>
-        <S.ActionType>{action?.actionType}</S.ActionType>
-      </S.Content>
-      {action?.state && getIcon(iconMap, action.state)}
+    <S.Container>
+      <S.Header state={action?.state || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction}>
+        <S.Content>
+          <Globe />
+          <S.ActionName>{action?.name || '액션'}</S.ActionName>
+          <S.ActionType>{action?.actionType}</S.ActionType>
+        </S.Content>
+        {action?.state && getIcon(iconMap, action.state)}
+      </S.Header>
       {isLastAction &&
         (action?.state === ACTION_STATE.SUCCESS ? (
           <S.UnderIcon>
@@ -53,6 +55,16 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             <UnderError />
           </S.UnderIcon>
         ) : null)}
+      <S.DescriptionContainer>
+        <S.DescriptionItem>
+          <S.DescriptionRow>locator</S.DescriptionRow>
+          <S.DescriptionRow>
+            <S.Input />
+            <Button color="blue">Apply</Button>
+          </S.DescriptionRow>
+        </S.DescriptionItem>
+        <S.DescriptionItem />
+      </S.DescriptionContainer>
     </S.Container>
   );
 }
