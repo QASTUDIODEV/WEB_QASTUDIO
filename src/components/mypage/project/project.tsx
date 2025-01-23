@@ -26,7 +26,6 @@ export default function Project({ id, name, participants, date, onClick }: TProj
 
     return () => window.removeEventListener('resize', checkOverflow);
   }, []);
-
   return (
     <S.TR key={id} onClick={onClick}>
       <S.TD>

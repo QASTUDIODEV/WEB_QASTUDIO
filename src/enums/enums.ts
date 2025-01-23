@@ -24,6 +24,14 @@ export enum ACTION_TYPE {
   WAITING = 'waiting',
 }
 
+//소셜 로그인
+export enum SOCIAL {
+  KAKAO = 'KAKAO',
+  GITHUB = 'GITHUB',
+  LOCAL = 'LOCAL',
+  GOOGLE = 'GOOGLE',
+}
+
 export enum TEST_STATE {
   FAIL = 'FAIL',
   SUCCESS = 'SUCCESS',

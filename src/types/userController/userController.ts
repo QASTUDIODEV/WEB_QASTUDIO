@@ -1,3 +1,5 @@
+import type { SOCIAL } from '@/enums/enums';
+
 import type { TCommonResponse } from '../common/common';
 
 export type TGetUserInfoResponse = TCommonResponse<{
@@ -6,13 +8,13 @@ export type TGetUserInfoResponse = TCommonResponse<{
   email: string;
   profileImage: string;
   bannerImage: string;
-  account: 'KAKAO' | 'GITHUB' | 'GOOGLE'[];
+  account: SOCIAL[] | undefined;
 }>;
 
 export type TPatchUserInfoValues = {
   nickname: string;
-  profileImage: string;
-  bannerImage: string;
+  profileImage?: string;
+  bannerImage?: string;
 };
 
 export type TPatchUserInfoResponse = TCommonResponse<{
@@ -21,7 +23,7 @@ export type TPatchUserInfoResponse = TCommonResponse<{
   email: string;
   profileImage: string;
   bannerImage: string;
-  account: 'KAKAO' | 'GITHUB' | 'GOOGLE'[];
+  account: SOCIAL[];
 }>;
 
 export type TGetUserProjectsValues = {
@@ -32,11 +34,11 @@ export type TUserProjectListResponse = {
   projectId: number;
   projectName: string;
   participant: number;
-  lastModifiedDate: Date;
+  lastModifiedDate: string;
 };
 
 export type TGetUserProjectsResponse = TCommonResponse<{
-  userProjectList: TUserProjectListResponse;
+  userProjectList: TUserProjectListResponse[];
   listSize: number;
   totalPage: number;
   totalElements: number;
