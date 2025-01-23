@@ -19,7 +19,9 @@ export default function ProjectStatistics() {
   const { projectName, projectImage, failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
 
   // TODO: 로딩 컴포넌트 구현 후 수정
-  if (isPending) <div>Loading...</div>;
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <S.Container>
