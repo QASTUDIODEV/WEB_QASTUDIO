@@ -8,10 +8,8 @@ import ScenarioDropdown from '@/components/scenarioAct/scenarioDropdown/scenario
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
-import { openModal } from '@/slices/modalSlice';
 
 export default function Controller() {
-  const dispatch = useDispatch();
   //시나리오 가져오기
   const scenario = useSelector((state) => state.scenarioAct);
   const { isOpen } = useSelector((state) => state.modal);
@@ -38,7 +36,7 @@ export default function Controller() {
       </S.ScenarioLIst>
 
       <S.ButtonContainer>
-        <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => dispatch(openModal('scenarioModal'))}>
+        <Button type="normal" color="gray" icon={<Add />} iconPosition="left">
           Scenario
         </Button>
       </S.ButtonContainer>
