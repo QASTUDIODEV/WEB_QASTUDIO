@@ -36,7 +36,10 @@ export const ButtonContainer = styled.div`
   bottom: 31px;
   right: 30px;
 `;
-
+export const DropdownContainer = styled.div`
+  width: 160px;
+  height: 47px;
+`;
 export const ScenarioLIst = styled.div`
   display: flex;
   flex-direction: column;

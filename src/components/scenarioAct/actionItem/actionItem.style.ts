@@ -67,6 +67,10 @@ export const DescriptionItem = styled.div`
   flex-direction: column;
   padding: 9px 50px;
 `;
+
+export const DropdownContainer = styled.div`
+  height: 33px;
+`;
 export const DescriptionRow = styled.div`
   display: flex;
   gap: 10px;

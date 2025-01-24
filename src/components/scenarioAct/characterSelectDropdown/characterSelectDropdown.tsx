@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown.style';
 
@@ -13,6 +13,7 @@ interface IDropdownProps {
 export default function CharacterSelectDropdown({ options, onSelect }: IDropdownProps) {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
   const [selectedOption, setSelectedOption] = useState(options[0]); // 선택된 옵션
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 드롭다운 열림 / 닫힘 함수
   const toggleDropdown = () => {
@@ -26,21 +27,33 @@ export default function CharacterSelectDropdown({ options, onSelect }: IDropdown
     setIsOpen(false);
   };
 
+  // 외부 클릭시 닫힘
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <S.Container $isOpen={isOpen}>
+    <S.Container $isOpen={isOpen} ref={dropdownRef}>
       <S.Content onClick={toggleDropdown} $isOpen={isOpen}>
         {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Content>
 
-      {isOpen && (
-        <S.Dropdown>
-          {options.map((option, index) => (
-            <S.Option key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption}>
-              {option}
-            </S.Option>
-          ))}
-        </S.Dropdown>
-      )}
+      <S.DropdownList $isOpen={isOpen}>
+        {options.map((option, index) => (
+          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption}>
+            {option}
+          </S.DropdownListItem>
+        ))}
+      </S.DropdownList>
     </S.Container>
   );
 }

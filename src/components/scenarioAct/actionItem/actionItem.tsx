@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
 
+import CharacterSelectDropdown from '../characterSelectDropdown/characterSelectDropdown';
+
 import ArrowRight from '@/assets/icons/arrow_right_red.svg?react';
 import CheckCircle from '@/assets/icons/check_circle.svg?react';
 import FailCircle from '@/assets/icons/fail_circle.svg?react';
@@ -65,14 +67,13 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       {isOpen && (
         <S.DescriptionContainer>
           <S.DescriptionItem>
-            <S.DescriptionRow>locator</S.DescriptionRow>
             <S.DescriptionRow>
-              <S.Input />
-              <Button color="blue">Apply</Button>
+              locator
+              <S.DropdownContainer>
+                <CharacterSelectDropdown options={['user', 'admin']} onSelect={() => {}} />
+              </S.DropdownContainer>
             </S.DescriptionRow>
-          </S.DescriptionItem>
-          <S.DescriptionItem>
-            <S.DescriptionRow>locator</S.DescriptionRow>
+
             <S.DescriptionRow>
               <S.Input />
               <Button color="blue">Apply</Button>

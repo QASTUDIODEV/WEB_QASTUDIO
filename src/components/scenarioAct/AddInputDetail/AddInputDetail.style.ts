@@ -50,3 +50,9 @@ export const AddButton = styled.div`
   background: rgba(217, 230, 255, 0.1);
   cursor: pointer;
 `;
+
+export const ButtonContainer = styled.div`
+  position: absolute;
+  bottom: 31px;
+  right: 30px;
+`;

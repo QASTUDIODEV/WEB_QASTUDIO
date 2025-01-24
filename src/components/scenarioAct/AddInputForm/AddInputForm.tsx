@@ -1,6 +1,8 @@
 import Input from '@/components/common/input/input';
 import * as S from '@/components/scenarioAct/AddInputForm/AddInputForm.style';
 
+import ThinDropdown from '../thinDropdown/thinDropdown';
+
 export default function AddInputForm() {
   return (
     <S.Container>
@@ -10,7 +12,7 @@ export default function AddInputForm() {
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Character</S.InputTitle>
-        <Input placeholder="Select a role for the scenario." type="thin" />
+        <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="Describe the scenario." />
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Description</S.InputTitle>
