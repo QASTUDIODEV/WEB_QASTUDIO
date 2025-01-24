@@ -24,6 +24,7 @@ type TFormValues = {
 };
 
 export default function LoginPage() {
+  sessionStorage.removeItem('loginHandled');
   const dispatch = useDispatch();
   const {
     register,

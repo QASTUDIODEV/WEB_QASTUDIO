@@ -50,6 +50,7 @@ const authSlice = createSlice({
         (state.refreshToken = null),
         (state.nickname = null),
         (state.profileImage = null);
+      sessionStorage.removeItem('loginHandled');
     },
     refreshToken: (state: TAuthState, action) => {
       localStorage.setItem('accessToken', action.payload.accessToken);
@@ -64,10 +65,15 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     },
+    userSetting: (state: TAuthState, action) => {
+      state.profileImage = action.payload.profileImage;
+      state.nickname = action.payload.nickname;
+      sessionStorage.removeItem('loginHandled');
+    },
   },
 });
 
-export const { login, logout, refreshToken, changeUserInfo, reset } = authSlice.actions;
+export const { login, logout, refreshToken, changeUserInfo, reset, userSetting } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

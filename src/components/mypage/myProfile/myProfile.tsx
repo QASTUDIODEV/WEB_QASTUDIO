@@ -98,7 +98,6 @@ export default function MyProfile() {
             },
             {
               onSuccess: () => {
-                setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + presignedUrlData.result.keyName);
                 if (type === 'banner' && presignedUrlData !== undefined) {
                   setBannerPreview(presignedUrlData.result.keyName);
                   setValue('bannerImage', presignedUrlData.result.keyName);
