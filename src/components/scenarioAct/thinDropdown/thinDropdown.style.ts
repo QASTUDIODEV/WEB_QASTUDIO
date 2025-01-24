@@ -3,17 +3,18 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 50px;
 `;
 
-export const DropdownHeader = styled.div`
+export const DropdownHeader = styled.div<{ $hasSelection: boolean; $isOpen: boolean }>`
   ${({ theme }) => theme.text.medium_20};
-  color: ${({ theme }) => theme.colors.gray.gray_300};
-  height: 64px;
+  color: ${({ theme, $hasSelection }) => ($hasSelection ? theme.colors.gray.gray_50 : theme.colors.gray.gray_300)};
+  height: 50px;
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(153, 153, 153, 0.5);
+  padding: 10px;
+  border-radius: ${({ $isOpen }) => ($isOpen ? '8px 8px 0 0' : '8px')};
+  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  border-bottom: ${({ $isOpen }) => ($isOpen ? 'none' : '1px solid')};
   background-color: inherit;
   box-sizing: border-box;
   cursor: pointer;
@@ -28,19 +29,19 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   left: 0;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  border: 1px solid rgba(153, 153, 153, 0.5);
-  border-radius: 0 0 4px 4px;
+  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  border-radius: 0 0 8px 8px;
   border-top: none;
   z-index: 1000;
   overflow-y: auto;
-  max-height: 128px;
+  max-height: 100px;
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   flex-direction: column;
 `;
 
 export const DropdownListItem = styled.li`
   display: flex;
-  height: 64px;
+  height: 50px;
   width: 100%;
   padding-left: 16px;
   align-items: center;
@@ -53,5 +54,4 @@ export const DropdownListItem = styled.li`
 
 export const DropdownArrow = styled.span<{ isOpen: boolean }>`
   transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0)')};
-  transition: transform 0.3s ease;
 `;

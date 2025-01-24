@@ -31,7 +31,7 @@ export default function Controller() {
   };
   return (
     <S.Container>
-      {step == 2 ? (
+      {step == 1 ? (
         /* 시나리오 실행 */
         <S.ActContainer>
           {isOpen && <ScenarioActModal />}
@@ -42,7 +42,9 @@ export default function Controller() {
 
           <S.CharacterHeader>
             <p>Character</p>
-            <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
+            <S.DropdownContainer>
+              <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
+            </S.DropdownContainer>
           </S.CharacterHeader>
 
           <S.ScenarioLIst>
@@ -66,12 +68,8 @@ export default function Controller() {
           </S.Header>
 
           <AddInputForm />
+
           <AddInputDetail />
-          <S.ButtonContainer>
-            <Button type="normal" color="gray">
-              Save
-            </Button>
-          </S.ButtonContainer>
         </S.AddContainer>
       )}
     </S.Container>

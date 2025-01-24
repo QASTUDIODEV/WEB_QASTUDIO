@@ -1,44 +1,42 @@
 import styled from 'styled-components';
 
 export const Container = styled.div<{ $isOpen: boolean }>`
-  width: 160px;
-  background: ${({ theme }) => theme.colors.primary.pri_900};
-  ${({ theme }) => theme.text.medium_18};
-  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
-  border-radius: 8px;
+  width: 100%;
   position: relative;
-  ${({ $isOpen }) =>
-    $isOpen &&
-    `
-      border-radius: 8px 8px 0px 0px;
-      border-bottom: 1px solid transparent;
-    `}
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const Content = styled.div<{ $isOpen: boolean }>`
+  width: 100%;
   display: flex;
   padding: 10px;
-  height: 47px;
+  height: 100%;
   box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  background: ${({ theme }) => theme.colors.primary.pri_900};
+
+  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  border-radius: ${({ $isOpen }) => ($isOpen ? '8px 8px 0 0' : '8px')};
+  border-bottom: ${({ $isOpen }) => ($isOpen ? 'none' : '1px solid')};
 `;
 
-export const Dropdown = styled.div`
+export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   position: absolute;
-  top: calc(100%);
-  left: -0.5px;
-  right: -0.5px;
-  width: 160px;
+  top: 100%;
+  left: 0;
+  width: 100%;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   z-index: 1000;
   border-radius: 0px 0px 8px 8px;
   border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
   border-top: none;
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
 `;
 
-export const Option = styled.div<{ $isSelected: boolean }>`
+export const DropdownListItem = styled.li<{ $isSelected: boolean }>`
+  width: 100%;
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;

@@ -1,7 +1,10 @@
 import { useState } from 'react';
 
+import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import * as S from '@/components/scenarioAct/AddInputDetail/AddInputDetail.style';
+
+import ThinDropdown from '../thinDropdown/thinDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
@@ -27,15 +30,20 @@ export default function AddInputDetail() {
 
       <S.DetailContainer>
         <Input placeholder="Enter action title." type="thin" />
-        <Input placeholder="select action" type="thin" />
+        <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
         <S.DividInputContainer>
-          <Input placeholder="select action" type="thin" />
+          <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
           <Input placeholder="enter key" type="thin" />
         </S.DividInputContainer>
         <S.AddButton>
           <Add />
         </S.AddButton>
       </S.DetailContainer>
+      <S.ButtonContainer>
+        <Button type="normal" color="gray">
+          Save
+        </Button>
+      </S.ButtonContainer>
     </S.Container>
   );
 }
