@@ -38,6 +38,7 @@ export type TGetStatisticsRequest = {
 export type TGetStatisticsResponse = TCommonResponse<{
   projectId: number;
   projectName: string;
+  projectImage: string | null;
   totalSuccessCnt: number;
   successRate: number;
   totalFailCnt: number;
