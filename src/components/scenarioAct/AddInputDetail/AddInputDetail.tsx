@@ -3,6 +3,9 @@ import { useState } from 'react';
 import Input from '@/components/common/input/input';
 import * as S from '@/components/scenarioAct/AddInputDetail/AddInputDetail.style';
 
+import Add from '@/assets/icons/add.svg?react';
+import AddDark from '@/assets/icons/add_dark.svg?react';
+
 export default function AddInputDetail() {
   // 스텝 - write directly: 1, record: 2
   const [step, setStep] = useState(1);
@@ -29,6 +32,9 @@ export default function AddInputDetail() {
           <Input placeholder="select action" type="thin" />
           <Input placeholder="enter key" type="thin" />
         </S.DividInputContainer>
+        <S.AddButton>
+          <Add />
+        </S.AddButton>
       </S.DetailContainer>
     </S.Container>
   );

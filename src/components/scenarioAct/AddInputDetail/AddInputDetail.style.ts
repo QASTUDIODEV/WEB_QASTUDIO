@@ -41,3 +41,12 @@ export const DividInputContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 `;
+export const AddButton = styled.div`
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: rgba(217, 230, 255, 0.1);
+  cursor: pointer;
+`;
