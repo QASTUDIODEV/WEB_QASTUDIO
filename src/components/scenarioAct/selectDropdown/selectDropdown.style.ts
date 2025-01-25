@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 100%;
+  width: 145px;
   position: relative;
   ${({ theme }) => theme.text.medium_18};
 `;
@@ -40,5 +40,9 @@ export const DropdownListItem = styled.li<{ $isSelected: boolean; $type: string 
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;
-  background: ${({ $isSelected }) => ($isSelected ? 'rgba(255, 255, 255, 0.10);' : 'inherit')};
+  background: ${({ $isSelected }) => ($isSelected ? 'rgba(255, 255, 255, 0.10)' : 'inherit')};
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 `;

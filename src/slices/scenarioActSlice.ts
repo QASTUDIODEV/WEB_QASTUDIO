@@ -35,7 +35,7 @@ const initialState: IScenarioActSlice = {
       scenarioId: 1,
       name: 'Scenario 1',
       isOpen: false,
-      lastActionId: 1,
+      lastActionId: 2,
       actions: [
         {
           actionId: 1,
@@ -49,7 +49,7 @@ const initialState: IScenarioActSlice = {
           actionId: 2,
           name: '액션2',
           actionType: ACTION_TYPE.CLICK,
-          state: ACTION_STATE.SUCCESS,
+          state: ACTION_STATE.ERROR,
           locator: 'css_selector',
           action: 'testuser2@example.com',
         },

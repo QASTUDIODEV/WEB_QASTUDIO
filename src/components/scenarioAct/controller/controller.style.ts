@@ -5,6 +5,7 @@ export const Container = styled.div`
   height: 100%;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_20};
+  min-width: 500px;
 `;
 //시나리오 실행
 export const ActContainer = styled.div`

@@ -36,23 +36,39 @@ export const DetailContainer = styled.div`
   gap: 10px;
   padding: 10px 30px;
 `;
-export const DividInputContainer = styled.div`
+export const DivideInputContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 `;
-export const AddButton = styled.div`
+export const AddButton = styled.div<{ disabled?: boolean }>`
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   background: rgba(217, 230, 255, 0.1);
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
 
 export const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
   position: absolute;
   bottom: 31px;
   right: 30px;
+`;
+
+export const ButtonWrapper = styled.div`
+  background-color: rgba(223, 232, 249, 0.1);
+  border-radius: 3px;
+  padding: 6px;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `;

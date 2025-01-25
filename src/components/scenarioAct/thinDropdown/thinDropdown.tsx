@@ -7,22 +7,29 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 
 interface IDropdownProps {
   options: string[];
-  onSelect: (value: string) => void;
+  onSelect?: (value: string) => void;
   placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
-export default function ThinDropdown({ options, onSelect, placeholder }: IDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false); //오픈
-  const [selected, setSelected] = useState<string | null>(null); //선택된
+export default function ThinDropdown({ options, onSelect, placeholder, value, onChange }: IDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false); // 오픈 상태
+  const [selected, setSelected] = useState<string | null>(value || null); // 선택된 값
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (option: string) => {
     setSelected(option);
-    onSelect(option);
+    onChange?.(option);
+    onSelect?.(option); // 기존 onSelect 호출 (옵션)
     setIsOpen(false);
   };
 
-  // 외부 클릭시 닫힘
+  useEffect(() => {
+    setSelected(value || null); // 외부 값 변경 시 동기화
+  }, [value]);
+
+  // 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -38,10 +45,13 @@ export default function ThinDropdown({ options, onSelect, placeholder }: IDropdo
 
   return (
     <S.DropdownContainer ref={dropdownRef}>
+      {/* 헤더 */}
       <S.DropdownHeader onClick={() => setIsOpen((prev) => !prev)} $hasSelection={!!selected} $isOpen={isOpen}>
         {selected || placeholder || 'Select an option'}
         {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.DropdownHeader>
+
+      {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
           <S.DropdownListItem key={index} onClick={() => handleSelect(option)}>
