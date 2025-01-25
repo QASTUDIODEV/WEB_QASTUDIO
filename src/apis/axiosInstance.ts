@@ -88,6 +88,7 @@ function handleTokenRefreshFailure() {
 function handleUnknownError(status: number) {
   console.log('알 수 없는 오류가 발생했습니다.', status);
   clearAuthData();
+  redirectToLogin();
 }
 
 function clearAuthData() {
