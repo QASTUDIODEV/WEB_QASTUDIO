@@ -1,5 +1,5 @@
 import Input from '@/components/common/input/input';
-import * as S from '@/components/scenarioAct/AddInputForm/AddInputForm.style';
+import * as S from '@/components/scenarioAct/addInputForm/addInputForm.style';
 
 import ThinDropdown from '../thinDropdown/thinDropdown';
 

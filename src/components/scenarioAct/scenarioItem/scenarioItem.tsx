@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
-import * as S from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown.style';
+import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';

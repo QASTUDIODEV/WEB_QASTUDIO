@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
-import * as S from '@/components/scenarioAct/AddInputDetail/AddInputDetail.style';
+import * as S from '@/components/scenarioAct/addInputDetail/addInputDetail.style';
 
 import ThinDropdown from '../thinDropdown/thinDropdown';
 
