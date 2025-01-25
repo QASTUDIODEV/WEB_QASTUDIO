@@ -66,6 +66,7 @@ export const DescriptionItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 9px 50px;
+  gap: 10px;
 `;
 
 export const DropdownContainer = styled.div`

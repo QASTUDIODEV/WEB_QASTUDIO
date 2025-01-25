@@ -69,7 +69,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             <S.DescriptionRow>
               locator
               <S.DropdownContainer>
-                <SelectDropdown options={['css_selector', 'id']} onSelect={() => {}} />
+                <SelectDropdown options={['css_selector', 'id']} onSelect={() => {}} type="thin" />
               </S.DropdownContainer>
             </S.DescriptionRow>
 

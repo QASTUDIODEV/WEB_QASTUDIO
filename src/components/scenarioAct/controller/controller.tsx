@@ -68,8 +68,6 @@ export default function Controller() {
           </S.Header>
 
           <AddInputForm />
-
-          <AddInputDetail />
         </S.AddContainer>
       )}
     </S.Container>

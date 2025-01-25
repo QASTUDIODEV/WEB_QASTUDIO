@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ $isOpen: boolean }>`
+export const Container = styled.div`
   width: 100%;
   position: relative;
   ${({ theme }) => theme.text.medium_18};
 `;
 
-export const Content = styled.div<{ $isOpen: boolean }>`
+export const Header = styled.div<{ $isOpen: boolean; $type: string }>`
   width: 100%;
   display: flex;
-  padding: 10px;
+  padding: ${({ $type }) => ($type == 'normal' ? '10px' : '3px 8px')};
   height: 100%;
   box-sizing: border-box;
   align-items: center;
@@ -35,7 +35,7 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
 `;
 
-export const DropdownListItem = styled.li<{ $isSelected: boolean }>`
+export const DropdownListItem = styled.li<{ $isSelected: boolean; $type: string }>`
   width: 100%;
   padding: 10px;
   cursor: pointer;
