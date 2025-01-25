@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
-import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import { useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
-import AddInputDetail from '@/components/scenarioAct/AddInputDetail/AddInputDetail';
-import AddInputForm from '@/components/scenarioAct/AddInputForm/AddInputForm';
-import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
+import AddInputDetail from '@/components/scenarioAct/addInputDetail/addInputDetail';
+import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
 import * as S from '@/components/scenarioAct/controller/controller.style';
 import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
-import ScenarioDropdown from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown';
+import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
+import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
@@ -43,18 +43,18 @@ export default function Controller() {
           <S.CharacterHeader>
             <p>Character</p>
             <S.DropdownContainer>
-              <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
+              <SelectDropdown options={['user', 'admin']} onSelect={onSelect} />
             </S.DropdownContainer>
           </S.CharacterHeader>
 
           <S.ScenarioLIst>
             {scenario.scenarios.map((scn) => (
-              <ScenarioDropdown key={scn.scenarioId} scenarioId={scn.scenarioId} />
+              <ScenarioItem key={scn.scenarioId} scenarioId={scn.scenarioId} />
             ))}
           </S.ScenarioLIst>
 
           <S.ButtonContainer>
-            <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => handleStep(1)}>
+            <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => handleStep(2)}>
               Scenario
             </Button>
           </S.ButtonContainer>
@@ -63,7 +63,7 @@ export default function Controller() {
         /* 시나리오 추가 */
         <S.AddContainer>
           <S.Header>
-            <Delete onClick={() => handleStep(2)} style={{ cursor: 'pointer' }} />
+            <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
             <p>Add Senario</p>
           </S.Header>
 

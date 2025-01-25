@@ -8,8 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
-
-import CharacterSelectDropdown from '../characterSelectDropdown/characterSelectDropdown';
+import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
 import ArrowRight from '@/assets/icons/arrow_right_red.svg?react';
 import CheckCircle from '@/assets/icons/check_circle.svg?react';
@@ -70,7 +69,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             <S.DescriptionRow>
               locator
               <S.DropdownContainer>
-                <CharacterSelectDropdown options={['user', 'admin']} onSelect={() => {}} />
+                <SelectDropdown options={['css_selector', 'id']} onSelect={() => {}} />
               </S.DropdownContainer>
             </S.DescriptionRow>
 

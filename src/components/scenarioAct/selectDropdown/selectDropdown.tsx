@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown.style';
+import * as S from '@/components/scenarioAct/selectDropdown/SelectDropdown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
