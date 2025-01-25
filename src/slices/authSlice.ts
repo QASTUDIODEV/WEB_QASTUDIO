@@ -15,8 +15,8 @@ type TLoginPayload = {
   email: string;
   accessToken: string;
   refreshToken: string;
-  nickname: string;
-  profileImage: string;
+  nickname: string | null;
+  profileImage: string | null;
 };
 
 const initialState = {
@@ -67,7 +67,7 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     },
-    userSetting: (state: TAuthState, action) => {
+    initailUserSetting: (state: TAuthState, action) => {
       state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
       sessionStorage.removeItem('loginHandled');
@@ -79,7 +79,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout, isSignup, refreshToken, changeUserInfo, reset, userSetting } = authSlice.actions;
+export const { login, logout, isSignup, refreshToken, changeUserInfo, reset, initailUserSetting } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

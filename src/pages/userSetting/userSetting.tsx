@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
@@ -16,7 +17,7 @@ import Profile from '@/components/common/profile/profile';
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
-import { userSetting } from '@/slices/authSlice';
+import { initailUserSetting, isSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   nickname: string;
@@ -25,6 +26,7 @@ type TFormValues = {
 
 export default function UserSetting() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -93,8 +95,10 @@ export default function UserSetting() {
     userSettingMutate(
       { nickname: data.nickname, profileImage: watchedImage },
       {
-        onSuccess: (_, variables) => {
-          dispatch(userSetting({ nickname: variables.nickname, profileImage: variables.profileImage }));
+        onSuccess: () => {
+          dispatch(initailUserSetting({ nickname: data.nickname, profileImage: watchedImage }));
+          dispatch(isSignup({ isSignup: false }));
+          navigate('/project');
         },
       },
     );

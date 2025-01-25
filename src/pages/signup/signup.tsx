@@ -17,7 +17,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
-import { login } from '@/slices/authSlice.ts';
+import { isSignup, login } from '@/slices/authSlice.ts';
 
 type TCodeVerify = undefined | boolean;
 
@@ -121,6 +121,7 @@ function SignupPage() {
                 dispatch(
                   login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }),
                 );
+                dispatch(isSignup({ isSignup: true }));
                 navigate('/signup/userSetting');
               },
             },

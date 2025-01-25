@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { login } from '@/slices/authSlice';
+import { isSignup, login } from '@/slices/authSlice';
 
 function LoginRedirect() {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ function LoginRedirect() {
       if (nickname === '') {
         sessionStorage.setItem('loginHandled', 'true');
         dispatch(login({ email, accessToken, refreshToken, nickname, profileImage }));
+        dispatch(isSignup({ isSignup: true }));
         navigate('/signup/userSetting');
         return;
       } else if (nickname !== '') {
