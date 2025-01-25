@@ -5,7 +5,7 @@ import type { TToken } from '@/types/auth/auth';
 
 import { refresh } from './auth/auth';
 
-import { refreshToken, reset } from '@/slices/authSlice';
+import { logout, refreshToken } from '@/slices/authSlice';
 import store from '@/store/store';
 
 export const axiosInstance = axios.create({
@@ -91,7 +91,7 @@ function handleUnknownError(status: number) {
 }
 
 function clearAuthData() {
-  store.dispatch(reset());
+  store.dispatch(logout());
 }
 
 function redirectToLogin() {
