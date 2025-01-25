@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ACTION_STATE } from '@/enums/enums';
+import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
 import { getIcon } from '@/utils/getIcon';
 
@@ -12,6 +12,7 @@ import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdo
 
 import ArrowRight from '@/assets/icons/arrow_right_red.svg?react';
 import CheckCircle from '@/assets/icons/check_circle.svg?react';
+import Click from '@/assets/icons/click.svg?react';
 import FailCircle from '@/assets/icons/fail_circle.svg?react';
 import Globe from '@/assets/icons/globe.svg?react';
 import UnderError from '@/assets/icons/under_error.svg?react';
@@ -23,11 +24,19 @@ interface IActionItem {
   actionId: number;
 }
 
-// 아이콘 매핑
-const iconMap = {
+// 상태 아이콘 매핑
+const stateIconMap = {
   [ACTION_STATE.SUCCESS]: CheckCircle,
   [ACTION_STATE.ERROR]: FailCircle,
   [ACTION_STATE.UNVERIFIED]: null,
+};
+// 액션 아이콘 매핑
+const actionIconMap = {
+  [ACTION_TYPE.NAVIGATE]: Globe,
+  [ACTION_TYPE.CLICK]: Click,
+  [ACTION_TYPE.HOVER]: null,
+  [ACTION_TYPE.FILL_TEXT]: null,
+  [ACTION_TYPE.WAITING]: null,
 };
 
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
@@ -57,11 +66,11 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
     <S.Container $isError={isError}>
       <S.Header state={action?.state || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
-          <Globe />
+          {action?.actionType && getIcon(actionIconMap, action.actionType)}
           <S.ActionName>{action?.name || '액션'}</S.ActionName>
           <S.ActionType>{action?.actionType}</S.ActionType>
         </S.Content>
-        {action?.state && getIcon(iconMap, action.state)}
+        {action?.state && getIcon(stateIconMap, action.state)}
       </S.Header>
       {isOpen && (
         <S.DescriptionContainer>
