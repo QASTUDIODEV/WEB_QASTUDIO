@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
+import { ACTION_TYPE } from '@/enums/enums';
+
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import * as S from '@/components/scenarioAct/addInputForm/addInputForm.style';
+import RecordItem from '@/components/scenarioAct/recordItem/recordItem';
 import ThinDropdown from '@/components/scenarioAct/thinDropdown/thinDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
@@ -37,23 +40,30 @@ export default function AddInputForm() {
           record
         </S.Select>
       </S.SelectToggle>
-
-      <S.DetailContainer>
-        <Input placeholder="Enter action title." type="thin" />
-        <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
-        <S.DividInputContainer>
-          <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
-          <Input placeholder="enter key" type="thin" />
-        </S.DividInputContainer>
-        <S.AddButton>
-          <Add />
-        </S.AddButton>
-      </S.DetailContainer>
-      <S.ButtonContainer>
-        <Button type="normal" color="gray">
-          Save
-        </Button>
-      </S.ButtonContainer>
+      {step == 1 ? (
+        <div>
+          <S.DetailContainer>
+            <Input placeholder="Enter action title." type="thin" />
+            <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
+            <S.DividInputContainer>
+              <ThinDropdown options={['gd', 'dd']} onSelect={() => {}} placeholder="select action" />
+              <Input placeholder="enter key" type="thin" />
+            </S.DividInputContainer>
+            <S.AddButton>
+              <Add />
+            </S.AddButton>
+          </S.DetailContainer>
+          <S.ButtonContainer>
+            <Button type="normal" color="gray">
+              Save
+            </Button>
+          </S.ButtonContainer>
+        </div>
+      ) : (
+        <div>
+          <RecordItem title="Navigate to Sign up" type={ACTION_TYPE.NAVIGATE} />
+        </div>
+      )}
     </S.Container>
   );
 }
