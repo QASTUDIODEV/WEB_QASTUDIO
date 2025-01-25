@@ -13,7 +13,6 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
 
-    // 토큰이 필요 없는 api 경로는 추가해주세용
     const excludedPaths = ['/v0/auth/login', '/v0/auth/signup'];
     if (!excludedPaths.includes(config.url || '') && token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -28,10 +27,7 @@ axiosInstance.interceptors.request.use(
 
 let isRedirecting = false;
 axiosInstance.interceptors.response.use(
-  (response) => {
-    console.log('response', response);
-    return response;
-  },
+  (response) => response,
   async (error) => {
     if (error.response?.status === 401 && isRedirecting === false) {
       const refreshToken = localStorage.getItem('refreshToken');

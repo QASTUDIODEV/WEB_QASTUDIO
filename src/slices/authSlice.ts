@@ -7,6 +7,7 @@ type TAuthState = {
   nickname: string | null;
   profileImage: string | null;
   isSignup?: boolean;
+  accessToken?: string;
 };
 
 type TLoginPayload = {
@@ -33,6 +34,7 @@ const authSlice = createSlice({
       localStorage.setItem('accessToken', action.payload.accessToken);
       localStorage.setItem('refreshToken', action.payload.refreshToken);
       state.isAuthenticated = true;
+      state.accessToken = action.payload.accessToken;
       state.email = action.payload.email;
       state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
