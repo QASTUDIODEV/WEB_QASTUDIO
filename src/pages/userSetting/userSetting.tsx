@@ -54,6 +54,7 @@ export default function UserSetting() {
   const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
   const { mutate: userSettingMutate } = useSettingUserInfo;
+
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');

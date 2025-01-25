@@ -24,6 +24,12 @@ function ProtectedRoute({ children }: PropsWithChildren) {
   return isAuthenticated ? children : <Navigate to="/" />;
 }
 
+function ProtectedRouteUserSetting({ children }: PropsWithChildren) {
+  const { isSignup } = useSelector(selectAuth);
+  console.log(isSignup);
+  return isSignup ? children : <Navigate to="/project" />;
+}
+
 // 개발 편의를 위해 지금은 ProtectedRoute를 씌어놓지는 않겠습니다..!
 
 export const router = createBrowserRouter([
@@ -64,7 +70,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/signup/userSetting',
-        element: <UserSetting />,
+        element: (
+          <ProtectedRouteUserSetting>
+            <UserSetting />
+          </ProtectedRouteUserSetting>
+        ),
       },
     ],
   },

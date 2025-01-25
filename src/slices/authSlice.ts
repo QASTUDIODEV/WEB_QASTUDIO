@@ -8,6 +8,7 @@ type TAuthState = {
   refreshToken: string | null;
   nickname: string | null;
   profileImage: string | null;
+  isSignup?: boolean;
 };
 
 type TLoginPayload = {
@@ -25,6 +26,7 @@ const initialState = {
   refreshToken: null,
   profileImage: null,
   nickname: null,
+  isSignup: false,
 };
 
 const authSlice = createSlice({
@@ -70,10 +72,14 @@ const authSlice = createSlice({
       state.nickname = action.payload.nickname;
       sessionStorage.removeItem('loginHandled');
     },
+    isSignup: (state: TAuthState, action) => {
+      console.log(action.payload.isSignup);
+      state.isSignup = action.payload.isSignup;
+    },
   },
 });
 
-export const { login, logout, refreshToken, changeUserInfo, reset, userSetting } = authSlice.actions;
+export const { login, logout, isSignup, refreshToken, changeUserInfo, reset, userSetting } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

@@ -5,7 +5,7 @@ import type { TToken } from '@/types/auth/auth';
 
 import { refresh } from './auth/auth';
 
-import { reset } from '@/slices/authSlice';
+import { refreshToken, reset } from '@/slices/authSlice';
 import store from '@/store/store';
 
 export const axiosInstance = axios.create({
@@ -38,8 +38,8 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
+    const refreshTokenData = localStorage.getItem('refreshToken');
+    if (!refreshTokenData) {
       handleUnauthenticated();
       return;
     }
@@ -76,6 +76,7 @@ function handleTokenRefreshSuccess(tokens: TToken, originalRequestConfig: AxiosR
   localStorage.setItem('refreshToken', tokens.refreshToken);
   originalRequestConfig.headers = originalRequestConfig.headers || {};
   originalRequestConfig.headers.Authorization = `Bearer ${tokens.accessToken}`;
+  store.dispatch(refreshToken({ accessToken: tokens.accessToken }));
 }
 
 function handleTokenRefreshFailure() {
