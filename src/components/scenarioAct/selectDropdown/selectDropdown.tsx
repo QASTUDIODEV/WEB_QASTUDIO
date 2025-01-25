@@ -8,9 +8,10 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 interface IDropdownProps {
   options: string[];
   onSelect: (option: string) => void;
+  type?: 'thin' | 'normal';
 }
 
-export default function CharacterSelectDropdown({ options, onSelect }: IDropdownProps) {
+export default function CharacterSelectDropdown({ options, onSelect, type = 'normal' }: IDropdownProps) {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
   const [selectedOption, setSelectedOption] = useState(options[0]); // 선택된 옵션
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,14 +43,14 @@ export default function CharacterSelectDropdown({ options, onSelect }: IDropdown
   }, []);
 
   return (
-    <S.Container $isOpen={isOpen} ref={dropdownRef}>
-      <S.Content onClick={toggleDropdown} $isOpen={isOpen}>
+    <S.Container ref={dropdownRef}>
+      <S.Header onClick={toggleDropdown} $isOpen={isOpen} $type={type}>
         {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
-      </S.Content>
+      </S.Header>
 
       <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
-          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption}>
+          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption} $type={type}>
             {option}
           </S.DropdownListItem>
         ))}
