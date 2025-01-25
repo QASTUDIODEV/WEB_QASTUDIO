@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
@@ -64,6 +65,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
 
   return (
     <S.Container $isError={isError}>
+      {/* 헤더 */}
       <S.Header state={action?.state || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
           {action?.actionType && getIcon(actionIconMap, action.actionType)}
@@ -72,6 +74,8 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
         </S.Content>
         {action?.state && getIcon(stateIconMap, action.state)}
       </S.Header>
+
+      {/* 세부 사항 */}
       {isOpen && (
         <S.DescriptionContainer>
           <S.DescriptionItem>
@@ -89,7 +93,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
           </S.DescriptionItem>
         </S.DescriptionContainer>
       )}
-
+      {/* 언더라인 */}
       {isLastAction &&
         (action?.state === ACTION_STATE.SUCCESS ? (
           <S.UnderIcon>

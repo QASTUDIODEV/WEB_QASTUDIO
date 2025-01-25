@@ -9,6 +9,7 @@ export const Container = styled.div`
   ${({ theme }) => theme.text.medium_20};
   width: 100%;
   align-items: center;
+  border-radius: 4px;
 `;
 
 export const TextContainer = styled.div`

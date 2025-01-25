@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import * as S from '@/components/scenarioAct/selectDropdown/SelectDropdown.style';
+import * as S from '@/components/scenarioAct/selectDropdown/selectDropdown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
@@ -35,7 +35,6 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'nor
         setIsOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -44,10 +43,11 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'nor
 
   return (
     <S.Container ref={dropdownRef}>
+      {/* 헤더 */}
       <S.Header onClick={toggleDropdown} $isOpen={isOpen} $type={type}>
         {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Header>
-
+      {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
           <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption} $type={type}>
