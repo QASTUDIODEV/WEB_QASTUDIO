@@ -48,6 +48,9 @@ export default function LoginPage() {
       { email: submitData.email, password: submitData.password },
       {
         onSuccess: (data: TLoginResponse) => {
+          console.log(data.result.token.accessToken);
+          // localStorage.setItem('accessToken', data.result.token.accessToken);
+          // localStorage.setItem('refreshToken', data.result.token.refreshToken);
           dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
           navigate('/project');
         },

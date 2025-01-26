@@ -17,7 +17,7 @@ import Profile from '@/components/common/profile/profile';
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
-import { initailUserSetting, isSignup } from '@/slices/authSlice';
+import { isSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   nickname: string;
@@ -96,7 +96,6 @@ export default function UserSetting() {
       { nickname: data.nickname, profileImage: watchedImage },
       {
         onSuccess: () => {
-          dispatch(initailUserSetting({ nickname: data.nickname, profileImage: watchedImage }));
           dispatch(isSignup({ isSignup: false }));
           navigate('/project');
         },
