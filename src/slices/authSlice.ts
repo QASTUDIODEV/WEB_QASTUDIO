@@ -6,12 +6,16 @@ type TAuthState = {
   email: string | null;
   accessToken: string | null;
   refreshToken: string | null;
+  nickname: string | null;
+  profileImage: string | null;
 };
 
 type TLoginPayload = {
   email: string;
   accessToken: string;
   refreshToken: string;
+  nickname: string;
+  profileImage: string;
 };
 
 const initialState = {
@@ -19,6 +23,8 @@ const initialState = {
   email: null,
   accessToken: null,
   refreshToken: null,
+  profileImage: null,
+  nickname: null,
 };
 
 const authSlice = createSlice({
@@ -32,20 +38,31 @@ const authSlice = createSlice({
       state.email = action.payload.email;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.profileImage = action.payload.profileImage;
+      state.nickname = action.payload.nickname;
     },
     logout: (state: TAuthState) => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      (state.isAuthenticated = false), (state.email = null), (state.accessToken = null), (state.refreshToken = null);
+      (state.isAuthenticated = false),
+        (state.email = null),
+        (state.accessToken = null),
+        (state.refreshToken = null),
+        (state.nickname = null),
+        (state.profileImage = null);
     },
     refreshToken: (state: TAuthState, action) => {
       localStorage.setItem('accessToken', action.payload.accessToken);
       state.accessToken = action.payload.accessToken;
     },
+    changeUserInfo: (state: TAuthState, action) => {
+      state.profileImage = action.payload.profileImage;
+      state.nickname = action.payload.nickname;
+    },
   },
 });
 
-export const { login, logout, refreshToken } = authSlice.actions;
+export const { login, logout, refreshToken, changeUserInfo } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

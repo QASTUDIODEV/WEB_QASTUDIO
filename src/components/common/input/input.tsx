@@ -7,7 +7,7 @@ import Eyes from '@/assets/icons/eyes.svg?react';
 
 export type TInput = {
   placeholder: string;
-  type: 'normal' | 'password' | 'auth' | string;
+  type: 'normal' | 'thin' | 'password' | 'auth' | string;
   isValid?: boolean;
   errorMessage?: string;
   touched?: boolean;
@@ -23,6 +23,9 @@ const Input = React.forwardRef<HTMLInputElement, TInput>(({ placeholder, type, i
 
   if (type === 'normal') {
     return <S.NormalInputWrapper placeholder={placeholder} ref={ref} {...rest} />;
+  }
+  if (type === 'thin') {
+    return <S.ThinInputWrapper placeholder={placeholder} ref={ref} {...rest} />;
   }
   return (
     <S.Container>

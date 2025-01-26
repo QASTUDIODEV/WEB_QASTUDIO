@@ -29,6 +29,10 @@ const MessageWrapper = styled.div`
   right: 0;
 `;
 
+const MessageWrapper2 = styled.div`
+  display: flex;
+`;
+
 const ButtonWrapper = styled.div`
   position: absolute;
   right: -90px;
@@ -40,4 +44,4 @@ const AuthButtonWrapper = styled.div`
   right: -90px;
 `;
 
-export { AuthButtonWrapper, ButtonWrapper, Container, MessageWrapper, Wrapper, Wrapper2 };
+export { AuthButtonWrapper, ButtonWrapper, Container, MessageWrapper, MessageWrapper2, Wrapper, Wrapper2 };

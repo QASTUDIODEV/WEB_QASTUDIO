@@ -1,15 +1,12 @@
 import React, { useRef } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
-import { userSetting } from '@/apis/auth/auth';
 
-import { useCustomMutation } from '@/hooks/common/useCustomMutation';
-import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
+import useUserAuth from '@/hooks/auth/useUserAuth';
+import { useImage } from '@/hooks/images/useImage';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -25,7 +22,6 @@ type TFormValues = {
 };
 
 export default function UserSetting() {
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -49,22 +45,30 @@ export default function UserSetting() {
     name: 'profileImage',
   });
 
-  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
-  const { uploadPresignedUrlAsync, uploadPresignedUrlPending } = useUploadPresignedUrl();
+  const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
+  const { useSettingUserInfo } = useUserAuth();
 
+  const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
+  const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
+  const { mutate: userSettingMutate } = useSettingUserInfo;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
 
-    try {
-      const data = await getPresignedUrl(file.name);
-      await uploadPresignedUrlAsync(data.url, file);
-      setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.keyName);
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error);
-    }
+    getPresignedUrlMutate(
+      { fileName: file.name },
+      {
+        onSuccess: (data) => {
+          setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
+          uploadImageToPresignedUrlMutate({
+            url: data.result.url,
+            file: file,
+          });
+        },
+      },
+    );
   };
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,23 +78,14 @@ export default function UserSetting() {
     }
   };
 
-  const { mutate: userSettingMutation } = useCustomMutation({
-    mutationFn: ({ nickname, profileImage }: { nickname: string; profileImage: string }) => userSetting({ nickname, profileImage }),
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    userSettingMutation({ nickname: data.nickname, profileImage: watchedImage });
-    navigate('/project');
+    userSettingMutate({ nickname: data.nickname, profileImage: watchedImage });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (touchedFields.nickname && !errors.nickname?.message && !uploadSingleImgPending && !uploadPresignedUrlPending) {
+      if (touchedFields.nickname && !errors.nickname?.message && !getPresignedUrlPending && !uploadImageToPresignedUrlPending) {
         handleSubmit(onSubmit);
       }
     }
@@ -128,7 +123,7 @@ export default function UserSetting() {
           style={{ display: 'none' }}
           onChange={handleInputChange}
         />
-        <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadPresignedUrlPending}>
+        <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadImageToPresignedUrlPending || getPresignedUrlPending}>
           Sign up
         </AuthButton>
       </S.Form>
