@@ -11,6 +11,11 @@ export type TGetUserInfoResponse = TCommonResponse<{
   account: SOCIAL[] | undefined;
 }>;
 
+export type TGetUserSidebarInfoResponse = TCommonResponse<{
+  nickname: string;
+  profileImage: string;
+}>;
+
 export type TPatchUserInfoValues = {
   nickname: string;
   profileImage?: string;

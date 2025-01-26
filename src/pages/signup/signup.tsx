@@ -115,12 +115,8 @@ function SignupPage() {
           loginMutate(
             { email: variables.email, password: variables.password },
             {
-              onSuccess: (data) => {
-                const { token, nickname, profileImage } = data.result;
-                const { accessToken, refreshToken } = token;
-                dispatch(
-                  login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }),
-                );
+              onSuccess: () => {
+                dispatch(login());
                 dispatch(isSignup({ isSignup: true }));
                 navigate('/signup/userSetting');
               },

@@ -45,11 +45,9 @@ export default function LoginPage() {
     loginMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: (data, variables) => {
+        onSuccess: () => {
+          dispatch(login());
           navigate('/project');
-          const { token, nickname, profileImage } = data.result;
-          const { accessToken, refreshToken } = token;
-          dispatch(login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
         },
       },
     );

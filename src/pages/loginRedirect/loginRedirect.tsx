@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { getCookie } from '@/utils/cookies';
+
 import { isSignup, login } from '@/slices/authSlice';
 
 function LoginRedirect() {
@@ -10,36 +12,33 @@ function LoginRedirect() {
   const dispatch = useDispatch();
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
-      const urlParams = new URLSearchParams(location.search);
-      const nickname = urlParams.get('nickname') ?? '';
-      const accessToken = urlParams.get('accessToken') ?? '';
-      const refreshToken = urlParams.get('refreshToken') ?? '';
-      const email = urlParams.get('email') ?? '';
-      const profileImage = urlParams.get('profileImage') ?? '';
-
-      if (accessToken !== '' && refreshToken !== '') {
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-      } else {
-        alert('로그인 또는 회원가입에 실패하였습니다.');
-        navigate('/');
-      }
-
-      if (nickname === '') {
-        sessionStorage.setItem('loginHandled', 'true');
-        dispatch(login({ email, accessToken, refreshToken, nickname, profileImage }));
-        dispatch(isSignup({ isSignup: true }));
-        navigate('/signup/userSetting');
-        return;
-      } else if (nickname !== '') {
-        sessionStorage.setItem('loginHandled', 'true');
-        navigate('/project');
-        return;
-      } else {
-        alert('로그인 또는 회원가입에 실패하였습니다.');
-        navigate('/');
-        return;
-      }
+      // const existing_user = getCookie('existing_user');
+      // const accessToken = getCookie('accessToken') ?? '';
+      // const refreshToken = getCookie('refreshToken') ?? '';
+      // if (accessToken !== '' && refreshToken !== '') {
+      //   localStorage.setItem('accessToken', accessToken);
+      //   localStorage.setItem('refreshToken', refreshToken);
+      // } else {
+      //   alert('로그인 또는 회원가입에 실패하였습니다.');
+      //   navigate('/');
+      //   return;
+      // }
+      // if (existing_user === 'false') {
+      //   sessionStorage.setItem('loginHandled', 'true');
+      //   dispatch(login());
+      //   dispatch(isSignup({ isSignup: true }));
+      //   navigate('/signup/userSetting');
+      //   return;
+      // } else if (existing_user === 'true') {
+      //   sessionStorage.setItem('loginHandled', 'true');
+      //   dispatch(login());
+      //   navigate('/project');
+      //   return;
+      // } else {
+      //   alert('로그인 또는 회원가입에 실패하였습니다.');
+      //   navigate('/');
+      //   return;
+      // }
     }
   }, [navigate, location]);
 

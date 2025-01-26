@@ -1,5 +1,6 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+
+import { deleteAllCookies } from '@/utils/cookies';
 
 type TAuthState = {
   isAuthenticated: boolean;
@@ -7,15 +8,7 @@ type TAuthState = {
   nickname: string | null;
   profileImage: string | null;
   isSignup?: boolean;
-  accessToken?: string;
-};
-
-type TLoginPayload = {
-  email: string;
-  accessToken: string;
-  refreshToken: string;
-  nickname: string | null;
-  profileImage: string | null;
+  isLogin?: boolean;
 };
 
 const initialState = {
@@ -24,25 +17,21 @@ const initialState = {
   profileImage: null,
   nickname: null,
   isSignup: false,
+  isLogin: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state: TAuthState, action: PayloadAction<TLoginPayload>) => {
-      localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
+    login: (state: TAuthState) => {
       state.isAuthenticated = true;
-      state.accessToken = action.payload.accessToken;
-      state.email = action.payload.email;
-      state.profileImage = action.payload.profileImage;
-      state.nickname = action.payload.nickname;
     },
-    logout: () => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    logout: (state: TAuthState) => {
+      deleteAllCookies();
+      localStorage.clear();
       sessionStorage.removeItem('loginHandled');
+      state.isAuthenticated = false;
       return initialState;
     },
     refreshToken: (_, action) => {
@@ -59,6 +48,11 @@ const authSlice = createSlice({
     },
     isSignup: (state: TAuthState, action) => {
       state.isSignup = action.payload.isSignup;
+    },
+    getUserInfo: (state: TAuthState, action) => {
+      state.email = action.payload.email;
+      state.profileImage = action.payload.profileImage;
+      state.nickname = action.payload.nickname;
     },
   },
 });
