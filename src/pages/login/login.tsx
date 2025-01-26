@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TLoginResponse } from '@/types/auth/auth';
+
 import { loginSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
@@ -45,8 +47,8 @@ export default function LoginPage() {
     loginMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: () => {
-          dispatch(login());
+        onSuccess: (data: TLoginResponse) => {
+          dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
           navigate('/project');
         },
       },

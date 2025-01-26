@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// import { getCookie } from '@/utils/cookies';
 // import { refresh } from './auth/auth';
 import { logout } from '@/slices/authSlice';
 import store from '@/store/store';
@@ -8,6 +9,19 @@ export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
+axios.defaults.withCredentials = true;
 
 let isRedirecting = false;
 axiosInstance.interceptors.response.use(

@@ -26,7 +26,6 @@ function ProtectedRoute({ children }: PropsWithChildren) {
 
 function ProtectedRouteUserSetting({ children }: PropsWithChildren) {
   const { isSignup } = useSelector(selectAuth);
-  console.log(isSignup);
   return isSignup ? children : <Navigate to="/project" />;
 }
 

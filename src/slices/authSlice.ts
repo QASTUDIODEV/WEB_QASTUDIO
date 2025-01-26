@@ -8,7 +8,6 @@ type TAuthState = {
   nickname: string | null;
   profileImage: string | null;
   isSignup?: boolean;
-  isLogin?: boolean;
 };
 
 const initialState = {
@@ -17,15 +16,16 @@ const initialState = {
   profileImage: null,
   nickname: null,
   isSignup: false,
-  isLogin: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state: TAuthState) => {
+    login: (state: TAuthState, action) => {
       state.isAuthenticated = true;
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     logout: (state: TAuthState) => {
       deleteAllCookies();
@@ -50,7 +50,6 @@ const authSlice = createSlice({
       state.isSignup = action.payload.isSignup;
     },
     getUserInfo: (state: TAuthState, action) => {
-      state.email = action.payload.email;
       state.profileImage = action.payload.profileImage;
       state.nickname = action.payload.nickname;
     },

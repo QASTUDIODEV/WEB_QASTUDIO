@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TLoginResponse } from '@/types/auth/auth';
+
 import { signupSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
@@ -115,8 +117,8 @@ function SignupPage() {
           loginMutate(
             { email: variables.email, password: variables.password },
             {
-              onSuccess: () => {
-                dispatch(login());
+              onSuccess: (data: TLoginResponse) => {
+                dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
                 dispatch(isSignup({ isSignup: true }));
                 navigate('/signup/userSetting');
               },

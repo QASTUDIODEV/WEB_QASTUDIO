@@ -45,7 +45,7 @@ export type TToken = {
   refreshToken: string;
 };
 
-export type TLoginResponse = TCommonResponse<{ token: TToken; nickname: string | null; profileImage: string | null }>;
+export type TLoginResponse = TCommonResponse<{ token: TToken }>;
 
 export type TUserSettingResponse = TCommonResponse<{ nickname: string; profileImage: string | null }>;
 
