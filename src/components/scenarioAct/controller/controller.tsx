@@ -1,43 +1,76 @@
+import { useState } from 'react';
+
 import { useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
-import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
+import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
 import * as S from '@/components/scenarioAct/controller/controller.style';
-import ScenarioDropdown from '@/components/scenarioAct/scenarioDropdown/scenarioDropdown';
+import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
+import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
+import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
 
 export default function Controller() {
+  // 스텝 - 시나리오 실행: 1, 시나리오 추가: 2
+  const [step, setStep] = useState<number>(1);
   //시나리오 가져오기
   const scenario = useSelector((state) => state.scenarioAct);
+  //모달
+  const { isOpen } = useSelector((state) => state.modal);
 
+  //드롭다운 함수
   const onSelect = () => {
     console.log('ㅅㅌ됨');
   };
+  // 스텝 함수
+  const handleStep = (selectedStep: number) => {
+    setStep(selectedStep);
+  };
   return (
     <S.Container>
-      <S.Header>
-        <Delete />
-        <p>프로젝트 이름</p>
-      </S.Header>
-
-      <S.CharacterHeader>
-        <p>Character</p>
-        <CharacterSelectDropdown options={['user', 'admin']} onSelect={onSelect} />
-      </S.CharacterHeader>
-
-      <S.ScenarioLIst>
-        {scenario.scenarios.map((scn) => (
-          <ScenarioDropdown key={scn.scenarioId} scenarioId={scn.scenarioId} />
-        ))}
-      </S.ScenarioLIst>
-
-      <S.ButtonContainer>
-        <Button type="normal" color="gray" icon={<Add />} iconPosition="left">
-          Scenario
-        </Button>
-      </S.ButtonContainer>
+      {step == 1 ? (
+        /* 시나리오 실행 */
+        <S.ActContainer>
+          {isOpen && <ScenarioActModal />}
+          {/* 헤더 */}
+          <S.Header>
+            <br />
+            <p>프로젝트 이름</p>
+          </S.Header>
+          {/* 역할 선택 */}
+          <S.CharacterHeader>
+            <p>Character</p>
+            <S.DropdownContainer>
+              <SelectDropdown options={['user', 'admin']} onSelect={onSelect} />
+            </S.DropdownContainer>
+          </S.CharacterHeader>
+          {/* 시나리오 리스트 */}
+          <S.ScenarioLIst>
+            {scenario.scenarios.map((scn) => (
+              <ScenarioItem key={scn.scenarioId} scenarioId={scn.scenarioId} />
+            ))}
+          </S.ScenarioLIst>
+          {/* 시나리오 추가 버튼 */}
+          <S.ButtonContainer>
+            <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => handleStep(2)}>
+              Scenario
+            </Button>
+          </S.ButtonContainer>
+        </S.ActContainer>
+      ) : (
+        /* 시나리오 추가 */
+        <S.AddContainer>
+          {/* 헤더 */}
+          <S.Header>
+            <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
+            <p>Add Scenario</p>
+          </S.Header>
+          {/* 수많은 인풋들 */}
+          <AddInputForm />
+        </S.AddContainer>
+      )}
     </S.Container>
   );
 }

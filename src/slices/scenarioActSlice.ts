@@ -1,14 +1,15 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ACTION_STATE } from '@/enums/enums';
+import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
 interface IAction {
   actionId: number;
   name: string;
+  actionType: ACTION_TYPE;
+  state: ACTION_STATE;
   locator: string;
   action: string;
-  state: ACTION_STATE;
 }
 
 interface IScenario {
@@ -34,21 +35,23 @@ const initialState: IScenarioActSlice = {
       scenarioId: 1,
       name: 'Scenario 1',
       isOpen: false,
-      lastActionId: 1,
+      lastActionId: 2,
       actions: [
         {
           actionId: 1,
           name: '액션1',
+          actionType: ACTION_TYPE.NAVIGATE,
+          state: ACTION_STATE.SUCCESS,
           locator: 'css_selector',
           action: 'testuser1@example.com',
-          state: ACTION_STATE.ERROR,
         },
         {
           actionId: 2,
           name: '액션2',
+          actionType: ACTION_TYPE.CLICK,
+          state: ACTION_STATE.ERROR,
           locator: 'css_selector',
           action: 'testuser2@example.com',
-          state: ACTION_STATE.SUCCESS,
         },
       ],
     },
@@ -61,9 +64,10 @@ const initialState: IScenarioActSlice = {
         {
           actionId: 3,
           name: '액션3',
+          state: ACTION_STATE.UNVERIFIED,
+          actionType: ACTION_TYPE.CLICK,
           locator: 'css_selector',
           action: 'testuser3@example.com',
-          state: ACTION_STATE.UNVERIFIED,
         },
       ],
     },
