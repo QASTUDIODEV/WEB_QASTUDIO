@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const ModalBox = styled.div`
   width: 860px;
   gap: 20px;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 export const PostBox = styled.div`
   gap: 10px;
