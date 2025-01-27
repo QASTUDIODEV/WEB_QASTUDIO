@@ -54,7 +54,7 @@ export default function Controller() {
           </S.ScenarioLIst>
           {/* 시나리오 추가 버튼 */}
           <S.ButtonContainer>
-            <Button type="normal" color="gray" icon={<Add />} iconPosition="left" onClick={() => handleStep(2)}>
+            <Button type="normal" color="default" icon={<Add />} iconPosition="left" onClick={() => handleStep(2)}>
               Scenario
             </Button>
           </S.ButtonContainer>
