@@ -21,13 +21,13 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isSignup = false;
     },
-    isSignup: (state: TAuthState, action) => {
+    isNowSignup: (state: TAuthState, action) => {
       state.isSignup = action.payload.isSignup;
     },
   },
 });
 
-export const { login, logout, isSignup } = authSlice.actions;
+export const { login, logout, isNowSignup } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;
