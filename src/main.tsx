@@ -10,6 +10,7 @@ import { ThemeProvider } from 'styled-components';
 import { queryClient } from './apis/queryClient';
 import App from './App.tsx';
 
+// import AuthHandler from './pages/authHandler/authHandler.tsx';
 import store from '@/store/store.ts';
 import GlobalStyle from '@/styles/global.ts';
 import theme from '@/styles/theme.ts';
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
         <ThemeProvider theme={theme}>
           <ReactQueryDevtools initialIsOpen={false} />
           <GlobalStyle />
+          {/* <AuthHandler /> */}
           <PersistGate loading={null} persistor={persistor}>
             <App />
           </PersistGate>

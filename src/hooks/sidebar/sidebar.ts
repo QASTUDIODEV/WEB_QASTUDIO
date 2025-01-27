@@ -1,11 +1,12 @@
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { addProject, getProjectList } from '@/apis/sidebar/sidebar';
+import { addProject, getProjectList, getUserSidebarInfo } from '@/apis/sidebar/sidebar';
 
 import { useCoreMutation, useCoreQuery } from '../common/customQuery';
 
 export default function useProjectList() {
   const useGetProjectList = useCoreQuery(QUERY_KEYS.PROJECT_LIST, () => getProjectList());
   const useAddProject = useCoreMutation(addProject, {});
-  return { useGetProjectList, useAddProject };
+  const useGetSidbarUserInfo = useCoreQuery(QUERY_KEYS.GET_USER_SIDEBAR_INFO, () => getUserSidebarInfo());
+  return { useGetProjectList, useAddProject, useGetSidbarUserInfo };
 }

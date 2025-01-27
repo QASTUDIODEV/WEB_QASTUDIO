@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import useProjectList from '@/hooks/sidebar/sidebar';
 
@@ -18,7 +17,6 @@ import DashboardLogo from '@/assets/icons/grid.svg?react';
 import InformationLogo from '@/assets/icons/info.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import Out from '@/assets/icons/logout.svg?react';
-import { selectAuth } from '@/slices/authSlice';
 
 type TUserProfile = {
   id: number;
@@ -27,13 +25,13 @@ type TUserProfile = {
 };
 
 export default function Sidebar() {
-  const { useGetProjectList } = useProjectList();
+  const { useGetProjectList, useGetSidbarUserInfo } = useProjectList();
   const { data: projectList } = useGetProjectList;
+  const { data: userInfo } = useGetSidbarUserInfo;
   const projects = projectList?.result.projectList || [];
   console.log(projectList?.result.projectList);
-  const auth = useSelector(selectAuth);
-  const nickname = auth.nickname;
-  const profile = auth.profileImage;
+  const nickname = userInfo?.result.nickname;
+  const profile = userInfo?.result.profileImage;
   const userProfile: TUserProfile = {
     id: 1,
     name: nickname || '',

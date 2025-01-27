@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
@@ -9,6 +8,7 @@ import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
 import { myPageScehma } from '@/utils/validate';
+import { queryClient } from '@/apis/queryClient';
 
 import { useImage } from '@/hooks/images/useImage';
 import useUserInfo from '@/hooks/mypage/useUserInfo';
@@ -24,10 +24,8 @@ import Plus from '@/assets/icons/add.svg?react';
 import Done from '@/assets/icons/done.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
-import { changeUserInfo } from '@/slices/authSlice';
 
 export default function MyProfile() {
-  const dispatch = useDispatch();
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
 
@@ -98,7 +96,6 @@ export default function MyProfile() {
             },
             {
               onSuccess: () => {
-                setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + presignedUrlData.result.keyName);
                 if (type === 'banner' && presignedUrlData !== undefined) {
                   setBannerPreview(presignedUrlData.result.keyName);
                   setValue('bannerImage', presignedUrlData.result.keyName);
@@ -139,8 +136,8 @@ export default function MyProfile() {
       updateData.bannerImage = userData.result.bannerImage.split('aws.com/')[1];
     }
     patchUserInfoMutation(updateData, {
-      onSuccess: (newUserData) => {
-        dispatch(changeUserInfo({ nickname: newUserData.result.nickname, profileImage: newUserData.result.profileImage }));
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['getUserSidebarInfo'] });
       },
     });
   };

@@ -12,7 +12,10 @@ export const getUserInfo = async (): Promise<TGetUserInfoResponse> => {
   const { data } = await axiosInstance.get('/api/v0/users');
   return data;
 };
-
+export const getSidebarUserInfo = async (): Promise<TGetUserInfoResponse> => {
+  const { data } = await axiosInstance.get('/api/v0/users/profile');
+  return data;
+};
 export const patchUserInfo = async ({ nickname, profileImage, bannerImage }: TPatchUserInfoValues): Promise<TPatchUserInfoResponse> => {
   const { data } = await axiosInstance.patch('/api/v0/users', { nickname, profileImage, bannerImage });
   return data;

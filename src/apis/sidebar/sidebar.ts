@@ -1,4 +1,4 @@
-import type { TAddProject, TAddProjectValue, TGetProjectList, TGetTeamMember, TRequestTeamMember } from '@/types/sidebar/sidebar';
+import type { TAddProject, TAddProjectValue, TGetProjectList, TGetTeamMember, TGetUserSidebarInfoResponse, TRequestTeamMember } from '@/types/sidebar/sidebar';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -14,6 +14,9 @@ export const getTeamMember = async ({ projectId, email }: TRequestTeamMember): P
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/team-members/search`, {
     params: { email },
   });
-
+  return data;
+};
+export const getUserSidebarInfo = async (): Promise<TGetUserSidebarInfoResponse> => {
+  const { data } = await axiosInstance.get('/api/v0/users/profile');
   return data;
 };

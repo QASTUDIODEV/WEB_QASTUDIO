@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import type { TLoginResponse } from '@/types/auth/auth';
+
 import { signupSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
@@ -17,7 +19,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
-import { login } from '@/slices/authSlice.ts';
+import { isSignup, login } from '@/slices/authSlice.ts';
 
 type TCodeVerify = undefined | boolean;
 
@@ -115,12 +117,9 @@ function SignupPage() {
           loginMutate(
             { email: variables.email, password: variables.password },
             {
-              onSuccess: (data) => {
-                const { token, nickname, profileImage } = data.result;
-                const { accessToken, refreshToken } = token;
-                dispatch(
-                  login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }),
-                );
+              onSuccess: (data: TLoginResponse) => {
+                dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
+                dispatch(isSignup({ isSignup: true }));
                 navigate('/signup/userSetting');
               },
             },

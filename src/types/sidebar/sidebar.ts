@@ -34,3 +34,7 @@ export type TRequestTeamMember = {
   projectId: number;
   email: string;
 };
+export type TGetUserSidebarInfoResponse = TCommonResponse<{
+  nickname: string;
+  profileImage: string;
+}>;

@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
@@ -15,6 +17,7 @@ import Profile from '@/components/common/profile/profile';
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
+import { isSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   nickname: string;
@@ -22,6 +25,8 @@ type TFormValues = {
 };
 
 export default function UserSetting() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -51,6 +56,7 @@ export default function UserSetting() {
   const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
   const { mutate: userSettingMutate } = useSettingUserInfo;
+
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
@@ -61,25 +67,40 @@ export default function UserSetting() {
       { fileName: file.name },
       {
         onSuccess: (data) => {
-          setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
-          uploadImageToPresignedUrlMutate({
-            url: data.result.url,
-            file: file,
-          });
+          uploadImageToPresignedUrlMutate(
+            {
+              url: data.result.url,
+              file: file,
+            },
+            {
+              onSuccess: (res) => {
+                console.log(res);
+                setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
+              },
+            },
+          );
         },
       },
     );
   };
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // 사용자가 선택한 첫 번째 파일
+    const file = e.target.files?.[0];
     if (file) {
       await handleImageUpload(file);
     }
   };
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    userSettingMutate({ nickname: data.nickname, profileImage: watchedImage });
+    userSettingMutate(
+      { nickname: data.nickname, profileImage: watchedImage },
+      {
+        onSuccess: () => {
+          dispatch(isSignup({ isSignup: false }));
+          navigate('/project');
+        },
+      },
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
