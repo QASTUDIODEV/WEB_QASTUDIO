@@ -19,6 +19,7 @@ export type TGetTestListRequest = {
   date?: Date;
   pageName?: string;
   state?: TEST_STATE;
+  testName?: string;
 };
 
 export type TGetTestListResponse = TCommonResponse<{
@@ -46,9 +47,3 @@ export type TGetStatisticsResponse = TCommonResponse<{
   participant: number;
   totalTestCnt: number;
 }>;
-
-// 테스트 검색 API
-export type TSearchTestListRequest = TGetTestListRequest & {
-  testName?: string;
-};
-export type TSearchTestListResponse = TGetTestListResponse;
