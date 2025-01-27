@@ -27,7 +27,7 @@ type TFormValues = {
 export default function LoginPage() {
   sessionStorage.removeItem('loginHandled');
   const dispatch = useDispatch();
-  const { useGetSidbarUserInfo } = useProjectList();
+  const { useGetSidebarUserInfo } = useProjectList();
   const {
     register,
     handleSubmit,
@@ -48,7 +48,7 @@ export default function LoginPage() {
       { email: submitData.email, password: submitData.password },
       {
         onSuccess: () => {
-          const { data: userInfo } = useGetSidbarUserInfo;
+          const { data: userInfo } = useGetSidebarUserInfo;
           if (userInfo?.result.nickname === '') {
             dispatch(isNowSignup({ isSignup: true }));
             navigate('/signup/userSetting');
