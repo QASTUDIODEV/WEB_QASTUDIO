@@ -7,9 +7,11 @@ export type TTestListDTO = {
   testName: string;
   pageName: string;
   attainment: number;
-  state: string;
+  state: TEST_STATE;
   time: number;
   nickname: string;
+  errorId: number;
+  scenarioRecord: string;
 };
 
 // 테스트 리스트 조회 API
