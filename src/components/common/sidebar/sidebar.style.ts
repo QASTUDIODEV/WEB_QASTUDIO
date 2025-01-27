@@ -8,7 +8,6 @@ export const SideBar = styled.div`
   height: 100vh;
   background: ${({ theme }) => `linear-gradient(76.11deg, ${theme.colors.primary.pri_700} 0%, ${theme.colors.primary.pri_900} 100.13%)`};
   position: sticky;
-  overflow-y: auto;
   top: 0;
   color: #d6deec;
   scrollbar-width: none;
@@ -198,6 +197,7 @@ export const ProjectBox = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 100px;
+  overflow-y: auto;
   ${media.desktop`
     display: flex;
     flex-direction: column;
@@ -222,4 +222,8 @@ export const LogoutBox = styled.div`
       align-items: stretch;
     }
   `}
+`;
+export const ProjectList = styled.div`
+  overflow-y: auto;
+  scrollbar-width: none;
 `;
