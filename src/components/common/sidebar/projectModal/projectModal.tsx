@@ -97,14 +97,10 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     setEmails((prev) => prev.filter((e) => e !== emailToRemove));
   };
   const handleCreate = async () => {
-    // console.log('Project Name:', projectNameValue); 참고용
-    // console.log('Project URL:', projectUrlValue);
-    // console.log('Emails:', emails);
     if (!keyName) {
       alert('Project image is required.');
       return;
     }
-    // 멤버 이메일 리스트 생성
     addProject(
       {
         projectImage: keyName,
@@ -140,9 +136,12 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
                 console.log(res);
                 setKeyName(img.result.keyName);
               },
+              onError: (err) => {
+                console.error('Image upload failed:', err);
+                alert('이미지 업로드에 실패했습니다.');
+              },
             },
           );
-          // setKeyName(img.result.keyName);
         },
       },
     );
