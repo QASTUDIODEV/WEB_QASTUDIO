@@ -1,14 +1,5 @@
 import styled from 'styled-components';
 
-// const Container = styled.div`
-//   ${({ theme }) => theme.align.column_center};
-//   padding: 50px 120px;
-//   gap: 20px;
-//   border-radius: 16px;
-//   z-index: 1;
-//   background-color: ${({ theme }) => theme.colors.black};
-// `;
-
 const Container = styled.div`
   ${({ theme }) => theme.align.column_center};
   position: relative;
