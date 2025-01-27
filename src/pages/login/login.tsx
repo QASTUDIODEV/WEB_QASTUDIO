@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validate';
+import { getUserSidebarInfo } from '@/apis/sidebar/sidebar';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
-import useProjectList from '@/hooks/sidebar/sidebar';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -27,7 +27,6 @@ type TFormValues = {
 export default function LoginPage() {
   sessionStorage.removeItem('loginHandled');
   const dispatch = useDispatch();
-  const { useGetSidebarUserInfo } = useProjectList();
   const {
     register,
     handleSubmit,
@@ -48,13 +47,14 @@ export default function LoginPage() {
       { email: submitData.email, password: submitData.password },
       {
         onSuccess: () => {
-          const { data: userInfo } = useGetSidebarUserInfo;
-          if (userInfo?.result.nickname === '') {
-            dispatch(isNowSignup({ isSignup: true }));
-            navigate('/signup/userSetting');
-          } else {
-            navigate('/project');
-          }
+          getUserSidebarInfo().then((res) => {
+            if (res?.result?.nickname === '') {
+              dispatch(isNowSignup({ isSignup: true }));
+              navigate('/signup/userSetting');
+            } else {
+              navigate('/project');
+            }
+          });
         },
       },
     );
