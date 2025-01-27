@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 
 import { useImage } from '@/hooks/images/useImage';
 import useProjectList from '@/hooks/sidebar/sidebar';
@@ -16,25 +15,32 @@ import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TProjectModalProps = {
+  projectLength: number | undefined;
   onClose: () => void; // 모달 닫기 함수
 };
-
 type TFormData = {
   email: string;
   projectName: string;
   projectUrl: string;
 };
-
-export default function ProjectModal({ onClose }: TProjectModalProps) {
+type TEmailList = {
+  userId: number;
+  email: string;
+}[];
+export default function ProjectModal({ projectLength, onClose }: TProjectModalProps) {
+  let projectId = 0;
+  if (projectLength) {
+    projectId = projectLength;
+  }
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
   const { useGetPresignedUrl } = useImage();
-  const { projectId } = useParams();
   const { useAddProject } = useProjectList();
   const { mutate: addProject } = useAddProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const ImgRef = useRef<HTMLInputElement | null>(null);
   const [keyName, setKeyName] = useState<string>();
-
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
   const {
     control,
     setValue,
@@ -49,39 +55,51 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
     },
   });
 
-  const emailValue = watch('email');
+  const emailValue = watch('email').trim();
   const projectNameValue = watch('projectName');
   const projectUrlValue = watch('projectUrl');
+  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: emailValue }); // 이메일 유효성 확인
+  const { data } = useGetTeamMember;
+  useEffect(() => {
+    if (data && data.result.userEmails.some((userEmail) => userEmail.email === emailValue)) {
+      const existingEmails = memberEmailList.map((member) => member.email);
+      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === emailValue && !existingEmails.includes(userEmail.email));
+
+      if (newEmails.length > 0) {
+        setMemberEmailList((prev) => [...prev, ...newEmails]); // 유효한 이메일만 추가
+        setIsEmailValid(true); // 이메일 유효성 상태 업데이트
+      }
+    } else {
+      setIsEmailValid(false); // 이메일이 유효하지 않음
+    }
+  }, [data, emailValue]);
 
   const handleAddEmail = () => {
-    const email = emailValue.trim();
-    if (email && !emails.includes(email)) {
-      setEmails((prev) => [...prev, email]);
-      setValue('email', ''); // 입력 필드 초기화
+    if (!emailValue || emails.includes(emailValue)) {
+      return; // 이메일이 비어 있거나 이미 추가된 경우
     }
+
+    if (!isEmailValid) {
+      alert('One or more emails include a non-registered user.');
+      return; // 유효하지 않은 이메일이면 추가하지 않음
+    }
+
+    setEmails((prev) => [...prev, emailValue]); // 이메일 추가
+    setValue('email', ''); // 입력 필드 초기화
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
-    setEmails((prev) => prev.filter((email) => email !== emailToRemove));
+    setEmails((prev) => prev.filter((e) => e !== emailToRemove));
   };
   const handleCreate = async () => {
     // console.log('Project Name:', projectNameValue); 참고용
     // console.log('Project URL:', projectUrlValue);
     // console.log('Emails:', emails);
-    const memberEmailList: { userId: number; email: string }[] = [];
     if (!keyName) {
       alert('Project image is required.');
       return;
     }
-    for (const email of emails) {
-      const { useGetTeamMember } = await useTeamMember({ projectId: Number(projectId), email }); // 이메일 유효성 확인
-      const { data } = useGetTeamMember;
-      if (!data) {
-        alert('One or more emails include a non-registered user.');
-        return; // 유효하지 않은 이메일이 발견되면 함수 종료
-      }
-      memberEmailList.push(...data.result.userEmails);
-    }
+    // 멤버 이메일 리스트 생성
     addProject({
       projectImage: keyName,
       projectName: projectNameValue,
@@ -99,13 +117,12 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
     getPresignedUrlMutate(
       { fileName: file.name },
       {
-        onSuccess(data) {
-          setKeyName(data.result.keyName);
+        onSuccess(img) {
+          setKeyName(img.result.keyName);
         },
       },
     );
   };
-  console.log(keyName); //성공
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -196,9 +213,9 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
           </S.BtnWrapper>
           {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
           <S.tagWrapper>
-            {emails.map((email) => (
-              <Button key={email} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(email)}>
-                {email}
+            {emails.map((em) => (
+              <Button key={em} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(em)}>
+                {em}
               </Button>
             ))}
           </S.tagWrapper>

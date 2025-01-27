@@ -98,7 +98,7 @@ export default function Sidebar() {
                 showModal();
               }}
             />
-            {modalShow && <ProjectModal onClose={hideModal} />}
+            {modalShow && <ProjectModal projectLength={projectList?.result.projectList.length} onClose={hideModal} />}
           </S.Projects>
           <div>
             {projects &&
@@ -107,7 +107,7 @@ export default function Sidebar() {
                   <S.Project onClick={() => toggleMenu(index)}>
                     <S.SemiBox>
                       <S.ProfileWrapper className="show content">
-                        <Profile />
+                        <Profile profileImg={project.projectImage || ''} />
                       </S.ProfileWrapper>
                       <S.ProjectName className="menu">{project.projectName}</S.ProjectName>
                     </S.SemiBox>
