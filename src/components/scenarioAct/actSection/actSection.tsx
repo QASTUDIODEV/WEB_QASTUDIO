@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Frame, { useFrame } from 'react-frame-component';
 
+import getCssSelector from '@/utils/getCssSelector';
+
 import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
 export default function ActSection() {
@@ -75,18 +77,7 @@ export default function ActSection() {
 
 function InnerComponent({ htmlContent }: any) {
   const { document } = useFrame();
-  // CSS 선택자 생성 함수
-  const getCssSelector = (element: HTMLElement): string => {
-    let path = '';
-    while (element.parentElement) {
-      const tag = element.tagName.toLowerCase();
-      const id = element.id ? `#${element.id}` : '';
-      const classes = element.className ? `.${element.className.split(' ').join('.')}` : '';
-      path = `${tag}${id}${classes} > ${path}`;
-      element = element.parentElement;
-    }
-    return path.slice(0, -3); // 마지막 ' > ' 제거
-  };
+
   useEffect(() => {
     if (document) {
       document.body.innerHTML = htmlContent;
