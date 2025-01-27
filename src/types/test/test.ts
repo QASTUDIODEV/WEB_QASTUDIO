@@ -31,6 +31,10 @@ export type TGetTestListResponse = TCommonResponse<{
   totalElements: number;
   isFirst: boolean;
   isLast: boolean;
+  offset: number;
+  limit: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
 }>;
 
 // 테스트 통계 조회 API
