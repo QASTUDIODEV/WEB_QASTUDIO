@@ -10,6 +10,7 @@ const TableContainer = styled.div`
 
 const TableWrapper = styled.div`
   width: 100%;
+  min-height: 400px;
   overflow-x: auto;
 `;
 
