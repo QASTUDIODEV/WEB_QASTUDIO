@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
+import useProjectList from '@/hooks/sidebar/sidebar';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -16,7 +17,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
-import { login } from '@/slices/authSlice';
+import { isNowSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
@@ -26,6 +27,7 @@ type TFormValues = {
 export default function LoginPage() {
   sessionStorage.removeItem('loginHandled');
   const dispatch = useDispatch();
+  const { useGetSidbarUserInfo } = useProjectList();
   const {
     register,
     handleSubmit,
@@ -46,12 +48,13 @@ export default function LoginPage() {
       { email: submitData.email, password: submitData.password },
       {
         onSuccess: () => {
-          // console.log(data.result.token.accessToken);
-          // localStorage.setItem('accessToken', data.result.token.accessToken);
-          // localStorage.setItem('refreshToken', data.result.token.refreshToken);
-          // dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
-          dispatch(login());
-          navigate('/project');
+          const { data: userInfo } = useGetSidbarUserInfo;
+          if (userInfo?.result.nickname === '') {
+            dispatch(isNowSignup({ isSignup: true }));
+            navigate('/signup/userSetting');
+          } else {
+            navigate('/project');
+          }
         },
       },
     );

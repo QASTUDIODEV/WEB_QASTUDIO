@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import useProjectList from '@/hooks/sidebar/sidebar';
 
-import { isNowSignup, login } from '@/slices/authSlice';
+import { isNowSignup } from '@/slices/authSlice';
 
 function LoginRedirect() {
   const navigate = useNavigate();
@@ -22,9 +22,7 @@ function LoginRedirect() {
       if (userInfo?.result.nickname === '') {
         navigate('/signup/userSetting');
         dispatch(isNowSignup({ isSignup: true }));
-        dispatch(login());
       } else {
-        dispatch(login());
         navigate('/project');
       }
     }
