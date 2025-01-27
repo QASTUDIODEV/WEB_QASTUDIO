@@ -213,8 +213,13 @@ const CharacterAddBox = styled.div`
     height: 50%;
   }
 `;
-
+export const TooltipWrapper = styled.div<{ visible: boolean }>`
+  position: fixed;
+  z-index: 1000;
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+`;
 const CharacterBox = styled.div`
+  position: relative;
   background: #007f7f;
   border-radius: 6.4px;
   height: 120px;
