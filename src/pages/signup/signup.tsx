@@ -5,8 +5,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TLoginResponse } from '@/types/auth/auth';
-
 import { signupSchema } from '@/utils/validate';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
@@ -36,8 +34,7 @@ type TAPIFormValues = {
 };
 
 function SignupPage() {
-  const { useDefaultSignup, useSendSignupCode, useDefaultLogin } = useUserAuth();
-  const { mutate: loginMutate } = useDefaultLogin;
+  const { useDefaultSignup, useSendSignupCode } = useUserAuth();
   const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
   const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode;
   const dispatch = useDispatch();
@@ -113,17 +110,10 @@ function SignupPage() {
     signupMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: (_, variables) => {
-          loginMutate(
-            { email: variables.email, password: variables.password },
-            {
-              onSuccess: (data: TLoginResponse) => {
-                dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
-                dispatch(isSignup({ isSignup: true }));
-                navigate('/signup/userSetting');
-              },
-            },
-          );
+        onSuccess: () => {
+          dispatch(isSignup({ isSignup: true }));
+          dispatch(login());
+          navigate('/signup/userSetting');
         },
       },
     );
