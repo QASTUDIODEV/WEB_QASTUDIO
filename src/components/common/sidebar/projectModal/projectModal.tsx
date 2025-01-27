@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useImage } from '@/hooks/images/useImage';
 import useProjectList from '@/hooks/sidebar/sidebar';
@@ -41,6 +42,8 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const [keyName, setKeyName] = useState<string>();
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
+
+  const queryClient = useQueryClient();
   const {
     control,
     setValue,
@@ -59,7 +62,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const projectNameValue = watch('projectName');
   const projectUrlValue = watch('projectUrl');
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: emailValue }); // 이메일 유효성 확인
-  const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
+  const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
 
   const { data } = useGetTeamMember;
   useEffect(() => {
@@ -102,13 +105,20 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       return;
     }
     // 멤버 이메일 리스트 생성
-    addProject({
-      projectImage: keyName,
-      projectName: projectNameValue,
-      projectUrl: projectUrlValue,
-      memberEmailList: memberEmailList,
-    });
-    onClose(); // 모달 닫기
+    addProject(
+      {
+        projectImage: keyName,
+        projectName: projectNameValue,
+        projectUrl: projectUrlValue,
+        memberEmailList: memberEmailList,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
+          onClose(); // 모달 닫기
+        },
+      },
+    );
   };
   const isCreateDisabled = !projectNameValue.trim() || !projectUrlValue.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
   const handleImageUpload = async (file: File) => {
@@ -169,7 +179,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="Enter project title." type="nomal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
+                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
               </>
             )}
           />
@@ -192,7 +202,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             render={({ field }) => (
               <>
                 <Input
-                  type="nomal"
+                  type="normal"
                   placeholder="Enter the deployed project URL"
                   {...field}
                   errorMessage={errors.projectUrl?.message}
@@ -218,7 +228,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
                 },
               }}
               render={({ field }) => (
-                <Input type="nomal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
             <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || emails.includes(emailValue.trim()) || !!errors.email}>
