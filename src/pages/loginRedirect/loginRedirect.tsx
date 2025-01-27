@@ -1,0 +1,36 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import useProjectList from '@/hooks/sidebar/sidebar';
+
+import { isSignup, login } from '@/slices/authSlice';
+
+function LoginRedirect() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const { useGetSidbarUserInfo } = useProjectList();
+  const { data: userInfo, isError } = useGetSidbarUserInfo;
+
+  useEffect(() => {
+    if (sessionStorage.getItem('loginHandled') == null) {
+      if (isError) {
+        navigate('/');
+      }
+      if (userInfo?.result.nickname === '') {
+        navigate('/signup/userSetting');
+        dispatch(isSignup({ isSignup: true }));
+        dispatch(login());
+      } else {
+        dispatch(login());
+        navigate('/project');
+      }
+    }
+  }, [navigate, location]);
+
+  return <div>로그인 처리 중...</div>;
+}
+
+export default LoginRedirect;

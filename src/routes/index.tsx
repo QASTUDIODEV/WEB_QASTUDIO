@@ -10,6 +10,7 @@ import AddProjectPage from '@/pages/addProject/addProject';
 import DashboardPage from '@/pages/dashboard/dashboard';
 import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
+import LoginRedirect from '@/pages/loginRedirect/loginRedirect';
 import MyPage from '@/pages/mypage/mypage';
 import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
 import ScenarioPage from '@/pages/scenario/scenario';
@@ -21,6 +22,11 @@ import { selectAuth } from '@/slices/authSlice';
 function ProtectedRoute({ children }: PropsWithChildren) {
   const { isAuthenticated } = useSelector(selectAuth);
   return isAuthenticated ? children : <Navigate to="/" />;
+}
+
+function ProtectedRouteUserSetting({ children }: PropsWithChildren) {
+  const { isSignup } = useSelector(selectAuth);
+  return isSignup ? children : <Navigate to="/project" />;
 }
 
 // 개발 편의를 위해 지금은 ProtectedRoute를 씌어놓지는 않겠습니다..!
@@ -44,7 +50,10 @@ export const router = createBrowserRouter([
     ),
     children: [{ index: true, element: <MyPage /> }],
   },
-
+  {
+    path: '/login/success',
+    element: <LoginRedirect />,
+  },
   {
     path: `/`,
     element: (
@@ -65,7 +74,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/signup/userSetting',
-        element: <UserSetting />,
+        element: (
+          <ProtectedRouteUserSetting>
+            <UserSetting />
+          </ProtectedRouteUserSetting>
+        ),
       },
     ],
   },

@@ -15,10 +15,6 @@ export default function useUserAuth() {
     },
   });
   const useSendFindingCode = useCoreMutation(findingSendEmailCode);
-  const useSettingUserInfo = useCoreMutation(userSetting, {
-    onSuccess: () => {
-      navigate('/project');
-    },
-  });
+  const useSettingUserInfo = useCoreMutation(userSetting);
   return { useSendSignupCode, useSettingUserInfo, useDefaultLogin, useDefaultSignup, useChangePassword, useSendFindingCode };
 }

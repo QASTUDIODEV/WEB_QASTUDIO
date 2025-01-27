@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+
+import { useImage } from '@/hooks/images/useImage';
+import useProjectList from '@/hooks/sidebar/sidebar';
+import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -22,6 +27,13 @@ type TFormData = {
 
 export default function ProjectModal({ onClose }: TProjectModalProps) {
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
+  const { useGetPresignedUrl } = useImage();
+  const { projectId } = useParams();
+  const { useAddProject } = useProjectList();
+  const { mutate: addProject } = useAddProject;
+  const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
+  const ImgRef = useRef<HTMLInputElement | null>(null);
+  const [keyName, setKeyName] = useState<string>();
 
   const {
     control,
@@ -52,22 +64,65 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
   const handleRemoveEmail = (emailToRemove: string) => {
     setEmails((prev) => prev.filter((email) => email !== emailToRemove));
   };
-
-  const handleCreate = () => {
+  const handleCreate = async () => {
     // console.log('Project Name:', projectNameValue); 참고용
     // console.log('Project URL:', projectUrlValue);
     // console.log('Emails:', emails);
+    const memberEmailList: { userId: number; email: string }[] = [];
+    if (!keyName) {
+      alert('Project image is required.');
+      return;
+    }
+    for (const email of emails) {
+      const { useGetTeamMember } = await useTeamMember({ projectId: Number(projectId), email }); // 이메일 유효성 확인
+      const { data } = useGetTeamMember;
+      if (!data) {
+        alert('One or more emails include a non-registered user.');
+        return; // 유효하지 않은 이메일이 발견되면 함수 종료
+      }
+      memberEmailList.push(...data.result.userEmails);
+    }
+    addProject({
+      projectImage: keyName,
+      projectName: projectNameValue,
+      projectUrl: projectUrlValue,
+      memberEmailList: memberEmailList,
+    });
     onClose(); // 모달 닫기
   };
   const isCreateDisabled = !projectNameValue.trim() || !projectUrlValue.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('이미지만 업로드 가능합니다');
+      return;
+    }
+    getPresignedUrlMutate(
+      { fileName: file.name },
+      {
+        onSuccess(data) {
+          setKeyName(data.result.keyName);
+        },
+      },
+    );
+  };
+  console.log(keyName); //성공
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
   return (
     <Modal title="Create Project" onClose={onClose}>
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
           <S.ModalText>Project Image</S.ModalText>
-          <Cam />
+          <label htmlFor="photo">
+            <Cam />
+          </label>
+          <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>

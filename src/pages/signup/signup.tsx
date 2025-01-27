@@ -17,7 +17,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/signup/signup.style';
-import { login } from '@/slices/authSlice.ts';
+import { isSignup, login } from '@/slices/authSlice.ts';
 
 type TCodeVerify = undefined | boolean;
 
@@ -34,8 +34,7 @@ type TAPIFormValues = {
 };
 
 function SignupPage() {
-  const { useDefaultSignup, useSendSignupCode, useDefaultLogin } = useUserAuth();
-  const { mutate: loginMutate } = useDefaultLogin;
+  const { useDefaultSignup, useSendSignupCode } = useUserAuth();
   const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
   const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode;
   const dispatch = useDispatch();
@@ -111,20 +110,10 @@ function SignupPage() {
     signupMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: (_, variables) => {
-          loginMutate(
-            { email: variables.email, password: variables.password },
-            {
-              onSuccess: (data) => {
-                const { token, nickname, profileImage } = data.result;
-                const { accessToken, refreshToken } = token;
-                dispatch(
-                  login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }),
-                );
-                navigate('/signup/userSetting');
-              },
-            },
-          );
+        onSuccess: () => {
+          dispatch(isSignup({ isSignup: true }));
+          dispatch(login());
+          navigate('/signup/userSetting');
         },
       },
     );

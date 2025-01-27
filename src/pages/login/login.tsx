@@ -24,6 +24,7 @@ type TFormValues = {
 };
 
 export default function LoginPage() {
+  sessionStorage.removeItem('loginHandled');
   const dispatch = useDispatch();
   const {
     register,
@@ -44,11 +45,13 @@ export default function LoginPage() {
     loginMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: (data, variables) => {
+        onSuccess: () => {
+          // console.log(data.result.token.accessToken);
+          // localStorage.setItem('accessToken', data.result.token.accessToken);
+          // localStorage.setItem('refreshToken', data.result.token.refreshToken);
+          // dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
+          dispatch(login());
           navigate('/project');
-          const { token, nickname, profileImage } = data.result;
-          const { accessToken, refreshToken } = token;
-          dispatch(login({ email: variables.email, accessToken: accessToken, refreshToken: refreshToken, nickname: nickname, profileImage: profileImage }));
         },
       },
     );
