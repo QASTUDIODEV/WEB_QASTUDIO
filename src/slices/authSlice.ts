@@ -2,14 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type TAuthState = {
   isAuthenticated: boolean;
-  isSignup?: boolean;
+  isSignup: boolean;
 };
 
 const initialState = {
   isAuthenticated: false,
   isSignup: false,
-  accessToken: null,
-  refreshToken: null,
 };
 
 const authSlice = createSlice({
