@@ -194,9 +194,10 @@ export const Logout = styled.div`
   cursor: pointer;
 `;
 export const ProjectBox = styled.div`
+  height: 100%;
+  margin-bottom: 35px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 100px;
   overflow-y: auto;
   ${media.desktop`
     display: flex;
