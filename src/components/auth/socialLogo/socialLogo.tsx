@@ -1,7 +1,10 @@
+// import { useState } from 'react';
+
 import { SOCIAL } from '@/enums/enums';
 
 import * as S from '@/components/auth/socialLogo/socialLogo.style';
 
+// import FailModal from '@/components/mypage/failModal/failModal';
 import GithubLogo from '@/assets/icons/githubLogo.svg?react';
 import GoogleLogo from '@/assets/icons/googleLogo.svg?react';
 import KakaoLogo from '@/assets/icons/kakaoLogo.svg?react';
@@ -14,6 +17,16 @@ type TSocialLogo = {
 };
 
 export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
+  // const [modalShow, setModalShow] = useState(false);
+
+  // const showModal = () => {
+  //   setModalShow(true);
+  // };
+
+  // const hideModal = () => {
+  //   setModalShow(false);
+  // };
+
   const handleKakaoLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/kakao`;
   };
@@ -25,6 +38,7 @@ export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
   };
   return (
     <S.Logos $gap={gap} size={size}>
+      {/* {modalShow && <FailModal onClose={hideModal} />} */}
       {id ? (
         <>
           {id?.includes(SOCIAL.GOOGLE) && (
