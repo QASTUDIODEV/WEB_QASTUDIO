@@ -33,7 +33,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     projectId = projectLength;
   }
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
-  const { useGetPresignedUrl } = useImage();
+  const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
   const { mutate: addProject } = useAddProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
@@ -59,6 +59,8 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const projectNameValue = watch('projectName');
   const projectUrlValue = watch('projectUrl');
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: emailValue }); // 이메일 유효성 확인
+  const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
+
   const { data } = useGetTeamMember;
   useEffect(() => {
     if (data && data.result.userEmails.some((userEmail) => userEmail.email === emailValue)) {
@@ -118,7 +120,19 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       { fileName: file.name },
       {
         onSuccess(img) {
-          setKeyName(img.result.keyName);
+          uploadImageToPresignedUrlMutate(
+            {
+              url: img.result.url,
+              file: file,
+            },
+            {
+              onSuccess: (res) => {
+                console.log(res);
+                setKeyName(img.result.keyName);
+              },
+            },
+          );
+          // setKeyName(img.result.keyName);
         },
       },
     );
