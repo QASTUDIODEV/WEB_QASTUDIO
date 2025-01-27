@@ -4,7 +4,7 @@ import { media } from '@/styles/media';
 
 export const ModalBox = styled.div`
   width: 860px;
-  gap: 20px;
+  gap: 10px;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ export const PostBox = styled.div`
   flex-direction: column;
 `;
 export const ModalText = styled.p`
-  ${({ theme }) => theme.text.medium_22};
+  ${({ theme }) => theme.text.medium_20};
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 export const tagWrapper = styled.div`

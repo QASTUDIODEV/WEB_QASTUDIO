@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useImage } from '@/hooks/images/useImage';
@@ -47,7 +47,6 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const {
     control,
     setValue,
-    watch,
     formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
@@ -57,10 +56,9 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       projectUrl: '',
     },
   });
-
-  const emailValue = watch('email').trim();
-  const projectNameValue = watch('projectName');
-  const projectUrlValue = watch('projectUrl');
+  const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
+  const projectNameValue = useWatch({ control, name: 'projectName' }) || '';
+  const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: emailValue }); // 이메일 유효성 확인
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
 
@@ -85,7 +83,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     }
 
     if (!isEmailValid) {
-      alert('One or more emails include a non-registered user.');
+      setValue('email', '');
       return; // 유효하지 않은 이메일이면 추가하지 않음
     }
 
@@ -235,6 +233,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             </Button>
           </S.BtnWrapper>
           {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {!isEmailValid && emailValue && <ValidataionMessage message={'One or more emails include a non-registered user.'} isError={!isEmailValid} />}
           <S.tagWrapper>
             {emails.map((em) => (
               <Button key={em} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(em)}>
