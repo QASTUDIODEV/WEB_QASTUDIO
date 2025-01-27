@@ -1,12 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type TAuthState = {
-  isAuthenticated: boolean;
   isSignup: boolean;
 };
 
 const initialState = {
-  isAuthenticated: false,
   isSignup: false,
 };
 
@@ -14,11 +12,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state: TAuthState) => {
-      state.isAuthenticated = true;
-    },
     logout: (state) => {
-      state.isAuthenticated = false;
       state.isSignup = false;
     },
     isNowSignup: (state: TAuthState, action) => {
@@ -27,7 +21,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout, isNowSignup } = authSlice.actions;
+export const { logout, isNowSignup } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

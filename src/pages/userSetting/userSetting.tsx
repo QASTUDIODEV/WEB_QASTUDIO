@@ -108,7 +108,7 @@ export default function UserSetting() {
           navigate('/project');
           setTimeout(() => {
             dispatch(isNowSignup({ isSignup: false }));
-          }, 0);
+          }, 3);
         },
       },
     );

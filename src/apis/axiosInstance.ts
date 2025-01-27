@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// import { getCookie } from '@/utils/cookies';
 // import { refresh } from './auth/auth';
 import { logout } from '@/slices/authSlice';
 import store from '@/store/store';
