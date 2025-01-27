@@ -34,7 +34,7 @@ export default function UserSetting() {
       navigate('/');
       return;
     }
-  }, [isSignup, navigate]);
+  }, []);
 
   const {
     register,
@@ -105,10 +105,8 @@ export default function UserSetting() {
       { nickname: data.nickname, profileImage: watchedImage },
       {
         onSuccess: () => {
-          navigate('/project');
-          setTimeout(() => {
-            dispatch(isNowSignup({ isSignup: false }));
-          }, 3);
+          navigate('/project', { replace: true });
+          dispatch(isNowSignup({ isSignup: false }));
         },
       },
     );
