@@ -11,8 +11,8 @@ function LoginRedirect() {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const { useGetSidbarUserInfo } = useProjectList();
-  const { data: userInfo, isError } = useGetSidbarUserInfo;
+  const { useGetSidebarUserInfo } = useProjectList();
+  const { data: userInfo, isError } = useGetSidebarUserInfo;
 
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
