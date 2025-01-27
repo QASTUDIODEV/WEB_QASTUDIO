@@ -25,9 +25,9 @@ type TUserProfile = {
 };
 
 export default function Sidebar() {
-  const { useGetProjectList, useGetSidbarUserInfo } = useProjectList();
+  const { useGetProjectList, useGetSidebarUserInfo } = useProjectList();
   const { data: projectList } = useGetProjectList;
-  const { data: userInfo } = useGetSidbarUserInfo;
+  const { data: userInfo } = useGetSidebarUserInfo;
   const projects = projectList?.result.projectList || [];
   console.log(projectList?.result.projectList);
   const nickname = userInfo?.result.nickname;
