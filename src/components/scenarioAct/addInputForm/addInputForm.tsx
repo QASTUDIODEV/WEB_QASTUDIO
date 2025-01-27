@@ -109,7 +109,7 @@ export default function AddInputForm() {
             </S.DetailContainer>
 
             <S.ButtonContainer>
-              <Button type="normal" color="gray" disabled={!isValid}>
+              <Button type="normal" color="default" disabled={!isValid}>
                 Save
               </Button>
             </S.ButtonContainer>
@@ -130,7 +130,7 @@ export default function AddInputForm() {
               </S.ButtonContainer>
             ) : (
               <S.ButtonContainer>
-                <Button type="normal" color="gray" onClick={handleIsRecord}>
+                <Button type="normal" color="default" onClick={handleIsRecord}>
                   Record
                 </Button>
               </S.ButtonContainer>
