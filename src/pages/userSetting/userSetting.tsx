@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -17,7 +17,7 @@ import Profile from '@/components/common/profile/profile';
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
-import { isSignup } from '@/slices/authSlice';
+import { isNowSignup, selectAuth } from '@/slices/authSlice';
 
 type TFormValues = {
   nickname: string;
@@ -27,6 +27,15 @@ type TFormValues = {
 export default function UserSetting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { isSignup } = useSelector(selectAuth);
+  useEffect(() => {
+    if (!isSignup) {
+      navigate('/');
+      return;
+    }
+  }, [isSignup, navigate]);
+
   const {
     register,
     handleSubmit,
@@ -96,8 +105,10 @@ export default function UserSetting() {
       { nickname: data.nickname, profileImage: watchedImage },
       {
         onSuccess: () => {
-          dispatch(isSignup({ isSignup: false }));
           navigate('/project');
+          setTimeout(() => {
+            dispatch(isNowSignup({ isSignup: false }));
+          }, 0);
         },
       },
     );
