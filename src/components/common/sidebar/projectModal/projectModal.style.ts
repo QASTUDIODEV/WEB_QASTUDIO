@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const ModalBox = styled.div`
-  width: 860px;
+  max-width: 860px;
   gap: 10px;
   margin: 20px 0;
   display: flex;
