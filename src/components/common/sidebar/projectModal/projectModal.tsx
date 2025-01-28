@@ -11,6 +11,7 @@ import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
+import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
 
 import Cam from '@/assets/icons/camera.svg?react';
@@ -43,6 +44,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const [keyName, setKeyName] = useState<string>();
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
+  const [imgFile, setImgFile] = useState('');
 
   const queryClient = useQueryClient();
   const {
@@ -150,6 +152,13 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   };
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImgFile(reader.result as string);
+      };
+    }
 
     if (file) {
       handleImageUpload(file);
@@ -161,10 +170,15 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
           <S.ModalText>Project Image</S.ModalText>
-          <label htmlFor="photo">
-            <Cam />
-          </label>
-          <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
+          <S.Preview>
+            <label htmlFor="photo">
+              <Cam style={{ cursor: 'pointer' }} />
+            </label>
+            <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
+            <S.ProfileWrapper>
+              <Profile profileImg={imgFile} />
+            </S.ProfileWrapper>
+          </S.Preview>
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>

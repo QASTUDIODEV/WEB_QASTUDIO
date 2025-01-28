@@ -46,3 +46,12 @@ export const Position = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+export const ProfileWrapper = styled.div`
+  width: 55px;
+  height: 55px;
+`;
+export const Preview = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
