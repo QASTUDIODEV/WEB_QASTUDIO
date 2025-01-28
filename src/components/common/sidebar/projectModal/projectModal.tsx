@@ -67,6 +67,9 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail }); // 이메일 유효성 확인
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
+  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
+  const [imgValid, setImgValid] = useState(true);
+  let isImg: boolean = true;
 
   const { data } = useGetTeamMember;
   useEffect(() => {
@@ -102,7 +105,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   };
   const handleCreate = async () => {
     if (!keyName) {
-      alert('Project image is required.');
+      setImgValid(false);
       return;
     }
     addProject(
@@ -123,13 +126,15 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
-      alert('이미지만 업로드 가능합니다');
+      isImg = false;
       return;
     }
     getPresignedUrlMutate(
       { fileName: file.name },
       {
         onSuccess(img) {
+          isImg = true;
+          setImgValid(true);
           uploadImageToPresignedUrlMutate(
             {
               url: img.result.url,
@@ -142,7 +147,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               },
               onError: (err) => {
                 console.error('Image upload failed:', err);
-                alert('이미지 업로드에 실패했습니다.');
+                setImgValid(false);
               },
             },
           );
@@ -154,14 +159,11 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     const file = e.target.files?.[0];
     const reader = new FileReader();
     if (file) {
+      handleImageUpload(file);
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setImgFile(reader.result as string);
       };
-    }
-
-    if (file) {
-      handleImageUpload(file);
     }
   };
   return (
@@ -179,6 +181,8 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               <Profile profileImg={imgFile} />
             </S.ProfileWrapper>
           </S.Preview>
+          {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
+          {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>
@@ -246,12 +250,19 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
                 <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
-            <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || emails.includes(emailValue.trim()) || !!errors.email}>
+            <Button
+              type="normal"
+              color="blue"
+              onClick={handleAddEmail}
+              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email}
+            >
               Share
             </Button>
           </S.BtnWrapper>
-          {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-          {!isEmailValid && emailValue && <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />}
+          {FirstValid && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {!FirstValid && !isEmailValid && debouncedEmail && (
+            <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />
+          )}
           <S.tagWrapper>
             {emails.map((em) => (
               <Button key={em} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(em)}>
