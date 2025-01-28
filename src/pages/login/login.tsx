@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validate';
-import { getUserSidebarInfo } from '@/apis/sidebar/sidebar';
 
 import useUserAuth from '@/hooks/auth/useUserAuth';
 
@@ -46,15 +45,13 @@ export default function LoginPage() {
     loginMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: () => {
-          getUserSidebarInfo().then((res) => {
-            if (res?.result?.nickname === '') {
-              dispatch(isNowSignup({ isSignup: true }));
-              navigate('/signup/userSetting');
-            } else {
-              navigate('/project');
-            }
-          });
+        onSuccess: (data) => {
+          if (data?.result?.nickname === '') {
+            dispatch(isNowSignup({ isSignup: true }));
+            navigate('/signup/userSetting');
+          } else {
+            navigate('/project');
+          }
         },
       },
     );
