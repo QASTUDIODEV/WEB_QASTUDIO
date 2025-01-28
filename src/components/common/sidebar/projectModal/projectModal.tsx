@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 
+import useDebounce from '@/hooks/common/useDebounce';
 import { useImage } from '@/hooks/images/useImage';
 import useProjectList from '@/hooks/sidebar/sidebar';
 import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
@@ -57,16 +58,19 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     },
   });
   const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
+  const debouncedEmail = useDebounce(emailValue, 800);
   const projectNameValue = useWatch({ control, name: 'projectName' }) || '';
+  const debouncedProjectName = useDebounce(projectNameValue, 500);
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
-  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: emailValue }); // 이메일 유효성 확인
+  const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
+  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail }); // 이메일 유효성 확인
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
 
   const { data } = useGetTeamMember;
   useEffect(() => {
-    if (data && data.result.userEmails.some((userEmail) => userEmail.email === emailValue)) {
+    if (data && data.result.userEmails.some((userEmail) => userEmail.email === debouncedEmail)) {
       const existingEmails = memberEmailList.map((member) => member.email);
-      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === emailValue && !existingEmails.includes(userEmail.email));
+      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
 
       if (newEmails.length > 0) {
         setMemberEmailList((prev) => [...prev, ...newEmails]); // 유효한 이메일만 추가
@@ -75,10 +79,10 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     } else {
       setIsEmailValid(false); // 이메일이 유효하지 않음
     }
-  }, [data, emailValue]);
+  }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
-    if (!emailValue || emails.includes(emailValue)) {
+    if (!debouncedEmail || emails.includes(debouncedEmail)) {
       return; // 이메일이 비어 있거나 이미 추가된 경우
     }
 
@@ -87,7 +91,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       return; // 유효하지 않은 이메일이면 추가하지 않음
     }
 
-    setEmails((prev) => [...prev, emailValue]); // 이메일 추가
+    setEmails((prev) => [...prev, debouncedEmail]); // 이메일 추가
     setValue('email', ''); // 입력 필드 초기화
   };
 
@@ -102,8 +106,8 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     addProject(
       {
         projectImage: keyName,
-        projectName: projectNameValue,
-        projectUrl: projectUrlValue,
+        projectName: debouncedProjectName,
+        projectUrl: debouncedProjectUrl,
         memberEmailList: memberEmailList,
       },
       {
@@ -114,7 +118,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       },
     );
   };
-  const isCreateDisabled = !projectNameValue.trim() || !projectUrlValue.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
+  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
@@ -233,7 +237,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             </Button>
           </S.BtnWrapper>
           {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-          {!isEmailValid && emailValue && <ValidataionMessage message={'One or more emails include a non-registered user.'} isError={!isEmailValid} />}
+          {!isEmailValid && emailValue && <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />}
           <S.tagWrapper>
             {emails.map((em) => (
               <Button key={em} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(em)}>
