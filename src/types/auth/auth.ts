@@ -39,13 +39,7 @@ export type TMailSendCodeResponse = TCommonResponse<{
   authCode: string;
 }>;
 
-export type TToken = {
-  type: string;
-  accessToken: string;
-  refreshToken: string;
-};
-
-export type TLoginResponse = TCommonResponse<{ token: TToken; existing_user: boolean }>;
+export type TLoginResponse = TCommonResponse<{ nickname: string }>;
 
 export type TUserSettingResponse = TCommonResponse<{ nickname: string; profileImage: string | null }>;
 

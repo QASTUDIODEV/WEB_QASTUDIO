@@ -1,6 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { configureStore } from '@reduxjs/toolkit';
 
 import authReducer from '@/slices/authSlice';
 import calendarReducer from '@/slices/calendarSlice';
@@ -8,30 +6,14 @@ import modalReducer from '@/slices/modalSlice';
 import scenarioActReducer from '@/slices/scenarioActSlice';
 import scenarioReducer from '@/slices/scenarioSlice';
 
-const rootReducer = combineReducers({
-  modal: modalReducer,
-  scenario: scenarioReducer,
-  scenarioAct: scenarioActReducer,
-  auth: authReducer,
-  calendar: calendarReducer,
-});
-
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['auth'],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  reducer: {
+    modal: modalReducer,
+    scenario: scenarioReducer,
+    scenarioAct: scenarioActReducer,
+    auth: authReducer,
+    calendar: calendarReducer,
+  },
 });
 
 export default store;

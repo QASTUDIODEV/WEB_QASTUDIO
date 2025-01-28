@@ -16,7 +16,7 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
-import { login } from '@/slices/authSlice';
+import { isNowSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
@@ -45,13 +45,13 @@ export default function LoginPage() {
     loginMutate(
       { email: submitData.email, password: submitData.password },
       {
-        onSuccess: () => {
-          // console.log(data.result.token.accessToken);
-          // localStorage.setItem('accessToken', data.result.token.accessToken);
-          // localStorage.setItem('refreshToken', data.result.token.refreshToken);
-          // dispatch(login({ accessToken: data.result.token.accessToken, refreshToken: data.result.token.refreshToken }));
-          dispatch(login());
-          navigate('/project');
+        onSuccess: (data) => {
+          if (data?.result?.nickname === '') {
+            dispatch(isNowSignup({ isSignup: true }));
+            navigate('/signup/userSetting');
+          } else {
+            navigate('/project');
+          }
         },
       },
     );
