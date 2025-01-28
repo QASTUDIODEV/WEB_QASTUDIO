@@ -17,4 +17,5 @@ export const QUERY_KEYS = {
       STATISTICS: (projectId: number) => ['STATISTICS', projectId],
     },
   },
+  GET_PROJECT_INFO: ['getProjectInfo'],
 };
