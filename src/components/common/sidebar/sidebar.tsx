@@ -29,7 +29,6 @@ export default function Sidebar() {
   const { data: projectList } = useGetProjectList;
   const { data: userInfo } = useGetSidebarUserInfo;
   const projects = projectList?.result.projectList || [];
-  console.log(projectList?.result.projectList);
   const nickname = userInfo?.result.nickname;
   const profile = userInfo?.result.profileImage;
   const userProfile: TUserProfile = {
