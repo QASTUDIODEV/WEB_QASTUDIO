@@ -29,7 +29,6 @@ export default function Sidebar() {
   const { data: projectList } = useGetProjectList;
   const { data: userInfo } = useGetSidebarUserInfo;
   const projects = projectList?.result.projectList || [];
-  console.log(projectList?.result.projectList);
   const nickname = userInfo?.result.nickname;
   const profile = userInfo?.result.profileImage;
   const userProfile: TUserProfile = {
@@ -91,6 +90,7 @@ export default function Sidebar() {
               </S.Profile>
             </S.StyledNavLink>
           </S.Container>
+
           <S.Projects className="menu">
             <S.ProjectText>Projects</S.ProjectText>
             <Plus
@@ -98,50 +98,52 @@ export default function Sidebar() {
                 showModal();
               }}
             />
-            {modalShow && <ProjectModal onClose={hideModal} />}
+            {modalShow && <ProjectModal projectLength={projectList?.result.projectList.length} onClose={hideModal} />}
           </S.Projects>
-          <div>
-            {projects &&
-              projects.map((project, index) => (
-                <div key={index}>
-                  <S.Project onClick={() => toggleMenu(index)}>
-                    <S.SemiBox>
-                      <S.ProfileWrapper className="show content">
-                        <Profile />
-                      </S.ProfileWrapper>
-                      <S.ProjectName className="menu">{project.projectName}</S.ProjectName>
-                    </S.SemiBox>
-                    {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
-                  </S.Project>
-                  <S.ProjectContents $isOpen={menuStates[index]} className="menu">
-                    <S.StyledNavLink to={`/project/dashboard/${project.projectId}`}>
-                      {({ isActive }) => (
-                        <S.ProjectContent $isActive={isActive}>
-                          <DashboardLogo />
-                          <S.ProjectContentName>Dashboard</S.ProjectContentName>
-                        </S.ProjectContent>
-                      )}
-                    </S.StyledNavLink>
-                    <S.StyledNavLink to={`/project/information/${project.projectId}`}>
-                      {({ isActive }) => (
-                        <S.ProjectContent $isActive={isActive}>
-                          <InformationLogo />
-                          <S.ProjectContentName>Information</S.ProjectContentName>
-                        </S.ProjectContent>
-                      )}
-                    </S.StyledNavLink>
-                    <S.StyledNavLink to={`/project/scenario/${project.projectId}`}>
-                      {({ isActive }) => (
-                        <S.ProjectContent $isActive={isActive}>
-                          <SenarioLogo />
-                          <S.ProjectContentName>Scenario</S.ProjectContentName>
-                        </S.ProjectContent>
-                      )}
-                    </S.StyledNavLink>
-                  </S.ProjectContents>
-                </div>
-              ))}
-          </div>
+          <S.ProjectList>
+            <div>
+              {projects &&
+                projects.map((project, index) => (
+                  <div key={index}>
+                    <S.Project onClick={() => toggleMenu(index)}>
+                      <S.SemiBox>
+                        <S.ProfileWrapper className="show content">
+                          <Profile profileImg={project.projectImage || ''} />
+                        </S.ProfileWrapper>
+                        <S.ProjectName className="menu">{project.projectName}</S.ProjectName>
+                      </S.SemiBox>
+                      {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
+                    </S.Project>
+                    <S.ProjectContents $isOpen={menuStates[index]} className="menu">
+                      <S.StyledNavLink to={`/project/dashboard/${project.projectId}`}>
+                        {({ isActive }) => (
+                          <S.ProjectContent $isActive={isActive}>
+                            <DashboardLogo />
+                            <S.ProjectContentName>Dashboard</S.ProjectContentName>
+                          </S.ProjectContent>
+                        )}
+                      </S.StyledNavLink>
+                      <S.StyledNavLink to={`/project/information/${project.projectId}`}>
+                        {({ isActive }) => (
+                          <S.ProjectContent $isActive={isActive}>
+                            <InformationLogo />
+                            <S.ProjectContentName>Information</S.ProjectContentName>
+                          </S.ProjectContent>
+                        )}
+                      </S.StyledNavLink>
+                      <S.StyledNavLink to={`/project/scenario/${project.projectId}`}>
+                        {({ isActive }) => (
+                          <S.ProjectContent $isActive={isActive}>
+                            <SenarioLogo />
+                            <S.ProjectContentName>Scenario</S.ProjectContentName>
+                          </S.ProjectContent>
+                        )}
+                      </S.StyledNavLink>
+                    </S.ProjectContents>
+                  </div>
+                ))}
+            </div>
+          </S.ProjectList>
         </S.ProjectBox>
         <S.Logout onClick={logoutShow}>
           <p className="menu">Logout</p>

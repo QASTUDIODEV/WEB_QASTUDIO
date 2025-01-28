@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const ModalBox = styled.div`
-  width: 860px;
-  gap: 20px;
+  height: 100%;
+  max-width: 860px;
+  min-width: 700px;
+  gap: 10px;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
@@ -18,7 +20,7 @@ export const PostBox = styled.div`
   flex-direction: column;
 `;
 export const ModalText = styled.p`
-  ${({ theme }) => theme.text.medium_22};
+  ${({ theme }) => theme.text.medium_20};
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 export const tagWrapper = styled.div`
@@ -43,4 +45,13 @@ export const Position = styled.div`
   padding-top: 25px;
   display: flex;
   justify-content: flex-end;
+`;
+export const ProfileWrapper = styled.div`
+  width: 55px;
+  height: 55px;
+`;
+export const Preview = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
