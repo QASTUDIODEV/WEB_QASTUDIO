@@ -119,6 +119,11 @@ export default function MyProfile() {
     }
   };
 
+  const handleStartChange = () => {
+    setIsEdit(true);
+    localStorage.setItem('route', 'mypage');
+  };
+
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
     setBannerPreview('');
@@ -202,7 +207,7 @@ export default function MyProfile() {
                   <S.AccoutWrapper>
                     <S.Account>{userData?.result.email}</S.Account>
                     <div className="socialLogoWrapper">
-                      <SocialLogo gap={8} size="small" id={socialLogin} />
+                      <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
                     </div>
                     <div ref={containerRef}>
                       {unlinkedSocials.length > 0 && (
@@ -210,7 +215,7 @@ export default function MyProfile() {
                           <Plus />
                           {show && (
                             <S.SocialLogoWrapper ref={contentRef}>
-                              <SocialLogo gap={8} size="small" id={unlinkedSocials} />
+                              <SocialLogo gap={8} size="small" id={unlinkedSocials} addAccount={true} />
                             </S.SocialLogoWrapper>
                           )}
                         </S.PlusWrapper>
@@ -247,7 +252,7 @@ export default function MyProfile() {
                 </S.UserInfo>
               </S.ProfileUserInfo>
               <S.ButtonWrapper>
-                <Button type="small_square" color="default" icon={<Edit />} onClick={() => setIsEdit(true)}>
+                <Button type="small_square" color="default" icon={<Edit />} onClick={handleStartChange}>
                   Edit
                 </Button>
               </S.ButtonWrapper>
