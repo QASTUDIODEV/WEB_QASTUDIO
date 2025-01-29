@@ -1,17 +1,25 @@
 import type { TCommonResponse } from '../common/common';
 
-export type TGetProjectInfoResponse = TCommonResponse<{
-  projectCharacters: [
+export type TGetCharacterListResponse = TCommonResponse<{
+  detailCharacters: [
     {
       characterId: number;
-      characterName: string;
-      characterDescription: string;
-      accessRightCnt: number;
-      roleScenarioCnt: number;
-      accessRightList: [string];
-      scenarioList: [string];
+      author: string;
+      createdAt: string;
+      updatedAt: string;
     },
   ];
+}>;
+
+export type TGetProjectInfoResponse = TCommonResponse<{
+  projectId: number;
+  projectImage: string;
+  projectName: string;
+  projectUrl: string;
+  introduction: string;
+  viewType: string;
+  developmentSkill: string;
+  assistantId: string;
 }>;
 
 export type TGetProjectInfoValues = {

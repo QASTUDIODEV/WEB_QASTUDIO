@@ -19,17 +19,36 @@ interface IScenario {
   lastActionId: number | null;
   actions: IAction[];
 }
+interface ICharcter {
+  characterId: number;
+  characterName: string;
+}
 
 interface IScenarioActSlice {
   characterId: number;
   title: string;
+  projectUrl: string | null;
+  projectName: string | null;
   scenarios: IScenario[];
+  characters: ICharcter[];
 }
 
 // 초기 상태
 const initialState: IScenarioActSlice = {
   characterId: 1,
   title: '역할 1',
+  projectUrl: 'https://www.kw.ac.kr/ko/',
+  projectName: 'QASTUDIO',
+  characters: [
+    {
+      characterId: 1,
+      characterName: '역할1',
+    },
+    {
+      characterId: 2,
+      characterName: '역할2',
+    },
+  ],
   scenarios: [
     {
       scenarioId: 1,
@@ -90,8 +109,17 @@ const scenarioActSlice = createSlice({
         }
       });
     },
+    // 프로젝트 정보 입력
+    setProjectInfo: (state, action) => {
+      state.projectUrl = action.payload.projectUrl;
+      state.projectName = action.payload.projectName;
+    },
+    // 역할 리스트 입력
+    setCharacterList: (state, action) => {
+      console.log(action.payload);
+    },
   },
 });
 
-export const { openScenario } = scenarioActSlice.actions;
+export const { openScenario, setProjectInfo, setCharacterList } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

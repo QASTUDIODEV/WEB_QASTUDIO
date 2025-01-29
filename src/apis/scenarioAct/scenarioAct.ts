@@ -2,9 +2,15 @@ import type { TGetProjectInfoResponse, TGetProjectInfoValues } from '@/types/sce
 
 import { axiosInstance } from '../axiosInstance';
 
-const getProjectInfo = async ({ projectId }: TGetProjectInfoValues): Promise<TGetProjectInfoResponse> => {
-  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/detail`);
+const getCharacterList = async ({ projectId }: TGetProjectInfoValues): Promise<TGetProjectInfoResponse> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters`);
+  console.log(data);
   return data;
 };
 
-export { getProjectInfo };
+const getProjectInfo = async ({ projectId }: TGetProjectInfoValues): Promise<TGetProjectInfoResponse> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}`);
+  console.log(data);
+  return data;
+};
+export { getCharacterList, getProjectInfo };

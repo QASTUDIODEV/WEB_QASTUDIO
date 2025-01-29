@@ -1,12 +1,12 @@
+import { useSelector } from '@/hooks/common/useCustomRedux';
+
 import * as S from '@/components/scenarioAct/header/header.style';
 
-interface IHeaderProps {
-  textURL: string;
-}
-export default function Header({ textURL }: IHeaderProps) {
+export default function Header() {
+  const projectUrl = useSelector((state) => state.scenarioAct.projectUrl);
   return (
     <S.Container>
-      <p>{textURL}</p>
+      <p>{projectUrl}</p>
     </S.Container>
   );
 }

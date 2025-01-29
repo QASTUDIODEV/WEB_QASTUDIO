@@ -28,6 +28,7 @@ export default function Controller() {
   const handleStep = (selectedStep: number) => {
     setStep(selectedStep);
   };
+
   return (
     <S.Container>
       {step == 1 ? (
