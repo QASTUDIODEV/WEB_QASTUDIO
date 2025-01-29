@@ -38,7 +38,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
-  const { mutate: addProject } = useAddProject;
+  const { mutate: addProject, isPending } = useAddProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const ImgRef = useRef<HTMLInputElement | null>(null);
   const [keyName, setKeyName] = useState<string>();
@@ -123,7 +123,8 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       },
     );
   };
-  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
+  const isCreateDisabled =
+    !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0 || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       isImg = false;
