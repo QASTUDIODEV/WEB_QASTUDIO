@@ -54,8 +54,8 @@ const initialState: IScenarioSlice = {
   ],
 };
 
-const characterSlice = createSlice({
-  name: 'character',
+const scenarioReducer = createSlice({
+  name: 'scenario',
   initialState,
   reducers: {
     // 편집 상태
@@ -147,5 +147,5 @@ const characterSlice = createSlice({
   },
 });
 
-export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = characterSlice.actions;
-export default characterSlice.reducer;
+export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = scenarioReducer.actions;
+export default scenarioReducer.reducer;

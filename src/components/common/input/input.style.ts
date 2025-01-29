@@ -71,8 +71,8 @@ const ThinInputWrapper = styled.input`
   height: 50px;
   width: 100%;
   padding: 10px;
-  border-radius: 4px;
-  border: 1px solid rgba(153, 153, 153, 0.5);
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
   background-color: inherit;
   box-sizing: border-box;
   &::placeholder {
