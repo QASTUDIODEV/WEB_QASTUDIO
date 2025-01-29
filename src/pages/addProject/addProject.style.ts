@@ -30,3 +30,15 @@ export const Text = styled.div`
   color: ${({ theme }) => theme.colors.gray.gray_300};
   margin-bottom: 2.083333333%;
 `;
+export const HiddenInput = styled.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+`;
+export const Box = styled.div`
+  position: relative;
+`;

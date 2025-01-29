@@ -56,7 +56,6 @@ function reducer(state: typeof initialState, action: TAction) {
 export default function ProjectInfoPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const modalDispatch = useDispatch();
-
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
     path: ['/', '/login', '/roadmap', '/mypage', '/mypage'],

@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'information/:projectId',
-        element: <ProjectInfoPage />,
+        element: <AddProjectPage />,
       },
     ],
   },
