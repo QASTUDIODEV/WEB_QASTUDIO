@@ -1,10 +1,11 @@
-import { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
+import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Goto from '@/assets/icons/arrow_goto.svg?react';
@@ -89,7 +90,28 @@ export default function ProjectInfoPage() {
       Master: false,
     },
   ];
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
+      tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.visibility = 'visible';
+      tooltipRef.current.style.opacity = '1';
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.visibility = 'hidden';
+      tooltipRef.current.style.opacity = '0';
+    }
+  };
   return (
     <S.Container>
       <S.Profile>
@@ -211,7 +233,10 @@ export default function ProjectInfoPage() {
           <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
-              <S.CharacterBox>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
                 <S.Medium18Text>Origin</S.Medium18Text>
                 <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
                 <S.rowBox>
@@ -221,9 +246,25 @@ export default function ProjectInfoPage() {
                   <S.Medium18Text>2</S.Medium18Text>
                 </S.rowBox>
               </S.CharacterBox>
-              <S.CharacterBox>
-                <S.Medium18Text>Admin</S.Medium18Text>
-                <S.Medium14Text>관리자는 어쩌구...</S.Medium14Text>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
+                <S.Medium18Text>2</S.Medium18Text>
+                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
+                <S.rowBox>
+                  <Book />
+                  <S.Medium18Text>3</S.Medium18Text>
+                  <Page />
+                  <S.Medium18Text>2</S.Medium18Text>
+                </S.rowBox>
+              </S.CharacterBox>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
+                <S.Medium18Text>2</S.Medium18Text>
+                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
                 <S.rowBox>
                   <Book />
                   <S.Medium18Text>3</S.Medium18Text>
