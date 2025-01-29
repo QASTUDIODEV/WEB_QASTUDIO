@@ -54,4 +54,15 @@ export const Preview = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  justify-content: center;
+  label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+  }
 `;

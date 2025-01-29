@@ -177,9 +177,9 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            <S.ProfileWrapper>
-              <Profile profileImg={imgFile} />
-            </S.ProfileWrapper>
+            {/* <S.ProfileWrapper> */}
+            <Profile profileImg={imgFile} />
+            {/* </S.ProfileWrapper> */}
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
           {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}
@@ -198,7 +198,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
+                <Input placeholder="Enter project title." type="thin" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
               </>
             )}
           />
@@ -221,7 +221,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             render={({ field }) => (
               <>
                 <Input
-                  type="normal"
+                  type="thin"
                   placeholder="Enter the deployed project URL"
                   {...field}
                   errorMessage={errors.projectUrl?.message}
@@ -247,7 +247,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
                 },
               }}
               render={({ field }) => (
-                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input type="thin" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
             <Button
