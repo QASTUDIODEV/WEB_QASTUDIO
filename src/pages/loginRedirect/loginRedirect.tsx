@@ -30,14 +30,10 @@ function LoginRedirect() {
         navigate('/signup/userSetting');
         dispatch(isNowSignup({ isSignup: true }));
       } else {
-        const beforeRoute = localStorage.getItem('route');
-
-        if (beforeRoute === 'mypage') {
+        if (localStorage.getItem('route') === 'mypage') {
           navigate('/mypage');
-          localStorage.removeItem('route');
         } else {
           navigate('/project');
-          localStorage.removeItem('route');
         }
       }
     }
