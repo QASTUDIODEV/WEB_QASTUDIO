@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,7 @@ type TFormValues = {
 export default function UserSetting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [previewImg, setPreviewImg] = useState('');
   const { isSignup } = useSelector(selectAuth);
   useEffect(() => {
     if (!isSignup) {
@@ -82,9 +82,9 @@ export default function UserSetting() {
               file: file,
             },
             {
-              onSuccess: (res) => {
-                console.log(res);
-                setValue('profileImage', import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
+              onSuccess: () => {
+                setPreviewImg(import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
+                setValue('profileImage', data.result.keyName);
               },
             },
           );
@@ -129,7 +129,8 @@ export default function UserSetting() {
           <S.Backdrop>
             <ProfileEdit />
           </S.Backdrop>
-          <Profile profileImg={watchedImage} />
+          {previewImg != '' ? <Profile profileImg={previewImg} /> : <Profile />}
+
           <S.ProfileEditBtn>
             <ProfileEdit />
           </S.ProfileEditBtn>
