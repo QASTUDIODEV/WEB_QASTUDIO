@@ -119,6 +119,11 @@ export default function MyProfile() {
     }
   };
 
+  const handleStartChange = () => {
+    setIsEdit(true);
+    localStorage.setItem('route', 'mypage');
+  };
+
   const onSubmit: SubmitHandler<TMyProfileValues> = (data) => {
     setIsEdit(false);
     setBannerPreview('');
@@ -247,7 +252,7 @@ export default function MyProfile() {
                 </S.UserInfo>
               </S.ProfileUserInfo>
               <S.ButtonWrapper>
-                <Button type="small_square" color="default" icon={<Edit />} onClick={() => setIsEdit(true)}>
+                <Button type="small_square" color="default" icon={<Edit />} onClick={handleStartChange}>
                   Edit
                 </Button>
               </S.ButtonWrapper>

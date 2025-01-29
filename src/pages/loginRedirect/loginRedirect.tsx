@@ -16,7 +16,6 @@ function LoginRedirect() {
   const urlParams = new URLSearchParams(location.search);
   const status = urlParams.get('status') || '';
   const message = urlParams.get('message') || '';
-
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
       if (isError || status === 'error') {
@@ -31,7 +30,15 @@ function LoginRedirect() {
         navigate('/signup/userSetting');
         dispatch(isNowSignup({ isSignup: true }));
       } else {
-        navigate('/project');
+        const beforeRoute = localStorage.getItem('route');
+
+        if (beforeRoute === 'mypage') {
+          navigate('/mypage');
+          localStorage.removeItem('route');
+        } else {
+          navigate('/project');
+          localStorage.removeItem('route');
+        }
       }
     }
   }, [navigate, location]);
