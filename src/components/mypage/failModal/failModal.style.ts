@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 const ModalBox = styled.div`
-  min-width: 760px;
-  width: 760px;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -19,6 +17,8 @@ const BtnWrapper = styled.div`
 const Content = styled.div`
   display: flex;
   padding: 0 0 30px 0;
+  width: 100%;
+  white-space: normal;
 `;
 
 export { BtnWrapper, Content, ModalBox };

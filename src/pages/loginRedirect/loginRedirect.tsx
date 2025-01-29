@@ -13,11 +13,19 @@ function LoginRedirect() {
 
   const { useGetSidebarUserInfo } = useProjectList();
   const { data: userInfo, isError } = useGetSidebarUserInfo;
+  const urlParams = new URLSearchParams(location.search);
+  const status = urlParams.get('status') || '';
+  const message = urlParams.get('message') || '';
 
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
-      if (isError) {
-        navigate('/');
+      if (isError || status === 'error') {
+        if (message === 'This social account cannot be linked.') {
+          navigate('/mypage?error=socialLink');
+          return;
+        } else {
+          navigate('/');
+        }
       }
       if (userInfo?.result.nickname === '') {
         navigate('/signup/userSetting');
