@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
@@ -20,23 +20,38 @@ export default function AddProjectPage() {
   const { data, isSuccess } = useProjectExtractInfo;
   const { mutate: uploadZipFile, isError, isSuccess: success } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
+
   const [modal, setModal] = useState(false);
-  if (isError) setModal(true);
+  const [isUploaded, setIsUploaded] = useState(false);
+
+  useEffect(() => {
+    if (isError) {
+      setModal(true);
+    }
+  }, [isError]);
+
   const ModalClose = () => {
     setModal(false);
   };
+
+  // ✅ ZIP 파일을 최초 한 번만 업로드하도록 변경
   const handleFileUpload = async (file: File) => {
-    if (!file.type.startsWith('application/zip')) {
-      return;
+    if (!file.type.startsWith('application/zip') || isUploaded) {
+      return; // ZIP 파일이 아니거나 이미 업로드되었으면 요청하지 않음
     }
+
+    setIsUploaded(true); // 업로드 시작 시 상태 변경
+
     uploadZipFile(
       { projectId: Number(projectId), zipFile: file },
       {
         onSuccess: (res) => {
           console.log('Upload success:', res);
+          setIsUploaded(true); // 업로드 성공 후 다시 요청 방지
         },
         onError: (err) => {
           console.error('Upload failed:', err);
+          setIsUploaded(false); // 실패 시 다시 업로드 가능하도록 설정
         },
       },
     );
@@ -49,8 +64,9 @@ export default function AddProjectPage() {
       e.target.value = '';
     }
   };
+
   return success || data?.result.viewType ? (
-    <ProjectInfoPage />
+    <ProjectInfoPage data={data} />
   ) : (
     <S.Container>
       {projectId && isSuccess && (
@@ -70,8 +86,8 @@ export default function AddProjectPage() {
       </S.Text>
       <S.Box>
         <label htmlFor="zipFile">
-          <Button type="normal" color="blue" icon={<Upload />} iconPosition="left">
-            Upload Project File (.zip)
+          <Button type="normal" color="blue" icon={<Upload />} iconPosition="left" disabled={isUploaded}>
+            {isUploaded ? 'File Uploaded' : 'Upload Project File (.zip)'}
           </Button>
           <S.HiddenInput type="file" id="zipFile" name="zipFile" accept=".zip, .ZIP" ref={zipFileRef} onChange={(e) => handleInputChange(e)} />
         </label>

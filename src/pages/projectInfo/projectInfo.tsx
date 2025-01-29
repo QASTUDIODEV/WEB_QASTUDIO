@@ -1,5 +1,6 @@
 import React, { useReducer, useRef } from 'react';
 
+import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
@@ -24,14 +25,6 @@ import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
 
-const initialState = {
-  isStructureVisible: true,
-  selectedPage: '홈',
-  isEdit: false,
-  content: '사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다.\n(두줄까지 들어갈 수 있습니다.)',
-  preContent: '',
-};
-
 type TAction =
   | { type: 'TOGGLE_STRUCTURE' }
   | { type: 'SET_PAGE'; payload: string }
@@ -39,23 +32,31 @@ type TAction =
   | { type: 'SET_PRE_CONTENT'; payload: string }
   | { type: 'SET_CONTENT'; payload: string };
 
-function reducer(state: typeof initialState, action: TAction) {
-  switch (action.type) {
-    case 'TOGGLE_STRUCTURE':
-      return { ...state, isStructureVisible: !state.isStructureVisible };
-    case 'SET_PAGE':
-      return { ...state, selectedPage: action.payload };
-    case 'TOGGLE_EDIT':
-      return { ...state, isEdit: action.payload ?? !state.isEdit };
-    case 'SET_PRE_CONTENT':
-      return { ...state, preContent: action.payload, isEdit: true };
-    case 'SET_CONTENT':
-      return { ...state, content: action.payload, isEdit: false };
-    default:
-      return state;
+export default function ProjectInfoPage(projectInfo: { data?: TGetProjectInfo }) {
+  const result = projectInfo.data?.result;
+  const initialState = {
+    isStructureVisible: true,
+    selectedPage: '홈',
+    isEdit: false,
+    content: result?.introduction || '',
+    preContent: '',
+  };
+  function reducer(state: typeof initialState, action: TAction) {
+    switch (action.type) {
+      case 'TOGGLE_STRUCTURE':
+        return { ...state, isStructureVisible: !state.isStructureVisible };
+      case 'SET_PAGE':
+        return { ...state, selectedPage: action.payload };
+      case 'TOGGLE_EDIT':
+        return { ...state, isEdit: action.payload ?? !state.isEdit };
+      case 'SET_PRE_CONTENT':
+        return { ...state, preContent: action.payload, isEdit: true };
+      case 'SET_CONTENT':
+        return { ...state, content: action.payload, isEdit: false };
+      default:
+        return state;
+    }
   }
-}
-export default function ProjectInfoPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const modalDispatch = useDispatch();
   const data = {
@@ -70,7 +71,6 @@ export default function ProjectInfoPage() {
     ],
     character: ['일반', '관리자', '비로그인'],
   };
-
   const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
   const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
   const member = [
@@ -112,12 +112,24 @@ export default function ProjectInfoPage() {
       tooltipRef.current.style.opacity = '0';
     }
   };
+  const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
+  const stack = STACK[result?.developmentSkill as keyof typeof STACK] ?? STACK.NEXT;
   return (
     <S.Container>
       <S.Profile>
-        <ProjectTitle stack={STACK.NEXT} device={DEVICE.PC} />
+        <ProjectTitle title={result?.projectName} profileImg={result?.projectImage} stack={stack} device={type} />
         <S.Wrapper top="5.6px" right="0" className="buttonShow">
-          <Button type="normal" color="default" icon={<Goto />} iconPosition="right">
+          <Button
+            type="normal"
+            color="default"
+            icon={<Goto />}
+            iconPosition="right"
+            onClick={() => {
+              if (result?.projectUrl) {
+                window.location.href = result.projectUrl;
+              }
+            }}
+          >
             Go to Site
           </Button>
         </S.Wrapper>
