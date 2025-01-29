@@ -20,12 +20,9 @@ const Container = styled.div`
       opacity: 0;
     }
   }
-  @media (max-width: 1400px) {
-    overflow: hidden;
-  }
-  @media (max-width: 1100px) {
+  @media (max-width: 1300px) {
     overflow: auto;
-    padding-bottom: 0;
+    padding-bottom: 0%;
   }
 `;
 const Profile = styled.div`
@@ -107,16 +104,6 @@ const Left = styled.div`
   justify-content: start;
   ${media.desktop`
     width: 100%;
-    
-  `}
-  @media (max-width: 1400px) {
-    height: 88%;
-  }
-  @media (max-width: 1200px) {
-    height: 75%;
-  }
-  ${media.desktop`
-    height: 100%;
   `}
 `;
 
@@ -134,12 +121,6 @@ const Right = styled.div`
     height: 100%;
     margin: 40px 0 0 0;
   `}
-  @media (max-width: 1400px) {
-    height: 88%;
-  }
-  @media (max-width: 1200px) {
-    height: 78%;
-  }
 `;
 
 const Title = styled.p`
@@ -196,8 +177,8 @@ const Text = styled.p`
   @media (max-width: 610px) {
     width: 60%;
   }
-  @media (max-width: 1200px) {
-    font-size: 10px;
+  @media (max-width: 1400px) {
+    font-size: 12px;
   }
 `;
 
@@ -215,7 +196,7 @@ const TextBold = styled.p`
 const SemiBox = styled.div`
   display: flex;
   height: 100%;
-  margin-top: 30px;
+  margin-top: 3%;
   ${media.desktop`
     width: 100%;
     height: 100%;
@@ -241,7 +222,7 @@ const CharacterAddBox = styled.div`
   ${({ theme }) => theme.align.column_center}
   background: #d9e6ff1a;
   border-radius: 6.4px;
-  height: 100%;
+  height: 96px;
   width: 112px;
   padding: 12px;
   cursor: pointer;
@@ -249,9 +230,6 @@ const CharacterAddBox = styled.div`
     width: 50%;
     height: 50%;
   }
-  ${media.desktop`
-    height: 80%
-  `}
 `;
 export const TooltipWrapper = styled.div<{ visible: boolean }>`
   position: fixed;
@@ -262,7 +240,7 @@ const CharacterBox = styled.div`
   position: relative;
   background: #007f7f;
   border-radius: 6.4px;
-  height: 100%;
+  height: 96px;
   width: 112px;
   display: flex;
   flex-direction: column;
@@ -270,16 +248,13 @@ const CharacterBox = styled.div`
   padding: 12px;
   gap: 8px;
   cursor: pointer;
-  ${media.desktop`
-    height: 80%;
-  `}
 `;
 const Character = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 `;
 type TWrapperProps = {
   top?: string;
@@ -317,9 +292,9 @@ export const Input = styled.textarea`
   @media (max-width: 610px) {
     width: 60%;
   }
-  ${media.desktop`
-    font-size: 10px;
-  `}
+  @media (max-width: 1400px) {
+    font-size: 12px;
+  }
 `;
 type TText = {
   color?: string;
