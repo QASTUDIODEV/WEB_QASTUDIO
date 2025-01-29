@@ -8,6 +8,8 @@ import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
 
+import ProjectInfoPage from '../projectInfo/projectInfo';
+
 import Upload from '@/assets/icons/upload.svg?react';
 import * as S from '@/pages/addProject/addProject.style';
 
@@ -16,9 +18,9 @@ export default function AddProjectPage() {
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
   const { data, isSuccess } = useProjectExtractInfo;
-  const { mutate: uploadZipFile, isError } = useUploadFile;
+  const { mutate: uploadZipFile, isError, isSuccess: success } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
   if (isError) setModal(true);
   const ModalClose = () => {
     setModal(false);
@@ -47,7 +49,9 @@ export default function AddProjectPage() {
       e.target.value = '';
     }
   };
-  return (
+  return success || data?.result.viewType ? (
+    <ProjectInfoPage />
+  ) : (
     <S.Container>
       {projectId && isSuccess && (
         <S.ProfileWrapper>
