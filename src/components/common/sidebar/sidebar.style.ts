@@ -75,7 +75,15 @@ export const Profile = styled.div`
 
 export const ProfileName = styled.p`
   margin: 0;
-  ${({ theme }) => theme.text.medium_24};
+  font-family: Pretendard;
+  font-size: 19.2px;
+  font-weight: 500;
+  line-height: 28.8px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
   color: #d6deec;
 `;
 export const ProfileWrapper = styled.div`
@@ -94,7 +102,15 @@ export const Projects = styled.div`
 `;
 
 export const ProjectText = styled.p`
-  ${({ theme }) => theme.text.medium_24};
+  font-family: Pretendard;
+  font-size: 19.2px;
+  font-weight: 500;
+  line-height: 28.8px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
   color: #d6deec;
 `;
 
@@ -126,7 +142,15 @@ export const SemiBox = styled.div`
 
 export const ProjectName = styled.p`
   margin: 0;
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-weight: 500;
+  line-height: 21.6px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
   color: #d6deec;
   white-space: nowrap;
   overflow: hidden;
@@ -187,7 +211,15 @@ export const StyledNavLink = styled(NavLink)`
 export const Logout = styled.div`
   padding: 0 10.938% 15.313% 10.938%;
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-weight: 500;
+  line-height: 21.6px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
   gap: 10px;
   display: inline-flex;
   align-items: center;
