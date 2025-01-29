@@ -1,8 +1,8 @@
-import { uploadZipFile } from '@/apis/projectInfo/projectInfo';
+import { uploadZipFile } from '@/apis/projectInfo/uploadZipFile';
 
 import { useCoreMutation } from '../common/customQuery';
 
-export default function useUploadZipFile() {
+export function useUploadZipFile() {
   const useUploadFile = useCoreMutation(uploadZipFile, {});
   return { useUploadFile };
 }

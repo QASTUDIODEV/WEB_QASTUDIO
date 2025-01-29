@@ -15,3 +15,7 @@ export type TProjectInfoRequest = {
   projectId: number;
   zipFile: File;
 };
+
+export type TProjectInfo = {
+  projectId: number;
+};
