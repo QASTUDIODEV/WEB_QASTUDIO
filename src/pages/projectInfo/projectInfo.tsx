@@ -1,10 +1,13 @@
 import React, { useReducer, useRef } from 'react';
 
+import { DEVICE, STACK } from '@/enums/enums';
+
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
+import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -15,10 +18,8 @@ import Branch from '@/assets/icons/branch_white.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import File from '@/assets/icons/files.svg?react';
-import NextJs from '@/assets/icons/nextjs.svg?react';
 import Page from '@/assets/icons/page.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
-import Web from '@/assets/icons/web.svg?react';
 import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
@@ -115,17 +116,12 @@ export default function ProjectInfoPage() {
   return (
     <S.Container>
       <S.Profile>
-        <S.ProfileWrapper>
-          <Profile />
-        </S.ProfileWrapper>
-        <S.ProfileName>UMC_PM_DAY</S.ProfileName>
+        <ProjectTitle stack={STACK.NEXT} device={DEVICE.PC} />
         <S.Wrapper top="5.6px" right="0" className="buttonShow">
           <Button type="normal" color="default" icon={<Goto />} iconPosition="right">
             Go to Site
           </Button>
         </S.Wrapper>
-        <NextJs />
-        <Web />
       </S.Profile>
       <S.Box height="18%">
         <S.Title>Introduction to the Project</S.Title>
@@ -166,6 +162,7 @@ export default function ProjectInfoPage() {
             >
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
+              <S.TextLight>{state.content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
                 <Plus onClick={() => modalDispatch(openModal(MODAL_TYPES.CreatePageModal))} />
               </S.Wrapper>
