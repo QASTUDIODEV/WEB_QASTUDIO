@@ -122,7 +122,7 @@ export default function ProjectInfoPage() {
           </Button>
         </S.Wrapper>
       </S.Profile>
-      <S.Box height="15%">
+      <S.Box height="18%">
         <S.Title>Introduction to the Project</S.Title>
         {!state.isEdit ? (
           <>
@@ -226,7 +226,7 @@ export default function ProjectInfoPage() {
               onBackToSummary={() => dispatch({ type: 'TOGGLE_STRUCTURE' })}
             />
           )}
-          <S.Box height="40%">
+          <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
               <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
