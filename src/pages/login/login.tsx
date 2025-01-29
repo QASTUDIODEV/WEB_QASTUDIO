@@ -25,6 +25,7 @@ type TFormValues = {
 
 export default function LoginPage() {
   sessionStorage.removeItem('loginHandled');
+  localStorage.setItem('route', 'login');
   const dispatch = useDispatch();
   const {
     register,
