@@ -177,9 +177,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            {/* <S.ProfileWrapper> */}
             <Profile profileImg={imgFile} />
-            {/* </S.ProfileWrapper> */}
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
           {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}

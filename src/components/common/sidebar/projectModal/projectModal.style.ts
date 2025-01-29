@@ -12,6 +12,7 @@ export const ModalBox = styled.div`
   flex-direction: column;
   ${media.desktop`
     width: 100%;
+    min-width: 350px;
   `}
 `;
 export const PostBox = styled.div`
