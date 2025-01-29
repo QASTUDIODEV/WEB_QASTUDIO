@@ -5,7 +5,8 @@ const Container = styled.div`
   border: 0.8px solid rgba(32, 75, 153, 0.2);
   background: linear-gradient(76deg, #001945 0%, #000714 100.13%);
   padding: 14px;
-  width: 260px;
+  width: 100%;
+  //width: 260px;
   display: flex;
   flex-direction: column;
   gap: 30px;
