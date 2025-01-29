@@ -39,7 +39,7 @@ export default function ProjectInfoPage(projectInfo: { data?: TGetProjectInfo })
     selectedPage: '홈',
     isEdit: false,
     content: result?.introduction || '',
-    preContent: '',
+    preContent: result?.introduction || '',
   };
   function reducer(state: typeof initialState, action: TAction) {
     switch (action.type) {
