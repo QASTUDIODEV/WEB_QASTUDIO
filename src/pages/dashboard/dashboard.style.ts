@@ -8,6 +8,10 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 60px;
+
+  @media (max-width: 1260px) {
+    padding: 60px 60px;
+  }
 `;
 
 const TableWrapper = styled.div`
