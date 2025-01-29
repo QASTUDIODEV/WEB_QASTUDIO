@@ -38,13 +38,13 @@ export default function Controller() {
           {/* 헤더 */}
           <S.Header>
             <br />
-            <p>프로젝트 이름</p>
+            <p>{scenario.projectName}</p>
           </S.Header>
           {/* 역할 선택 */}
           <S.CharacterHeader>
             <p>Character</p>
             <S.DropdownContainer>
-              <SelectDropdown options={['user', 'admin']} onSelect={onSelect} />
+              <SelectDropdown options={scenario.characters.map((char) => char.characterName)} onSelect={onSelect} />
             </S.DropdownContainer>
           </S.CharacterHeader>
           {/* 시나리오 리스트 */}

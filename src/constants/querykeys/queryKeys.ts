@@ -19,4 +19,6 @@ export const QUERY_KEYS = {
   },
   GET_PROJECT_INFO: ['getProjectInfo'],
   GET_CHARACTER_LIST: ['getCharacterList'],
+  GET_SCENARIO_INFO: ['getScenarioInfo'],
+  GET_SCENARIO_LIST: ['getScenarioList'],
 };

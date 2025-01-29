@@ -4,6 +4,7 @@ export type TGetCharacterListResponse = TCommonResponse<{
   detailCharacters: [
     {
       characterId: number;
+      characterName: string;
       author: string;
       createdAt: string;
       updatedAt: string;
@@ -22,6 +23,41 @@ export type TGetProjectInfoResponse = TCommonResponse<{
   assistantId: string;
 }>;
 
+export type TGetScenarioListResponse = TCommonResponse<{
+  scenarioList: [
+    {
+      scenarioId: number;
+      scenarioName: string;
+      author: string;
+      createdAt: string;
+      updatedAt: string;
+    },
+  ];
+}>;
+
+export type TGetScenarioInfo = TCommonResponse<{
+  scenarioId: number;
+  scenarioName: string;
+  scenarioDescription: string;
+  actions: [
+    {
+      actionDescription: string;
+      step: number;
+      actionType: string;
+      locator: {
+        strategy: string;
+        value: string;
+      };
+      action: {
+        type: string;
+        value: string;
+      };
+    },
+  ];
+}>;
+
 export type TGetProjectInfoValues = {
-  projectId: string;
+  projectId?: number;
+  characterId?: number;
+  scenarioId?: number;
 };
