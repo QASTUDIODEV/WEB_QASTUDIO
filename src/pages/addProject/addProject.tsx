@@ -5,6 +5,7 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import { useUploadZipFile } from '@/hooks/projectInfo/useUploadZip';
 
 import Button from '@/components/common/button/button';
+import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import Profile from '@/components/common/profile/profile';
 
@@ -18,7 +19,7 @@ export default function AddProjectPage() {
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
   const { data, isSuccess } = useProjectExtractInfo;
-  const { mutate: uploadZipFile, isError, isSuccess: success } = useUploadFile;
+  const { mutate: uploadZipFile, isError, isSuccess: success, isPending } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
 
   const [modal, setModal] = useState(false);
@@ -64,7 +65,13 @@ export default function AddProjectPage() {
       e.target.value = '';
     }
   };
-
+  if (isPending) {
+    return (
+      <S.Container>
+        <Loading />
+      </S.Container>
+    );
+  }
   return success || data?.result.viewType ? (
     <ProjectInfoPage projectInfo={data} />
   ) : (
