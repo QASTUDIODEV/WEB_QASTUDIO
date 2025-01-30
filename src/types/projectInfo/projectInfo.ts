@@ -34,3 +34,10 @@ export type TGetProjectMember = TCommonResponse<{
     profileImage: string;
   }[];
 }>;
+
+export type TProjectMember = TCommonResponse<{
+  userEmails: {
+    userId: number;
+    email: string;
+  }[];
+}>;
