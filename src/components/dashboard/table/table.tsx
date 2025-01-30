@@ -44,7 +44,7 @@ export default function Table() {
     pageSize: 6,
   });
 
-  const { data: listData } = usePaginateTestList({ projectId: Number(projectId), page: pagination.pageIndex });
+  const { data: listData } = usePaginateTestList({ projectId: Number(projectId), page: pagination.pageIndex, state: selectState ?? null });
 
   console.log(selectState, selectedPageName);
 
