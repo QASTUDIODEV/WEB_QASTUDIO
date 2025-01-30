@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { refresh } from './auth/auth';
+import { logout, refresh } from './auth/auth';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.log('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.', refreshError);
-
+        logout();
         window.location.href = '/';
       } finally {
         isRedirecting = false;
