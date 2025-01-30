@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const ModalContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   width: 608px;
   ${media.desktop`
     width: 100%;
@@ -14,11 +14,23 @@ export const ModalContainer = styled.div`
 `;
 
 export const description = styled.div`
-  ${({ theme }) => theme.text.medium_24};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  font-family: Pretendard;
+  font-size: 19.2px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 28.8px */
+  letter-spacing: 0.384px;
 `;
 
 export const SubTitle = styled.p`
-  ${({ theme }) => theme.text.medium_22};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  font-family: Pretendard;
+  font-size: 17.6px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 26.4px */
+  letter-spacing: 0.352px;
 `;
 
 export const InputWrapper = styled.div`
@@ -29,10 +41,11 @@ export const InputWrapper = styled.div`
 
 export const ButtonContainer = styled.div`
   display: flex;
+  align-items: center;
+  gap: 16px;
   justify-content: flex-end;
 `;
 export const ButtonWrapper = styled.div`
-  width: 104px;
   display: flex;
   justify-content: flex-end;
 `;
@@ -63,7 +76,12 @@ export const DescriptionItem = styled.div`
 
 export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  ${({ theme }) => theme.text.medium_18}
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21.6px */
+  letter-spacing: 0.288px;
 `;
 export const ScenarioContainer = styled.div`
   display: flex;
@@ -74,7 +92,7 @@ export const MainScenarioWrapper = styled.div`
   display: flex;
   height: 277px;
   padding: 20px;
-
+  border-radius: 6.4px;
   flex-direction: column;
   align-items: center;
   align-self: stretch;
@@ -88,8 +106,12 @@ export const ScenarioDescription = styled.div`
   flex-direction: column;
   gap: 10px;
   color: white;
-  ${({ theme }) => theme.text.medium_22}
-`;
-export const LongButtonWrapper = styled.div`
-  width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Pretendard;
+  font-size: 17.6px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 26.4px */
+  letter-spacing: 0.352px;
 `;
