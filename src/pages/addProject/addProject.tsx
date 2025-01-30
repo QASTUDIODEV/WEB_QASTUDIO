@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import { useUploadZipFile } from '@/hooks/projectInfo/useUploadZip';
+import useProjectList from '@/hooks/sidebar/sidebar';
 
 import Button from '@/components/common/button/button';
 import Loading from '@/components/common/loading/loading';
@@ -19,6 +21,17 @@ export default function AddProjectPage() {
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
   const { data, isSuccess } = useProjectExtractInfo;
+  const { useGetProjectList } = useProjectList();
+  const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    const firstProjectId = projectList?.result.projectList[0].projectId;
+    if (firstProjectId) {
+      navigate(`/project/information/${firstProjectId}`);
+    }
+    queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
+  }, [isProjectListLoaded, projectList, projectId, navigate]);
   const { mutate: uploadZipFile, isError, isSuccess: success, isPending } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
 
