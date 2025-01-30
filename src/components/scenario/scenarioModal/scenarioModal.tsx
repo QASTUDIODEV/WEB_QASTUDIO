@@ -29,7 +29,7 @@ export default function ScenarioModal() {
   // 역할 생성 함수
   const handleCreate = (data: any) => {
     //역할 생성
-    console.log(data);
+    //console.log(data);
     setModalStep(2);
   };
 
