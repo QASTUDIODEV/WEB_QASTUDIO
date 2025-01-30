@@ -3,7 +3,13 @@ import styled from 'styled-components';
 export const CharacterHeaderLeftSide = styled.div`
   display: flex;
   gap: 8px;
+  min-width: 100px;
 `;
+export const IconContainer = styled.div`
+  width: 24px;
+  height: 24px;
+`;
+
 export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolean; $isSelected?: boolean }>`
   display: flex;
   padding: 30px 20px;
@@ -37,4 +43,10 @@ export const Elapsed = styled.div`
   align-items: center;
   gap: 8px;
   width: 195px;
+`;
+
+export const CharacterTitle = styled.p`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

@@ -30,7 +30,7 @@ const initialState: IScenarioSlice = {
   characters: [
     {
       id: 1,
-      title: '역할 1',
+      title: '역할asdfasdfsdfasdfasdfadsasdfasdfasdfasfsadfsad 1',
       isChecked: false,
       isSelected: false,
       createdBy: 'User 1',

@@ -2,13 +2,13 @@ import styled from 'styled-components';
 
 export const Background = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  padding: 100px;
+  padding: 6%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
   width: 100%;
-  min-width: 1005px;
+
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-size: 18px;
@@ -22,6 +22,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: inherit;
+  overflow-x: auto; /* 📌 가로 스크롤 추가 */
+  max-width: 100%; /* 📌 화면 너비에 맞게 조정 */
 `;
 
 export const Header = styled.div`
