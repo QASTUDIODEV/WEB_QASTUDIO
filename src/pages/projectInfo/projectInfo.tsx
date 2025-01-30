@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
@@ -10,6 +10,7 @@ import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
+import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -61,6 +62,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const [state, dispatch] = useReducer(reducer, initialState);
   const { useEditIntroduce, useGetProjectMember } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: members } = useGetProjectMember;
+  const [modalShow, setModalShow] = useState(false);
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const data = {
@@ -79,7 +81,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
   const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-
+  const showModal = () => {
+    setModalShow(true);
+  };
+  const hideModal = () => {
+    setModalShow(false);
+  };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (tooltipRef.current) {
       tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
@@ -309,9 +316,10 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               </S.Member>
             ))}
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={() => modalDispatch(openModal(MODAL_TYPES.InviteModal))}>
+              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={showModal}>
                 Invite
               </Button>
+              {modalShow && <InviteModal onClose={hideModal} projectId={Number(result?.projectId)} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>

@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+
+import useDebounce from '@/hooks/common/useDebounce';
+import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -11,19 +14,21 @@ import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TInviteModalProps = {
   onClose: () => void; // 모달 닫기 함수
+  projectId: number;
 };
 
 type TFormData = {
   email: string;
 };
-
-export default function InviteModal({ onClose }: TInviteModalProps) {
+type TEmailList = {
+  userId: number;
+  email: string;
+}[];
+export default function InviteModal({ onClose, projectId }: TInviteModalProps) {
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
-
   const {
     control,
     setValue,
-    watch,
     formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
@@ -32,14 +37,39 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
     },
   });
 
-  const emailValue = watch('email'); // 이메일 값 실시간 추적
+  const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
+  const debouncedEmail = useDebounce(emailValue, 800);
+  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail }); // 이메일 유효성 확인
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
+  const { data } = useGetTeamMember;
+  useEffect(() => {
+    if (data && data.result.userEmails.some((userEmail) => userEmail.email === debouncedEmail)) {
+      const existingEmails = memberEmailList.map((member) => member.email);
+      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
+
+      if (newEmails.length > 0) {
+        setMemberEmailList((prev) => [...prev, ...newEmails]); // 유효한 이메일만 추가
+        setIsEmailValid(true); // 이메일 유효성 상태 업데이트
+      }
+    } else {
+      setIsEmailValid(false); // 이메일이 유효하지 않음
+    }
+  }, [data, debouncedEmail]);
+  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
 
   const handleAddEmail = () => {
-    const email = emailValue.trim();
-    if (email && !emails.includes(email)) {
-      setEmails((prev) => [...prev, email]);
-      setValue('email', ''); // 입력 필드 초기화
+    if (!debouncedEmail || emails.includes(debouncedEmail)) {
+      return; // 이메일이 비어 있거나 이미 추가된 경우
     }
+
+    if (!isEmailValid) {
+      setValue('email', '');
+      return; // 유효하지 않은 이메일이면 추가하지 않음
+    }
+
+    setEmails((prev) => [...prev, debouncedEmail]); // 이메일 추가
+    setValue('email', ''); // 입력 필드 초기화
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
@@ -47,7 +77,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
   };
 
   const handleCreate = () => {
-    // console.log('Emails:', emails); 나중에 지울게용
+    setEmails([]);
     onClose(); // 모달 닫기
   };
 
@@ -75,18 +105,17 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
           />
           <Button
             type="act"
-            color="gray"
+            color="blue"
             onClick={handleAddEmail}
-            disabled={
-              !emailValue.trim() || // 값이 비어 있으면 비활성화
-              !!errors.email || // 유효성 검사 에러가 있으면 비활성화
-              emails.includes(emailValue.trim()) // 이미 추가된 이메일이면 비활성화
-            }
+            disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email || !isEmailValid}
           >
             Share
           </Button>
         </S.BtnWrapper>
-        {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+        {FirstValid && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+        {!FirstValid && !isEmailValid && debouncedEmail && (
+          <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />
+        )}
         {/* 이메일 태그 리스트 */}
         <S.tagWrapper>
           {emails.map((email) => (
