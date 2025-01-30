@@ -167,7 +167,7 @@ const Text = styled.p`
   line-height: 150%;
   letter-spacing: 0.288px;
   white-space: pre;
-  overflow-y: scroll;
+  overflow: hidden;
   scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
@@ -223,7 +223,7 @@ const CharacterAddBox = styled.div`
   background: #d9e6ff1a;
   border-radius: 6.4px;
   height: 96px;
-  width: 112px;
+  min-width: 112px;
   padding: 12px;
   cursor: pointer;
   svg {
@@ -255,6 +255,9 @@ const Character = styled.div`
   width: 100%;
   align-items: center;
   gap: 16px;
+  @media (max-width: 720px) {
+    overflow-x: scroll;
+  }
 `;
 type TWrapperProps = {
   top?: string;
