@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
-import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
+import SelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 
 import ArrowRight from '@/assets/icons/arrow_right_red.svg?react';
 import CheckCircle from '@/assets/icons/check_circle.svg?react';

@@ -1,18 +1,20 @@
 import { useState } from 'react';
 
-import { useSelector } from '@/hooks/common/useCustomRedux';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
 import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
+import SelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 import * as S from '@/components/scenarioAct/controller/controller.style';
 import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
 import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
-import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
+import { setCharacterId } from '@/slices/scenarioActSlice';
 
 export default function Controller() {
+  const dispatch = useDispatch();
   // 스텝 - 시나리오 실행: 1, 시나리오 추가: 2
   const [step, setStep] = useState<number>(1);
   //시나리오 가져오기
@@ -21,8 +23,8 @@ export default function Controller() {
   const { isOpen } = useSelector((state) => state.modal);
 
   //드롭다운 함수
-  const onSelect = () => {
-    console.log('ㅅㅌ됨');
+  const onSelect = (selectedCharacter: { characterId: number; characterName: string }) => {
+    dispatch(setCharacterId(selectedCharacter.characterId));
   };
   // 스텝 함수
   const handleStep = (selectedStep: number) => {
@@ -44,7 +46,7 @@ export default function Controller() {
           <S.CharacterHeader>
             <p>Character</p>
             <S.DropdownContainer>
-              <SelectDropdown options={scenario.characters.map((char) => char.characterName)} onSelect={onSelect} />
+              <SelectDropdown options={scenario.characters} onSelect={onSelect} onSelect={onSelect} />
             </S.DropdownContainer>
           </S.CharacterHeader>
           {/* 시나리오 리스트 */}

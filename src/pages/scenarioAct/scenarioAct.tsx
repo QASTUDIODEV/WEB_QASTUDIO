@@ -52,14 +52,14 @@ const dummyScenarioList = {
     scenarioList: [
       {
         scenarioId: 101,
-        scenarioName: 'Scenario 1',
+        scenarioName: 'Scenario 11',
         author: 'Tester',
         createdAt: '2025-01-29T15:48:51.914Z',
         updatedAt: '2025-01-29T15:48:51.914Z',
       },
       {
         scenarioId: 102,
-        scenarioName: 'Scenario 2',
+        scenarioName: 'Scenario 22',
         author: 'Tester',
         createdAt: '2025-01-29T15:48:51.914Z',
         updatedAt: '2025-01-29T15:48:51.914Z',
@@ -73,12 +73,9 @@ export default function ScenarioActPage() {
   const { projectId: stringProjectId } = useParams<{ projectId: string }>();
   const projectId = stringProjectId ? Number(stringProjectId) : undefined;
 
-  // 프로젝트 정보 가져오기
-  const { useGetProjectInfo } = useProjectInfo(projectId);
+  // 프로젝트 정보, 역할 리스트  가져오기
+  const { useGetProjectInfo, useGetCharacterList } = useProjectInfo(projectId);
   const { data: projectInfo, isLoading: projectInfoLoading } = useGetProjectInfo;
-
-  // 역할 리스트 가져오기
-  const { useGetCharacterList } = useProjectInfo(projectId);
   const { data: characterList, isLoading: characterListLoading } = useGetCharacterList;
 
   const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
@@ -103,8 +100,6 @@ export default function ScenarioActPage() {
   useEffect(() => {
     if (scenarioList?.result?.scenarioList) {
       dispatch(setScenarioList({ scenarioList: scenarioList.result.scenarioList }));
-
-      dummyScenarioList;
     }
   }, [scenarioList, dispatch]);
 

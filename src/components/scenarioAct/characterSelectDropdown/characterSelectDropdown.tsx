@@ -5,15 +5,20 @@ import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSe
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 
+interface IDropdownOption {
+  characterId: number;
+  characterName: string;
+}
+
 interface IDropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
+  options: IDropdownOption[];
+  onSelect: (selected: IDropdownOption) => void;
   type?: 'thin' | 'normal';
 }
 
 export default function CharacterSelectDropdown({ options, onSelect, type = 'normal' }: IDropdownProps) {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
-  const [selectedOption, setSelectedOption] = useState(options[0]); // 선택된 옵션
+  const [selectedOption, setSelectedOption] = useState<IDropdownOption>(options[0]); // 선택된 옵션
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 드롭다운 열림 / 닫힘 함수
@@ -22,7 +27,7 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'nor
   };
 
   // 옵션 선택 함수
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = (option: IDropdownOption) => {
     setSelectedOption(option);
     onSelect(option);
     setIsOpen(false);
@@ -45,13 +50,13 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'nor
     <S.Container ref={dropdownRef}>
       {/* 헤더 */}
       <S.Header onClick={toggleDropdown} $isOpen={isOpen} $type={type}>
-        {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
+        {selectedOption.characterName} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Header>
       {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
           <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption} $type={type}>
-            {option}
+            {option.characterName}
           </S.DropdownListItem>
         ))}
       </S.DropdownList>
