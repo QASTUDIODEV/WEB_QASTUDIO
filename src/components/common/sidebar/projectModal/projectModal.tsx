@@ -87,7 +87,6 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
-    console.log(emails);
     if (!debouncedEmail || emails.includes(debouncedEmail)) {
       return; // 이메일이 비어 있거나 이미 추가된 경우
     }
