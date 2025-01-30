@@ -38,7 +38,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
-  const { mutate: addProject } = useAddProject;
+  const { mutate: addProject, isPending } = useAddProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const ImgRef = useRef<HTMLInputElement | null>(null);
   const [keyName, setKeyName] = useState<string>();
@@ -87,6 +87,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
+    console.log(emails);
     if (!debouncedEmail || emails.includes(debouncedEmail)) {
       return; // 이메일이 비어 있거나 이미 추가된 경우
     }
@@ -118,12 +119,14 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
+          setEmails([]);
           onClose(); // 모달 닫기
         },
       },
     );
   };
-  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0;
+  const isCreateDisabled =
+    !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0 || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       isImg = false;
@@ -177,9 +180,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            <S.ProfileWrapper>
-              <Profile profileImg={imgFile} />
-            </S.ProfileWrapper>
+            <Profile profileImg={imgFile} />
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
           {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}
@@ -198,7 +199,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
+                <Input placeholder="Enter project title." type="thin" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
               </>
             )}
           />
@@ -221,7 +222,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
             render={({ field }) => (
               <>
                 <Input
-                  type="normal"
+                  type="thin"
                   placeholder="Enter the deployed project URL"
                   {...field}
                   errorMessage={errors.projectUrl?.message}
@@ -247,14 +248,14 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
                 },
               }}
               render={({ field }) => (
-                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input type="thin" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
             <Button
               type="normal"
               color="blue"
               onClick={handleAddEmail}
-              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email}
+              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email || !isEmailValid}
             >
               Share
             </Button>
