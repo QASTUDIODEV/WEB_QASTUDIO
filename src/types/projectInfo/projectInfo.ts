@@ -19,3 +19,8 @@ export type TProjectInfoRequest = {
 export type TProjectInfo = {
   projectId: number;
 };
+
+export type TEditRequest = {
+  projectId: number;
+  introduce: string;
+};
