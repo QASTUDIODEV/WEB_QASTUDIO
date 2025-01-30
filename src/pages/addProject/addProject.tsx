@@ -25,13 +25,17 @@ export default function AddProjectPage() {
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const hasNavigated = useRef(false);
   useEffect(() => {
-    const firstProjectId = projectList?.result.projectList[0].projectId;
-    if (firstProjectId) {
-      navigate(`/project/information/${firstProjectId}`);
+    if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
+      const firstProjectId = projectList.result.projectList[0].projectId;
+      if (firstProjectId) {
+        navigate(`/project/information/${firstProjectId}`);
+        hasNavigated.current = true;
+      }
     }
     queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
-  }, [isProjectListLoaded, projectList, projectId, navigate]);
+  }, [isProjectListLoaded, projectList, navigate]);
   const { mutate: uploadZipFile, isError, isSuccess: success, isPending } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
 
