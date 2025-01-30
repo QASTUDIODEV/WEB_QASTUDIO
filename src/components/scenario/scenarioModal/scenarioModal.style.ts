@@ -25,9 +25,7 @@ export const InputWrapper = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-`;
-export const ButtonWrapper = styled.div`
-  width: 104px;
+  gap: 20px;
 `;
 
 export const TagContainer = styled.div`
@@ -81,7 +79,4 @@ export const ScenarioDescription = styled.div`
   gap: 10px;
   color: white;
   ${({ theme }) => theme.text.medium_22}
-`;
-export const LongButtonWrapper = styled.div`
-  width: 200px;
 `;
