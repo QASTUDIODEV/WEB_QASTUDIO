@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const ModalContainer = styled.div`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 850px;
+  width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const description = styled.div`
@@ -28,6 +33,8 @@ export const ButtonContainer = styled.div`
 `;
 export const ButtonWrapper = styled.div`
   width: 104px;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 export const TagContainer = styled.div`

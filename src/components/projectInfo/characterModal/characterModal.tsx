@@ -68,7 +68,7 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
 
           <S.ButtonContainer>
             <S.ButtonWrapper>
-              <Button color="blue" onClick={handleCreate}>
+              <Button type="act" color="blue" onClick={handleCreate}>
                 Create
               </Button>
             </S.ButtonWrapper>

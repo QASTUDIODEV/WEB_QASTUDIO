@@ -166,7 +166,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                 ))}
               </S.BtnWrapper>
               <S.Position>
-                <Button type="normal" color="blue" disabled={!isValid}>
+                <Button type="act" color="blue" disabled={!isValid}>
                   Next
                 </Button>
               </S.Position>

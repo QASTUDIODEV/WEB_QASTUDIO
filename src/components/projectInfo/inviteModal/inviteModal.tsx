@@ -74,7 +74,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
             )}
           />
           <Button
-            type="normal"
+            type="act"
             color="gray"
             onClick={handleAddEmail}
             disabled={
@@ -97,7 +97,7 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
         </S.tagWrapper>
         {/* Create 버튼 */}
         <S.Position>
-          <Button type="normal" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
+          <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
             Create
           </Button>
         </S.Position>

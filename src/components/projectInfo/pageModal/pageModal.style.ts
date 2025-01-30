@@ -7,7 +7,7 @@ export const ProjectText = styled.p`
   color: #d6deec;
 `;
 export const ModalBox = styled.div`
-  width: 820px;
+  width: 688px;
   gap: 20px;
   margin: 20px 0;
   display: flex;
