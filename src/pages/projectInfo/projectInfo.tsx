@@ -1,4 +1,5 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
@@ -35,6 +36,7 @@ type TAction =
   | { type: 'SET_CONTENT'; payload: string };
 
 export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
+  const queryClient = useQueryClient();
   const result = projectInfo?.result;
   const initialState = {
     isStructureVisible: true,
@@ -114,12 +116,22 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     const lines = state.preContent.split('\n');
     const modifiedText = lines.slice(0, maxRows).join('\n');
     dispatch({ type: 'SET_CONTENT', payload: modifiedText });
-    console.log(state.preContent);
-    editIntroduce({
-      projectId: Number(result?.projectId),
-      introduce: state.preContent,
-    });
+    editIntroduce(
+      {
+        projectId: Number(result?.projectId),
+        introduce: state.preContent,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectInfo', Number(result?.projectId)] });
+        },
+      },
+    );
   };
+  useEffect(() => {
+    dispatch({ type: 'SET_PRE_CONTENT', payload: result?.introduction || '' });
+    dispatch({ type: 'SET_CONTENT', payload: result?.introduction || '' });
+  }, [result?.projectId]);
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxRows = 2;
     const textarea = e.target;

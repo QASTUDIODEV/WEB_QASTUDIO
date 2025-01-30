@@ -76,7 +76,7 @@ export default function Sidebar() {
         <S.ProjectBox>
           <S.Container>
             <S.StyledNavLink to={`/project`}>
-              <Logo width={32} height={32} />
+              <Logo width={25.6} height={25.6} />
             </S.StyledNavLink>
             <S.StyledNavLink to={`/mypage`}>
               <S.Profile>
@@ -107,9 +107,9 @@ export default function Sidebar() {
                   <div key={index}>
                     <S.Project onClick={() => toggleMenu(index)}>
                       <S.SemiBox>
-                        <S.ProfileWrapper className="show content">
+                        <S.ProjectProfile className="show content">
                           <Profile profileImg={project.projectImage || ''} />
-                        </S.ProfileWrapper>
+                        </S.ProjectProfile>
                         <S.ProjectName className="menu">{project.projectName}</S.ProjectName>
                       </S.SemiBox>
                       {menuStates[index] ? <ArrowUp className="menu" /> : <ArrowDown className="menu" />}
@@ -118,7 +118,7 @@ export default function Sidebar() {
                       <S.StyledNavLink to={`/project/dashboard/${project.projectId}`}>
                         {({ isActive }) => (
                           <S.ProjectContent $isActive={isActive}>
-                            <DashboardLogo />
+                            <DashboardLogo width={19.2} height={19.2} />
                             <S.ProjectContentName>Dashboard</S.ProjectContentName>
                           </S.ProjectContent>
                         )}
@@ -126,7 +126,7 @@ export default function Sidebar() {
                       <S.StyledNavLink to={`/project/information/${project.projectId}`}>
                         {({ isActive }) => (
                           <S.ProjectContent $isActive={isActive}>
-                            <InformationLogo />
+                            <InformationLogo width={19.2} height={19.2} />
                             <S.ProjectContentName>Information</S.ProjectContentName>
                           </S.ProjectContent>
                         )}
@@ -134,7 +134,7 @@ export default function Sidebar() {
                       <S.StyledNavLink to={`/project/scenario/${project.projectId}`}>
                         {({ isActive }) => (
                           <S.ProjectContent $isActive={isActive}>
-                            <SenarioLogo />
+                            <SenarioLogo width={19.2} height={19.2} />
                             <S.ProjectContentName>Scenario</S.ProjectContentName>
                           </S.ProjectContent>
                         )}
