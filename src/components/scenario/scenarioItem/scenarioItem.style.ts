@@ -8,7 +8,6 @@ export const ScenarioItem = styled.div<{ $isChecked: boolean; $isSelected?: bool
   background: ${({ $isSelected, $isChecked }) =>
     $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
-  gap: 20px;
 `;
 export const IconContainer = styled.div`
   width: 24px;
@@ -30,6 +29,7 @@ export const Creater = styled.div`
   align-items: center;
   gap: 8px;
   width: 93px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const Elapsed = styled.div`
@@ -38,9 +38,11 @@ export const Elapsed = styled.div`
   align-items: center;
   gap: 8px;
   width: 195px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 export const ScenarioTitle = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  ${({ theme }) => theme.text.medium_20};
 `;
