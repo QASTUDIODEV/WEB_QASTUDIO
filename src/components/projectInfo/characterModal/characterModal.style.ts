@@ -45,10 +45,6 @@ export const ButtonContainer = styled.div`
   gap: 16px;
   justify-content: flex-end;
 `;
-export const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
 
 export const TagContainer = styled.div`
   display: flex;
