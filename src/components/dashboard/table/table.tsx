@@ -50,7 +50,7 @@ export default function Table() {
 
   const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
-      navigate(`/project/scenario/${projectId}`);
+      navigate(`/scenarioAct/${projectId}`);
     } else {
       dispatch(openModal({ modalType: MODAL_TYPES.ErrorModal, modalProps: { testId: testId } }));
     }
