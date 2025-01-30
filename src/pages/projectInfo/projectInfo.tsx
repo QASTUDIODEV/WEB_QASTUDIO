@@ -32,8 +32,8 @@ type TAction =
   | { type: 'SET_PRE_CONTENT'; payload: string }
   | { type: 'SET_CONTENT'; payload: string };
 
-export default function ProjectInfoPage(projectInfo: { data?: TGetProjectInfo }) {
-  const result = projectInfo.data?.result;
+export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
+  const result = projectInfo?.result;
   const initialState = {
     isStructureVisible: true,
     selectedPage: '홈',
