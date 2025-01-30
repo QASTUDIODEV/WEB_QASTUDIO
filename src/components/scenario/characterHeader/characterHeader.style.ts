@@ -18,6 +18,7 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
   align-self: stretch;
   justify-content: space-between;
   border-radius: 8px;
+
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
   border-top: ${({ $isEdit }) => ($isEdit ? '1px solid rgba(217, 230, 255, 0.2)' : 'none')};
   background: ${({ $isSelected, $isChecked }) =>
@@ -35,6 +36,7 @@ export const Creater = styled.div`
   align-items: center;
   gap: 8px;
   width: 93px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const Elapsed = styled.div`
@@ -43,10 +45,12 @@ export const Elapsed = styled.div`
   align-items: center;
   gap: 8px;
   width: 195px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const CharacterTitle = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  ${({ theme }) => theme.text.medium_20};
 `;

@@ -10,10 +10,7 @@ export const Container = styled.div`
   max-width: 80%;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   p {
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0.48px;
+    ${({ theme }) => theme.text.medium_24};
   }
 `;
 
