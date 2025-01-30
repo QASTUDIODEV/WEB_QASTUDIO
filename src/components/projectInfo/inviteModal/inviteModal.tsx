@@ -61,7 +61,6 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
       setMemberEmails(memberEmail.result.userEmails);
     }
   }, [memberEmail]);
-
   const members = memberEmails.map((a) => a.email);
 
   useEffect(() => {
@@ -76,7 +75,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     } else {
       setIsEmailValid(false);
     }
-  }, [data, debouncedEmail]);
+  }, [data, debouncedEmail, emails]);
   const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
 
   const handleAddEmail = () => {
@@ -96,9 +95,9 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     setEmails((prev) => [...prev, debouncedEmail]);
     setValue('email', '');
   };
-
-  const handleRemoveEmail = (emailToRemove: string) => {
-    setEmails((prevEmails) => prevEmails.filter((email) => email !== emailToRemove));
+  const handleRemoveEmail = (remove: string) => {
+    setMemberEmailList((prev) => prev.filter((email) => email.email !== remove));
+    setEmails((prev) => prev.filter((email) => email !== remove));
   };
   const handleCreate = () => {
     inviteMember(
