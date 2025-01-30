@@ -50,8 +50,7 @@ export default function Table() {
 
   const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
-      // 성공의 경우 경로 수정
-      navigate('/project/scenario/1');
+      navigate(`/project/scenario/${projectId}`);
     } else {
       dispatch(openModal({ modalType: MODAL_TYPES.ErrorModal, modalProps: { testId: testId } }));
     }
