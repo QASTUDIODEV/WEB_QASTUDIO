@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums.ts';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux';
+import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import Calendar from '@/components/dashboard/calendar/calendar';
@@ -21,7 +22,6 @@ import NextArrow from '@/assets/icons/arrow_right.svg?react';
 import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
 import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
 import UpArrow from '@/assets/icons/arrow_up.svg?react';
-import { tableData } from '@/mocks/tableData';
 import { openModal } from '@/slices/modalSlice';
 
 const columnHelper = createColumnHelper<TTestListDTO>();
@@ -38,17 +38,15 @@ export default function Table() {
 
   const dispatch = useDispatch();
   const { projectId } = useParams();
-  console.log(projectId);
-  const [data] = useState(tableData.result.testList);
-  const [pagination] = useState<PaginationState>({
+
+  const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 6,
   });
 
-  // const { data: listData } = usePaginateTestList({ projectId: Number(projectId) });
-  // console.log(listData?.result.testList);
+  const { data: listData } = usePaginateTestList({ projectId: Number(projectId), page: pagination.pageIndex });
 
-  console.log(selectedPageName, selectState);
+  console.log(selectState, selectedPageName);
 
   const handleModal = (state: boolean) => {
     if (state) {
@@ -99,7 +97,7 @@ export default function Table() {
     columnHelper.accessor('state', {
       header: () => <StateHeader onSelect={setSelectState} />,
       size: 200,
-      cell: (info) => <S.State $isSuccess={info.getValue() === TEST_STATE.SUCCESS}>{info.getValue()}</S.State>,
+      cell: (info) => <S.State $isSuccess={info.getValue() === TEST_STATE.SUCCESS}>{info.getValue() === TEST_STATE.SUCCESS ? 'Success' : 'Fail'}</S.State>,
     }),
     columnHelper.accessor('time', {
       header: 'Time',
@@ -125,11 +123,14 @@ export default function Table() {
   ];
 
   const table = useReactTable({
-    data,
+    data: listData?.result.testList ?? [],
     columns,
     state: { pagination },
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
-    pageCount: 10,
+    getPaginationRowModel: getPaginationRowModel(),
+    pageCount: listData?.result.totalPage ?? 1,
+    onPaginationChange: setPagination,
     manualSorting: true,
   });
 
@@ -164,7 +165,14 @@ export default function Table() {
           <PreArrow />
         </S.ArrowBox>
         {table.getPageOptions().map((page) => (
-          <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)}>
+          <S.PageBtnBox
+            key={page}
+            onClick={() => {
+              console.log('Clicked page:', page);
+              table.setPageIndex(page);
+            }}
+            $cur={page === pagination.pageIndex}
+          >
             {page + 1}
           </S.PageBtnBox>
         ))}

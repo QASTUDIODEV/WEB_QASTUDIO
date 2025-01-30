@@ -13,7 +13,9 @@ export default function usePaginateTestList({ projectId, date, state, pageName, 
     QUERY_KEYS.DASHBOARD.TEST.LIST({ projectId, date, state, pageName, page, testName }),
     () => getTestList({ projectId, date, state, pageName, page, testName }),
     {
+      staleTime: 2000,
       placeholderData: keepPreviousData,
+      enabled: !!projectId,
     },
   );
 }
