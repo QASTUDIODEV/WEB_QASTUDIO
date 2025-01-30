@@ -1,6 +1,4 @@
-import { useParams } from 'react-router-dom';
-
-import useGetStatistics from '@/hooks/test/useGetStatistics';
+import type { TGetStatisticsResponse } from '@/types/test/test.ts';
 
 import Profile from '@/components/common/profile/profile';
 import PercentLabel from '@/components/dashboard/percentLabel/percentLabel';
@@ -13,15 +11,12 @@ import StarIcon from '@/assets/icons/star.svg?react';
 import SuccessIcon from '@/assets/icons/success.svg?react';
 import UserIcon from '@/assets/icons/user_profile.svg?react';
 
-export default function ProjectStatistics() {
-  const { projectId } = useParams();
-  const { data, isPending } = useGetStatistics({ projectId: Number(projectId) });
-  const { projectName, projectImage, failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
+interface IProps {
+  data: TGetStatisticsResponse;
+}
 
-  // TODO: 로딩 컴포넌트 구현 후 수정
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+export default function ProjectStatistics({ data }: IProps) {
+  const { projectName, projectImage, failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
 
   return (
     <S.Container>
