@@ -66,7 +66,7 @@ export default function AddProjectPage() {
   };
 
   return success || data?.result.viewType ? (
-    <ProjectInfoPage data={data} />
+    <ProjectInfoPage projectInfo={data} />
   ) : (
     <S.Container>
       {projectId && isSuccess && (
