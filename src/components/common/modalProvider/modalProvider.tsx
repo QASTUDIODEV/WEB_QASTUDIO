@@ -24,7 +24,7 @@ export const MODAL_COMPONENTS = {
 };
 
 export default function ModalProvider() {
-  const { modalType, isOpen } = useSelector(selectModal);
+  const { modalType, isOpen, modalProps } = useSelector(selectModal);
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -37,5 +37,5 @@ export default function ModalProvider() {
   const ModalComponent = MODAL_COMPONENTS[modalType];
   if (!ModalComponent) return null;
 
-  return <ModalComponent onClose={() => dispatch(closeModal())} />;
+  return <ModalComponent onClose={() => dispatch(closeModal())} {...modalProps} />;
 }

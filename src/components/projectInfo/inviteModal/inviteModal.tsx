@@ -15,7 +15,7 @@ import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TInviteModalProps = {
   onClose: () => void; // 모달 닫기 함수
-  projectId: number;
+  projectId?: number;
 };
 
 type TFormData = {
@@ -25,7 +25,7 @@ type TEmailList = {
   userId: number;
   email: string;
 }[];
-export default function InviteModal({ onClose, projectId }: TInviteModalProps) {
+export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProps) {
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
   const {
     control,
