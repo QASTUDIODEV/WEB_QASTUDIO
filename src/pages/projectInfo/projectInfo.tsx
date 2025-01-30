@@ -1,10 +1,16 @@
-import { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
+
+import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
+import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
+import ProjectTitle from '@/components/common/projectTitle/projectTitle';
+import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Goto from '@/assets/icons/arrow_goto.svg?react';
@@ -14,21 +20,11 @@ import Branch from '@/assets/icons/branch_white.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import File from '@/assets/icons/files.svg?react';
-import NextJs from '@/assets/icons/nextjs.svg?react';
 import Page from '@/assets/icons/page.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
-import Web from '@/assets/icons/web.svg?react';
 import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
-
-const initialState = {
-  isStructureVisible: true,
-  selectedPage: '홈',
-  isEdit: false,
-  content: '사용자가 학습 로드맵을 생성하고 이를 직관적으로 확인할 수 있도록 지원합니다.\n(두줄까지 들어갈 수 있습니다.)',
-  preContent: '',
-};
 
 type TAction =
   | { type: 'TOGGLE_STRUCTURE' }
@@ -37,26 +33,35 @@ type TAction =
   | { type: 'SET_PRE_CONTENT'; payload: string }
   | { type: 'SET_CONTENT'; payload: string };
 
-function reducer(state: typeof initialState, action: TAction) {
-  switch (action.type) {
-    case 'TOGGLE_STRUCTURE':
-      return { ...state, isStructureVisible: !state.isStructureVisible };
-    case 'SET_PAGE':
-      return { ...state, selectedPage: action.payload };
-    case 'TOGGLE_EDIT':
-      return { ...state, isEdit: action.payload ?? !state.isEdit };
-    case 'SET_PRE_CONTENT':
-      return { ...state, preContent: action.payload, isEdit: true };
-    case 'SET_CONTENT':
-      return { ...state, content: action.payload, isEdit: false };
-    default:
-      return state;
+export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
+  const result = projectInfo?.result;
+  const initialState = {
+    isStructureVisible: true,
+    selectedPage: '홈',
+    isEdit: false,
+    content: result?.introduction || '',
+    preContent: result?.introduction || '',
+  };
+  function reducer(state: typeof initialState, action: TAction) {
+    switch (action.type) {
+      case 'TOGGLE_STRUCTURE':
+        return { ...state, isStructureVisible: !state.isStructureVisible };
+      case 'SET_PAGE':
+        return { ...state, selectedPage: action.payload };
+      case 'TOGGLE_EDIT':
+        return { ...state, isEdit: action.payload ?? !state.isEdit };
+      case 'SET_PRE_CONTENT':
+        return { ...state, preContent: action.payload, isEdit: true };
+      case 'SET_CONTENT':
+        return { ...state, content: action.payload, isEdit: false };
+      default:
+        return state;
+    }
   }
-}
-export default function ProjectInfoPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { useEditIntroduce } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
-
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
     path: ['/', '/login', '/roadmap', '/mypage', '/mypage'],
@@ -69,7 +74,6 @@ export default function ProjectInfoPage() {
     ],
     character: ['일반', '관리자', '비로그인'],
   };
-
   const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
   const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
   const member = [
@@ -89,21 +93,72 @@ export default function ProjectInfoPage() {
       Master: false,
     },
   ];
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
+      tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.visibility = 'visible';
+      tooltipRef.current.style.opacity = '1';
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (tooltipRef.current) {
+      tooltipRef.current.style.visibility = 'hidden';
+      tooltipRef.current.style.opacity = '0';
+    }
+  };
+  const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
+  const stack = STACK[result?.developmentSkill as keyof typeof STACK] ?? STACK.NEXT;
+  const handleEdit = () => {
+    const maxRows = 2;
+    const lines = state.preContent.split('\n');
+    const modifiedText = lines.slice(0, maxRows).join('\n');
+    dispatch({ type: 'SET_CONTENT', payload: modifiedText });
+    console.log(state.preContent);
+    editIntroduce({
+      projectId: Number(result?.projectId),
+      introduce: state.preContent,
+    });
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const maxRows = 2;
+    const textarea = e.target;
+
+    const computedStyle = window.getComputedStyle(textarea);
+    const lineHeight = parseInt(computedStyle.lineHeight, 10);
+    const currentRows = Math.floor(textarea.scrollHeight / lineHeight);
+    if (currentRows > maxRows) {
+      return;
+    }
+    dispatch({ type: 'SET_PRE_CONTENT', payload: e.target.value });
+  };
   return (
     <S.Container>
       <S.Profile>
-        <S.ProfileWrapper>
-          <Profile />
-        </S.ProfileWrapper>
-        <S.ProfileName>UMC_PM_DAY</S.ProfileName>
-        <S.Wrapper top="5.6px" right="0" className="buttonShow">
-          <Button type="normal" color="default" icon={<Goto />} iconPosition="right">
+        <ProjectTitle title={result?.projectName} profileImg={result?.projectImage} stack={stack} device={type} />
+        <S.Wrapper top="7.2px" right="0" className="buttonShow">
+          <Button
+            type="normal"
+            color="default"
+            icon={<Goto />}
+            iconPosition="right"
+            onClick={() => {
+              if (result?.projectUrl) {
+                window.location.href = result.projectUrl;
+              }
+            }}
+          >
             Go to Site
           </Button>
         </S.Wrapper>
-        <NextJs />
-        <Web />
       </S.Profile>
       <S.Box height="18%">
         <S.Title>Introduction to the Project</S.Title>
@@ -118,15 +173,9 @@ export default function ProjectInfoPage() {
           </>
         ) : (
           <>
-            <S.Input onChange={(e) => dispatch({ type: 'SET_PRE_CONTENT', payload: e.target.value })} value={state.preContent} />
+            <S.Input onChange={(e) => handleInputChange(e)} value={state.preContent} rows={2} />
             <S.Wrapper bottom="16px" right="24px">
-              <Button
-                type="normal"
-                color="default"
-                icon={<Edit />}
-                iconPosition="left"
-                onClick={() => dispatch({ type: 'SET_CONTENT', payload: state.preContent })}
-              >
+              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
                 Done
               </Button>
             </S.Wrapper>
@@ -144,6 +193,7 @@ export default function ProjectInfoPage() {
             >
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
+              <S.TextLight>{state.content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
                 <Plus onClick={() => modalDispatch(openModal(MODAL_TYPES.CreatePageModal))} />
               </S.Wrapper>
@@ -211,7 +261,10 @@ export default function ProjectInfoPage() {
           <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
-              <S.CharacterBox>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
                 <S.Medium18Text>Origin</S.Medium18Text>
                 <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
                 <S.rowBox>
@@ -221,9 +274,25 @@ export default function ProjectInfoPage() {
                   <S.Medium18Text>2</S.Medium18Text>
                 </S.rowBox>
               </S.CharacterBox>
-              <S.CharacterBox>
-                <S.Medium18Text>Admin</S.Medium18Text>
-                <S.Medium14Text>관리자는 어쩌구...</S.Medium14Text>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
+                <S.Medium18Text>2</S.Medium18Text>
+                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
+                <S.rowBox>
+                  <Book />
+                  <S.Medium18Text>3</S.Medium18Text>
+                  <Page />
+                  <S.Medium18Text>2</S.Medium18Text>
+                </S.rowBox>
+              </S.CharacterBox>
+              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <S.TooltipWrapper ref={tooltipRef} visible={false}>
+                  <ToolTip />
+                </S.TooltipWrapper>
+                <S.Medium18Text>2</S.Medium18Text>
+                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
                 <S.rowBox>
                   <Book />
                   <S.Medium18Text>3</S.Medium18Text>

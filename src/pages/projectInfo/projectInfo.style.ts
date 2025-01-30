@@ -5,15 +5,12 @@ import { media } from '@/styles/media';
 const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  flex: 1;
   height: 100vh;
-  padding: 5.8% 7.5% 3.125% 7.5%;
+  padding: 3% 6% 2% 6%;
   display: flex;
   flex-direction: column;
-  overflow: auto;
   min-width: 410px;
   ${media.desktop`
-    margin-bottom: 50px;
     .show {
       opacity: 0;
     }
@@ -23,12 +20,16 @@ const Container = styled.div`
       opacity: 0;
     }
   }
+  @media (max-width: 1300px) {
+    overflow: auto;
+    padding-bottom: 0%;
+  }
 `;
 const Profile = styled.div`
   display: flex;
   align-items: center;
   gap: 0.813rem;
-  margin-bottom: 33.6px;
+  margin-bottom: 31.8px;
   position: relative;
 `;
 
@@ -56,15 +57,22 @@ export const MemberBox = styled.div`
 `;
 export const MemberName = styled.p`
   margin: 0;
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21.6px */
+  letter-spacing: 0.288px;
   ${({ theme }) => theme.colors.white};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 83%;
+  max-width: 80%;
+  @media (max-width: 1200px) {
+    max-width: 70%;
+  }
 `;
 export const ArrowWrapper = styled.div`
-  min-width: 10%;
   flex-shrink: 0;
   flex: 1;
 `;
@@ -81,22 +89,22 @@ const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
   border-radius: 8px;
-  padding: 20px 30px;
+  padding: 16px 24px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  border: 0.8px solid rgba(32, 75, 153, 0.2);
 `;
 
 const Left = styled.div`
   width: 75%;
-  gap: 40px;
+  gap: 6%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   ${media.desktop`
     width: 100%;
-    
   `}
 `;
 
@@ -111,8 +119,8 @@ const Right = styled.div`
   min-width: 168px;
   ${media.desktop`
     width: 100%;
+    height: 100%;
     margin: 40px 0 0 0;
-    overflow: auto;
   `}
 `;
 
@@ -124,13 +132,17 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   @media (max-width: 530px) {
     width: 50%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
+  ${media.desktop`
+    ${({ theme }) => theme.text.medium_14};
+    margin-bottom: 10px;
+  `}
 `;
 
 const TextLight = styled.p`
@@ -141,6 +153,10 @@ const TextLight = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.224px;
+  white-space: pre;
+  ${media.desktop`
+    font-size: 8px;
+  `}
 `;
 
 const Text = styled.p`
@@ -153,7 +169,7 @@ const Text = styled.p`
   line-height: 150%;
   letter-spacing: 0.288px;
   white-space: pre;
-  overflow-y: scroll;
+  overflow: hidden;
   scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
@@ -162,6 +178,9 @@ const Text = styled.p`
   }
   @media (max-width: 610px) {
     width: 60%;
+  }
+  @media (max-width: 1400px) {
+    font-size: 12px;
   }
 `;
 
@@ -179,11 +198,12 @@ const TextBold = styled.p`
 const SemiBox = styled.div`
   display: flex;
   height: 100%;
-  margin-top: 37px;
+  margin-top: 3%;
   ${media.desktop`
     width: 100%;
+    height: 100%;
     flex-wrap: wrap;
-    `}
+  `}
 `;
 
 const InnerBox = styled.div`
@@ -192,8 +212,8 @@ const InnerBox = styled.div`
   border-radius: 6.4px;
   padding: 7px 10px;
   position: relative;
-  margin-top: 25px;
-  height: 220px;
+  margin-top: 16px;
+  height: 80%;
   overflow: scroll;
   @media (max-width: 900px) {
     width: 100%;
@@ -204,8 +224,8 @@ const CharacterAddBox = styled.div`
   ${({ theme }) => theme.align.column_center}
   background: #d9e6ff1a;
   border-radius: 6.4px;
-  height: 120px;
-  width: 140px;
+  height: 96px;
+  min-width: 112px;
   padding: 12px;
   cursor: pointer;
   svg {
@@ -213,12 +233,17 @@ const CharacterAddBox = styled.div`
     height: 50%;
   }
 `;
-
+export const TooltipWrapper = styled.div<{ visible: boolean }>`
+  position: fixed;
+  z-index: 1000;
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
+`;
 const CharacterBox = styled.div`
+  position: relative;
   background: #007f7f;
   border-radius: 6.4px;
-  height: 120px;
-  width: 140px;
+  height: 96px;
+  width: 112px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -229,8 +254,12 @@ const CharacterBox = styled.div`
 const Character = styled.div`
   display: flex;
   height: 100%;
+  width: 100%;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  @media (max-width: 720px) {
+    overflow-x: scroll;
+  }
 `;
 type TWrapperProps = {
   top?: string;
@@ -261,12 +290,16 @@ export const Input = styled.textarea`
   border-radius: 6.4px;
   background: rgba(217, 230, 255, 0.05);
   border: none;
-  scrollbar-width: none;
+  overflow: 'hidden';
+  resize: 'none';
   @media (max-width: 840px) {
     width: 70%;
   }
   @media (max-width: 610px) {
     width: 60%;
+  }
+  @media (max-width: 1400px) {
+    font-size: 12px;
   }
 `;
 type TText = {
@@ -279,7 +312,12 @@ export const rowBox = styled.div`
 `;
 export const Medium18Text = styled.p<TText>`
   color: ${(props) => props.color || '${({ theme }) => theme.colors.white'};
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21.6px */
+  letter-spacing: 0.288px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -287,7 +325,12 @@ export const Medium18Text = styled.p<TText>`
 `;
 export const Medium14Text = styled.p<TText>`
   color: ${(props) => props.color};
-  ${({ theme }) => theme.text.medium_14};
+  font-family: Pretendard;
+  font-size: 11.2px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 16.8px */
+  letter-spacing: 0.224px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -334,23 +377,33 @@ export const Table = styled.table`
 `;
 
 export const TH = styled.th`
-  height: 25px;
-  padding-bottom: 20px;
+  height: 22px;
+  padding-bottom: 16px;
   background: transparent;
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21.6px */
+  letter-spacing: 0.288px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   text-align: left;
 `;
 export const TR = styled.tr`
   border-radius: 99px;
-  padding: 4px 10px;
+  padding: 3.2px 8px;
   &:hover {
     background: rgba(223, 232, 249, 0.1);
   }
 `;
 export const TD = styled.td`
-  padding: 4px 10px;
-  ${({ theme }) => theme.text.medium_14};
+  padding: 3.2px 8px;
+  font-family: Pretendard;
+  font-size: 9.6px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 14.4px */
+  letter-spacing: 0.192px;
   color: ${({ theme }) => theme.colors.white};
 
   &:first-child {

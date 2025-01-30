@@ -1,10 +1,11 @@
-// import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SOCIAL } from '@/enums/enums';
 
 import * as S from '@/components/auth/socialLogo/socialLogo.style';
+import FailModal from '@/components/mypage/failModal/failModal';
 
-// import FailModal from '@/components/mypage/failModal/failModal';
 import GithubLogo from '@/assets/icons/githubLogo.svg?react';
 import GoogleLogo from '@/assets/icons/googleLogo.svg?react';
 import KakaoLogo from '@/assets/icons/kakaoLogo.svg?react';
@@ -14,31 +15,41 @@ type TSocialLogo = {
   size: 'small' | 'large';
   disable?: boolean;
   id?: SOCIAL[];
+  addAccount?: boolean;
 };
 
-export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
-  // const [modalShow, setModalShow] = useState(false);
+export default function SocialLogo({ gap, size, disable, id, addAccount }: TSocialLogo) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const urlParams = new URLSearchParams(location.search);
+  const errorType = urlParams.get('error');
 
-  // const showModal = () => {
-  //   setModalShow(true);
-  // };
+  const [modalShow, setModalShow] = useState(false);
 
-  // const hideModal = () => {
-  //   setModalShow(false);
-  // };
+  const hideModal = () => {
+    setModalShow(false);
+    navigate('/mypage');
+  };
 
-  const handleKakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/kakao`;
+  useEffect(() => {
+    if (errorType === 'socialLink') {
+      setModalShow(true);
+    }
+  }, [errorType]);
+
+  const handleSocialLogin = (platform: string) => {
+    const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization`;
+    const queryParam = addAccount ? '?addSocial=true' : '';
+    window.location.href = `${baseUrl}/${platform}${queryParam}`;
   };
-  const handleGithubLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/github`;
-  };
-  const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/google`;
-  };
+
+  const handleKakaoLogin = () => handleSocialLogin('kakao');
+  const handleGithubLogin = () => handleSocialLogin('github');
+  const handleGoogleLogin = () => handleSocialLogin('google');
+
   return (
     <S.Logos $gap={gap} size={size}>
-      {/* {modalShow && <FailModal onClose={hideModal} />} */}
+      {modalShow && <FailModal onClose={hideModal} />}
       {id ? (
         <>
           {id?.includes(SOCIAL.GOOGLE) && (
