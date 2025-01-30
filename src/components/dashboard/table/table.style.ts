@@ -10,6 +10,7 @@ const TableContainer = styled.div`
 
 const TableWrapper = styled.div`
   width: 100%;
+  min-height: 400px;
   overflow-x: auto;
 `;
 
@@ -116,15 +117,32 @@ const PageNumberWrapper = styled.div`
   height: 25px;
 `;
 
-const PageBtnBox = styled.button`
+const PageBtnBox = styled.button<{ $cur: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 25px;
   height: 100%;
   padding: 2px 9px;
+  border-radius: 3px;
 
   ${({ theme }) => theme.text.medium_14};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
+  background-color: ${({ $cur }) => ($cur ? 'rgba(217, 230, 255, 0.2)' : 'transparent')};
+
+  &:hover {
+    background: rgba(217, 230, 255, 0.2);
+  }
+`;
+
+const ArrowBox = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 100%;
+
+  padding: 0;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   background-color: transparent;
 
@@ -132,10 +150,10 @@ const PageBtnBox = styled.button`
     background: rgba(217, 230, 255, 0.2);
     border-radius: 3px;
   }
-`;
 
-const ArrowBox = styled(PageBtnBox)`
-  padding: 0;
+  &:disabled {
+    background-color: transparent;
+  }
 `;
 
 const HeaderWrapper = styled.div`
