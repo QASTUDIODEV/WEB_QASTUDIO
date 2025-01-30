@@ -1,6 +1,6 @@
 import type { TProjectInfo } from '@/types/projectInfo/projectInfo';
 import type { TRequestTeamMember } from '@/types/sidebar/sidebar';
-import type { TSearchTestListRequest } from '@/types/test/test.ts';
+import type { TGetTestListRequest } from '@/types/test/test';
 
 export const QUERY_KEYS = {
   KAKAO_OAUTH: ['getKakaoOAuth'],
@@ -17,7 +17,7 @@ export const QUERY_KEYS = {
   DASHBOARD: {
     ERROR: (testId: number) => ['ERROR', testId],
     TEST: {
-      LIST: ({ projectId, date, state, pageName, page, testName }: TSearchTestListRequest) => ['LIST', projectId, date, state, pageName, page, testName],
+      LIST: ({ projectId, date, state, pageName, page, testName }: TGetTestListRequest) => ['LIST', projectId, date, state, pageName, page, testName],
       STATISTICS: (projectId: number) => ['STATISTICS', projectId],
     },
   },
