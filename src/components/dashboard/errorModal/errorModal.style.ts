@@ -7,6 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  max-width: 950px;
   margin-top: 15px;
 
   p {
@@ -16,26 +17,37 @@ const Container = styled.div`
 
 const ResultContainer = styled.div`
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
   gap: 20px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ScreenShotWrapper = styled.div`
-  width: 768px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-
+  height: 450px;
+  border-radius: 13px;
   ${media.tablet`
       width: 100%;
   `}
+
+  img {
+    border-radius: 13px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 const ScreenShotBox = styled.div`
   background-color: #353535;
   border-radius: 13px;
   width: 100%;
-  height: 450px;
+  height: 100%;
 `;
 
 const ResultWrapper = styled.div`
@@ -59,7 +71,8 @@ const ResultBox = styled.div`
 `;
 
 const MessageBox = styled(ResultBox)`
-  height: 256px;
+  height: 230px;
+  overflow-y: auto;
 `;
 const ErrorWrapper = styled.div`
   width: 100%;

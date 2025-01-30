@@ -48,12 +48,12 @@ export default function Table() {
 
   console.log(selectState, selectedPageName);
 
-  const handleModal = (state: boolean) => {
+  const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
       // 성공의 경우 경로 수정
       navigate('/project/scenario/1');
     } else {
-      dispatch(openModal(MODAL_TYPES.ErrorModal));
+      dispatch(openModal({ modalType: MODAL_TYPES.ErrorModal, modalProps: { testId: testId } }));
     }
   };
 
@@ -113,7 +113,10 @@ export default function Table() {
       id: 'action',
       header: 'Action',
       cell: (info) => (
-        <S.Action $isSuccess={info.row.original.state === TEST_STATE.SUCCESS} onClick={() => handleModal(info.row.original.state === TEST_STATE.SUCCESS)}>
+        <S.Action
+          $isSuccess={info.row.original.state === TEST_STATE.SUCCESS}
+          onClick={() => handleModal({ state: info.row.original.state === TEST_STATE.SUCCESS, testId: info.row.original.testId })}
+        >
           <p>{info.row.original.state === TEST_STATE.SUCCESS ? 'Run Scenario' : 'Check the error'}</p>
           {info.row.original.state === TEST_STATE.SUCCESS ? <GreenArrow /> : <RedArrow />}
         </S.Action>
