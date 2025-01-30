@@ -2,8 +2,8 @@ import React from 'react';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import CodeInput from '@/components/auth/codeInput/codeInput';
-import ValidationMessage from '@/components/auth/validationMessage/validationMessage';
 import Input from '@/components/common/input/input';
+import ValidationMessage from '@/components/common/input/validationMessage';
 
 import * as S from './module.style';
 
@@ -28,7 +28,6 @@ type TCodeModuleProps = {
   Name: string;
   codeverify: boolean | undefined;
   handleVerifyCode: () => void;
-  // ref: any;
 };
 
 // InputModule 컴포넌트
@@ -57,6 +56,11 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
               </AuthButton>
             </S.ButtonWrapper>
           )}
+          {errorMessage && touched && top && inputname === 'normal' && (
+            <S.MessageWrapper>
+              <ValidationMessage message={errorMessage} isError={!valid} />
+            </S.MessageWrapper>
+          )}
         </S.Wrapper2>
       </S.Wrapper>
     );
@@ -69,7 +73,7 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
     return (
       <S.Wrapper>
         <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeverify ? true : false) : false) : undefined} ref={ref} {...rest} />
-        <S.MessageWrapper>
+        <S.MessageWrapper2>
           {touched && errorMessage ? (
             <ValidationMessage message={errorMessage} isError={!valid} />
           ) : codeverify ? (
@@ -77,7 +81,7 @@ export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
           ) : (
             codeverify === false && <ValidationMessage message={'Invalid code.'} isError={true} />
           )}
-        </S.MessageWrapper>
+        </S.MessageWrapper2>
         <S.AuthButtonWrapper>
           <AuthButton valid={valid} type="button" format="code" onClick={handleVerifyCode} disabled={!valid} codeverify={codeverify}>
             Verify

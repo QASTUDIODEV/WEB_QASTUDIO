@@ -5,7 +5,7 @@ import * as S from './projectInfoBox.style';
 type TProjectInfoBoxProps = {
   label: string;
   icon: React.ReactNode;
-  content: string;
+  content: string | number;
   percentLabel?: React.ReactNode;
 };
 

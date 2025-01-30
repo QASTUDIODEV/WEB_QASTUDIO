@@ -20,7 +20,7 @@ export function useCoreMutation<T, U>(mutation: MutationFunction<T, U>, options?
   return useMutation({
     mutationFn: mutation,
     onError: (error) => {
-      toast.error(error.response?.data.message || '알 수 없는 오류가 발생했습니다.');
+      toast.error(error.response?.data.message || 'An error occurred.');
     },
     ...options,
   });

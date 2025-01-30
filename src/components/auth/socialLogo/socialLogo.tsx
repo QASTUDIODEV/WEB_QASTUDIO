@@ -1,4 +1,10 @@
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { SOCIAL } from '@/enums/enums';
+
 import * as S from '@/components/auth/socialLogo/socialLogo.style';
+import FailModal from '@/components/mypage/failModal/failModal';
 
 import GithubLogo from '@/assets/icons/githubLogo.svg?react';
 import GoogleLogo from '@/assets/icons/googleLogo.svg?react';
@@ -8,48 +14,71 @@ type TSocialLogo = {
   gap: number;
   size: 'small' | 'large';
   disable?: boolean;
-  id?: ('github' | 'kakao' | 'google')[] | null;
+  id?: SOCIAL[];
+  addAccount?: boolean;
 };
 
-export default function SocialLogo({ gap, size, disable, id }: TSocialLogo) {
-  const kakaoLoginUrl = `${import.meta.env.VITE_KAKAO_URL}?response_type=code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
-  // const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
+export default function SocialLogo({ gap, size, disable, id, addAccount }: TSocialLogo) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const urlParams = new URLSearchParams(location.search);
+  const errorType = urlParams.get('error');
+
+  const [modalShow, setModalShow] = useState(false);
+
+  const hideModal = () => {
+    setModalShow(false);
+    navigate('/mypage');
+  };
+
+  useEffect(() => {
+    if (errorType === 'socialLink') {
+      setModalShow(true);
+    }
+  }, [errorType]);
+
+  const handleSocialLogin = (platform: string) => {
+    const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization`;
+    const queryParam = addAccount ? '?addSocial=true' : '';
+    window.location.href = `${baseUrl}/${platform}${queryParam}`;
+  };
+
+  const handleKakaoLogin = () => handleSocialLogin('kakao');
+  const handleGithubLogin = () => handleSocialLogin('github');
+  const handleGoogleLogin = () => handleSocialLogin('google');
+
   return (
     <S.Logos $gap={gap} size={size}>
+      {modalShow && <FailModal onClose={hideModal} />}
       {id ? (
         <>
-          {id?.includes('google') && (
-            <S.Logo $logotype="google" size={size} disabled={disable}>
+          {id?.includes(SOCIAL.GOOGLE) && (
+            <S.Logo $logotype="google" size={size} disabled={disable} onClick={handleGoogleLogin}>
               <GoogleLogo />
             </S.Logo>
           )}
-          {id?.includes('kakao') && (
-            <S.Logo $logotype="kakao" size={size} disabled={disable}>
+          {id?.includes(SOCIAL.KAKAO) && (
+            <S.Logo $logotype="kakao" size={size} disabled={disable} onClick={handleKakaoLogin}>
               <KakaoLogo />
             </S.Logo>
           )}
-          {id?.includes('github') && (
-            <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable}>
+          {id?.includes(SOCIAL.GITHUB) && (
+            <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable} onClick={handleGithubLogin}>
               <GithubLogo />
             </S.Logo>
           )}
         </>
       ) : (
         <>
-          <S.Logo $logotype="google" size={size} disabled={disable}>
+          <S.Logo $logotype="google" size={size} disabled={disable} onClick={handleGoogleLogin}>
             <GoogleLogo />
           </S.Logo>
-          <S.Logo
-            $logotype="kakao"
-            size={size}
-            disabled={disable}
-            onClick={() => {
-              location.href = kakaoLoginUrl;
-            }}
-          >
+
+          <S.Logo $logotype="kakao" size={size} disabled={disable} onClick={handleKakaoLogin}>
             <KakaoLogo />
           </S.Logo>
-          <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable}>
+
+          <S.Logo $logotype="github" $isgithub="true" size={size} disabled={disable} onClick={handleGithubLogin}>
             <GithubLogo />
           </S.Logo>
         </>

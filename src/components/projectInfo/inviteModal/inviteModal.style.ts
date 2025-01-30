@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const ProjectText = styled.p`
   ${({ theme }) => theme.text.medium_24};
   color: #d6deec;
 `;
 export const ModalBox = styled.div`
-  width: 820px;
+  width: 688px;
   gap: 20px;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 export const PostBox = styled.div`
   gap: 10px;

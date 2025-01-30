@@ -1,12 +1,12 @@
 import type { SubmitHandler } from 'react-hook-form';
-// import useForm from '@/hooks/auth/useForm';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 
 import { loginSchema } from '@/utils/validate';
-import { defaultLogin } from '@/apis/auth/auth';
+
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -16,12 +16,17 @@ import SocialLogo from '@/components/auth/socialLogo/socialLogo';
 import * as S from '@/pages/login/login.style.ts';
 
 import Logo from '@/assets/icons/logo.svg?react';
+import { isNowSignup } from '@/slices/authSlice';
 
 type TFormValues = {
   email: string;
   password: string;
 };
+
 export default function LoginPage() {
+  sessionStorage.removeItem('loginHandled');
+  localStorage.setItem('route', 'login');
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -33,21 +38,24 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const { mutate: loginMutation, isPending } = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => defaultLogin({ email, password }),
-    onSuccess: (data) => {
-      const { accessToken, refreshToken } = data.result;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      navigate('/project');
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { useDefaultLogin } = useUserAuth();
 
-  const onSubmit: SubmitHandler<TFormValues> = async (data) => {
-    loginMutation({ email: data.email, password: data.password });
+  const { mutate: loginMutate, isPending } = useDefaultLogin;
+
+  const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    loginMutate(
+      { email: submitData.email, password: submitData.password },
+      {
+        onSuccess: (data) => {
+          if (data?.result?.nickname === '') {
+            dispatch(isNowSignup({ isSignup: true }));
+            navigate('/signup/userSetting');
+          } else {
+            navigate('/project');
+          }
+        },
+      },
+    );
   };
 
   return (

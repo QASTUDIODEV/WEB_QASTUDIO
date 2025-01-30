@@ -2,12 +2,16 @@ import * as S from './projectNum.style';
 
 import Package from '@/assets/icons/package.svg?react';
 
-export default function ProjectNum() {
+type TProjectNum = {
+  projectNum: number;
+};
+export default function ProjectNum({ projectNum }: TProjectNum) {
   return (
     <S.ProjectNum>
       <Package />
       <div className="ProjectNumber">
-        3<span>Projects in progress</span>
+        {projectNum}
+        <span>Projects in progress</span>
       </div>
     </S.ProjectNum>
   );

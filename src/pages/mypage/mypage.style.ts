@@ -34,7 +34,7 @@ const Projects = styled.div`
   display: flex;
   flex: 1;
   gap: 20px;
-  @media (max-width: 750px) {
+  @media (max-width: 847px) {
     flex-direction: column;
     align-items: center;
   }

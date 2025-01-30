@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
+import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/projectInfo/characterModal/characterModal.style';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
@@ -11,26 +13,36 @@ import DelCircle from '@/assets/icons/del_circle.svg?react';
 type TCharacterModalProps = {
   onClose: () => void;
 };
-
+type TFormData = {
+  characterName: string;
+  characterDescription: string;
+  accessPage: string;
+};
 export default function CharacterModal({ onClose }: TCharacterModalProps) {
-  const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
-  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
-
-  // 역할 생성 함수
+  const [modalStep, setModalStep] = useState(1);
+  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const {
+    control,
+    formState: { errors, isValid, touchedFields },
+  } = useForm<TFormData>({
+    mode: 'onChange',
+    defaultValues: {
+      characterName: '',
+      characterDescription: '',
+      accessPage: '',
+    },
+  });
   const handleCreate = () => {
-    //역할 생성
     setModalStep(2);
   };
 
-  // 선택된 옵션 추가 함수
   const handleSelect = (value: string) => {
     if (!selectedOptions.includes(value)) {
       setSelectedOptions((prev) => [...prev, value]);
     }
   };
 
-  // 선택된 옵션 제거 함수
   const handleRemove = (value: string) => {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
   };
@@ -38,40 +50,91 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
   return (
     <Modal title={'Create Character'} onClose={onClose}>
       {modalStep === 1 ? (
-        // 역할 선택 단계
         <S.ModalContainer>
           <div>
             <S.description>Define users for the registered project.</S.description>
-            <S.description>QASTUDIO will create a suitable scenario for you.</S.description>
           </div>
 
           <S.InputWrapper>
             <S.SubTitle>Name</S.SubTitle>
-            <Input placeholder="Define the target character in one sentence." type="normal" />
+            <Controller
+              name="characterName"
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Character Name is required',
+                },
+                minLength: {
+                  value: 3,
+                  message: 'Character Name must be at least 3 characters',
+                },
+              }}
+              render={({ field }) => (
+                <>
+                  <Input
+                    placeholder="Define the target character in one sentence."
+                    type="normal"
+                    {...field}
+                    errorMessage={errors.characterName?.message}
+                    touched={!!errors.characterName}
+                  />
+                  {touchedFields.characterName && errors.characterName?.message && (
+                    <ValidataionMessage message={errors.characterName?.message || ''} isError={!!errors.characterName} />
+                  )}
+                </>
+              )}
+            />
           </S.InputWrapper>
           <S.InputWrapper>
             <S.SubTitle>Description</S.SubTitle>
-            <Input placeholder="Explain the character's purpose for using the project." type="normal" />
+            <Controller
+              name="characterDescription"
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Character Description is required',
+                },
+                minLength: {
+                  value: 3,
+                  message: 'Character Description must be at least 3 characters',
+                },
+              }}
+              render={({ field }) => (
+                <>
+                  <Input
+                    placeholder="Explain the character's purpose for using the project."
+                    type="normal"
+                    {...field}
+                    errorMessage={errors.characterDescription?.message}
+                    touched={!!errors.characterDescription}
+                  />
+                  {touchedFields.characterDescription && errors.characterDescription?.message && (
+                    <ValidataionMessage message={errors.characterDescription?.message || ''} isError={!!errors.characterDescription} />
+                  )}
+                </>
+              )}
+            />
           </S.InputWrapper>
           <S.InputWrapper>
             <S.SubTitle>Access page</S.SubTitle>
             <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
           </S.InputWrapper>
-
-          <S.TagContainer>
-            {selectedOptions.map((option) => (
-              <Button key={option} type="tag" color="mint" icon={<DelCircle />} iconPosition="right" onClick={() => handleRemove(option)}>
-                {option}
-              </Button>
-            ))}
-          </S.TagContainer>
+          {selectedOptions && (
+            <S.TagContainer>
+              {selectedOptions.map((option) => (
+                <Button key={option} type="tag" color="mint" icon={<DelCircle />} iconPosition="right" onClick={() => handleRemove(option)}>
+                  {option}
+                </Button>
+              ))}
+            </S.TagContainer>
+          )}
 
           <S.ButtonContainer>
-            <S.ButtonWrapper>
-              <Button color="blue" onClick={handleCreate}>
-                Create
-              </Button>
-            </S.ButtonWrapper>
+            <Button type="act" color="blue" onClick={handleCreate} disabled={!isValid || !selectedOptions[0]}>
+              Create
+            </Button>
           </S.ButtonContainer>
         </S.ModalContainer>
       ) : (
@@ -103,16 +166,12 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
           </S.ScenarioContainer>
 
           <S.ButtonContainer>
-            <S.LongButtonWrapper>
-              <Button color="mint" onClick={onClose}>
-                Edit and Request
-              </Button>
-            </S.LongButtonWrapper>
-            <S.ButtonWrapper>
-              <Button color="blue" onClick={onClose}>
-                Close
-              </Button>
-            </S.ButtonWrapper>
+            <Button type="act" color="mint" onClick={onClose}>
+              Edit and Request
+            </Button>
+            <Button type="act" color="blue" onClick={onClose}>
+              Close
+            </Button>
           </S.ButtonContainer>
         </S.ConfirmModalContainer>
       )}

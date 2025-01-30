@@ -1,12 +1,14 @@
-import React, { useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
 
-import { useGetPresignedUrl } from '@/hooks/images/useGetPresignedURL';
-import { useUploadPresignedUrl } from '@/hooks/images/useUploadPresignedURL';
+import useUserAuth from '@/hooks/auth/useUserAuth';
+import { useImage } from '@/hooks/images/useImage';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -15,16 +17,30 @@ import Profile from '@/components/common/profile/profile';
 import Logo from '@/assets/icons/logo.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 import * as S from '@/pages/userSetting/userSetting.style';
+import { isNowSignup, selectAuth } from '@/slices/authSlice';
 
 type TFormValues = {
   nickname: string;
+  profileImage: string;
 };
 
 export default function UserSetting() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [previewImg, setPreviewImg] = useState('');
+  const { isSignup } = useSelector(selectAuth);
+  useEffect(() => {
+    if (!isSignup) {
+      navigate('/');
+      return;
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
@@ -38,38 +54,68 @@ export default function UserSetting() {
     contentInputRef.current?.click();
   };
 
-  const { getPresignedUrl, uploadSingleImgPending } = useGetPresignedUrl();
-  const { uploadPresignedUrlMutate, uploadPresignedUrlPending } = useUploadPresignedUrl();
+  const watchedImage = useWatch({
+    control,
+    name: 'profileImage',
+  });
 
-  const handleImageUpload = async (blob: File) => {
-    if (!blob.type.startsWith('image/')) {
+  const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
+  const { useSettingUserInfo } = useUserAuth();
+
+  const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
+  const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
+  const { mutate: userSettingMutate } = useSettingUserInfo;
+
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
       alert('이미지만 업로드 가능합니다');
       return;
     }
 
-    try {
-      const presignedUrl = await getPresignedUrl(blob.name);
-      await uploadPresignedUrlMutate({ _presignedUrl: presignedUrl, blob: blob });
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error);
-    }
+    getPresignedUrlMutate(
+      { fileName: file.name },
+      {
+        onSuccess: (data) => {
+          uploadImageToPresignedUrlMutate(
+            {
+              url: data.result.url,
+              file: file,
+            },
+            {
+              onSuccess: () => {
+                setPreviewImg(import.meta.env.VITE_API_IMAGE_ACCESS + data.result.keyName);
+                setValue('profileImage', data.result.keyName);
+              },
+            },
+          );
+        },
+      },
+    );
   };
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // 사용자가 선택한 첫 번째 파일
+    const file = e.target.files?.[0];
     if (file) {
       await handleImageUpload(file);
     }
   };
 
-  const onSubmit = () => {
-    navigate('/');
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+    userSettingMutate(
+      { nickname: data.nickname, profileImage: watchedImage },
+      {
+        onSuccess: () => {
+          navigate('/project', { replace: true });
+          dispatch(isNowSignup({ isSignup: false }));
+        },
+      },
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (touchedFields.nickname && !errors.nickname?.message && !uploadSingleImgPending && !uploadPresignedUrlPending) {
+      if (touchedFields.nickname && !errors.nickname?.message && !getPresignedUrlPending && !uploadImageToPresignedUrlPending) {
         handleSubmit(onSubmit);
       }
     }
@@ -83,7 +129,8 @@ export default function UserSetting() {
           <S.Backdrop>
             <ProfileEdit />
           </S.Backdrop>
-          <Profile />
+          {previewImg != '' ? <Profile profileImg={previewImg} /> : <Profile />}
+
           <S.ProfileEditBtn>
             <ProfileEdit />
           </S.ProfileEditBtn>
@@ -107,7 +154,7 @@ export default function UserSetting() {
           style={{ display: 'none' }}
           onChange={handleInputChange}
         />
-        <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadPresignedUrlPending}>
+        <AuthButton onClick={handleSubmit(onSubmit)} format="normal" disabled={!isValid || uploadImageToPresignedUrlPending || getPresignedUrlPending}>
           Sign up
         </AuthButton>
       </S.Form>

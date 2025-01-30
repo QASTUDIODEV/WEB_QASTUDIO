@@ -1,50 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { z } from 'zod';
 
 import { findingSchema } from '@/utils/validate';
 
-import AuthButton from '@/components/auth/authButton/authButton';
-import { CodeModule, InputModule } from '@/components/auth/module/module';
+import useUserAuth from '@/hooks/auth/useUserAuth';
+
+import FindingPasswordStep1 from '@/components/findingPassword/findingPasswordStep1';
+import FindingPasswordStep2 from '@/components/findingPassword/findingPasswordStep2';
 
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import * as S from '@/pages/findingPassword/findingPassword.style';
 
-type TCodeVerify = undefined | boolean;
-
-type TFormValues = {
-  email: string;
-  password: string;
-  repassword: string;
-  code: string;
-};
-
-type TAPIFormValues = {
-  email: string;
-  password: string;
-};
+type TField = z.infer<typeof findingSchema>;
 
 export default function FindingPassword() {
   const {
-    register,
-    handleSubmit,
     control,
-    formState: { errors, touchedFields, isValid },
-  } = useForm<TFormValues>({
+    formState: { errors, touchedFields },
+  } = useForm<TField>({
     mode: 'onChange',
     resolver: zodResolver(findingSchema),
   });
 
-  const [step, setStep] = useState(0);
-  const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
-  const [AuthCode, setAuthCode] = useState('');
+  const [step, setStep] = useState(1);
   const [passwordMatch, setPasswordMatch] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
 
   const navigate = useNavigate();
+  const methods = useForm<TField>();
+  const { handleSubmit } = methods;
+  const { useChangePassword } = useUserAuth();
+  const { mutate: changePasswordMutation } = useChangePassword;
 
   const watchedPassword = useWatch({
     control,
@@ -55,8 +46,7 @@ export default function FindingPassword() {
     control,
     name: 'repassword',
   });
-
-  const watchedEamil = useWatch({
+  const watchedEmail = useWatch({
     control,
     name: 'email',
   });
@@ -66,146 +56,67 @@ export default function FindingPassword() {
     name: 'code',
   });
 
-  const handleSendCode = () => {
-    if (!errors.email?.message) {
-      alert('해당 이메일로 인증 코드가 발송되었습니다');
-      setStep(1);
-      setAuthCode('1234'); //추후 API 요청해서 받아온 인증 값으로 변경 예정
-    } else {
-      alert('올바른 이메일을 입력해주세요');
-    }
-  };
-
-  const onSubmit: SubmitHandler<TAPIFormValues> = (data) => {
+  const onSubmit: SubmitHandler<TField> = (data) => {
+    console.log(data);
     const { email, password } = data;
-    console.log(email, password);
 
-    // alert(email);
-    // alert(password);
-    navigate('/');
-    // 로그인 로직 추후 추가 예정
+    changePasswordMutation(
+      { email: email, newPassword: password },
+      {
+        onError: (error) => {
+          const errorPasswordMessage = error?.response?.data?.message || 'An error occurred.';
+          setPasswordErrorMessage(errorPasswordMessage);
+        },
+      },
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && !errors.email?.message && touchedFields.email) {
-        handleSendCode();
-      }
-      if (step === 1 && !errors.code?.message && touchedFields.code) {
-        setStep(2);
-      }
-      if (step === 2 && !errors.password?.message && !errors.repassword?.message && touchedFields.password && touchedFields.repassword && passwordMatch) {
-        const email = watchedEamil;
+      if (
+        step === 2 &&
+        !errors.password?.message &&
+        !errors.repassword?.message &&
+        touchedFields.password &&
+        touchedFields.repassword &&
+        passwordMatch &&
+        !passwordErrorMessage
+      ) {
+        const email = watchedEmail;
         const password = watchedPassword;
-        onSubmit({ email, password });
+        const repassword = watchedRepassword;
+        const code = watchedCode;
+        onSubmit({
+          email: email,
+          password: password,
+          repassword: repassword,
+          code: code,
+        });
       }
     }
   };
 
-  const handleVerifyCode = () => {
-    if (watchedCode === AuthCode) {
-      setCodeVerify(true);
-    } else {
-      setCodeVerify(false);
-    }
-  };
-
   useEffect(() => {
-    setCodeVerify(undefined);
-  }, [watchedEamil]);
-
-  useEffect(() => {
-    if (codeverify) {
-      setStep(2);
-    }
-  }, [AuthCode, watchedEamil, codeverify, watchedCode]);
-
-  useEffect(() => {
-    if (watchedPassword === watchedRepassword) {
-      setPasswordMatch(true);
-      setErrorMessage('');
-    } else {
-      setPasswordMatch(false);
-      setErrorMessage('Passwords must match.');
-    }
-  }, [watchedPassword, watchedRepassword]);
-
-  useEffect(() => {
-    setStep(0);
+    setStep(1);
   }, []);
 
   return (
     <S.Container>
       <Logo style={{ width: '48px', height: '48px' }} />
-      <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}>
-        {step === 0 && (
-          <>
-            <InputModule
-              top={true}
-              inputname="email"
-              Name="Email"
-              span="Email"
-              btnName="Send"
-              handleSendCode={handleSendCode}
-              touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message}
-              errorMessage={errors.email?.message}
-              {...register('email')}
+      <FormProvider {...methods}>
+        <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}>
+          {step === 1 && <FindingPasswordStep1 setStep={setStep} step={step} />}
+          {step === 2 && (
+            <FindingPasswordStep2
+              setPasswordMatch={setPasswordMatch}
+              passwordMatch={passwordMatch}
+              setPasswordErrorMessage={setPasswordErrorMessage}
+              passwordErrorMessage={passwordErrorMessage}
             />
-          </>
-        )}
-        {step === 1 && (
-          <>
-            <InputModule
-              top={true}
-              inputname="email"
-              Name="Email"
-              span="Email"
-              btnName="Send"
-              handleSendCode={handleSendCode}
-              touched={touchedFields.email}
-              valid={touchedFields.email && !errors.email?.message}
-              errorMessage={errors.email?.message}
-              {...register('email')}
-            />
-            <CodeModule
-              touched={touchedFields.code}
-              valid={touchedFields.code && !errors.code?.message}
-              errorMessage={errors.code?.message}
-              Name={'Code'}
-              codeverify={codeverify}
-              handleVerifyCode={handleVerifyCode}
-              {...register('code')}
-            />
-          </>
-        )}
-        {step === 2 && (
-          <>
-            <InputModule
-              top={false}
-              touched={touchedFields.password}
-              valid={touchedFields.password && !errors.password?.message}
-              errorMessage={errors.password?.message}
-              Name={'Password'}
-              inputname={'password'}
-              span={'New Password'}
-              {...register('password')}
-            />
-            <InputModule
-              top={false}
-              touched={touchedFields.repassword}
-              valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
-              errorMessage={errors.repassword?.message || errorMessage}
-              Name={'Password'}
-              inputname={'password'}
-              span={'Re-enter Password'}
-              {...register('repassword')}
-            />
-            <AuthButton disabled={!isValid || !passwordMatch}>Go to the login</AuthButton>
-          </>
-        )}
-      </S.Form>
+          )}
+        </S.Form>
+      </FormProvider>
 
       <S.BackButton onClick={() => navigate(-1)}>
         <ArrowLeft style={{ width: '24px', height: '24px' }} />

@@ -1,73 +1,95 @@
-export type TTableData = {
-  date: string;
-  name: string;
-  page: string;
-  attainment: number;
-  state: string;
-  time: string;
-  user: string;
-  action: boolean;
+import type { TGetTestListResponse } from '@/types/test/test.ts';
+import { TEST_STATE } from '@/enums/enums.ts';
+
+export const tableData: TGetTestListResponse = {
+  isSuccess: true,
+  code: '200',
+  message: 'Success',
+  result: {
+    testList: [
+      {
+        testId: 1,
+        testDate: '2025-01-26',
+        testName: '테스트 A',
+        pageName: '페이지 A',
+        attainment: 85,
+        state: TEST_STATE.SUCCESS,
+        time: 120,
+        nickname: '사용자1',
+        errorId: 101,
+        scenarioRecord: '시나리오 A',
+      },
+      {
+        testId: 2,
+        testDate: '2025-01-25',
+        testName: '테스트 B',
+        pageName: '페이지 B',
+        attainment: 60,
+        state: TEST_STATE.SUCCESS,
+        time: 90,
+        nickname: '사용자2',
+        errorId: 102,
+        scenarioRecord: '시나리오 B',
+      },
+      {
+        testId: 3,
+        testDate: '2025-01-24',
+        testName: '테스트 C',
+        pageName: '페이지 C',
+        attainment: 70,
+        state: TEST_STATE.SUCCESS,
+        time: 100,
+        nickname: '사용자3',
+        errorId: 103,
+        scenarioRecord: '시나리오 C',
+      },
+      {
+        testId: 4,
+        testDate: '2025-01-23',
+        testName: '테스트 D',
+        pageName: '페이지 D',
+        attainment: 90,
+        state: TEST_STATE.SUCCESS,
+        time: 110,
+        nickname: '사용자4',
+        errorId: 104,
+        scenarioRecord: '시나리오 D',
+      },
+      {
+        testId: 5,
+        testDate: '2025-01-22',
+        testName: '테스트 E',
+        pageName: '페이지 E',
+        attainment: 50,
+        state: TEST_STATE.SUCCESS,
+        time: 80,
+        nickname: '사용자5',
+        errorId: 105,
+        scenarioRecord: '시나리오 E',
+      },
+      {
+        testId: 6,
+        testDate: '2025-01-21',
+        testName: '테스트 F',
+        pageName: '페이지 F',
+        attainment: 75,
+        state: TEST_STATE.FAIL,
+        time: 95,
+        nickname: '사용자6',
+        errorId: 106,
+        scenarioRecord: '시나리오 F',
+      },
+    ],
+    listSize: 6,
+    totalPage: 2,
+    totalElements: 12,
+    offset: 0,
+    limit: 6,
+    isFirst: true,
+    isLast: false,
+    hasPrevious: false,
+    hasNext: true,
+  },
 };
 
-export const tableData: TTableData[] = [
-  {
-    date: '2024. 12. 21',
-    name: '회원가입',
-    page: '(1)회원가입',
-    attainment: 80,
-    state: 'Success',
-    time: '2.5s',
-    user: '핑퐁',
-    action: true,
-  },
-  {
-    date: '2024. 12. 21',
-    name: '회원가입',
-    page: '(1)회원가입',
-    attainment: 80,
-    state: 'Success',
-    time: '2.5s',
-    user: '핑퐁',
-    action: true,
-  },
-  {
-    date: '2024. 12. 21',
-    name: '토큰 테스트',
-    page: '(2)로그인',
-    attainment: 50, // string → number로 변환
-    state: 'Fail',
-    time: '2.5s',
-    user: '핑퐁',
-    action: false,
-  },
-  {
-    date: '2024. 12. 21',
-    name: '로그인',
-    page: '(2)로그인',
-    attainment: 90,
-    state: 'Success',
-    time: '3s',
-    user: '핑퐁',
-    action: true,
-  },
-  {
-    date: '2024. 12. 21',
-    name: '테스트4',
-    page: '(4)캘린더',
-    attainment: 64,
-    state: 'Fail',
-    time: '5s',
-    user: '핑퐁',
-    action: false,
-  },
-  {
-    date: '2024. 12. 21',
-    name: '테스트3',
-    page: '(3)메인',
-    attainment: 30,
-    state: 'Success',
-    time: '10s',
-    user: '핑퐁',
-    action: true,
-  },
-];
+export const pageData = ['(1) 회원가입', '(2) 로그인', '(3) 메인'];

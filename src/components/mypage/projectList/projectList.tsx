@@ -1,54 +1,47 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import type { TUserProjectListResponse } from '@/types/userController/userController';
+
+import useProjects from '@/hooks/project/useProject';
 
 import Project from '@/components/mypage/project/project';
 
 import * as S from './projectList.style';
 
-import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
-import ArrowRight from '@/assets/icons/arrow_right.svg?react';
+import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
+import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function ProjectList() {
+type TProjectListProps = {
+  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+};
+export default function ProjectList({ setProjectNum }: TProjectListProps) {
   const navigate = useNavigate();
-  const projectsData = [
-    { name: 'QASTUDIO', participants: 12, date: '2025.01.09', id: 1 },
-    { name: '초대박적인프로젝트', participants: 23, date: '2025.01.09', id: 2 },
-    { name: '엄청난 프로젝트', participants: 102, date: '2025.01.09', id: 3 },
-    { name: '혁신적인 프로젝트', participants: 243, date: '2025.01.09', id: 4 },
-    { name: '세상에 이런일이', participants: 719, date: '2025.01.09', id: 5 },
-    { name: '고양이가 세상 지배', participants: 48, date: '2025.01.09', id: 6 },
-    { name: '귀여운게 제일 좋아', participants: 1, date: '2025.01.09', id: 7 },
-    { name: '감자같은인생 퍽퍽하다는 뜻임', participants: 13, date: '2025.01.09', id: 8 },
-    { name: '우리팀짱', participants: 89, date: '2025.01.09', id: 9 },
-    { name: '망곰이 기여웡', participants: 51, date: '2025.01.09', id: 10 },
-    // 테스트 용, 추후 삭제 예정
-  ];
+  const [currentPage, setCurrentPage] = useState(0);
+  const { useGetMypageProjects } = useProjects(currentPage);
+  const { data } = useGetMypageProjects;
 
-  const pageSize = 7; // 한 페이지에 표시할 프로젝트 수
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const totalPages = Math.ceil(projectsData.length / pageSize); // 전체 페이지 수
-  const haveNext = currentPage < totalPages; // 다음 페이지가 있는지 확인
-  const havePrevious = currentPage > 1; // 이전 페이지가 있는지 확인
+  const projectsData = data?.result.userProjectList;
 
-  // 현재 페이지에 맞는 프로젝트 데이터만 가져오기
-  const currentProjects = projectsData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  useEffect(() => {
+    setProjectNum(data?.result.totalElements || 0);
+  }, [data]);
 
-  // 페이지 이동 함수
   const goToNextPage = () => {
-    if (haveNext) {
+    if (!data?.result.isLast) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const goToPreviousPage = () => {
-    if (havePrevious) {
+    if (!data?.result.isFirst) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   return (
     <S.ProjectList>
-      <div style={{ flex: '1' }}>
+      <S.TableWrapper>
         <S.Table>
           <thead>
             <tr>
@@ -59,25 +52,43 @@ export default function ProjectList() {
               <S.TH>Last Modified Date</S.TH>
             </tr>
           </thead>
-          <S.TBody>
-            {currentProjects.map((project) => (
+          <tbody>
+            {projectsData?.map((project: TUserProjectListResponse) => (
               <Project
-                key={project.id}
-                id={project.id}
-                name={project.name}
-                participants={project.participants}
-                date={project.date}
-                onClick={() => navigate(`/project/information/${project.id}`)}
+                key={project.projectId}
+                id={project.projectId}
+                name={project.projectName}
+                participants={project.participant}
+                date={project.lastModifiedDate}
+                onClick={() => navigate(`/project/information/${project.projectId}`)}
               />
             ))}
-          </S.TBody>
+          </tbody>
         </S.Table>
-      </div>
+      </S.TableWrapper>
 
-      <S.Buttons>
-        {havePrevious ? <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} /> : <ArrowLeft stroke={'#e9e8f91a'} />}
-        {haveNext ? <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} /> : <ArrowRight stroke={'#e9e8f91a'} />}
-      </S.Buttons>
+      <div>
+        <S.Buttons>
+          {!data?.result.isFirst ? (
+            <S.Button $disable={false}>
+              <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} />
+            </S.Button>
+          ) : (
+            <S.Button $disable={true}>
+              <ArrowLeft stroke={'#e9e8f91a'} />
+            </S.Button>
+          )}
+          {!data?.result.isLast ? (
+            <S.Button $disable={false}>
+              <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} />
+            </S.Button>
+          ) : (
+            <S.Button $disable={true}>
+              <ArrowRight stroke={'#e9e8f91a'} />
+            </S.Button>
+          )}
+        </S.Buttons>
+      </div>
     </S.ProjectList>
   );
 }

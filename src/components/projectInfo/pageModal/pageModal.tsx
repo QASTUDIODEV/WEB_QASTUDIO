@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
-import ValidataionMessage from '@/components/auth/validationMessage/validationMessage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
+import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 import * as S from '@/components/projectInfo/pageModal/pageModal.style';
@@ -25,7 +25,7 @@ type TFormData = {
 export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
   const [options] = useState<string[]>(['origin', 'admin', 'guest']);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
+  const [modalStep, setModalStep] = useState(1);
 
   const {
     control,
@@ -34,7 +34,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
     getValues,
     formState: { errors, isValid, touchedFields },
   } = useForm<TFormData>({
-    mode: 'onChange', // 실시간으로 상태를 업데이트
+    mode: 'onChange',
     defaultValues: {
       pageName: '',
       pageDescription: '',
@@ -45,14 +45,12 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
   });
   const { fields, append } = useFieldArray({
     control,
-    name: 'scenarios', // 필드 배열 이름
+    name: 'scenarios',
   });
   const onSubmit = () => {
-    // console.log('Form Submitted:', data);
-    setModalStep(2); // 다음 단계로 이동
+    setModalStep(2);
   };
 
-  // 선택된 옵션 추가 함수
   const handleSelect = (value: string) => {
     if (!selectedOptions.includes(value)) {
       setSelectedOptions((prev) => [...prev, value]);
@@ -61,9 +59,8 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
   const handleCreate = () => {
     // const scenarios = getValues('scenarios'); 나중에 활용 예정
     // console.log('Scenarios:', scenarios);
-    onClose(); // 모달 닫기
+    onClose();
   };
-  // 선택된 옵션 제거 함수
   const handleRemove = (value: string) => {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
   };
@@ -99,7 +96,6 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
               />
             </S.PostBox>
 
-            {/* Page Description */}
             <S.PostBox>
               <S.ModalText>Page Description</S.ModalText>
               <Controller
@@ -132,7 +128,6 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
               />
             </S.PostBox>
 
-            {/* Page Path */}
             <S.PostBox>
               <S.ModalText>Page Path</S.ModalText>
               <Controller
@@ -158,12 +153,10 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                 )}
               />
             </S.PostBox>
-            {/* Page Path */}
             <S.PostBox>
               <S.ModalText>Access Control</S.ModalText>
               <Dropdown options={options} onSelect={handleSelect} placeholder="Select roles for page access." />
             </S.PostBox>
-            {/* Next Button */}
             <S.PostBox>
               <S.BtnWrapper>
                 {selectedOptions.map((option) => (
@@ -173,11 +166,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
                 ))}
               </S.BtnWrapper>
               <S.Position>
-                <Button
-                  type="normal"
-                  color="blue"
-                  disabled={!isValid} // 모든 필드가 유효하지 않으면 비활성화
-                >
+                <Button type="act" color="blue" disabled={!isValid}>
                   Next
                 </Button>
               </S.Position>
@@ -186,7 +175,6 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
         </form>
       ) : (
         <S.ModalBox>
-          {/* Scenarios */}
           <S.PostBox>
             <S.ModalText>Main Scenario</S.ModalText>
             <S.ModalText2>
@@ -239,7 +227,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
               disabled={
                 !fields[fields.length - 1] || !getValues(`scenarios.${fields.length - 1}.value`) || getValues(`scenarios.${fields.length - 1}.value`).length < 3
               }
-              onClick={() => append({ value: '' })} // 새로운 필드 추가
+              onClick={() => append({ value: '' })}
             >
               {!fields[fields.length - 1] ||
               !getValues(`scenarios.${fields.length - 1}.value`) ||
