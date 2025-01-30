@@ -10,6 +10,7 @@ const store = configureStore({
   reducer: {
     modal: modalReducer,
     scenario: scenarioReducer,
+    scenarioAct: scenarioActReducer,
     auth: authReducer,
     calendar: calendarReducer,
   },

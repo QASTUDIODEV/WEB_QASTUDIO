@@ -19,7 +19,12 @@ import UserSetting from '@/pages/userSetting/userSetting';
 export const router = createBrowserRouter([
   {
     path: '/scenarioAct/:projectId',
-    element: <ScenarioActPage />,
+    element: (
+      <>
+        <ScenarioActPage />
+        <ModalProvider />
+      </>
+    ),
   },
   {
     path: '/mypage',
