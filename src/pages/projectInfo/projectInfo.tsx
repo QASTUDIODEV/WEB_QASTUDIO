@@ -59,7 +59,8 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     }
   }
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { useEditIntroduce } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { useEditIntroduce, useGetProjectMember } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { data: members } = useGetProjectMember;
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const data = {
@@ -74,25 +75,9 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     ],
     character: ['일반', '관리자', '비로그인'],
   };
+  const member = members?.result.members;
   const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
   const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
-  const member = [
-    {
-      name: '핑퐁',
-      userImage: 'https://picsum.photos/100',
-      Master: true,
-    },
-    {
-      name: '뿡빵이',
-      userImage: 'https://picsum.photos/100',
-      Master: false,
-    },
-    {
-      name: '길이가 길면 끊어주세요요요요요요요요',
-      userImage: 'https://picsum.photos/100',
-      Master: false,
-    },
-  ];
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -309,14 +294,14 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
         <S.Right>
           <S.Box height="100%">
             <S.Title>Team Members</S.Title>
-            {member.map((a, i) => (
+            {member?.map((a, i) => (
               <S.Member key={i}>
                 <S.MemberBox>
                   <S.ProfileWrapper>
-                    <Profile profileImg={a.userImage} />
+                    <Profile profileImg={a.profileImage} />
                   </S.ProfileWrapper>
-                  <S.MemberName>{a.name}</S.MemberName>
-                  {a.Master && <Crown />}
+                  <S.MemberName>{a.nickname}</S.MemberName>
+                  {a.projectRole === 'LEADER' && <Crown />}
                 </S.MemberBox>
                 <S.ArrowWrapper>
                   <ArrowRight className="show" />

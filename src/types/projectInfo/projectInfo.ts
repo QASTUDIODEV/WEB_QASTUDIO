@@ -24,3 +24,13 @@ export type TEditRequest = {
   projectId: number;
   introduce: string;
 };
+
+export type TGetProjectMember = TCommonResponse<{
+  members: {
+    userId: number;
+    projectRole: string;
+    email: string;
+    nickname: string;
+    profileImage: string;
+  }[];
+}>;
