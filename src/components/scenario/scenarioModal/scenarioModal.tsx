@@ -82,11 +82,9 @@ export default function ScenarioModal() {
             </S.TagContainer>
 
             <S.ButtonContainer>
-              <S.ButtonWrapper>
-                <Button color="blue" onClick={handleSubmit(handleCreate)} disabled={!isValid || selectedOptions.length === 0}>
-                  Create
-                </Button>
-              </S.ButtonWrapper>
+              <Button color="blue" onClick={handleSubmit(handleCreate)} disabled={!isValid || selectedOptions.length === 0}>
+                Create
+              </Button>
             </S.ButtonContainer>
           </S.ModalContainer>
         </form>
@@ -119,16 +117,12 @@ export default function ScenarioModal() {
           </S.ScenarioContainer>
 
           <S.ButtonContainer>
-            <S.LongButtonWrapper>
-              <Button color="mint" onClick={() => setModalStep(1)}>
-                Edit and Request
-              </Button>
-            </S.LongButtonWrapper>
-            <S.ButtonWrapper>
-              <Button color="blue" onClick={() => dispatch(closeModal())}>
-                Save
-              </Button>
-            </S.ButtonWrapper>
+            <Button color="mint" onClick={() => setModalStep(1)}>
+              Edit and Request
+            </Button>
+            <Button color="blue" onClick={() => dispatch(closeModal())}>
+              Save
+            </Button>
           </S.ButtonContainer>
         </S.ConfirmModalContainer>
       )}

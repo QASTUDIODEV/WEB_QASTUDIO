@@ -2,19 +2,15 @@ import styled from 'styled-components';
 
 export const Background = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  padding: 100px;
+  padding: 6%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
   width: 100%;
-  min-width: 1005px;
+  position: relative;
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0.36px;
   }
 `;
 
@@ -22,6 +18,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: inherit;
+  overflow-x: auto;
+  max-width: 100%;
 `;
 
 export const Header = styled.div`
@@ -29,13 +27,6 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 36px;
-  h1 {
-    color: ${({ theme }) => theme.colors.primary.pri_50};
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0.48px;
-  }
 `;
 
 export const CharactersContainer = styled.div`
@@ -46,6 +37,9 @@ export const CharactersContainer = styled.div`
 
 export const Pagination = styled.div`
   display: flex;
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
   justify-content: center;
   align-items: center;
   &:hover {
