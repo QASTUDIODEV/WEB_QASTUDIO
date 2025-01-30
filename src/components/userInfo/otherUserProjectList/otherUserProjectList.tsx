@@ -3,20 +3,20 @@ import { useNavigate } from 'react-router-dom';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
 
-import useProjects from '@/hooks/project/useProject';
+import useOtherUserInfo from '@/hooks/userInfo/useOtherUserInfo';
 
 import Project from '@/components/mypage/project/project';
 
-import * as S from './projectList.style';
+import * as S from './otherUserProjectList.style.ts';
 
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function ProjectList() {
+export default function OtherUserProjectList({ userId }: { userId: string }) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const { useGetMypageProjects } = useProjects(currentPage);
-  const { data } = useGetMypageProjects;
+  const { useGetOtherUserProjects } = useOtherUserInfo({ userId, currentPage });
+  const { data } = useGetOtherUserProjects;
 
   const projectsData = data?.result.userProjectList;
 

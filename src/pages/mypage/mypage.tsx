@@ -11,10 +11,10 @@ export default function MyPage() {
   return (
     <S.Container>
       <S.Title>My Page</S.Title>
-      <MyProfile />
+      <MyProfile setProjectNum={setProjectNum} />
       <S.Projects>
         <ProjectNum projectNum={projectNum} />
-        <ProjectList setProjectNum={setProjectNum} />
+        <ProjectList />
       </S.Projects>
     </S.Container>
   );

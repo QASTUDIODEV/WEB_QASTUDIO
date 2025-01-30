@@ -13,6 +13,7 @@ import MyPage from '@/pages/mypage/mypage';
 import ScenarioPage from '@/pages/scenario/scenario';
 import ScenarioActPage from '@/pages/scenarioAct/scenarioAct';
 import SignupPage from '@/pages/signup/signup';
+import UserInfo from '@/pages/userInfo/userInfo';
 import UserSetting from '@/pages/userSetting/userSetting';
 
 export const router = createBrowserRouter([
@@ -24,6 +25,11 @@ export const router = createBrowserRouter([
         <ModalProvider />
       </>
     ),
+  },
+  {
+    path: '/userInfo/:userId',
+    element: <MainLayout />,
+    children: [{ index: true, element: <UserInfo /> }],
   },
   {
     path: '/mypage',
