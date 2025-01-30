@@ -13,10 +13,9 @@ interface IDropdownOption {
 interface IDropdownProps {
   options: IDropdownOption[];
   onSelect: (selected: IDropdownOption) => void;
-  type?: 'thin' | 'normal';
 }
 
-export default function CharacterSelectDropdown({ options, onSelect, type = 'normal' }: IDropdownProps) {
+export default function CharacterSelectDropdown({ options, onSelect }: IDropdownProps) {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
   const [selectedOption, setSelectedOption] = useState<IDropdownOption>(options[0]); // 선택된 옵션
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,13 +48,13 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'nor
   return (
     <S.Container ref={dropdownRef}>
       {/* 헤더 */}
-      <S.Header onClick={toggleDropdown} $isOpen={isOpen} $type={type}>
+      <S.Header onClick={toggleDropdown} $isOpen={isOpen}>
         {selectedOption.characterName} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Header>
       {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
         {options.map((option, index) => (
-          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption} $type={type}>
+          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption}>
             {option.characterName}
           </S.DropdownListItem>
         ))}

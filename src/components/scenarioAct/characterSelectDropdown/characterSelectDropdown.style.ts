@@ -6,10 +6,10 @@ export const Container = styled.div`
   ${({ theme }) => theme.text.medium_18};
 `;
 
-export const Header = styled.div<{ $isOpen: boolean; $type: string }>`
+export const Header = styled.div<{ $isOpen: boolean }>`
   width: 100%;
   display: flex;
-  padding: ${({ $type }) => ($type == 'normal' ? '10px' : '3px 8px')};
+  padding: 10px;
   height: 100%;
   box-sizing: border-box;
   align-items: center;
@@ -35,7 +35,7 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
 `;
 
-export const DropdownListItem = styled.li<{ $isSelected: boolean; $type: string }>`
+export const DropdownListItem = styled.li<{ $isSelected: boolean }>`
   width: 100%;
   padding: 10px;
   cursor: pointer;
