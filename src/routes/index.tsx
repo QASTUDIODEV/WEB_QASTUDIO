@@ -10,7 +10,6 @@ import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
 import LoginRedirect from '@/pages/loginRedirect/loginRedirect';
 import MyPage from '@/pages/mypage/mypage';
-import ProjectInfoPage from '@/pages/projectInfo/projectInfo';
 import ScenarioPage from '@/pages/scenario/scenario';
 import ScenarioActPage from '@/pages/scenarioAct/scenarioAct';
 import SignupPage from '@/pages/signup/signup';
