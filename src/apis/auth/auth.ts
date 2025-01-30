@@ -34,7 +34,12 @@ const userSetting = async ({ nickname, profileImage }: TUserSettingValues): Prom
 };
 
 const refresh = async () => {
-  const { data } = await axiosInstance.post('refresh'); // 아직 동작 안합니당...
+  const { data } = await axiosInstance.post('/api/v0/auth/reissue');
+  return data;
+};
+
+const logout = async () => {
+  const { data } = await axiosInstance.post('/api/v0/auth/logout');
   return data;
 };
 
@@ -47,4 +52,4 @@ const changePassword = async ({ email, newPassword }: TChangePasswordValues): Pr
   const { data } = await axiosInstance.post('/api/v0/auth/update/password', { email: email, newPassword: newPassword });
   return data;
 };
-export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, refresh, userSetting };
+export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, logout, refresh, userSetting };
