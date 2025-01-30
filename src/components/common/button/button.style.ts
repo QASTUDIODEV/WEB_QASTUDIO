@@ -2,39 +2,48 @@ import styled, { css } from 'styled-components';
 
 const buttonTypes = {
   normal: css`
-    padding: 10px 20px;
-    ${({ theme }) => theme.text.medium_18};
+    padding: 8px 16px;
+    font-family: Pretendard;
+    font-size: 14.4px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 21.6px */
+    letter-spacing: 0.288px;
     border-radius: 8px;
   `,
   act: css`
-    padding: 10px 20px;
-    ${({ theme }) => theme.text.medium_20};
+    padding: 8px 16px;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 24px */
+    letter-spacing: 0.32px;
     border-radius: 8px;
   `,
   small_round: css`
-    padding: 2px 10px;
+    padding: 1.6px 8px;
     font-family: Pretendard;
-    font-size: 12px;
+    font-size: 9.6px;
     font-style: normal;
     font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0.24px;
+    line-height: 150%; /* 14.4px */
+    letter-spacing: 0.192px;
     border-radius: 99px;
   `,
   small_square: css`
-    padding: 6px 10px;
+    padding: 4.8px 8px;
     font-family: Pretendard;
-    font-size: 12px;
+    font-size: 9.6px;
     font-style: normal;
     font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0.24px;
-    border-radius: 4px;
+    line-height: 150%; /* 14.4px */
+    letter-spacing: 0.192px;
   `,
   tag: css`
-    padding: 8px 12px;
+    padding: 6.4px 9.6px;
     font-family: Inter;
-    font-size: 18px;
+    font-size: 14.4px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -107,7 +116,7 @@ export const StyledButton = styled.button<{
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
   ${({ type }) => buttonTypes[type]}
   ${({ color }) => buttonColors[color]}
