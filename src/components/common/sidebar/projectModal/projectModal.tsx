@@ -87,6 +87,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
+    console.log(emails);
     if (!debouncedEmail || emails.includes(debouncedEmail)) {
       return; // 이메일이 비어 있거나 이미 추가된 경우
     }
@@ -118,6 +119,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
+          setEmails([]);
           onClose(); // 모달 닫기
         },
       },
@@ -253,7 +255,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               type="normal"
               color="blue"
               onClick={handleAddEmail}
-              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email}
+              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email || !isEmailValid}
             >
               Share
             </Button>
