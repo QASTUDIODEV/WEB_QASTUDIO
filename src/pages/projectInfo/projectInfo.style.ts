@@ -94,6 +94,7 @@ const Box = styled.div<{ height: string }>`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  border: 0.8px solid rgba(32, 75, 153, 0.2);
 `;
 
 const Left = styled.div`
@@ -152,6 +153,7 @@ const TextLight = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.224px;
+  white-space: pre;
   ${media.desktop`
     font-size: 8px;
   `}
@@ -288,7 +290,8 @@ export const Input = styled.textarea`
   border-radius: 6.4px;
   background: rgba(217, 230, 255, 0.05);
   border: none;
-  scrollbar-width: none;
+  overflow: 'hidden';
+  resize: 'none';
   @media (max-width: 840px) {
     width: 70%;
   }

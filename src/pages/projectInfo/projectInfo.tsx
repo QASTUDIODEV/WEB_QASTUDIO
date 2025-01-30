@@ -4,6 +4,7 @@ import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
@@ -58,6 +59,8 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     }
   }
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { useEditIntroduce } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const data = {
     page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
@@ -114,11 +117,34 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   };
   const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
   const stack = STACK[result?.developmentSkill as keyof typeof STACK] ?? STACK.NEXT;
+  const handleEdit = () => {
+    const maxRows = 2;
+    const lines = state.preContent.split('\n');
+    const modifiedText = lines.slice(0, maxRows).join('\n');
+    dispatch({ type: 'SET_CONTENT', payload: modifiedText });
+    console.log(state.preContent);
+    editIntroduce({
+      projectId: Number(result?.projectId),
+      introduce: state.preContent,
+    });
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const maxRows = 2;
+    const textarea = e.target;
+
+    const computedStyle = window.getComputedStyle(textarea);
+    const lineHeight = parseInt(computedStyle.lineHeight, 10);
+    const currentRows = Math.floor(textarea.scrollHeight / lineHeight);
+    if (currentRows > maxRows) {
+      return;
+    }
+    dispatch({ type: 'SET_PRE_CONTENT', payload: e.target.value });
+  };
   return (
     <S.Container>
       <S.Profile>
         <ProjectTitle title={result?.projectName} profileImg={result?.projectImage} stack={stack} device={type} />
-        <S.Wrapper top="5.6px" right="0" className="buttonShow">
+        <S.Wrapper top="7.2px" right="0" className="buttonShow">
           <Button
             type="normal"
             color="default"
@@ -147,15 +173,9 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
           </>
         ) : (
           <>
-            <S.Input onChange={(e) => dispatch({ type: 'SET_PRE_CONTENT', payload: e.target.value })} value={state.preContent} />
+            <S.Input onChange={(e) => handleInputChange(e)} value={state.preContent} rows={2} />
             <S.Wrapper bottom="16px" right="24px">
-              <Button
-                type="normal"
-                color="default"
-                icon={<Edit />}
-                iconPosition="left"
-                onClick={() => dispatch({ type: 'SET_CONTENT', payload: state.preContent })}
-              >
+              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
                 Done
               </Button>
             </S.Wrapper>
