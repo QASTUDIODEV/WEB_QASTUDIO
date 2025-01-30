@@ -1,3 +1,5 @@
+import { useNavigate, useParams } from 'react-router-dom';
+
 import useGetError from '@/hooks/error/useGetError';
 
 import Button from '@/components/common/button/button';
@@ -12,6 +14,8 @@ type TErrorProps = {
 
 export default function ErrorModal({ onClose, testId = 0 }: TErrorProps) {
   const { data } = useGetError({ testId });
+  const nav = useNavigate();
+  const { projectId } = useParams();
 
   return (
     <Modal title={data?.result.testName} onClose={onClose}>
@@ -29,7 +33,12 @@ export default function ErrorModal({ onClose, testId = 0 }: TErrorProps) {
               <S.MessageBox>{data?.result.errorMessage}</S.MessageBox>
             </S.ErrorWrapper>
             <S.ButtonBox>
-              <Button color={'blue'} onClick={() => {}}>
+              <Button
+                color={'blue'}
+                onClick={() => {
+                  nav(`/scenarioAct/${projectId}`);
+                }}
+              >
                 Replay
               </Button>
             </S.ButtonBox>
