@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 
 import useDebounce from '@/hooks/common/useDebounce';
+import useInviteMember from '@/hooks/projectInfo/useInviteMember';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
@@ -42,14 +44,17 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
   const debouncedEmail = useDebounce(emailValue, 800);
   const { useGetTeamMember } = useTeamMember({ projectId, email: debouncedEmail });
   const { useGetMemberEmail } = useProjectInfo({ projectId });
+  const { useInvite } = useInviteMember();
 
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
 
   const { data: memberEmail } = useGetMemberEmail;
   const { data } = useGetTeamMember;
-
+  const { mutate: inviteMember } = useInvite;
   const [memberEmails, setMemberEmails] = useState<TEmailList>([]);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (memberEmail?.result?.userEmails) {
@@ -79,7 +84,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
 
     const isDuplicate =
       emails.includes(debouncedEmail) || // 이미 추가된 이메일
-      members.includes(debouncedEmail); // 이미 프로젝트에 존재하는 이메일
+      members.includes(debouncedEmail);
 
     if (isDuplicate) return;
 
@@ -93,12 +98,22 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
-    setEmails(emails.filter((email) => email !== emailToRemove));
+    setEmails((prevEmails) => prevEmails.filter((email) => email !== emailToRemove));
   };
-
   const handleCreate = () => {
-    setEmails([]);
-    onClose();
+    inviteMember(
+      {
+        projectId: projectId,
+        memberEmailList: memberEmailList,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectMember'] });
+          setEmails([]);
+          onClose();
+        },
+      },
+    );
   };
 
   return (

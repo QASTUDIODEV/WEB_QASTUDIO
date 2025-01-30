@@ -41,3 +41,11 @@ export type TProjectMember = TCommonResponse<{
     email: string;
   }[];
 }>;
+
+export type TRequestInvite = {
+  projectId: number;
+  memberEmailList: {
+    userId: number;
+    email: string;
+  }[];
+};
