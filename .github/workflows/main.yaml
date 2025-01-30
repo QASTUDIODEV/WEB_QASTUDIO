@@ -1,4 +1,4 @@
-name: cicd action
+name: ci/cd action
 
 on:
   push:
