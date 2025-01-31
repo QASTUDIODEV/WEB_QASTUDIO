@@ -11,10 +11,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 410px;
+  min-height: 780px;
   ${media.desktop`
     .show {
       opacity: 0;
     }
+    margin-bottom: 30px;
   `}
   @media (max-width: 610px) {
     .buttonShow {
@@ -23,7 +25,6 @@ const Container = styled.div`
   }
   @media (max-width: 1300px) {
     overflow: auto;
-    padding-bottom: 0%;
   }
 `;
 const Profile = styled.div`
@@ -52,9 +53,9 @@ const ProfileName = styled.p`
 export const MemberBox = styled.div`
   display: flex;
   align-items: center;
-  width: 85%;
+  width: 100%;
   gap: 4.05%;
-  min-width: 150px;
+  max-width: 100%;
 `;
 export const MemberName = styled.p`
   margin: 0;
@@ -79,23 +80,23 @@ export const ArrowWrapper = styled.div`
 `;
 export const Member = styled.div`
   ${({ theme }) => theme.align.row_space_between};
+  width: 100%;
   gap: 2.5%;
   cursor: pointer;
   margin-bottom: 20px;
-  ${media.desktop`
-    width: 70%;
-  `}
 `;
 export const MemberContainer = styled.div`
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
   max-height: 78%;
   ${media.desktop`
-    max-height: 88%;
+    max-height: 80%;
   `}
 `;
 const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
-  min-height: 95px;
+  min-height: 100px;
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
   border-radius: 8px;
   padding: 16px 24px;
@@ -114,6 +115,7 @@ const Left = styled.div`
   justify-content: start;
   ${media.desktop`
     width: 100%;
+    height: 75%;
   `}
 `;
 
@@ -128,7 +130,7 @@ const Right = styled.div`
   min-width: 168px;
   ${media.desktop`
     width: 100%;
-    height: 100%;
+    height: 50%;
     margin: 40px 0 0 0;
   `}
 `;
@@ -141,7 +143,7 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   @media (max-width: 530px) {
     width: 50%;
     white-space: nowrap;
@@ -162,6 +164,10 @@ const TextLight = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.224px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-height: 40px;
   white-space: pre;
   ${media.desktop`
     font-size: 12px;
@@ -175,7 +181,7 @@ const Text = styled.p`
   font-size: 14.4px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%;
+  line-height: 140%;
   letter-spacing: 0.288px;
   white-space: pre;
   overflow: hidden;
@@ -187,9 +193,6 @@ const Text = styled.p`
   }
   @media (max-width: 610px) {
     width: 60%;
-  }
-  @media (max-width: 1400px) {
-    font-size: 12px;
   }
 `;
 
@@ -243,6 +246,9 @@ const CharacterAddBox = styled.div`
     width: 50%;
     height: 50%;
   }
+  ${media.desktop`
+    height: 90%;
+  `}
 `;
 export const CharacterList = styled.div`
   width: 85%;
@@ -254,7 +260,6 @@ export const CharacterList = styled.div`
   overflow-x: scroll;
   ${media.desktop`
     height: 100%;
-    flex-wrap: wrap;
   `}
 `;
 export const TooltipWrapper = styled.div<{ visible: boolean }>`
@@ -275,7 +280,7 @@ const CharacterBox = styled.div`
   gap: 8px;
   cursor: pointer;
   ${media.desktop`
-    height: 30%;
+    height: 90%;
     flex-wrap: wrap;
   `}
 `;

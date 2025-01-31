@@ -81,6 +81,11 @@ export type TGetCharacter = TCommonResponse<{
   detailCharacters: {
     characterId: number;
     characterName: string;
+    characterDescription: string;
+    pageCnt: number;
+    scenarioCnt: number;
+    accessPageList: string[];
+    scenarioList: string[];
     author: string;
     createdAt: Date;
     updatedAt: Date;
@@ -98,3 +103,9 @@ export type TGetScenario = TCommonResponse<{
 export type TCharacterId = {
   characterId: number;
 };
+export type TPath = TCommonResponse<{
+  projectPaths: {
+    pageId: number;
+    path: string;
+  }[];
+}>;

@@ -8,6 +8,7 @@ import type {
   TGetProjectMember,
   TGetScenario,
   TPageSummary,
+  TPath,
   TProjectInfo,
   TProjectMember,
   TRequestInvite,
@@ -49,5 +50,9 @@ export const getCharacter = async ({ projectId }: TProjectInfo): Promise<TGetCha
 };
 export const getScenario = async ({ characterId }: TCharacterId): Promise<TGetScenario> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/characters/${characterId}/scenarios`);
+  return data;
+};
+export const getPath = async ({ projectId }: TProjectInfo): Promise<TPath> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/paths`);
   return data;
 };
