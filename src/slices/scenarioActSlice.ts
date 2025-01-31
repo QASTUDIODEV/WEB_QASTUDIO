@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
 interface IAction {
+  actionId: number;
   actionDescription: string;
   step: number;
   actionType: string;
@@ -48,21 +49,7 @@ interface IScenarioPayload {
       scenarioId: number;
       scenarioName: string;
       scenarioDescription: string;
-      actions: [
-        {
-          actionDescription: string;
-          step: number;
-          actionType: string;
-          locator: {
-            strategy: string;
-            value: string;
-          };
-          action: {
-            type: string;
-            value: string;
-          };
-        },
-      ];
+      actions: IAction[];
     },
   ];
 }

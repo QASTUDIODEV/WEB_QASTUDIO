@@ -32,6 +32,7 @@ export type TGetScenarioInfoResponse = TCommonResponse<{
       scenarioDescription: string;
       actions: [
         {
+          actionId: number;
           actionDescription: string;
           step: number;
           actionType: string;

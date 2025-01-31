@@ -11,36 +11,33 @@ import { setCharacterId } from '@/slices/scenarioActSlice';
 export default function CharacterSelectDropdown() {
   const dispatch = useDispatch();
 
-  // ✅ Redux에서 캐릭터 목록과 현재 선택된 캐릭터 ID 가져오기
   const characters = useSelector((state) => state.scenarioAct.characters);
   const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
-
-  // ✅ 현재 선택된 캐릭터 찾기
   const selectedCharacter = characters.find((char) => char.characterId === selectedCharacterId) || characters[0];
 
-  // ✅ UI 상태 (드롭다운 열림/닫힘)
+  // 드롭다운 열림/닫힘
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Redux 상태와 UI 동기화
+  // Redux 상태와 동기화
   useEffect(() => {
     if (selectedCharacter) {
       dispatch(setCharacterId(selectedCharacter.characterId));
     }
   }, [selectedCharacter, dispatch]);
 
-  // ✅ 드롭다운 토글
+  // 드롭다운 토글 함수
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // ✅ 캐릭터 선택
+  // 캐릭터 선택 함수
   const handleOptionClick = (characterId: number) => {
     dispatch(setCharacterId(characterId)); // Redux 상태 업데이트
     setIsOpen(false); // 드롭다운 닫기
   };
 
-  // ✅ 외부 클릭 시 드롭다운 닫기
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
