@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const SideBar = styled.div`
-  min-width: 280px;
+  min-width: 256px;
   height: 100vh;
   background: ${({ theme }) => `linear-gradient(76.11deg, ${theme.colors.primary.pri_700} 0%, ${theme.colors.primary.pri_900} 100.13%)`};
   position: sticky;
@@ -188,7 +188,12 @@ export const BtnWrapper = styled.div`
 `;
 export const ProjectContentName = styled.p`
   margin: 0;
-  ${({ theme }) => theme.text.medium_18};
+  font-family: Pretendard;
+  font-size: 14.4px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 21.6px */
+  letter-spacing: 0.288px;
   color: #d6deec;
 `;
 
@@ -259,4 +264,8 @@ export const LogoutBox = styled.div`
 export const ProjectList = styled.div`
   overflow-y: auto;
   scrollbar-width: none;
+`;
+export const ProjectProfile = styled.div`
+  width: 19.2px;
+  height: 19.2px;
 `;

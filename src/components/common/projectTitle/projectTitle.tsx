@@ -34,12 +34,12 @@ export const deviceIconMap: Record<DEVICE, React.FunctionComponent> = {
 export default function ProjectTitle({ title = 'UNTITLED', profileImg, device = DEVICE.PC, stack = STACK.NEXT }: TProjectTitleProps) {
   return (
     <S.Container>
-      <S.ProfileWrapper>
+      <S.IconContainer>
         <Profile profileImg={profileImg} />
-      </S.ProfileWrapper>
-      <p>{title}</p>
-      {getIcon(deviceIconMap, device)}
-      {getIcon(stackIconMap, stack)}
+      </S.IconContainer>
+      <S.Title>{title}</S.Title>
+      <S.IconContainer>{getIcon(deviceIconMap, device)}</S.IconContainer>
+      <S.IconContainer>{getIcon(stackIconMap, stack)}</S.IconContainer>
     </S.Container>
   );
 }

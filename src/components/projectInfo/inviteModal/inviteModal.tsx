@@ -1,5 +1,11 @@
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
+
+import useDebounce from '@/hooks/common/useDebounce';
+import useInviteMember from '@/hooks/projectInfo/useInviteMember';
+import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -11,19 +17,21 @@ import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TInviteModalProps = {
   onClose: () => void; // 모달 닫기 함수
+  projectId?: number;
 };
 
 type TFormData = {
   email: string;
 };
-
-export default function InviteModal({ onClose }: TInviteModalProps) {
+type TEmailList = {
+  userId: number;
+  email: string;
+}[];
+export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProps) {
   const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
-
   const {
     control,
     setValue,
-    watch,
     formState: { errors, touchedFields },
   } = useForm<TFormData>({
     mode: 'onChange',
@@ -32,23 +40,79 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
     },
   });
 
-  const emailValue = watch('email'); // 이메일 값 실시간 추적
+  const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
+  const debouncedEmail = useDebounce(emailValue, 800);
+  const { useGetTeamMember } = useTeamMember({ projectId, email: debouncedEmail });
+  const { useGetMemberEmail } = useProjectInfo({ projectId });
+  const { useInvite } = useInviteMember();
+
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
+
+  const { data: memberEmail } = useGetMemberEmail;
+  const { data } = useGetTeamMember;
+  const { mutate: inviteMember } = useInvite;
+  const [memberEmails, setMemberEmails] = useState<TEmailList>([]);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (memberEmail?.result?.userEmails) {
+      setMemberEmails(memberEmail.result.userEmails);
+    }
+  }, [memberEmail]);
+  const members = memberEmails.map((a) => a.email);
+
+  useEffect(() => {
+    if (data?.result?.userEmails.some((userEmail) => userEmail.email === debouncedEmail)) {
+      const existingEmails = memberEmailList.map((member) => member.email);
+      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
+
+      if (newEmails.length > 0) {
+        setMemberEmailList((prev) => [...prev, ...newEmails]);
+        setIsEmailValid(true);
+      }
+    } else {
+      setIsEmailValid(false);
+    }
+  }, [data, debouncedEmail, emails]);
+  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
 
   const handleAddEmail = () => {
-    const email = emailValue.trim();
-    if (email && !emails.includes(email)) {
-      setEmails((prev) => [...prev, email]);
-      setValue('email', ''); // 입력 필드 초기화
+    if (!debouncedEmail.trim()) return;
+
+    const isDuplicate =
+      emails.includes(debouncedEmail) || // 이미 추가된 이메일
+      members.includes(debouncedEmail);
+
+    if (isDuplicate) return;
+
+    if (!isEmailValid) {
+      setValue('email', '');
+      return;
     }
-  };
 
-  const handleRemoveEmail = (emailToRemove: string) => {
-    setEmails((prev) => prev.filter((email) => email !== emailToRemove));
+    setEmails((prev) => [...prev, debouncedEmail]);
+    setValue('email', '');
   };
-
+  const handleRemoveEmail = (remove: string) => {
+    setMemberEmailList((prev) => prev.filter((email) => email.email !== remove));
+    setEmails((prev) => prev.filter((email) => email !== remove));
+  };
   const handleCreate = () => {
-    // console.log('Emails:', emails); 나중에 지울게용
-    onClose(); // 모달 닫기
+    inviteMember(
+      {
+        projectId: projectId,
+        memberEmailList: memberEmailList,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectMember'] });
+          setEmails([]);
+          onClose();
+        },
+      },
+    );
   };
 
   return (
@@ -68,26 +132,17 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
               },
             }}
             render={({ field }) => (
-              <>
-                <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} touched={touchedFields.email} />
-              </>
+              <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} touched={touchedFields.email} />
             )}
           />
-          <Button
-            type="act"
-            color="gray"
-            onClick={handleAddEmail}
-            disabled={
-              !emailValue.trim() || // 값이 비어 있으면 비활성화
-              !!errors.email || // 유효성 검사 에러가 있으면 비활성화
-              emails.includes(emailValue.trim()) // 이미 추가된 이메일이면 비활성화
-            }
-          >
+          <Button type="act" color="blue" onClick={handleAddEmail} disabled={!debouncedEmail.trim() || !isEmailValid}>
             Share
           </Button>
         </S.BtnWrapper>
-        {touchedFields.email && errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-        {/* 이메일 태그 리스트 */}
+        {FirstValid && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+        {!FirstValid && !isEmailValid && debouncedEmail && (
+          <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />
+        )}
         <S.tagWrapper>
           {emails.map((email) => (
             <Button key={email} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(email)}>
@@ -95,7 +150,6 @@ export default function InviteModal({ onClose }: TInviteModalProps) {
             </Button>
           ))}
         </S.tagWrapper>
-        {/* Create 버튼 */}
         <S.Position>
           <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
             Create

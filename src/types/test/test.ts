@@ -7,9 +7,11 @@ export type TTestListDTO = {
   testName: string;
   pageName: string;
   attainment: number;
-  state: string;
+  state: TEST_STATE;
   time: number;
   nickname: string;
+  errorId: number;
+  scenarioRecord: string;
 };
 
 // 테스트 리스트 조회 API
@@ -18,7 +20,8 @@ export type TGetTestListRequest = {
   page?: number;
   date?: Date;
   pageName?: string;
-  state?: TEST_STATE;
+  state?: TEST_STATE | null;
+  testName?: string;
 };
 
 export type TGetTestListResponse = TCommonResponse<{
@@ -28,6 +31,10 @@ export type TGetTestListResponse = TCommonResponse<{
   totalElements: number;
   isFirst: boolean;
   isLast: boolean;
+  offset: number;
+  limit: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
 }>;
 
 // 테스트 통계 조회 API
@@ -46,9 +53,3 @@ export type TGetStatisticsResponse = TCommonResponse<{
   participant: number;
   totalTestCnt: number;
 }>;
-
-// 테스트 검색 API
-export type TSearchTestListRequest = TGetTestListRequest & {
-  testName?: string;
-};
-export type TSearchTestListResponse = TGetTestListResponse;

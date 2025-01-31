@@ -24,3 +24,28 @@ export type TEditRequest = {
   projectId: number;
   introduce: string;
 };
+
+export type TGetProjectMember = TCommonResponse<{
+  members: {
+    userId: number;
+    projectRole: string;
+    email: string;
+    nickname: string;
+    profileImage: string;
+  }[];
+}>;
+
+export type TProjectMember = TCommonResponse<{
+  userEmails: {
+    userId: number;
+    email: string;
+  }[];
+}>;
+
+export type TRequestInvite = {
+  projectId: number;
+  memberEmailList: {
+    userId: number;
+    email: string;
+  }[];
+};

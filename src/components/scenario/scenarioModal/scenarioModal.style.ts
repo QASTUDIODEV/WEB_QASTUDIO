@@ -5,7 +5,6 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 850px;
 `;
 
 export const description = styled.div`
@@ -14,6 +13,7 @@ export const description = styled.div`
 
 export const SubTitle = styled.p`
   ${({ theme }) => theme.text.medium_22};
+  white-space: nowrap;
 `;
 
 export const InputWrapper = styled.div`
@@ -25,9 +25,7 @@ export const InputWrapper = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-`;
-export const ButtonWrapper = styled.div`
-  width: 104px;
+  gap: 20px;
 `;
 
 export const TagContainer = styled.div`
@@ -41,7 +39,6 @@ export const ConfirmModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
-  width: 850px;
 `;
 
 export const DescriptionContainer = styled.div`
@@ -56,7 +53,7 @@ export const DescriptionItem = styled.div`
 
 export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  ${({ theme }) => theme.text.medium_18}
+  ${({ theme }) => theme.text.medium_18};
 `;
 export const ScenarioContainer = styled.div`
   display: flex;
@@ -82,7 +79,4 @@ export const ScenarioDescription = styled.div`
   gap: 10px;
   color: white;
   ${({ theme }) => theme.text.medium_22}
-`;
-export const LongButtonWrapper = styled.div`
-  width: 200px;
 `;

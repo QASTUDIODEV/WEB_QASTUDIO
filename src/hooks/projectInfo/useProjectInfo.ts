@@ -1,12 +1,14 @@
 import type { TProjectInfo } from '@/types/projectInfo/projectInfo';
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { editIntroduce, getProjectInfo } from '@/apis/projectInfo/projectInfo';
+import { editIntroduce, getMemberEmail, getProjectInfo, getProjectMember } from '@/apis/projectInfo/projectInfo';
 
 import { useCoreMutation, useCoreQuery } from '../common/customQuery';
 
 export function useProjectInfo({ projectId }: TProjectInfo) {
-  const useProjectExtractInfo = useCoreQuery(QUERY_KEYS.PROJECT_INFO({ projectId }), () => getProjectInfo({ projectId }));
+  const useProjectExtractInfo = useCoreQuery(QUERY_KEYS.PROJECT_INFO({ projectId }), () => getProjectInfo({ projectId }), { enabled: !!projectId });
   const useEditIntroduce = useCoreMutation(editIntroduce, {});
-  return { useProjectExtractInfo, useEditIntroduce };
+  const useGetProjectMember = useCoreQuery(QUERY_KEYS.PROJECT_MEMBER({ projectId }), () => getProjectMember({ projectId }), { enabled: !!projectId });
+  const useGetMemberEmail = useCoreQuery(QUERY_KEYS.PROJECT_MEMBER_EMAIL({ projectId }), () => getMemberEmail({ projectId }), { enabled: !!projectId });
+  return { useProjectExtractInfo, useEditIntroduce, useGetProjectMember, useGetMemberEmail };
 }

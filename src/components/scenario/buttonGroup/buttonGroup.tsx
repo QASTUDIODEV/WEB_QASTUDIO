@@ -56,7 +56,6 @@ export default function ButtonGroup() {
 
   // Play 버튼 클릭 함수
   const handlePlayClick = (): void => {
-    console.log(selectedCharacter?.id, selectedScenario?.id);
     navigate(`/scenarioAct/123`, {
       state: {
         characterId: selectedCharacter?.id || null,

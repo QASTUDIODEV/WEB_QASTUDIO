@@ -1,4 +1,5 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
@@ -10,6 +11,7 @@ import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
+import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -34,6 +36,7 @@ type TAction =
   | { type: 'SET_CONTENT'; payload: string };
 
 export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
+  const queryClient = useQueryClient();
   const result = projectInfo?.result;
   const initialState = {
     isStructureVisible: true,
@@ -59,7 +62,9 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     }
   }
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { useEditIntroduce } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { useEditIntroduce, useGetProjectMember } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { data: members } = useGetProjectMember;
+  const [modalShow, setModalShow] = useState(false);
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const data = {
@@ -74,27 +79,16 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     ],
     character: ['일반', '관리자', '비로그인'],
   };
+  const member = members?.result.members;
   const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
   const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
-  const member = [
-    {
-      name: '핑퐁',
-      userImage: 'https://picsum.photos/100',
-      Master: true,
-    },
-    {
-      name: '뿡빵이',
-      userImage: 'https://picsum.photos/100',
-      Master: false,
-    },
-    {
-      name: '길이가 길면 끊어주세요요요요요요요요',
-      userImage: 'https://picsum.photos/100',
-      Master: false,
-    },
-  ];
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-
+  const showModal = () => {
+    setModalShow(true);
+  };
+  const hideModal = () => {
+    setModalShow(false);
+  };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (tooltipRef.current) {
       tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
@@ -122,12 +116,22 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     const lines = state.preContent.split('\n');
     const modifiedText = lines.slice(0, maxRows).join('\n');
     dispatch({ type: 'SET_CONTENT', payload: modifiedText });
-    console.log(state.preContent);
-    editIntroduce({
-      projectId: Number(result?.projectId),
-      introduce: state.preContent,
-    });
+    editIntroduce(
+      {
+        projectId: Number(result?.projectId),
+        introduce: state.preContent,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectInfo', Number(result?.projectId)] });
+        },
+      },
+    );
   };
+  useEffect(() => {
+    dispatch({ type: 'SET_PRE_CONTENT', payload: result?.introduction || '' });
+    dispatch({ type: 'SET_CONTENT', payload: result?.introduction || '' });
+  }, [result?.projectId]);
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxRows = 2;
     const textarea = e.target;
@@ -309,14 +313,14 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
         <S.Right>
           <S.Box height="100%">
             <S.Title>Team Members</S.Title>
-            {member.map((a, i) => (
+            {member?.map((a, i) => (
               <S.Member key={i}>
                 <S.MemberBox>
                   <S.ProfileWrapper>
-                    <Profile profileImg={a.userImage} />
+                    <Profile profileImg={a.profileImage} />
                   </S.ProfileWrapper>
-                  <S.MemberName>{a.name}</S.MemberName>
-                  {a.Master && <Crown />}
+                  <S.MemberName>{a.nickname}</S.MemberName>
+                  {a.projectRole === 'LEADER' && <Crown />}
                 </S.MemberBox>
                 <S.ArrowWrapper>
                   <ArrowRight className="show" />
@@ -324,9 +328,10 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               </S.Member>
             ))}
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={() => modalDispatch(openModal(MODAL_TYPES.InviteModal))}>
+              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={showModal}>
                 Invite
               </Button>
+              {modalShow && <InviteModal onClose={hideModal} projectId={Number(result?.projectId)} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>
