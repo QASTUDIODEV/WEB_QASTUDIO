@@ -5,6 +5,7 @@ import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import { useGetScenario } from '@/hooks/projectInfo/useGetScenario';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
@@ -52,6 +53,16 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const notAccessed = summary?.map((a) => a.deniedAccess);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
+  const { useScenario } = useGetScenario({
+    characterId: selectedCharacterId || 0,
+  });
+  const { data: scenarioList } = useScenario;
+  const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
+  const handleMouseEnter = (characterId: number) => {
+    setSelectedCharacterId(characterId);
+    setActiveTooltip(characterId);
+  };
   const showModal = () => {
     setModalShow(true);
   };
@@ -247,12 +258,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
                     <S.CharacterBox
                       key={a.characterId}
                       onMouseMove={handleMouseMove}
-                      onMouseEnter={() => setActiveTooltip(a.characterId)}
+                      onMouseEnter={() => handleMouseEnter(a.characterId)}
                       onMouseLeave={() => setActiveTooltip(null)}
                     >
                       {activeTooltip === a.characterId && (
                         <S.TooltipWrapper ref={tooltipRef} visible={true}>
-                          <ToolTip name={a.characterName} description={a.author} />
+                          <ToolTip name={a.characterName} description={a.author} scenario={currentScenario} />
                         </S.TooltipWrapper>
                       )}
                       <S.Medium18Text>{a.characterName}</S.Medium18Text>

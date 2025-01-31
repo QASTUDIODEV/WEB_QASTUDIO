@@ -1,4 +1,4 @@
-import type { TProjectInfo } from '@/types/projectInfo/projectInfo';
+import type { TCharacterId, TProjectInfo } from '@/types/projectInfo/projectInfo';
 import type { TRequestTeamMember } from '@/types/sidebar/sidebar';
 import type { TGetTestListRequest } from '@/types/test/test';
 
@@ -12,6 +12,7 @@ export const QUERY_KEYS = {
   PROJECT_MEMBER: ({ projectId }: TProjectInfo) => ['getProjectMember', projectId],
   PROJECT_MEMBER_EMAIL: ({ projectId }: TProjectInfo) => ['getMemberEmail', projectId],
   CHARACTER: ({ projectId }: TProjectInfo) => ['getCharacter', projectId],
+  SCENARIO: ({ characterId }: TCharacterId) => ['getScenario', characterId],
   GET_USER_PROJECT_LIST: (page: number | null) => ['getUserProjectList', page],
   PAGE_SUMMARY: ({ projectId }: TProjectInfo) => ['getPageSummary', projectId],
   GET_USER_INFO: ['getUserInfo'],
