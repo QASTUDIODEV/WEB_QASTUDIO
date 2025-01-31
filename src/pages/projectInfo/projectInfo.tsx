@@ -51,6 +51,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const accessed = summary?.map((a) => a.hasAccess);
   const notAccessed = summary?.map((a) => a.deniedAccess);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
   const showModal = () => {
     setModalShow(true);
   };
@@ -67,20 +68,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     if (tooltipRef.current) {
       tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
       tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (tooltipRef.current) {
-      tooltipRef.current.style.visibility = 'visible';
-      tooltipRef.current.style.opacity = '1';
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (tooltipRef.current) {
-      tooltipRef.current.style.visibility = 'hidden';
-      tooltipRef.current.style.opacity = '0';
     }
   };
   const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
@@ -253,45 +240,31 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
           <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>Origin</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>2</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>2</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
+              <S.CharacterList>
+                {character &&
+                  character.map((a) => (
+                    <S.CharacterBox
+                      key={a.characterId}
+                      onMouseMove={handleMouseMove}
+                      onMouseEnter={() => setActiveTooltip(a.characterId)}
+                      onMouseLeave={() => setActiveTooltip(null)}
+                    >
+                      {activeTooltip === a.characterId && (
+                        <S.TooltipWrapper ref={tooltipRef} visible={true}>
+                          <ToolTip name={a.characterName} description={a.author} />
+                        </S.TooltipWrapper>
+                      )}
+                      <S.Medium18Text>{a.characterName}</S.Medium18Text>
+                      <S.Medium14Text>{a.author}</S.Medium14Text>
+                      <S.rowBox>
+                        <Book />
+                        <S.Medium18Text>3</S.Medium18Text>
+                        <Page />
+                        <S.Medium18Text>2</S.Medium18Text>
+                      </S.rowBox>
+                    </S.CharacterBox>
+                  ))}
+              </S.CharacterList>
               <S.CharacterAddBox onClick={() => modalDispatch(openModal(MODAL_TYPES.CharacterModal))}>
                 <Plus />
               </S.CharacterAddBox>
