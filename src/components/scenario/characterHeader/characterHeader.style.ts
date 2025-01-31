@@ -2,17 +2,23 @@ import styled from 'styled-components';
 
 export const CharacterHeaderLeftSide = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 6.4px;
   min-width: 100px;
+  align-items: center;
 `;
 export const IconContainer = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 19.2px;
+  height: 19.2px;
+  margin-right: 6.4px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolean; $isSelected?: boolean }>`
   display: flex;
-  padding: 30px 20px;
+  padding: 24px 16px;
   align-items: center;
   gap: 40px;
   align-self: stretch;
@@ -28,7 +34,7 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
 export const CharacterHeaderRightSide = styled.div`
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
 `;
 export const Creater = styled.div`
   display: flex;
@@ -36,7 +42,7 @@ export const Creater = styled.div`
   align-items: center;
   gap: 8px;
   width: 93px;
-  ${({ theme }) => theme.text.medium_18};
+  ${({ theme }) => theme.text.medium_14};
 `;
 
 export const Elapsed = styled.div`
@@ -45,12 +51,15 @@ export const Elapsed = styled.div`
   align-items: center;
   gap: 8px;
   width: 195px;
-  ${({ theme }) => theme.text.medium_18};
+  ${({ theme }) => theme.text.medium_14};
 `;
 
-export const CharacterTitle = styled.p`
+export const CharacterTitle = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   ${({ theme }) => theme.text.medium_20};
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
 `;
