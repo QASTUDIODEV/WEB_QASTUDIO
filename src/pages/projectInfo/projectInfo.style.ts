@@ -89,9 +89,13 @@ export const Member = styled.div`
 export const MemberContainer = styled.div`
   overflow: auto;
   max-height: 70%;
+  ${media.desktop`
+    max-height: 88%;
+  `}
 `;
 const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
+  min-height: 95px;
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
   border-radius: 8px;
   padding: 16px 24px;
@@ -160,7 +164,7 @@ const TextLight = styled.p`
   letter-spacing: 0.224px;
   white-space: pre;
   ${media.desktop`
-    font-size: 8px;
+    font-size: 12px;
   `}
 `;
 
@@ -240,6 +244,19 @@ const CharacterAddBox = styled.div`
     height: 50%;
   }
 `;
+export const CharacterList = styled.div`
+  width: 85%;
+  height: 95%;
+  max-height: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: scroll;
+  ${media.desktop`
+    height: 100%;
+    flex-wrap: wrap;
+  `}
+`;
 export const TooltipWrapper = styled.div<{ visible: boolean }>`
   position: fixed;
   z-index: 1000;
@@ -255,18 +272,26 @@ const CharacterBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 12px;
-  gap: 8px;
+  gap: 4px;
   cursor: pointer;
+  ${media.desktop`
+    height: 30%;
+    flex-wrap: wrap;
+  `}
 `;
 const Character = styled.div`
   display: flex;
-  height: 80%;
+  height: 90%;
   width: 100%;
   align-items: center;
   gap: 16px;
   @media (max-width: 720px) {
     overflow-x: scroll;
   }
+  ${media.desktop`
+    align-items: flex-start;
+    height: 100%;
+  `}
 `;
 type TWrapperProps = {
   top?: string;
@@ -319,9 +344,9 @@ export const rowBox = styled.div`
   gap: 8px;
 `;
 export const Medium18Text = styled.p<TText>`
-  color: ${(props) => props.color || '${({ theme }) => theme.colors.white'};
+  color: ${(props) => props.color};
   font-family: Pretendard;
-  font-size: 14.4px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 21.6px */
