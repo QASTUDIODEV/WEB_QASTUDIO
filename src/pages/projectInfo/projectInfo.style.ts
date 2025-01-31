@@ -86,6 +86,10 @@ export const Member = styled.div`
     width: 70%;
   `}
 `;
+export const MemberContainer = styled.div`
+  overflow: auto;
+  max-height: 70%;
+`;
 const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
@@ -215,9 +219,11 @@ const InnerBox = styled.div`
   position: relative;
   margin-top: 16px;
   overflow: scroll;
+  scrollbar-width: none;
   height: inherit;
-  @media (max-width: 900px) {
+  @media (max-width: 1010px) {
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -225,7 +231,7 @@ const CharacterAddBox = styled.div`
   ${({ theme }) => theme.align.column_center}
   background: #d9e6ff1a;
   border-radius: 6.4px;
-  height: 96px;
+  height: inherit;
   min-width: 112px;
   padding: 12px;
   cursor: pointer;
@@ -243,8 +249,8 @@ const CharacterBox = styled.div`
   position: relative;
   background: #007f7f;
   border-radius: 6.4px;
-  height: 96px;
   width: 112px;
+  height: inherit;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -254,7 +260,7 @@ const CharacterBox = styled.div`
 `;
 const Character = styled.div`
   display: flex;
-  height: 100%;
+  height: 80%;
   width: 100%;
   align-items: center;
   gap: 16px;
@@ -294,6 +300,7 @@ export const Input = styled.textarea`
   overflow: 'hidden';
   resize: 'none';
   @media (max-width: 840px) {
+    height: 100%;
     width: 70%;
   }
   @media (max-width: 610px) {

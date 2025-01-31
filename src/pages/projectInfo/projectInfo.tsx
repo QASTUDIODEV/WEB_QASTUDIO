@@ -290,20 +290,22 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
         <S.Right>
           <S.Box height="100%">
             <S.Title>Team Members</S.Title>
-            {member?.map((a, i) => (
-              <S.Member key={i}>
-                <S.MemberBox>
-                  <S.ProfileWrapper>
-                    <Profile profileImg={a.profileImage} />
-                  </S.ProfileWrapper>
-                  <S.MemberName>{a.nickname}</S.MemberName>
-                  {a.projectRole === 'LEADER' && <Crown />}
-                </S.MemberBox>
-                <S.ArrowWrapper>
-                  <ArrowRight className="show" />
-                </S.ArrowWrapper>
-              </S.Member>
-            ))}
+            <S.MemberContainer>
+              {member?.map((a, i) => (
+                <S.Member key={i}>
+                  <S.MemberBox>
+                    <S.ProfileWrapper>
+                      <Profile profileImg={a.profileImage} />
+                    </S.ProfileWrapper>
+                    <S.MemberName>{a.nickname}</S.MemberName>
+                    {a.projectRole === 'LEADER' && <Crown />}
+                  </S.MemberBox>
+                  <S.ArrowWrapper>
+                    <ArrowRight className="show" />
+                  </S.ArrowWrapper>
+                </S.Member>
+              ))}
+            </S.MemberContainer>
             <S.Wrapper bottom="16px" right="24px">
               <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={showModal}>
                 Invite
