@@ -7,13 +7,15 @@ import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums.ts';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux';
+import useDebounce from '@/hooks/common/useDebounce.ts';
 import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
+import SearchBar from '@/components/common/searchBar/searchBar';
 import Calendar from '@/components/dashboard/calendar/calendar';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
-import PageNameHeader from '@/components/dashboard/table/pageNameHeader.tsx';
-import StateHeader from '@/components/dashboard/table/stateHeader.tsx';
+import PageNameHeader from '@/components/dashboard/table/pageNameHeader';
+import StateHeader from '@/components/dashboard/table/stateHeader';
 import * as S from '@/components/dashboard/table/table.style';
 
 import DownArrow from '@/assets/icons/arrow_down.svg?react';
@@ -28,6 +30,12 @@ const columnHelper = createColumnHelper<TTestListDTO>();
 
 export default function Table() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { projectId } = useParams();
+
+  const [search, setSearch] = useState<string>('');
+  const debouncedSearch = useDebounce(search, 500);
+
   const [isClicked, setIsClicked] = useState({
     state: false,
     date: false,
@@ -36,17 +44,19 @@ export default function Table() {
   const [selectedPageName, setSelectedPageName] = useState<string | null>(null);
   const [selectState, setSelectState] = useState<TEST_STATE | null>(null);
 
-  const dispatch = useDispatch();
-  const { projectId } = useParams();
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 6,
   });
 
-  const { data: listData } = usePaginateTestList({ projectId: Number(projectId), page: pagination.pageIndex, state: selectState ?? null });
+  const { data: listData } = usePaginateTestList({
+    projectId: Number(projectId),
+    page: pagination.pageIndex,
+    state: selectState ?? null,
+    testName: debouncedSearch,
+  });
 
-  console.log(selectState, selectedPageName);
+  console.log(selectState, selectedPageName, listData?.result.testList, debouncedSearch);
 
   const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
@@ -136,9 +146,14 @@ export default function Table() {
     manualSorting: true,
   });
 
-  return (
-    <S.TableContainer>
-      <S.TableWrapper>
+  const isEmpty = listData?.result.totalElements === 0;
+  let contents;
+
+  if (isEmpty) {
+    contents = <S.Wrapper>No content</S.Wrapper>;
+  } else {
+    contents = (
+      <>
         <S.Table>
           <S.TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -160,29 +175,39 @@ export default function Table() {
             ))}
           </tbody>
         </S.Table>
-      </S.TableWrapper>
+      </>
+    );
+  }
 
-      <S.PageNumberWrapper>
-        <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
-          <PreArrow />
-        </S.ArrowBox>
-        {table.getPageOptions().map((page) => (
-          <S.PageBtnBox
-            key={page}
-            onClick={() => {
-              console.log('Clicked page:', page);
-              table.setPageIndex(page);
-            }}
-            $cur={page === pagination.pageIndex}
-          >
-            {page + 1}
-          </S.PageBtnBox>
-        ))}
+  return (
+    <>
+      <S.SearchBox>
+        <SearchBar placeholder={'Search by name'} value={search} onChange={(e) => setSearch(e.target.value)} />
+      </S.SearchBox>
+      <S.TableContainer>
+        <S.TableWrapper>{contents}</S.TableWrapper>
 
-        <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
-          <NextArrow />
-        </S.ArrowBox>
-      </S.PageNumberWrapper>
-    </S.TableContainer>
+        <S.PageNumberWrapper>
+          <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
+            <PreArrow />
+          </S.ArrowBox>
+          {(table.getPageOptions().length ? table.getPageOptions() : [0]).map((page) => (
+            <S.PageBtnBox
+              key={page}
+              onClick={() => {
+                table.setPageIndex(page);
+              }}
+              $cur={page === pagination.pageIndex}
+            >
+              {page + 1}
+            </S.PageBtnBox>
+          ))}
+
+          <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
+            <NextArrow />
+          </S.ArrowBox>
+        </S.PageNumberWrapper>
+      </S.TableContainer>
+    </>
   );
 }

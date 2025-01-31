@@ -172,4 +172,33 @@ const ButtonHeader = styled.button`
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 
-export { Action, ArrowBox, ButtonHeader, HeaderWrapper, PageBtnBox, PageNumberWrapper, State, Table, TableContainer, TableHeader, TableWrapper, Td, Th, Tr };
+const SearchBox = styled.div`
+  width: 190px;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export {
+  Action,
+  ArrowBox,
+  ButtonHeader,
+  HeaderWrapper,
+  PageBtnBox,
+  PageNumberWrapper,
+  SearchBox,
+  State,
+  Table,
+  TableContainer,
+  TableHeader,
+  TableWrapper,
+  Td,
+  Th,
+  Tr,
+  Wrapper,
+};
