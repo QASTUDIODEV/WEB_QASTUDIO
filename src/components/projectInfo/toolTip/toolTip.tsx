@@ -1,12 +1,26 @@
 import * as S from '@/components/projectInfo/toolTip/toolTip.style';
 
-export default function ToolTip() {
+type TToltipProps = {
+  data: {
+    characterId: number;
+    characterName: string;
+    characterDescription: string;
+    pageCnt: number;
+    scenarioCnt: number;
+    accessPageList: string[];
+    scenarioList: string[];
+    author: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+export default function ToolTip({ data }: TToltipProps) {
   return (
     <S.Container>
-      <S.Text>역할 이름</S.Text>
-      <S.Text>설명</S.Text>
-      <S.Text>/, /page, /roadmap</S.Text>
-      <S.Text>시나리오1, 시나리오2, 시나리오3</S.Text>
+      <S.Text>{data.characterName}</S.Text>
+      <S.Text>{data.characterDescription}</S.Text>
+      <S.Text>{data.accessPageList.join(', ')}</S.Text>
+      <S.Text>{data.scenarioList.join(', ')}</S.Text>
     </S.Container>
   );
 }

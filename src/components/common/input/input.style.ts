@@ -68,7 +68,7 @@ const NormalInputWrapper = styled.input`
 const ThinInputWrapper = styled.input`
   ${({ theme }) => theme.text.medium_20};
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  height: 50px;
+  height: 100%;
   width: 100%;
   padding: 10px;
   border-radius: 8px;

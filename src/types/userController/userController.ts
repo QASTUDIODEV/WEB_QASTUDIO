@@ -8,7 +8,9 @@ export type TGetUserInfoResponse = TCommonResponse<{
   email: string;
   profileImage: string;
   bannerImage: string;
-  account: SOCIAL[] | undefined;
+  account?: SOCIAL[] | undefined;
+  projectCnt: number;
+  isUser?: boolean;
 }>;
 
 export type TPatchUserInfoValues = {
@@ -28,6 +30,7 @@ export type TPatchUserInfoResponse = TCommonResponse<{
 
 export type TGetUserProjectsValues = {
   page?: number;
+  userId?: string;
 };
 
 export type TUserProjectListResponse = {

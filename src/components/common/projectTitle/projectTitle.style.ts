@@ -18,8 +18,17 @@ export const Title = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 19.2px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.384px;
 `;
 export const IconContainer = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 25.6px;
+  height: 25.6px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
