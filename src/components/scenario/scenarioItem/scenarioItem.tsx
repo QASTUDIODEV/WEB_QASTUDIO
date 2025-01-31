@@ -35,7 +35,9 @@ export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemP
       {isEdit ? (
         <S.ScenarioItem $isChecked={scenario.isChecked} $isEdit={isEdit}>
           <S.ScenarioItemLeftSide>
-            <CheckBox scenarioId={scenarioId} characterId={characterId} />
+            <S.IconContainer>
+              <CheckBox scenarioId={scenarioId} characterId={characterId} />
+            </S.IconContainer>
             <S.IconContainer>
               <File />
             </S.IconContainer>

@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import * as S from '@/components/scenario/characterHeader/characterHeader.style';
 
+import CheckBox from '../checkBox/checkBox';
+
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
@@ -42,6 +44,9 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
         <S.CharacterHeader $isChecked={character.isChecked && true} $isEdit={isEdit}>
           <S.CharacterHeaderLeftSide>
             <S.IconContainer>
+              <CheckBox characterId={characterId} />
+            </S.IconContainer>
+            <S.IconContainer>
               <UserProfile />
             </S.IconContainer>
             <S.CharacterTitle>{character.title}</S.CharacterTitle>
@@ -63,6 +68,7 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
             <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
               {character.isExpanded ? <ArrowUp /> : <ArrowDown />}
             </div>
+
             <S.IconContainer>
               <UserProfile />
             </S.IconContainer>
