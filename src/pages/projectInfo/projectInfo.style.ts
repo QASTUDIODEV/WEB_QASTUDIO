@@ -6,6 +6,7 @@ const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   height: 100vh;
+  overflow: auto;
   padding: 3% 6% 2% 6%;
   display: flex;
   flex-direction: column;
@@ -85,8 +86,16 @@ export const Member = styled.div`
     width: 70%;
   `}
 `;
+export const MemberContainer = styled.div`
+  overflow: auto;
+  max-height: 78%;
+  ${media.desktop`
+    max-height: 88%;
+  `}
+`;
 const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
+  min-height: 95px;
   background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
   border-radius: 8px;
   padding: 16px 24px;
@@ -132,7 +141,7 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   @media (max-width: 530px) {
     width: 50%;
     white-space: nowrap;
@@ -155,7 +164,7 @@ const TextLight = styled.p`
   letter-spacing: 0.224px;
   white-space: pre;
   ${media.desktop`
-    font-size: 8px;
+    font-size: 12px;
   `}
 `;
 
@@ -197,7 +206,7 @@ const TextBold = styled.p`
 
 const SemiBox = styled.div`
   display: flex;
-  height: 100%;
+  height: 70%;
   margin-top: 3%;
   ${media.desktop`
     width: 100%;
@@ -213,10 +222,12 @@ const InnerBox = styled.div`
   padding: 7px 10px;
   position: relative;
   margin-top: 16px;
-  height: 80%;
   overflow: scroll;
-  @media (max-width: 900px) {
+  scrollbar-width: none;
+  height: inherit;
+  @media (max-width: 1010px) {
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -224,7 +235,7 @@ const CharacterAddBox = styled.div`
   ${({ theme }) => theme.align.column_center}
   background: #d9e6ff1a;
   border-radius: 6.4px;
-  height: 96px;
+  height: inherit;
   min-width: 112px;
   padding: 12px;
   cursor: pointer;
@@ -232,6 +243,19 @@ const CharacterAddBox = styled.div`
     width: 50%;
     height: 50%;
   }
+`;
+export const CharacterList = styled.div`
+  width: 85%;
+  height: 97%;
+  max-height: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: scroll;
+  ${media.desktop`
+    height: 100%;
+    flex-wrap: wrap;
+  `}
 `;
 export const TooltipWrapper = styled.div<{ visible: boolean }>`
   position: fixed;
@@ -242,24 +266,32 @@ const CharacterBox = styled.div`
   position: relative;
   background: #007f7f;
   border-radius: 6.4px;
-  height: 96px;
   width: 112px;
+  height: inherit;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 12px;
   gap: 8px;
   cursor: pointer;
+  ${media.desktop`
+    height: 30%;
+    flex-wrap: wrap;
+  `}
 `;
 const Character = styled.div`
   display: flex;
-  height: 100%;
+  height: 95%;
   width: 100%;
   align-items: center;
   gap: 16px;
   @media (max-width: 720px) {
     overflow-x: scroll;
   }
+  ${media.desktop`
+    align-items: flex-start;
+    height: 100%;
+  `}
 `;
 type TWrapperProps = {
   top?: string;
@@ -293,6 +325,7 @@ export const Input = styled.textarea`
   overflow: 'hidden';
   resize: 'none';
   @media (max-width: 840px) {
+    height: 100%;
     width: 70%;
   }
   @media (max-width: 610px) {
@@ -311,9 +344,9 @@ export const rowBox = styled.div`
   gap: 8px;
 `;
 export const Medium18Text = styled.p<TText>`
-  color: ${(props) => props.color || '${({ theme }) => theme.colors.white'};
+  color: ${(props) => props.color};
   font-family: Pretendard;
-  font-size: 14.4px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 21.6px */
@@ -456,7 +489,10 @@ export const Position = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-
+export const Button = styled.div`
+  flex: 0 0 auto;
+  white-space: nowrap;
+`;
 export {
   Box,
   Character,
