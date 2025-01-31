@@ -21,7 +21,7 @@ type TFormData = {
   characterDescription: string;
   accessPage: string;
 };
-export default function CharacterModal({ onClose, projectId }: TCharacterModalProps) {
+export default function CharacterModal({ onClose, projectId = 0 }: TCharacterModalProps) {
   const [modalStep, setModalStep] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const { useGetPath } = useProjectInfo({ projectId });
