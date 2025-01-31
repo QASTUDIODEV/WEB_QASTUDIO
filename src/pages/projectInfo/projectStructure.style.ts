@@ -48,7 +48,7 @@ const Box = styled.div<{ height: string }>`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: inherit;
+  border: 0.8px solid rgba(32, 75, 153, 0.2);
 `;
 
 const Title = styled.p`
@@ -92,7 +92,7 @@ const LRBox = styled.div<{ width: string }>`
   margin-top: 16px;
   width: ${(props) => props.width};
   max-width: 100%;
-  height: inherit;
+  overflow: scroll;
 `;
 
 const InnerBox = styled.div`
@@ -100,6 +100,7 @@ const InnerBox = styled.div`
   padding-bottom: 16px;
   gap: 16px;
   height: 100%;
+  height: inherit;
 `;
 
 const Wrap = styled.div`

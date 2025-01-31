@@ -27,7 +27,7 @@ type TProjectStructureProps = {
 function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, pageData }: TProjectStructureProps) {
   return (
     <S.Box
-      height="58%"
+      height="59%"
       style={{
         cursor: 'pointer',
       }}
