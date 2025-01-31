@@ -5,7 +5,7 @@ import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
-import { useGetScenario } from '@/hooks/projectInfo/useGetScenario';
+// import { useGetScenario } from '@/hooks/projectInfo/useGetScenario';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
@@ -51,11 +51,11 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
   const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
-  const { useScenario } = useGetScenario({
-    characterId: selectedCharacterId || 0,
-  });
-  const { data: scenarioList } = useScenario;
-  const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
+  // const { useScenario } = useGetScenario({
+  //   characterId: selectedCharacterId || 0,
+  // });
+  // const { data: scenarioList } = useScenario;
+  // const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
   const handleMouseEnter = (characterId: number) => {
     setSelectedCharacterId(characterId);
     setActiveTooltip(characterId);
@@ -123,7 +123,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
           </Button>
         </S.Wrapper>
       </S.Profile>
-      <S.Box height="18%">
+      <S.Box height="20%">
         <S.Title>Introduction to the Project</S.Title>
         {!isEdit ? (
           <>
@@ -254,21 +254,23 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
                     >
                       {activeTooltip === a.characterId && (
                         <S.TooltipWrapper ref={tooltipRef} visible={true}>
-                          <ToolTip name={a.characterName} description={a.author} scenario={currentScenario} />
+                          <ToolTip data={a} />
                         </S.TooltipWrapper>
                       )}
                       <S.Medium18Text>{a.characterName}</S.Medium18Text>
-                      <S.Medium14Text>{a.author}</S.Medium14Text>
+                      <S.Medium14Text>{a.characterDescription}</S.Medium14Text>
                       <S.rowBox>
                         <Book />
-                        <S.Medium18Text>3</S.Medium18Text>
+                        <S.Medium18Text>{a.pageCnt}</S.Medium18Text>
                         <Page />
-                        <S.Medium18Text>2</S.Medium18Text>
+                        <S.Medium18Text>{a.scenarioCnt}</S.Medium18Text>
                       </S.rowBox>
                     </S.CharacterBox>
                   ))}
               </S.CharacterList>
-              <S.CharacterAddBox onClick={() => modalDispatch(openModal(MODAL_TYPES.CharacterModal))}>
+              <S.CharacterAddBox
+                onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.CharacterModal, modalProps: { projectId: Number(result?.projectId) } }))}
+              >
                 <Plus />
               </S.CharacterAddBox>
             </S.Character>
@@ -288,7 +290,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
                     {a.projectRole === 'LEADER' && <Crown />}
                   </S.MemberBox>
                   <S.ArrowWrapper>
-                    <ArrowRight className="show" />
+                    <ArrowRight />
                   </S.ArrowWrapper>
                 </S.Member>
               ))}
