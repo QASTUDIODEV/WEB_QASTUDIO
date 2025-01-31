@@ -14,7 +14,7 @@ import DelCircle from '@/assets/icons/del_circle.svg?react';
 
 type TCharacterModalProps = {
   onClose: () => void;
-  projectId: number;
+  projectId?: number;
 };
 type TFormData = {
   characterName: string;
