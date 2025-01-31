@@ -14,5 +14,6 @@ export default function useUserInfo() {
       });
     },
   });
+
   return { useGetUserInfo, usePatchUserInfo };
 }

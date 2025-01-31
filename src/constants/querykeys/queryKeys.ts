@@ -14,9 +14,11 @@ export const QUERY_KEYS = {
   CHARACTER: ({ projectId }: TProjectInfo) => ['getCharacter', projectId],
   SCENARIO: ({ characterId }: TCharacterId) => ['getScenario', characterId],
   GET_USER_PROJECT_LIST: (page: number | null) => ['getUserProjectList', page],
+  GET_OTHER_USER_PROJECT_LIST: ({ page, userId }: { page: number; userId: string }) => ['getUserProjectList', page, userId],
   PAGE_SUMMARY: ({ projectId }: TProjectInfo) => ['getPageSummary', projectId],
   GET_USER_INFO: ['getUserInfo'],
   GET_USER_SIDEBAR_INFO: ['getUserSidebarInfo'],
+  GET_OTHER_USER_INFO: (userId: string) => ['getUserInfo', userId],
   DASHBOARD: {
     ERROR: (testId: number) => ['ERROR', testId],
     TEST: {

@@ -25,7 +25,10 @@ import Done from '@/assets/icons/done.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
-export default function MyProfile() {
+type TProjectListProps = {
+  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+};
+export default function MyProfile({ setProjectNum }: TProjectListProps) {
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
 
@@ -162,6 +165,7 @@ export default function MyProfile() {
 
   useEffect(() => {
     if (userData) {
+      setProjectNum(userData.result.projectCnt);
       setValue('nickname', userData.result.nickname);
       setValue('profileImage', userData.result.profileImage);
       setValue('bannerImage', userData.result.bannerImage);
