@@ -12,7 +12,6 @@ import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
-import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import PageModal from '@/components/projectInfo/pageModal/pageModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
@@ -43,7 +42,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const { data: summaryList } = useGetPageSummary;
   const { data: characterList } = useGetCharacter;
   const summary = summaryList?.result.pageSummaryList;
-  const [modalShow, setModalShow] = useState(false);
+
   const [pageModalShow, setPageModalShow] = useState(false);
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
@@ -63,12 +62,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     setSelectedCharacterId(characterId);
     setActiveTooltip(characterId);
   };
-  const showModal = () => {
-    setModalShow(true);
-  };
-  const hideModal = () => {
-    setModalShow(false);
-  };
+
   const pageModal = () => {
     setPageModalShow(true);
   };
@@ -303,10 +297,15 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               ))}
             </S.MemberContainer>
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={showModal}>
+              <Button
+                type="normal"
+                color="default"
+                icon={<Plus />}
+                iconPosition="left"
+                onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.InviteModal, modalProps: { projectId: Number(result?.projectId) } }))}
+              >
                 Invite
               </Button>
-              {modalShow && <InviteModal onClose={hideModal} projectId={Number(result?.projectId)} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>
