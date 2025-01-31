@@ -6,6 +6,7 @@ const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   height: 100vh;
+  overflow: auto;
   padding: 3% 6% 2% 6%;
   display: flex;
   flex-direction: column;
@@ -197,7 +198,7 @@ const TextBold = styled.p`
 
 const SemiBox = styled.div`
   display: flex;
-  height: 100%;
+  height: 70%;
   margin-top: 3%;
   ${media.desktop`
     width: 100%;
@@ -213,8 +214,8 @@ const InnerBox = styled.div`
   padding: 7px 10px;
   position: relative;
   margin-top: 16px;
-  height: 80%;
   overflow: scroll;
+  height: inherit;
   @media (max-width: 900px) {
     width: 100%;
   }
@@ -456,7 +457,10 @@ export const Position = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-
+export const Button = styled.div`
+  flex: 0 0 auto;
+  white-space: nowrap;
+`;
 export {
   Box,
   Character,

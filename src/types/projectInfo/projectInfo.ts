@@ -49,3 +49,15 @@ export type TRequestInvite = {
     email: string;
   }[];
 };
+
+export type TPageSummary = TCommonResponse<{
+  pageSummaryList: {
+    pageId: number;
+    pageName: string;
+    pageDescription: string;
+    path: string;
+    hasAccess: string[];
+    deniedAccess: string[];
+    scenarios: string[];
+  }[];
+}>;

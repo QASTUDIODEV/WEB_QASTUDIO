@@ -12,6 +12,7 @@ export const QUERY_KEYS = {
   PROJECT_MEMBER: ({ projectId }: TProjectInfo) => ['getProjectMember', projectId],
   PROJECT_MEMBER_EMAIL: ({ projectId }: TProjectInfo) => ['getMemberEmail', projectId],
   GET_USER_PROJECT_LIST: (page: number | null) => ['getUserProjectList', page],
+  PAGE_SUMMARY: ({ projectId }: TProjectInfo) => ['getPageSummary', projectId],
   GET_USER_INFO: ['getUserInfo'],
   GET_USER_SIDEBAR_INFO: ['getUserSidebarInfo'],
   DASHBOARD: {

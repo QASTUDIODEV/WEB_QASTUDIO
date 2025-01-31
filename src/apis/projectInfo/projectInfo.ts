@@ -1,4 +1,12 @@
-import type { TEditRequest, TGetProjectInfo, TGetProjectMember, TProjectInfo, TProjectMember, TRequestInvite } from '@/types/projectInfo/projectInfo';
+import type {
+  TEditRequest,
+  TGetProjectInfo,
+  TGetProjectMember,
+  TPageSummary,
+  TProjectInfo,
+  TProjectMember,
+  TRequestInvite,
+} from '@/types/projectInfo/projectInfo';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -20,5 +28,9 @@ export const getMemberEmail = async ({ projectId }: TProjectInfo): Promise<TProj
 };
 export const inviteMember = async (inviteData: TRequestInvite): Promise<TGetProjectMember> => {
   const { data } = await axiosInstance.post('/api/v0/projects/team-members/invite', inviteData);
+  return data;
+};
+export const getPageSummaryList = async ({ projectId }: TProjectInfo): Promise<TPageSummary> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/pages`);
   return data;
 };
