@@ -12,6 +12,7 @@ import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
+import PageModal from '@/components/projectInfo/pageModal/pageModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -36,13 +37,16 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const [isEdit, setIsEdit] = useState(false);
   const [content, setContent] = useState(result?.introduction || '');
   const [preContent, setPreContent] = useState(result?.introduction || '');
-  const { useEditIntroduce, useGetProjectMember, useGetPageSummary } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { useEditIntroduce, useGetProjectMember, useGetPageSummary, useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: members } = useGetProjectMember;
   const { data: summaryList } = useGetPageSummary;
+  const { data: characterList } = useGetCharacter;
   const summary = summaryList?.result.pageSummaryList;
   const [modalShow, setModalShow] = useState(false);
+  const [pageModalShow, setPageModalShow] = useState(false);
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
+  const character = characterList?.result.detailCharacters;
   const member = members?.result.members;
   const accessed = summary?.map((a) => a.hasAccess);
   const notAccessed = summary?.map((a) => a.deniedAccess);
@@ -52,6 +56,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   };
   const hideModal = () => {
     setModalShow(false);
+  };
+  const pageModal = () => {
+    setPageModalShow(true);
+  };
+  const hidePageModal = () => {
+    setPageModalShow(false);
   };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (tooltipRef.current) {
@@ -163,7 +173,8 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               <S.TextBold>Summary</S.TextBold>
               <S.TextLight>{content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
-                <Plus onClick={() => modalDispatch(openModal(MODAL_TYPES.CreatePageModal))} />
+                <Plus onClick={pageModal} />
+                {pageModalShow && <PageModal onClose={hidePageModal} projectId={Number(result?.projectId)} hasAccess={accessed} character={character} />}
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>

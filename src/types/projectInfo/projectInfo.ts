@@ -61,3 +61,26 @@ export type TPageSummary = TCommonResponse<{
     scenarios: string[];
   }[];
 }>;
+export type TAddPage = TCommonResponse<{
+  pageId: number;
+  pageName: string;
+  pageDescription: string;
+  path: string;
+}>;
+export type TAddPageRequest = {
+  projectId: number;
+  pageName: string;
+  pageDescription: string;
+  path: string;
+  characterIdList: number[];
+  scenarioList: string[];
+};
+export type TGetCharacter = TCommonResponse<{
+  detailCharacters: {
+    characterId: number;
+    characterName: string;
+    author: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
+}>;

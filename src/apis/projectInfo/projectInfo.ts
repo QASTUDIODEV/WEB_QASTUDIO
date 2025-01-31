@@ -1,5 +1,8 @@
 import type {
+  TAddPage,
+  TAddPageRequest,
   TEditRequest,
+  TGetCharacter,
   TGetProjectInfo,
   TGetProjectMember,
   TPageSummary,
@@ -32,5 +35,13 @@ export const inviteMember = async (inviteData: TRequestInvite): Promise<TGetProj
 };
 export const getPageSummaryList = async ({ projectId }: TProjectInfo): Promise<TPageSummary> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/pages`);
+  return data;
+};
+export const addPage = async (pageData: TAddPageRequest): Promise<TAddPage> => {
+  const { data } = await axiosInstance.post(`/api/v0/projects/${pageData.projectId}/pages`, pageData);
+  return data;
+};
+export const getCharacter = async ({ projectId }: TProjectInfo): Promise<TGetCharacter> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters`);
   return data;
 };

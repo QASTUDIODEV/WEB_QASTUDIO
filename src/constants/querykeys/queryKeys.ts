@@ -11,6 +11,7 @@ export const QUERY_KEYS = {
   PROJECT_INFO: ({ projectId }: TProjectInfo) => ['getProjectInfo', projectId],
   PROJECT_MEMBER: ({ projectId }: TProjectInfo) => ['getProjectMember', projectId],
   PROJECT_MEMBER_EMAIL: ({ projectId }: TProjectInfo) => ['getMemberEmail', projectId],
+  CHARACTER: ({ projectId }: TProjectInfo) => ['getCharacter', projectId],
   GET_USER_PROJECT_LIST: (page: number | null) => ['getUserProjectList', page],
   PAGE_SUMMARY: ({ projectId }: TProjectInfo) => ['getPageSummary', projectId],
   GET_USER_INFO: ['getUserInfo'],
