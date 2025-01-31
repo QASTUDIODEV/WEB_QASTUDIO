@@ -50,14 +50,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const notAccessed = summary?.map((a) => a.deniedAccess);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
-  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
   // const { useScenario } = useGetScenario({
   //   characterId: selectedCharacterId || 0,
   // });
   // const { data: scenarioList } = useScenario;
   // const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
   const handleMouseEnter = (characterId: number) => {
-    setSelectedCharacterId(characterId);
     setActiveTooltip(characterId);
   };
 
