@@ -1,5 +1,15 @@
 import type { TCommonResponse } from '../common/common';
 
+export type TPageSummaryDTO = {
+  pageId: number;
+  pageName: string;
+  pageDescription: string;
+  path: string;
+  hasAccess: string[];
+  deniedAccess: string[];
+  scenarios: string[];
+};
+
 export type TGetProjectInfo = TCommonResponse<{
   projectId: number;
   projectImage: string;
@@ -51,15 +61,7 @@ export type TRequestInvite = {
 };
 
 export type TPageSummary = TCommonResponse<{
-  pageSummaryList: {
-    pageId: number;
-    pageName: string;
-    pageDescription: string;
-    path: string;
-    hasAccess: string[];
-    deniedAccess: string[];
-    scenarios: string[];
-  }[];
+  pageSummaryList: TPageSummaryDTO[];
 }>;
 export type TAddPage = TCommonResponse<{
   pageId: number;
