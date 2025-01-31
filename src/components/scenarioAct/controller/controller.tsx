@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import Button from '@/components/common/button/button';
 import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
-import SelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
+import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 import * as S from '@/components/scenarioAct/controller/controller.style';
 import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
 import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
@@ -30,7 +30,7 @@ export default function Controller() {
   const handleStep = (selectedStep: number) => {
     setStep(selectedStep);
   };
-
+  console.log(scenario.characters);
   return (
     <S.Container>
       {step == 1 ? (
@@ -46,7 +46,7 @@ export default function Controller() {
           <S.CharacterHeader>
             <p>Character</p>
             <S.DropdownContainer>
-              <SelectDropdown options={scenario.characters} onSelect={onSelect} onSelect={onSelect} />
+              <CharacterSelectDropdown options={scenario.characters} onSelect={onSelect} />
             </S.DropdownContainer>
           </S.CharacterHeader>
           {/* 시나리오 리스트 */}
