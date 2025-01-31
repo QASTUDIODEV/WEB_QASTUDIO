@@ -174,7 +174,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               <S.TextLight>{content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
                 <Plus onClick={pageModal} />
-                {pageModalShow && <PageModal onClose={hidePageModal} projectId={Number(result?.projectId)} hasAccess={accessed} character={character} />}
+                {pageModalShow && <PageModal onClose={hidePageModal} projectId={Number(result?.projectId)} character={character} />}
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>

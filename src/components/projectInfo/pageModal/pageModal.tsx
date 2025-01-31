@@ -18,7 +18,6 @@ import DelCircle from '@/assets/icons/del_circle.svg?react';
 type TPageModalProps = {
   onClose: () => void; // 모달 닫기 함수
   projectId: number;
-  hasAccess: string[][] | undefined;
   character:
     | {
         characterId: number;
@@ -36,7 +35,7 @@ type TFormData = {
   accessControl: string[];
   scenarios: { value: string }[];
 };
-export default function PageModal({ onClose, projectId, hasAccess, character }: TPageModalProps) {
+export default function PageModal({ onClose, projectId, character }: TPageModalProps) {
   const queryClient = useQueryClient();
   const [options] = useState<string[] | undefined>(character?.map((a) => a.characterName));
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
