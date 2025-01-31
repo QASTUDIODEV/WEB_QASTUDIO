@@ -13,7 +13,7 @@ export const DropdownHeader = styled.div`
   width: 100%;
   padding: 16px 20px;
   border-radius: 4px;
-  border: 1px solid rgba(153, 153, 153, 0.5);
+  border: 0.8px solid rgba(153, 153, 153, 0.5);
   background-color: inherit;
   box-sizing: border-box;
   cursor: pointer;
@@ -28,7 +28,7 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   left: 0;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  border: 1px solid rgba(153, 153, 153, 0.5);
+  border: 0.8px solid rgba(153, 153, 153, 0.5);
   border-radius: 0 0 4px 4px;
   border-top: none;
   z-index: 1000;

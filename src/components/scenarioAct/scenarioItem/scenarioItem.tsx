@@ -23,9 +23,19 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
   return (
     <S.Container>
       <S.ScenarioHeader onClick={toggleDropdown} $isOpen={scenario?.isOpen}>
-        {scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}
+        {scenario?.isOpen ? (
+          <S.IconContainer>
+            <ArrowUp />
+          </S.IconContainer>
+        ) : (
+          <S.IconContainer>
+            <ArrowDown />
+          </S.IconContainer>
+        )}
         <S.Title>{scenario?.scenarioName || '타이틀'}</S.Title>
-        <Play />
+        <S.IconContainer>
+          <Play />
+        </S.IconContainer>
       </S.ScenarioHeader>
 
       {scenario?.isOpen && (

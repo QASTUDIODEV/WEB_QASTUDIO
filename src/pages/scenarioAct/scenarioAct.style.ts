@@ -9,7 +9,7 @@ export const Container = styled.div`
   width: 100vw;
   display: grid;
   grid-template-columns: 11fr 5fr;
-  grid-template-rows: 64px 1fr;
+  grid-template-rows: 51.2px 1fr;
   grid-template-areas:
     'header controller'
     'actSection controller';

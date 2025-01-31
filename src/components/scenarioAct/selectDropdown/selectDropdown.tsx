@@ -45,7 +45,16 @@ export default function CharacterSelectDropdown({ options, onSelect, type = 'thi
     <S.Container ref={dropdownRef}>
       {/* 헤더 */}
       <S.Header onClick={toggleDropdown} $isOpen={isOpen} $type={type}>
-        {selectedOption} {isOpen ? <ArrowUp /> : <ArrowDown />}
+        {selectedOption}{' '}
+        {isOpen ? (
+          <S.IconContainer>
+            <ArrowUp />
+          </S.IconContainer>
+        ) : (
+          <S.IconContainer>
+            <ArrowDown />
+          </S.IconContainer>
+        )}
       </S.Header>
       {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>

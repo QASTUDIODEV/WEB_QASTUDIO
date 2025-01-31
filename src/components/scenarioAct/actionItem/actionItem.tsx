@@ -67,11 +67,11 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       {/* 헤더 */}
       <S.Header state={actionState || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
-          {action?.actionType && getIcon(actionIconMap, action.actionType)}
+          {action?.actionType && <S.IconContainer>{getIcon(actionIconMap, action.actionType)}</S.IconContainer>}
           <S.ActionName>{action?.actionDescription || '액션'}</S.ActionName>
           <S.ActionType>{action?.actionType}</S.ActionType>
         </S.Content>
-        {actionState && getIcon(stateIconMap, actionState)}
+        {actionState && <S.IconContainer>getIcon(stateIconMap, actionState)</S.IconContainer>}
       </S.Header>
 
       {/* 세부 사항 */}
