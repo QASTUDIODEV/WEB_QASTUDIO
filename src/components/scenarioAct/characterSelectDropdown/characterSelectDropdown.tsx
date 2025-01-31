@@ -1,40 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+
 import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
+import { setCharacterId } from '@/slices/scenarioActSlice';
 
-interface IDropdownOption {
-  characterId: number;
-  characterName: string;
-}
+export default function CharacterSelectDropdown() {
+  const dispatch = useDispatch();
 
-interface IDropdownProps {
-  options: IDropdownOption[];
-  onSelect: (selected: IDropdownOption) => void;
-}
+  // ✅ Redux에서 캐릭터 목록과 현재 선택된 캐릭터 ID 가져오기
+  const characters = useSelector((state) => state.scenarioAct.characters);
+  const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
 
-export default function CharacterSelectDropdown({ options, onSelect }: IDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
-  const [selectedOption, setSelectedOption] = useState<IDropdownOption>(options[0]); // 선택된 옵션
+  // ✅ 현재 선택된 캐릭터 찾기
+  const selectedCharacter = characters.find((char) => char.characterId === selectedCharacterId) || characters[0];
+
+  // ✅ UI 상태 (드롭다운 열림/닫힘)
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 드롭다운 열림 / 닫힘 함수
+  // ✅ Redux 상태와 UI 동기화
+  useEffect(() => {
+    if (selectedCharacter) {
+      dispatch(setCharacterId(selectedCharacter.characterId));
+    }
+  }, [selectedCharacter, dispatch]);
+
+  // ✅ 드롭다운 토글
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // 옵션 선택 함수
-  const handleOptionClick = (option: IDropdownOption) => {
-    console.log(1);
-    setSelectedOption(option);
-    onSelect(option);
-    console.log(1);
-    setIsOpen(false);
+  // ✅ 캐릭터 선택
+  const handleOptionClick = (characterId: number) => {
+    dispatch(setCharacterId(characterId)); // Redux 상태 업데이트
+    setIsOpen(false); // 드롭다운 닫기
   };
 
-  // 외부 클릭시 닫힘
+  // ✅ 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -51,13 +57,14 @@ export default function CharacterSelectDropdown({ options, onSelect }: IDropdown
     <S.Container ref={dropdownRef}>
       {/* 헤더 */}
       <S.Header onClick={toggleDropdown} $isOpen={isOpen}>
-        {selectedOption.characterName} {isOpen ? <ArrowUp /> : <ArrowDown />}
+        {selectedCharacter?.characterName || 'Select Character'} {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Header>
+
       {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
-        {options.map((option, index) => (
-          <S.DropdownListItem key={index} onClick={() => handleOptionClick(option)} $isSelected={option === selectedOption}>
-            {option.characterName}
+        {characters.map((char) => (
+          <S.DropdownListItem key={char.characterId} onClick={() => handleOptionClick(char.characterId)} $isSelected={char.characterId === selectedCharacterId}>
+            {char.characterName}
           </S.DropdownListItem>
         ))}
       </S.DropdownList>

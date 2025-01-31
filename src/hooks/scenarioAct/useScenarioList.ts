@@ -10,12 +10,13 @@ import { setScenarioList } from '@/slices/scenarioActSlice';
 
 export default function useScenarioList(characterId: number | null | undefined) {
   const dispatch = useDispatch();
-
+  console.log(characterId);
   const useGetScenarioList = useCoreQuery([QUERY_KEYS.GET_SCENARIO_LIST, characterId], () => getScenarioInfo({ characterId: characterId! }), {
     enabled: !!characterId,
     select: (data) => {
       if (data?.result?.scenarios) {
-        dispatch(setScenarioList(data?.result?.scenarios));
+        console.log(data.result.scenarios);
+        dispatch(setScenarioList(data.result));
       }
       return data;
     },

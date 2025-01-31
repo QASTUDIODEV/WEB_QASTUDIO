@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 
 import { useSelector } from '@/hooks/common/useCustomRedux';
-import useCharacterInfo from '@/hooks/scenarioAct/useCharacterInfo';
 import useProjectInfo from '@/hooks/scenarioAct/useProjectInfo';
+import useCharacterInfo from '@/hooks/scenarioAct/useScenarioList';
 
 import ActSection from '@/components/scenarioAct/actSection/actSection';
 import Controller from '@/components/scenarioAct/controller/controller';

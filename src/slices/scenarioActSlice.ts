@@ -43,8 +43,30 @@ interface ICharacterPayload {
   detailCharacters: { characterId: number; characterName: string }[];
 }
 interface IScenarioPayload {
-  scenarios: any[];
+  scenarios: [
+    {
+      scenarioId: number;
+      scenarioName: string;
+      scenarioDescription: string;
+      actions: [
+        {
+          actionDescription: string;
+          step: number;
+          actionType: string;
+          locator: {
+            strategy: string;
+            value: string;
+          };
+          action: {
+            type: string;
+            value: string;
+          };
+        },
+      ];
+    },
+  ];
 }
+
 // 초기 상태
 const initialState: IScenarioActSlice = {
   characterId: null,
