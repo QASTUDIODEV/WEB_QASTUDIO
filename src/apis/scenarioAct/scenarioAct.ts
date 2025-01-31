@@ -1,10 +1,4 @@
-import type {
-  TGetCharacterListResponse,
-  TGetProjectInfoResponse,
-  TGetProjectInfoValues,
-  TGetScenarioInfo,
-  TGetScenarioListResponse,
-} from '@/types/scenarioAct/scenarioAct';
+import type { TGetCharacterListResponse, TGetProjectInfoResponse, TGetProjectInfoValues, TGetScenarioInfoResponse } from '@/types/scenarioAct/scenarioAct';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -20,16 +14,10 @@ const getCharacterList = async ({ projectId }: TGetProjectInfoValues): Promise<T
   return data;
 };
 
-const getScenarioList = async ({ characterId }: TGetProjectInfoValues): Promise<TGetScenarioListResponse> => {
-  const { data } = await axiosInstance.get(`/api/v0/projects/characters/${characterId}/scenarios`);
+const getScenarioInfo = async ({ characterId }: TGetProjectInfoValues): Promise<TGetScenarioInfoResponse> => {
+  const { data } = await axiosInstance.get(`/api/v0/scenarios/characters/${characterId}`);
   console.log(data);
   return data;
 };
 
-const getScenarioInfo = async ({ scenarioId }: TGetProjectInfoValues): Promise<TGetScenarioInfo> => {
-  const { data } = await axiosInstance.get(`/api/v0/scenarios/${scenarioId}`);
-  console.log(data);
-  return data;
-};
-
-export { getCharacterList, getProjectInfo, getScenarioInfo, getScenarioList };
+export { getCharacterList, getProjectInfo, getScenarioInfo };

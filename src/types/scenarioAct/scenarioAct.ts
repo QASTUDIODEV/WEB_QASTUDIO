@@ -23,35 +23,28 @@ export type TGetProjectInfoResponse = TCommonResponse<{
   assistantId: string;
 }>;
 
-export type TGetScenarioListResponse = TCommonResponse<{
-  scenarioList: [
+export type TGetScenarioInfoResponse = TCommonResponse<{
+  characterId: number;
+  scenarios: [
     {
       scenarioId: number;
       scenarioName: string;
-      author: string;
-      createdAt: string;
-      updatedAt: string;
-    },
-  ];
-}>;
-
-export type TGetScenarioInfo = TCommonResponse<{
-  scenarioId: number;
-  scenarioName: string;
-  scenarioDescription: string;
-  actions: [
-    {
-      actionDescription: string;
-      step: number;
-      actionType: string;
-      locator: {
-        strategy: string;
-        value: string;
-      };
-      action: {
-        type: string;
-        value: string;
-      };
+      scenarioDescription: string;
+      actions: [
+        {
+          actionDescription: string;
+          step: number;
+          actionType: string;
+          locator: {
+            strategy: string;
+            value: string;
+          };
+          action: {
+            type: string;
+            value: string;
+          };
+        },
+      ];
     },
   ];
 }>;

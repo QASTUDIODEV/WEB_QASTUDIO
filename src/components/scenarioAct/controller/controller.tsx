@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
@@ -15,17 +15,21 @@ import { setCharacterId } from '@/slices/scenarioActSlice';
 
 export default function Controller() {
   const dispatch = useDispatch();
-  // 스텝 - 시나리오 실행: 1, 시나리오 추가: 2
-  const [step, setStep] = useState<number>(1);
-  //시나리오 가져오기
   const scenario = useSelector((state) => state.scenarioAct);
-  //모달
   const { isOpen } = useSelector((state) => state.modal);
+  const [step, setStep] = useState<number>(1);
+  const [selectedCharacter, setSelectedCharacter] = useState(scenario.characters[0] || null);
 
-  //드롭다운 함수
-  const onSelect = (selectedCharacter: { characterId: number; characterName: string }) => {
-    dispatch(setCharacterId(selectedCharacter.characterId));
+  // 드롭다운 함수
+  const onSelect = (selected: { characterId: number; characterName: string }) => {
+    setSelectedCharacter(selected);
   };
+  useEffect(() => {
+    if (selectedCharacter) {
+      dispatch(setCharacterId(selectedCharacter.characterId));
+    }
+  }, [selectedCharacter, dispatch]);
+
   // 스텝 함수
   const handleStep = (selectedStep: number) => {
     setStep(selectedStep);

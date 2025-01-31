@@ -27,8 +27,10 @@ export default function CharacterSelectDropdown({ options, onSelect }: IDropdown
 
   // 옵션 선택 함수
   const handleOptionClick = (option: IDropdownOption) => {
+    console.log(1);
     setSelectedOption(option);
     onSelect(option);
+    console.log(1);
     setIsOpen(false);
   };
 

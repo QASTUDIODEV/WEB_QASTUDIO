@@ -4,20 +4,26 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
 interface IAction {
-  actionId: number;
-  name: string;
-  actionType: ACTION_TYPE;
-  state: ACTION_STATE;
-  locator: string;
-  action: string;
+  actionDescription: string;
+  step: number;
+  actionType: string;
+  locator: {
+    strategy: string;
+    value: string;
+  };
+  action: {
+    type: string;
+    value: string;
+  };
 }
 
 interface IScenario {
   scenarioId: number;
-  name: string;
+  scenarioName: string;
+  scenarioDescription: string;
+  actions: IAction[];
   isOpen: boolean;
   lastActionId: number | null;
-  actions: IAction[];
 }
 
 interface ICharacter {
@@ -37,7 +43,7 @@ interface ICharacterPayload {
   detailCharacters: { characterId: number; characterName: string }[];
 }
 interface IScenarioPayload {
-  scenarioList: { scenarioId: number; scenarioName: string }[];
+  scenarios: any[];
 }
 // 초기 상태
 const initialState: IScenarioActSlice = {
@@ -76,12 +82,10 @@ const scenarioActSlice = createSlice({
     },
     //  시나리오 리스트 설정
     setScenarioList: (state, action: PayloadAction<IScenarioPayload>) => {
-      state.scenarios = action.payload.scenarioList.map(({ scenarioId, scenarioName }) => ({
-        scenarioId,
-        name: scenarioName,
+      state.scenarios = action.payload.scenarios.map((scn) => ({
+        ...scn,
         isOpen: false,
         lastActionId: null,
-        actions: [],
       }));
     },
   },
