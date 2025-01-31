@@ -1,17 +1,26 @@
 import * as S from '@/components/projectInfo/toolTip/toolTip.style';
 
 type TToltipProps = {
-  name: string;
-  description: string;
-  scenario: string[] | undefined;
+  data: {
+    characterId: number;
+    characterName: string;
+    characterDescription: string;
+    pageCnt: number;
+    scenarioCnt: number;
+    accessPageList: string[];
+    scenarioList: string[];
+    author: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
 };
-export default function ToolTip({ name, description, scenario }: TToltipProps) {
+export default function ToolTip({ data }: TToltipProps) {
   return (
     <S.Container>
-      <S.Text>{name}</S.Text>
-      <S.Text>{description}</S.Text>
-      <S.Text>/, /page, /roadmap</S.Text>
-      <S.Text>{scenario?.join(', ')}</S.Text>
+      <S.Text>{data.characterName}</S.Text>
+      <S.Text>{data.characterDescription}</S.Text>
+      <S.Text>{data.accessPageList.join(', ')}</S.Text>
+      <S.Text>{data.scenarioList.join(', ')}</S.Text>
     </S.Container>
   );
 }

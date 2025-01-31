@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
@@ -12,16 +14,19 @@ import DelCircle from '@/assets/icons/del_circle.svg?react';
 
 type TCharacterModalProps = {
   onClose: () => void;
+  projectId: number;
 };
 type TFormData = {
   characterName: string;
   characterDescription: string;
   accessPage: string;
 };
-export default function CharacterModal({ onClose }: TCharacterModalProps) {
+export default function CharacterModal({ onClose, projectId }: TCharacterModalProps) {
   const [modalStep, setModalStep] = useState(1);
-  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const { useGetPath } = useProjectInfo({ projectId });
+  const { data } = useGetPath;
+  const path = data?.result.projectPaths.map((a) => a.path);
   const {
     control,
     formState: { errors, isValid, touchedFields },
@@ -119,7 +124,7 @@ export default function CharacterModal({ onClose }: TCharacterModalProps) {
           </S.InputWrapper>
           <S.InputWrapper>
             <S.SubTitle>Access page</S.SubTitle>
-            <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
+            <Dropdown options={path as string[]} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
           </S.InputWrapper>
           {selectedOptions && (
             <S.TagContainer>
