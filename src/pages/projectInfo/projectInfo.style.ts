@@ -88,7 +88,7 @@ export const Member = styled.div`
 `;
 export const MemberContainer = styled.div`
   overflow: auto;
-  max-height: 70%;
+  max-height: 78%;
   ${media.desktop`
     max-height: 88%;
   `}
@@ -141,7 +141,7 @@ const Title = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.352px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   @media (max-width: 530px) {
     width: 50%;
     white-space: nowrap;
@@ -246,7 +246,7 @@ const CharacterAddBox = styled.div`
 `;
 export const CharacterList = styled.div`
   width: 85%;
-  height: 95%;
+  height: 97%;
   max-height: fit-content;
   display: flex;
   align-items: center;
@@ -272,7 +272,7 @@ const CharacterBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 12px;
-  gap: 4px;
+  gap: 8px;
   cursor: pointer;
   ${media.desktop`
     height: 30%;
@@ -281,7 +281,7 @@ const CharacterBox = styled.div`
 `;
 const Character = styled.div`
   display: flex;
-  height: 90%;
+  height: 95%;
   width: 100%;
   align-items: center;
   gap: 16px;
