@@ -7,12 +7,13 @@ export const Container = styled.div`
 `;
 
 export const ScenarioHeader = styled.div<{ $isOpen: boolean | undefined }>`
-  height: 56px;
-  box-sizing: border-box;
+  height: 45px;
   width: 100%;
-  padding: 10px 30px;
-  align-items: center;
+  padding: 8px 24px;
+
+  gap: 6.4px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   cursor: pointer;
   ${({ $isOpen }) =>
@@ -23,9 +24,9 @@ export const ScenarioHeader = styled.div<{ $isOpen: boolean | undefined }>`
 `;
 
 export const Title = styled.div`
-  margin-left: 8px;
   flex: 1;
   ${({ theme }) => theme.text.medium_24};
+  font-size: 19.2px;
 `;
 
 export const ActionList = styled.div`
@@ -33,8 +34,19 @@ export const ActionList = styled.div`
 `;
 
 export const ActionDescription = styled.div`
-  ${({ theme }) => theme.text.medium_18};
+  ${({ theme }) => theme.text.medium_14};
   color: ${({ theme }) => theme.colors.point.point_1};
-  padding: 8px 30px;
+  padding: 6.4px 24px;
   background-color: rgba(217, 230, 255, 0.05);
+`;
+
+export const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 19.2px;
+  height: 19.2px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;

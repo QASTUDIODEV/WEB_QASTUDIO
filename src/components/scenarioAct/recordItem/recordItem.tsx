@@ -30,12 +30,14 @@ export default function RecordItem({ title, type }: IRecordItemProps) {
     <S.Container>
       <p>1.</p>
       <S.TextContainer>
-        {type && getIcon(actionIconMap, type)}
+        {type && <S.IconContainer>{getIcon(actionIconMap, type)}</S.IconContainer>}
         <p>{title}</p>
       </S.TextContainer>
 
       <S.DelContainer>
-        <Del onClick={handleDel} />
+        <S.IconContainer>
+          <Del onClick={handleDel} />
+        </S.IconContainer>
       </S.DelContainer>
     </S.Container>
   );

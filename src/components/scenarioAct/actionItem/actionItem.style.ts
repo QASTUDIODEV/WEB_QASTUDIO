@@ -8,7 +8,7 @@ export const Container = styled.div<{ $isError: boolean }>`
 `;
 export const Header = styled.div<{ state: ACTION_STATE; $isLastAction: boolean; $isOpen: boolean }>`
   display: flex;
-  padding: 10px 30px;
+  padding: 8px 24px;
   align-items: center;
   justify-content: space-between;
 
@@ -21,7 +21,7 @@ export const Header = styled.div<{ state: ACTION_STATE; $isLastAction: boolean; 
     bottom: 0;
     left: 9px;
     right: 9px;
-    height: 2px;
+    height: 0.8px;
     background-color: ${({ theme, state, $isLastAction }) =>
       $isLastAction
         ? state === ACTION_STATE.SUCCESS
@@ -42,6 +42,7 @@ export const Content = styled.div`
 export const ActionName = styled.div`
   ${({ theme }) => theme.text.medium_20};
   height: 100%;
+  font-size: 16px;
   margin-right: 10px;
 `;
 
@@ -52,9 +53,10 @@ export const UnderIcon = styled.div`
 `;
 
 export const ActionType = styled.div`
-  padding: 3px 10px;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  padding: 2.4px 8px;
+  border-radius: 3.2px;
+  border: 0.8px solid ${({ theme }) => theme.colors.primary.pri_50};
+  ${({ theme }) => theme.text.medium_14};
 `;
 
 //상세
@@ -65,23 +67,25 @@ export const DescriptionContainer = styled.div`
 export const DescriptionItem = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 9px 50px;
-  gap: 10px;
+  padding: 7.2px 51.2px;
+  gap: 8px;
 `;
 
 export const DropdownContainer = styled.div`
-  height: 33px;
+  height: 26.8px;
+  width: 119.8px;
 `;
 export const DescriptionRow = styled.div`
   display: flex;
-  gap: 10px;
-  ${({ theme }) => theme.text.medium_18};
+  align-items: center;
+  gap: 8px;
+  ${({ theme }) => theme.text.medium_14};
 `;
 export const Input = styled.input`
   padding: 4px 10px;
-  ${({ theme }) => theme.text.medium_18};
+  ${({ theme }) => theme.text.medium_14};
   border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  border-bottom: 0.8px solid ${({ theme }) => theme.colors.primary.pri_50};
   color: ${({ theme }) => theme.colors.primary.pri_50};
   background-color: inherit;
   outline: none;
@@ -93,8 +97,19 @@ export const CheckError = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  ${({ theme }) => theme.text.medium_18};
+  ${({ theme }) => theme.text.medium_14};
   color: ${({ theme }) => theme.colors.error.error_500};
   cursor: pointer;
-  right: 30px;
+  right: 24px;
+`;
+
+export const IconContainer = styled.div`
+  width: 19.2px;
+  height: 19.2px;
+  display: flex;
+  align-items: center;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;

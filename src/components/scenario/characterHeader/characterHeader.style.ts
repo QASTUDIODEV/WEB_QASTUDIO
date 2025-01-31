@@ -26,7 +26,7 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
   border-radius: 8px;
 
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
-  border-top: ${({ $isEdit }) => ($isEdit ? '1px solid rgba(217, 230, 255, 0.2)' : 'none')};
+  border-top: ${({ $isEdit }) => ($isEdit ? '0.8px solid rgba(217, 230, 255, 0.2)' : 'none')};
   background: ${({ $isSelected, $isChecked }) =>
     $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
 `;

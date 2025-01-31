@@ -64,7 +64,9 @@ export default function Controller() {
         <S.AddContainer>
           {/* 헤더 */}
           <S.Header>
-            <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
+            <S.IconContainer>
+              <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
+            </S.IconContainer>
             <p>Add Scenario</p>
           </S.Header>
           {/* 수많은 인풋들 */}

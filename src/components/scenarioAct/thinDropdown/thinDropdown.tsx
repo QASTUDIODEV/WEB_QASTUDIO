@@ -48,7 +48,15 @@ export default function ThinDropdown({ options, onSelect, placeholder, value, on
       {/* 헤더 */}
       <S.DropdownHeader onClick={() => setIsOpen((prev) => !prev)} $hasSelection={!!selected} $isOpen={isOpen}>
         {selected || placeholder || 'Select an option'}
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+        {isOpen ? (
+          <S.IconContainer>
+            <ArrowUp />
+          </S.IconContainer>
+        ) : (
+          <S.IconContainer>
+            <ArrowDown />
+          </S.IconContainer>
+        )}
       </S.DropdownHeader>
 
       {/* 드롭다운 리스트 */}
