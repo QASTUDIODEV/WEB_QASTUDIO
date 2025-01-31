@@ -77,6 +77,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     const lines = preContent.split('\n');
     const modifiedText = lines.slice(0, maxRows).join('\n');
     setContent(modifiedText);
+    setIsEdit(false);
     editIntroduce(
       {
         projectId: Number(result?.projectId),
