@@ -16,9 +16,9 @@ import PlusDark from '@/assets/icons/add_dark.svg?react';
 import DelCircle from '@/assets/icons/del_circle.svg?react';
 
 type TPageModalProps = {
-  onClose: () => void; // 모달 닫기 함수
-  projectId: number;
-  character:
+  onClose: () => void;
+  projectId?: number;
+  character?:
     | {
         characterId: number;
         characterName: string;
@@ -35,7 +35,7 @@ type TFormData = {
   accessControl: string[];
   scenarios: { value: string }[];
 };
-export default function PageModal({ onClose, projectId, character }: TPageModalProps) {
+export default function PageModal({ onClose, projectId = 0, character }: TPageModalProps) {
   const queryClient = useQueryClient();
   const [options] = useState<string[] | undefined>(character?.map((a) => a.characterName));
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);

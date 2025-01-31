@@ -12,7 +12,6 @@ import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
-import PageModal from '@/components/projectInfo/pageModal/pageModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -43,7 +42,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const { data: characterList } = useGetCharacter;
   const summary = summaryList?.result.pageSummaryList;
 
-  const [pageModalShow, setPageModalShow] = useState(false);
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const character = characterList?.result.detailCharacters;
@@ -63,12 +61,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     setActiveTooltip(characterId);
   };
 
-  const pageModal = () => {
-    setPageModalShow(true);
-  };
-  const hidePageModal = () => {
-    setPageModalShow(false);
-  };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (tooltipRef.current) {
       tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
@@ -166,8 +158,13 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               <S.TextBold>Summary</S.TextBold>
               <S.TextLight>{content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
-                <Plus onClick={pageModal} />
-                {pageModalShow && <PageModal onClose={hidePageModal} projectId={Number(result?.projectId)} character={character} />}
+                <Plus
+                  onClick={() =>
+                    modalDispatch(
+                      openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }),
+                    )
+                  }
+                />
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
