@@ -1,10 +1,12 @@
 import type {
   TAddPage,
   TAddPageRequest,
+  TCharacterId,
   TEditRequest,
   TGetCharacter,
   TGetProjectInfo,
   TGetProjectMember,
+  TGetScenario,
   TPageSummary,
   TProjectInfo,
   TProjectMember,
@@ -43,5 +45,9 @@ export const addPage = async (pageData: TAddPageRequest): Promise<TAddPage> => {
 };
 export const getCharacter = async ({ projectId }: TProjectInfo): Promise<TGetCharacter> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters`);
+  return data;
+};
+export const getScenario = async ({ characterId }: TCharacterId): Promise<TGetScenario> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/characters/${characterId}/scenarios`);
   return data;
 };

@@ -84,3 +84,15 @@ export type TGetCharacter = TCommonResponse<{
     updatedAt: Date;
   }[];
 }>;
+export type TGetScenario = TCommonResponse<{
+  scenarioList: {
+    scenarioId: number;
+    scenarioName: string;
+    author: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
+}>;
+export type TCharacterId = {
+  characterId: number;
+};
