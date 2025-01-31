@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
+
+import useAddPage from '@/hooks/projectInfo/useAddPage';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -12,8 +15,18 @@ import Plus from '@/assets/icons/add.svg?react';
 import PlusDark from '@/assets/icons/add_dark.svg?react';
 import DelCircle from '@/assets/icons/del_circle.svg?react';
 
-type TCreatePageModalProps = {
-  onClose: () => void; // 모달 닫기 함수
+type TPageModalProps = {
+  onClose: () => void;
+  projectId?: number;
+  character?:
+    | {
+        characterId: number;
+        characterName: string;
+        author: string;
+        createdAt: Date;
+        updatedAt: Date;
+      }[]
+    | undefined;
 };
 type TFormData = {
   pageName: string;
@@ -22,11 +35,14 @@ type TFormData = {
   accessControl: string[];
   scenarios: { value: string }[];
 };
-export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
-  const [options] = useState<string[]>(['origin', 'admin', 'guest']);
+export default function PageModal({ onClose, projectId = 0, character }: TPageModalProps) {
+  const queryClient = useQueryClient();
+  const [options] = useState<string[] | undefined>(character?.map((a) => a.characterName));
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedIdList, setSelectedIdList] = useState<number[]>([]);
   const [modalStep, setModalStep] = useState(1);
-
+  const { usePage } = useAddPage();
+  const { mutate: addPage } = usePage;
   const {
     control,
     handleSubmit,
@@ -54,15 +70,39 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
   const handleSelect = (value: string) => {
     if (!selectedOptions.includes(value)) {
       setSelectedOptions((prev) => [...prev, value]);
+      const selectedId = character?.find((char) => char.characterName === value)?.characterId;
+      if (selectedId) {
+        setSelectedIdList((prev) => [...prev, selectedId]);
+      }
     }
   };
   const handleCreate = () => {
-    // const scenarios = getValues('scenarios'); 나중에 활용 예정
-    // console.log('Scenarios:', scenarios);
-    onClose();
+    const scenarios = getValues('scenarios');
+    const scenarioList = scenarios.map((a) => a.value);
+    addPage(
+      {
+        projectId: projectId,
+        pageName: getValues('pageName'),
+        pageDescription: getValues('pageDescription'),
+        path: getValues('pagePath'),
+        characterIdList: selectedIdList,
+        scenarioList: scenarioList,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getPageSummary', projectId] });
+          onClose();
+        },
+      },
+    );
   };
   const handleRemove = (value: string) => {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
+    const selectedId = character?.find((char) => char.characterName === value)?.characterId;
+    if (selectedId) {
+      setSelectedIdList((prev) => [...prev, selectedId]);
+    }
+    setSelectedIdList((prev) => prev.filter((option) => option !== selectedId));
   };
   return (
     <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
@@ -155,7 +195,7 @@ export default function CreatePageModal({ onClose }: TCreatePageModalProps) {
             </S.PostBox>
             <S.PostBox>
               <S.ModalText>Access Control</S.ModalText>
-              <Dropdown options={options} onSelect={handleSelect} placeholder="Select roles for page access." />
+              <Dropdown options={options as string[]} onSelect={handleSelect} placeholder="Select roles for page access." />
             </S.PostBox>
             <S.PostBox>
               <S.BtnWrapper>

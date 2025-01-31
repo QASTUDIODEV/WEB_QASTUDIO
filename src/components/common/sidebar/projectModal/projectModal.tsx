@@ -102,6 +102,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
 
   const handleRemoveEmail = (emailToRemove: string) => {
     setEmails((prev) => prev.filter((e) => e !== emailToRemove));
+    setMemberEmailList((prev) => prev.filter((e) => e.email !== emailToRemove));
   };
   const handleCreate = async () => {
     if (!keyName) {

@@ -36,8 +36,10 @@ export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemP
         <S.ScenarioItem $isChecked={scenario.isChecked} $isEdit={isEdit}>
           <S.ScenarioItemLeftSide>
             <CheckBox scenarioId={scenarioId} characterId={characterId} />
-            <File />
-            <p>{scenario.name}</p>
+            <S.IconContainer>
+              <File />
+            </S.IconContainer>
+            <S.ScenarioTitle>{scenario.name}</S.ScenarioTitle>
           </S.ScenarioItemLeftSide>
           <S.ScenarioRightSide>
             <S.Creater>
@@ -53,8 +55,10 @@ export default function ScenarioItem({ scenarioId, characterId }: IScenarioItemP
       ) : (
         <S.ScenarioItem $isChecked={scenario.isChecked} $isSelected={scenario.isSelected} onClick={handleSelect}>
           <S.ScenarioItemLeftSide>
-            <File />
-            <p>{scenario.name}</p>
+            <S.IconContainer>
+              <File />
+            </S.IconContainer>
+            <S.ScenarioTitle>{scenario.name}</S.ScenarioTitle>
           </S.ScenarioItemLeftSide>
           <S.ScenarioRightSide>
             <S.Creater>

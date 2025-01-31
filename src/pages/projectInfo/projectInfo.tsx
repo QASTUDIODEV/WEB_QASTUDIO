@@ -1,16 +1,17 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import { useGetScenario } from '@/hooks/projectInfo/useGetScenario';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
-import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
@@ -27,99 +28,69 @@ import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
 
-type TAction =
-  | { type: 'TOGGLE_STRUCTURE' }
-  | { type: 'SET_PAGE'; payload: string }
-  | { type: 'TOGGLE_EDIT'; payload?: boolean }
-  | { type: 'SET_PRE_CONTENT'; payload: string }
-  | { type: 'SET_CONTENT'; payload: string };
-
 export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
+  const queryClient = useQueryClient();
   const result = projectInfo?.result;
-  const initialState = {
-    isStructureVisible: true,
-    selectedPage: '홈',
-    isEdit: false,
-    content: result?.introduction || '',
-    preContent: result?.introduction || '',
-  };
-  function reducer(state: typeof initialState, action: TAction) {
-    switch (action.type) {
-      case 'TOGGLE_STRUCTURE':
-        return { ...state, isStructureVisible: !state.isStructureVisible };
-      case 'SET_PAGE':
-        return { ...state, selectedPage: action.payload };
-      case 'TOGGLE_EDIT':
-        return { ...state, isEdit: action.payload ?? !state.isEdit };
-      case 'SET_PRE_CONTENT':
-        return { ...state, preContent: action.payload, isEdit: true };
-      case 'SET_CONTENT':
-        return { ...state, content: action.payload, isEdit: false };
-      default:
-        return state;
-    }
-  }
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { useEditIntroduce, useGetProjectMember } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const [isStructureVisible, setIsStructureVisible] = useState(true);
+  const [selectedPage, setSelectedPage] = useState(0);
+  const [isEdit, setIsEdit] = useState(false);
+  const [content, setContent] = useState(result?.introduction || '');
+  const [preContent, setPreContent] = useState(result?.introduction || '');
+  const { useEditIntroduce, useGetProjectMember, useGetPageSummary, useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: members } = useGetProjectMember;
-  const [modalShow, setModalShow] = useState(false);
+  const { data: summaryList } = useGetPageSummary;
+  const { data: characterList } = useGetCharacter;
+  const summary = summaryList?.result.pageSummaryList;
+
   const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
-  const data = {
-    page: ['홈', '로그인', '로드맵', '마이페이지', '마이페이지'],
-    path: ['/', '/login', '/roadmap', '/mypage', '/mypage'],
-    accessRights: [
-      [true, true, false],
-      [true, false, false],
-      [true, false, false],
-      [true, false, false],
-      [true, false, false],
-    ],
-    character: ['일반', '관리자', '비로그인'],
-  };
+  const character = characterList?.result.detailCharacters;
   const member = members?.result.members;
-  const accessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (isAccessible ? data.character[j] : null)).filter(Boolean));
-  const notAccessed = data.page.map((_, i) => data.accessRights[i].map((isAccessible, j) => (!isAccessible ? data.character[j] : null)).filter(Boolean));
+  const accessed = summary?.map((a) => a.hasAccess);
+  const notAccessed = summary?.map((a) => a.deniedAccess);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const showModal = () => {
-    setModalShow(true);
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
+  const { useScenario } = useGetScenario({
+    characterId: selectedCharacterId || 0,
+  });
+  const { data: scenarioList } = useScenario;
+  const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
+  const handleMouseEnter = (characterId: number) => {
+    setSelectedCharacterId(characterId);
+    setActiveTooltip(characterId);
   };
-  const hideModal = () => {
-    setModalShow(false);
-  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (tooltipRef.current) {
       tooltipRef.current.style.top = `${e.clientY + 15}px`; // 마우스 아래에 표시
       tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
     }
   };
-
-  const handleMouseEnter = () => {
-    if (tooltipRef.current) {
-      tooltipRef.current.style.visibility = 'visible';
-      tooltipRef.current.style.opacity = '1';
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (tooltipRef.current) {
-      tooltipRef.current.style.visibility = 'hidden';
-      tooltipRef.current.style.opacity = '0';
-    }
-  };
   const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
   const stack = STACK[result?.developmentSkill as keyof typeof STACK] ?? STACK.NEXT;
   const handleEdit = () => {
     const maxRows = 2;
-    const lines = state.preContent.split('\n');
+    const lines = preContent.split('\n');
     const modifiedText = lines.slice(0, maxRows).join('\n');
-    dispatch({ type: 'SET_CONTENT', payload: modifiedText });
-    console.log(state.preContent);
-    editIntroduce({
-      projectId: Number(result?.projectId),
-      introduce: state.preContent,
-    });
+    setContent(modifiedText);
+    setIsEdit(false);
+    editIntroduce(
+      {
+        projectId: Number(result?.projectId),
+        introduce: preContent,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectInfo', Number(result?.projectId)] });
+        },
+      },
+    );
   };
+  useEffect(() => {
+    setPreContent(result?.introduction || '');
+    setContent(result?.introduction || '');
+  }, [result?.projectId]);
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxRows = 2;
     const textarea = e.target;
@@ -130,7 +101,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     if (currentRows > maxRows) {
       return;
     }
-    dispatch({ type: 'SET_PRE_CONTENT', payload: e.target.value });
+    setPreContent(e.target.value);
   };
   return (
     <S.Container>
@@ -154,18 +125,18 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       </S.Profile>
       <S.Box height="18%">
         <S.Title>Introduction to the Project</S.Title>
-        {!state.isEdit ? (
+        {!isEdit ? (
           <>
-            <S.Text>{state.content}</S.Text>
+            <S.Text>{content}</S.Text>
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={() => dispatch({ type: 'TOGGLE_EDIT', payload: true })}>
+              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
                 Edit
               </Button>
             </S.Wrapper>
           </>
         ) : (
           <>
-            <S.Input onChange={(e) => handleInputChange(e)} value={state.preContent} rows={2} />
+            <S.Input onChange={(e) => handleInputChange(e)} value={preContent} rows={2} />
             <S.Wrapper bottom="16px" right="24px">
               <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
                 Done
@@ -176,18 +147,24 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       </S.Box>
       <S.SemiBox>
         <S.Left>
-          {state.isStructureVisible ? (
+          {isStructureVisible ? (
             <S.Box
-              height="58%"
+              height="59%"
               style={{
                 cursor: 'pointer',
               }}
             >
               <S.Title>Project structure</S.Title>
               <S.TextBold>Summary</S.TextBold>
-              <S.TextLight>{state.content}</S.TextLight>
+              <S.TextLight>{content}</S.TextLight>
               <S.Wrapper top="16px" right="24px">
-                <Plus onClick={() => modalDispatch(openModal(MODAL_TYPES.CreatePageModal))} />
+                <Plus
+                  onClick={() =>
+                    modalDispatch(
+                      openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }),
+                    )
+                  }
+                />
               </S.Wrapper>
               <S.InnerBox>
                 <div style={{ flex: 1 }}>
@@ -206,38 +183,50 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
                       </tr>
                     </thead>
                     <tbody>
-                      {data.page.map((page, index) => (
-                        <S.TR
-                          key={index}
-                          onClick={() => {
-                            dispatch({ type: 'TOGGLE_STRUCTURE' });
-                            dispatch({ type: 'SET_PAGE', payload: page });
-                          }}
-                        >
-                          <S.TD>{page}</S.TD>
-                          <S.TD>{data.path[index]}</S.TD>
-                          <S.TD>
-                            <S.AccessRights>
-                              <Button type="small_round" color="green">
-                                접근 가능
-                              </Button>
-                              {accessed[index].map((role, i) => (
-                                <Button key={i} type="small_round" color="white_round">
-                                  {role}
-                                </Button>
-                              ))}
-                              <Button type="small_round" color="red">
-                                접근 불가능
-                              </Button>
-                              {notAccessed[index].map((role, i) => (
-                                <Button key={i} type="small_round" color="white_round">
-                                  {role}
-                                </Button>
-                              ))}
-                            </S.AccessRights>
-                          </S.TD>
-                        </S.TR>
-                      ))}
+                      {summary &&
+                        summary.map((a, index) => (
+                          <S.TR
+                            key={a.pageId}
+                            onClick={() => {
+                              setIsStructureVisible(false);
+                              setSelectedPage(index);
+                            }}
+                          >
+                            <S.TD>{a.pageName}</S.TD>
+                            <S.TD>{a.path}</S.TD>
+                            <S.TD>
+                              <S.AccessRights>
+                                <S.Button>
+                                  <Button type="small_round" color="green">
+                                    접근 가능
+                                  </Button>
+                                </S.Button>
+                                {accessed &&
+                                  accessed[index].map((role, i) => (
+                                    <S.Button key={i}>
+                                      <Button type="small_round" color="white_round">
+                                        {role}
+                                      </Button>
+                                    </S.Button>
+                                  ))}
+
+                                <S.Button>
+                                  <Button type="small_round" color="red">
+                                    접근 불가능
+                                  </Button>
+                                </S.Button>
+                                {notAccessed &&
+                                  notAccessed[index].map((role, i) => (
+                                    <S.Button key={i}>
+                                      <Button type="small_round" color="white_round">
+                                        {role}
+                                      </Button>
+                                    </S.Button>
+                                  ))}
+                              </S.AccessRights>
+                            </S.TD>
+                          </S.TR>
+                        ))}
                     </tbody>
                   </S.Table>
                 </div>
@@ -245,53 +234,40 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
             </S.Box>
           ) : (
             <ProjectStructure
-              selectedPage={state.selectedPage}
-              setSelectedPage={(page) => dispatch({ type: 'SET_PAGE', payload: page })}
-              onBackToSummary={() => dispatch({ type: 'TOGGLE_STRUCTURE' })}
+              selectedPage={selectedPage}
+              setSelectedPage={(page) => setSelectedPage(page)}
+              onBackToSummary={() => setIsStructureVisible(true)}
+              pageData={summary}
             />
           )}
           <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>Origin</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>2</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
-              <S.CharacterBox onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <S.TooltipWrapper ref={tooltipRef} visible={false}>
-                  <ToolTip />
-                </S.TooltipWrapper>
-                <S.Medium18Text>2</S.Medium18Text>
-                <S.Medium14Text>dklasalfjdssfd.</S.Medium14Text>
-                <S.rowBox>
-                  <Book />
-                  <S.Medium18Text>3</S.Medium18Text>
-                  <Page />
-                  <S.Medium18Text>2</S.Medium18Text>
-                </S.rowBox>
-              </S.CharacterBox>
+              <S.CharacterList>
+                {character &&
+                  character.map((a) => (
+                    <S.CharacterBox
+                      key={a.characterId}
+                      onMouseMove={handleMouseMove}
+                      onMouseEnter={() => handleMouseEnter(a.characterId)}
+                      onMouseLeave={() => setActiveTooltip(null)}
+                    >
+                      {activeTooltip === a.characterId && (
+                        <S.TooltipWrapper ref={tooltipRef} visible={true}>
+                          <ToolTip name={a.characterName} description={a.author} scenario={currentScenario} />
+                        </S.TooltipWrapper>
+                      )}
+                      <S.Medium18Text>{a.characterName}</S.Medium18Text>
+                      <S.Medium14Text>{a.author}</S.Medium14Text>
+                      <S.rowBox>
+                        <Book />
+                        <S.Medium18Text>3</S.Medium18Text>
+                        <Page />
+                        <S.Medium18Text>2</S.Medium18Text>
+                      </S.rowBox>
+                    </S.CharacterBox>
+                  ))}
+              </S.CharacterList>
               <S.CharacterAddBox onClick={() => modalDispatch(openModal(MODAL_TYPES.CharacterModal))}>
                 <Plus />
               </S.CharacterAddBox>
@@ -301,25 +277,32 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
         <S.Right>
           <S.Box height="100%">
             <S.Title>Team Members</S.Title>
-            {member?.map((a, i) => (
-              <S.Member key={i}>
-                <S.MemberBox>
-                  <S.ProfileWrapper>
-                    <Profile profileImg={a.profileImage} />
-                  </S.ProfileWrapper>
-                  <S.MemberName>{a.nickname}</S.MemberName>
-                  {a.projectRole === 'LEADER' && <Crown />}
-                </S.MemberBox>
-                <S.ArrowWrapper>
-                  <ArrowRight className="show" />
-                </S.ArrowWrapper>
-              </S.Member>
-            ))}
+            <S.MemberContainer>
+              {member?.map((a, i) => (
+                <S.Member key={i}>
+                  <S.MemberBox>
+                    <S.ProfileWrapper>
+                      <Profile profileImg={a.profileImage} />
+                    </S.ProfileWrapper>
+                    <S.MemberName>{a.nickname}</S.MemberName>
+                    {a.projectRole === 'LEADER' && <Crown />}
+                  </S.MemberBox>
+                  <S.ArrowWrapper>
+                    <ArrowRight className="show" />
+                  </S.ArrowWrapper>
+                </S.Member>
+              ))}
+            </S.MemberContainer>
             <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Plus />} iconPosition="left" onClick={showModal}>
+              <Button
+                type="normal"
+                color="default"
+                icon={<Plus />}
+                iconPosition="left"
+                onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.InviteModal, modalProps: { projectId: Number(result?.projectId) } }))}
+              >
                 Invite
               </Button>
-              {modalShow && <InviteModal onClose={hideModal} projectId={Number(result?.projectId)} />}
             </S.Wrapper>
           </S.Box>
         </S.Right>

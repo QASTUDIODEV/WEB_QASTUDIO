@@ -22,7 +22,12 @@ export const PostBox = styled.div`
   flex-direction: column;
 `;
 export const ModalText = styled.p`
-  ${({ theme }) => theme.text.medium_22};
+  font-family: Pretendard;
+  font-size: 17.6px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 26.4px */
+  letter-spacing: 0.352px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 export const ModalText2 = styled.p`

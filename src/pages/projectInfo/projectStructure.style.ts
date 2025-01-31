@@ -13,6 +13,7 @@ const TextBold = styled.p`
 
 const TextLight = styled.p`
   color: ${({ theme }) => theme.colors.white};
+  margin: 16px 0 10px 0;
   font-family: Pretendard;
   font-size: 11.2px;
   font-style: normal;
@@ -47,6 +48,7 @@ const Box = styled.div<{ height: string }>`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  height: inherit;
 `;
 
 const Title = styled.p`
@@ -65,8 +67,12 @@ const TitleBox = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  ${({ theme }) => theme.align.row_space_between}
+  display: flex;
+  max-width: 250px;
+  margin-right: 24px;
+  overflow-x: scroll;
   gap: 8px;
+  scrollbar-width: none;
 `;
 
 const Wrapper = styled.div<TWrapperProps>`
@@ -84,9 +90,9 @@ const LRBox = styled.div<{ width: string }>`
   padding: 8px;
   position: relative;
   margin-top: 16px;
-  height: 100%;
   width: ${(props) => props.width};
   max-width: 100%;
+  height: inherit;
 `;
 
 const InnerBox = styled.div`
@@ -116,6 +122,7 @@ const AccessRights = styled.div`
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 `;
 const AccessBox = styled.div`
   display: flex;
@@ -124,11 +131,11 @@ const AccessBox = styled.div`
 `;
 export const Scenario = styled.div`
   height: 100%;
+  padding: 1rem;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  padding: 1rem;
-  padding-top: 0;
+  gap: 6.4px;
 `;
 export const ScenarioText = styled.p`
   color: ${({ theme }) => theme.colors.primary.pri_50};
@@ -139,4 +146,9 @@ export const ScenarioText = styled.p`
   line-height: 150%; /* 14.4px */
   letter-spacing: 0.192px;
 `;
+export const ButtonItem = styled.div`
+  flex: 0 0 auto;
+  white-space: nowrap;
+`;
+
 export { AccessBox, AccessRights, Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };

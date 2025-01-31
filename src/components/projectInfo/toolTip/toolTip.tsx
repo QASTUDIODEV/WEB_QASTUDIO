@@ -1,12 +1,17 @@
 import * as S from '@/components/projectInfo/toolTip/toolTip.style';
 
-export default function ToolTip() {
+type TToltipProps = {
+  name: string;
+  description: string;
+  scenario: string[] | undefined;
+};
+export default function ToolTip({ name, description, scenario }: TToltipProps) {
   return (
     <S.Container>
-      <S.Text>역할 이름</S.Text>
-      <S.Text>설명</S.Text>
+      <S.Text>{name}</S.Text>
+      <S.Text>{description}</S.Text>
       <S.Text>/, /page, /roadmap</S.Text>
-      <S.Text>시나리오1, 시나리오2, 시나리오3</S.Text>
+      <S.Text>{scenario?.join(', ')}</S.Text>
     </S.Container>
   );
 }

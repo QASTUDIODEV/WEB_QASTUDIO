@@ -1,3 +1,4 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface IModalState {
@@ -6,7 +7,7 @@ interface IModalState {
   modalProps?: Record<string, any>;
 }
 
-const initialState = {
+const initialState: IModalState = {
   modalType: '',
   isOpen: false,
   modalProps: {},
@@ -16,10 +17,15 @@ export const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, action) => {
-      state.modalType = action.payload;
+    openModal: (state, action: PayloadAction<string | { modalType: string; modalProps?: Record<string, any> }>) => {
+      if (typeof action.payload === 'string') {
+        state.modalType = action.payload;
+        state.modalProps = {};
+      } else {
+        state.modalType = action.payload.modalType;
+        state.modalProps = action.payload.modalProps || {};
+      }
       state.isOpen = true;
-      state.modalProps = action.payload.modalProps || {};
     },
     closeModal: (state) => {
       state.modalType = '';

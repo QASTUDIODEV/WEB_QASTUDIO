@@ -8,59 +8,26 @@ import FileBranch from '@/assets/icons/file_branch.svg?react';
 import Rights from '@/assets/icons/rights.svg?react';
 
 type TProjectStructureProps = {
-  selectedPage: string;
-  setSelectedPage: (page: string) => void;
+  selectedPage: number;
+  setSelectedPage: (page: number) => void;
   onBackToSummary: () => void;
+  pageData:
+    | {
+        pageId: number;
+        pageName: string;
+        pageDescription: string;
+        path: string;
+        hasAccess: string[];
+        deniedAccess: string[];
+        scenarios: string[];
+      }[]
+    | undefined;
 };
 
-function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TProjectStructureProps) {
-  type TData = {
-    page: string[];
-    path: string[];
-    character: string[];
-    accessRights: boolean[][];
-  };
-
-  const initialData: TData = {
-    page: ['홈', '로그인', '로드맵', '마이페이지'],
-    path: ['/', '/login', '/roadmap', '/mypage'],
-    accessRights: [
-      [true, true, false],
-      [true, false, false],
-      [true, false, false],
-      [true, false, false],
-    ],
-    character: ['일반', '관리자', '비로그인'],
-  };
-
-  const data = { ...initialData };
-  const getPageDetails = () => {
-    const pageIndex = data.page.indexOf(selectedPage);
-    if (pageIndex !== -1) {
-      return {
-        path: data.path[pageIndex],
-      };
-    }
-    return null;
-  };
-
-  const pageDetails = getPageDetails();
-  const accessed: string[][] = new Array(data.page.length).fill(null).map(() => []);
-  const notAccessed: string[][] = new Array(data.page.length).fill(null).map(() => []);
-
-  data.accessRights.forEach((access, i) => {
-    access.forEach((isAccessible, j) => {
-      if (isAccessible) {
-        accessed[i].push(data.character[j]);
-      } else {
-        notAccessed[i].push(data.character[j]);
-      }
-    });
-  });
-
+function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, pageData }: TProjectStructureProps) {
   return (
     <S.Box
-      height="64.19117647058824%"
+      height="58%"
       style={{
         cursor: 'pointer',
       }}
@@ -68,75 +35,72 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
       <S.Title>Project structure</S.Title>
       <S.TitleBox>
         <S.Wrap>
-          <S.TextBold>{selectedPage}</S.TextBold>
-          {pageDetails && (
+          <S.TextBold>{pageData && pageData[selectedPage].pageName}</S.TextBold>
+          {pageData && (
             <>
               <Branch />
-              <S.Path>{pageDetails.path}</S.Path>
+              <S.Path>{pageData[selectedPage].path}</S.Path>
             </>
           )}
         </S.Wrap>
         <S.ButtonWrapper>
-          <Button
-            type="small_square"
-            color="white_square"
-            onClick={() => {
-              onBackToSummary();
-            }}
-          >
-            전체
-          </Button>
-          {data.page.map((p, i) => (
+          <S.ButtonItem>
             <Button
               type="small_square"
-              color={selectedPage === p ? 'selected' : 'white_square'}
-              key={i}
+              color="white_square"
               onClick={() => {
-                setSelectedPage(p);
+                onBackToSummary();
               }}
             >
-              {p}
+              전체
             </Button>
+          </S.ButtonItem>
+          {pageData?.map((p, i) => (
+            <S.ButtonItem key={i}>
+              <Button
+                type="small_square"
+                color={selectedPage === i ? 'selected' : 'white_square'}
+                key={p.pageId}
+                onClick={() => {
+                  setSelectedPage(i);
+                }}
+              >
+                {p.pageName}
+              </Button>
+            </S.ButtonItem>
           ))}
         </S.ButtonWrapper>
       </S.TitleBox>
-      {pageDetails && (
-        <S.TextLight>
-          <br />
-          {selectedPage} 페이지 설명
-          <br />
-          (두줄까지 들어갈 수 있습니다.)
-        </S.TextLight>
-      )}
+      {pageData && <S.TextLight>{pageData[selectedPage].pageDescription}</S.TextLight>}
       <S.Wrapper top="16px" right="24px">
         <Plus />
       </S.Wrapper>
       <S.InnerBox>
         <S.LRBox width="41.66666667%">
           <S.Wrap>
-            <Rights />
+            <Rights width={19.2} height={19.2} />
             <S.InnerBoxTitle>Access rights</S.InnerBoxTitle>
           </S.Wrap>
           <S.AccessBox>
-            {accessed[data.page.indexOf(selectedPage)] && (
+            {pageData && pageData[selectedPage].hasAccess && (
               <S.AccessRights>
                 <Button type="small_round" color="green">
                   접근 가능
                 </Button>
-                {accessed[data.page.indexOf(selectedPage)].map((a, index) => (
-                  <Button key={index} type="small_round" color="white_round">
+                {pageData[selectedPage].hasAccess.map((a, i) => (
+                  <Button key={i} type="small_round" color="white_round">
                     {a}
                   </Button>
                 ))}
               </S.AccessRights>
             )}
-            {notAccessed[data.page.indexOf(selectedPage)] && (
+            {pageData && pageData[selectedPage].deniedAccess && (
               <S.AccessRights>
                 <Button type="small_round" color="red">
                   접근 불가능
                 </Button>
-                {notAccessed[data.page.indexOf(selectedPage)].map((a, index) => (
-                  <Button key={index} type="small_round" color="white_round">
+                {pageData[selectedPage].deniedAccess.map((a, i) => (
+                  <Button key={i} type="small_round" color="white_round">
                     {a}
                   </Button>
                 ))}
@@ -146,15 +110,17 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary }: TP
         </S.LRBox>
         <S.LRBox width="56.25%">
           <S.Wrap>
-            <FileBranch />
+            <FileBranch width={19.2} height={19.2} />
             <S.InnerBoxTitle>Scenario</S.InnerBoxTitle>
           </S.Wrap>
           <S.Scenario>
-            <S.ScenarioText>1. 로그인 화면으로 이동한다.</S.ScenarioText>
-            <S.ScenarioText>2. 이메일, 비밀번호를 입력한다...</S.ScenarioText>
-            <S.ScenarioText>3. 시나리오 3</S.ScenarioText>
-            <S.ScenarioText>4. 시나리오 4</S.ScenarioText>
-            <S.ScenarioText>5. 시나리오 5</S.ScenarioText>
+            {pageData &&
+              pageData[selectedPage].scenarios &&
+              pageData[selectedPage].scenarios.map((a, i) => (
+                <S.ScenarioText key={i}>
+                  {i + 1}. {a}
+                </S.ScenarioText>
+              ))}
           </S.Scenario>
         </S.LRBox>
       </S.InnerBox>
