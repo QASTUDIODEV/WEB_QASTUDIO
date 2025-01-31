@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { getScenarioInfo } from '@/apis/scenarioAct/scenarioAct';
+import { getScenarioList } from '@/apis/scenarioAct/scenarioAct';
 
 import { useCoreQuery } from '@/hooks/common/customQuery';
 
@@ -11,10 +11,9 @@ import { setScenarioList } from '@/slices/scenarioActSlice';
 
 export default function useScenarioList(characterId: number | null | undefined) {
   const dispatch = useDispatch();
-  console.log(characterId);
 
   // 시나리오 리스트 가져오기
-  const useGetScenarioList = useCoreQuery([QUERY_KEYS.GET_SCENARIO_LIST, characterId], () => getScenarioInfo({ characterId: characterId! }), {
+  const useGetScenarioList = useCoreQuery([QUERY_KEYS.GET_SCENARIO_LIST, characterId], () => getScenarioList({ characterId: characterId! }), {
     enabled: !!characterId,
   });
 

@@ -73,7 +73,7 @@ const scenarioActSlice = createSlice({
         scenario.isOpen = scenario.scenarioId === action.payload ? !scenario.isOpen : false;
       });
     },
-    //  프로젝트 정보 설정
+    // 프로젝트 정보 설정
     setProjectInfo: (state, action: PayloadAction<{ projectUrl: string | null; projectName: string | null }>) => {
       state.projectUrl = action.payload.projectUrl;
       state.projectName = action.payload.projectName;

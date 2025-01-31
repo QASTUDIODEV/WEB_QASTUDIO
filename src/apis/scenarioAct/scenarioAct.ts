@@ -14,10 +14,10 @@ const getCharacterList = async ({ projectId }: TGetProjectInfoValues): Promise<T
   return data;
 };
 
-const getScenarioInfo = async ({ characterId }: TGetProjectInfoValues): Promise<TGetScenarioInfoResponse> => {
+const getScenarioList = async ({ characterId }: TGetProjectInfoValues): Promise<TGetScenarioInfoResponse> => {
   const { data } = await axiosInstance.get(`/api/v0/scenarios/characters/${characterId}`);
   console.log(data);
   return data;
 };
 
-export { getCharacterList, getProjectInfo, getScenarioInfo };
+export { getCharacterList, getProjectInfo, getScenarioList };

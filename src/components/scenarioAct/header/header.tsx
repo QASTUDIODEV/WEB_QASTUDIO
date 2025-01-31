@@ -6,7 +6,7 @@ export default function Header() {
   const projectUrl = useSelector((state) => state.scenarioAct.projectUrl);
   return (
     <S.Container>
-      <p>{projectUrl}</p>
+      <S.UrlText>{projectUrl}</S.UrlText>
     </S.Container>
   );
 }
