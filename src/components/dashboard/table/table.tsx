@@ -6,8 +6,8 @@ import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel,
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums.ts';
 
-import { useDispatch } from '@/hooks/common/useCustomRedux';
-import useDebounce from '@/hooks/common/useDebounce.ts';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useDebounce from '@/hooks/common/useDebounce';
 import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
@@ -32,6 +32,7 @@ export default function Table() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { projectId } = useParams();
+  const { date } = useSelector((state) => state.calendar);
 
   const [search, setSearch] = useState<string>('');
   const debouncedSearch = useDebounce(search, 500);
@@ -54,9 +55,10 @@ export default function Table() {
     page: pagination.pageIndex,
     state: selectState ?? null,
     testName: debouncedSearch,
+    date: date,
   });
 
-  console.log(selectState, selectedPageName, listData?.result.testList, debouncedSearch);
+  console.log(selectedPageName);
 
   const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
@@ -154,27 +156,13 @@ export default function Table() {
   } else {
     contents = (
       <>
-        <S.Table>
-          <S.TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <S.Th key={header.id}> {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
-                ))}
-              </tr>
+        {table.getRowModel().rows.map((row) => (
+          <S.Tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
             ))}
-          </S.TableHeader>
-
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <S.Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
-                ))}
-              </S.Tr>
-            ))}
-          </tbody>
-        </S.Table>
+          </S.Tr>
+        ))}
       </>
     );
   }
@@ -185,7 +173,20 @@ export default function Table() {
         <SearchBar placeholder={'Search by name'} value={search} onChange={(e) => setSearch(e.target.value)} />
       </S.SearchBox>
       <S.TableContainer>
-        <S.TableWrapper>{contents}</S.TableWrapper>
+        <S.TableWrapper>
+          <S.Table>
+            <S.TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <S.Th key={header.id}> {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
+                  ))}
+                </tr>
+              ))}
+            </S.TableHeader>
+            <tbody>{contents}</tbody>
+          </S.Table>
+        </S.TableWrapper>
 
         <S.PageNumberWrapper>
           <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
