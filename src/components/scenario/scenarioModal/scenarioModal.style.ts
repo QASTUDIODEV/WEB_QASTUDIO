@@ -1,18 +1,26 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const ModalContainer = styled.div`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const description = styled.div`
-  ${({ theme }) => theme.text.medium_24};
+  ${({ theme }) => theme.text.medium_22};
+  font-size: 19.2px;
 `;
 
 export const SubTitle = styled.p`
   ${({ theme }) => theme.text.medium_22};
+  font-size: 17.6px;
   white-space: nowrap;
 `;
 
@@ -25,20 +33,25 @@ export const InputWrapper = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 20px;
+  gap: 16px;
 `;
 
 export const TagContainer = styled.div`
   display: flex;
-  gap: 10px;
-  height: 40px;
+  gap: 8px;
+  height: 30px;
 `;
 
+//step:2
 export const ConfirmModalContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
+  width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const DescriptionContainer = styled.div`
@@ -54,16 +67,18 @@ export const DescriptionItem = styled.div`
 export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_18};
+  font-size: 14.4px;
 `;
 export const ScenarioContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
 `;
 export const MainScenarioWrapper = styled.div`
   display: flex;
-  height: 277px;
-  padding: 20px;
+  height: 222px;
+  padding: 16px;
 
   flex-direction: column;
   align-items: center;
@@ -78,5 +93,6 @@ export const ScenarioDescription = styled.div`
   flex-direction: column;
   gap: 10px;
   color: white;
-  ${({ theme }) => theme.text.medium_22}
+  ${({ theme }) => theme.text.medium_18};
+  font-size: 17.6px;
 `;
