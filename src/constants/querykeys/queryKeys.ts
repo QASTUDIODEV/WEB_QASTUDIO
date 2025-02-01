@@ -31,4 +31,5 @@ export const QUERY_KEYS = {
   GET_PROJECT_INFO: ['getProjectInfo'],
   GET_SUMMARY_PROJECT_INFO: (projectId: string) => ['getSummaryProjectInfo', projectId],
   GET_CHARACTER_LIST: ({ currentPage, projectId }: TGetCharacterListValue) => ['getCharacterList', currentPage, projectId],
+  GET_ALL_PATHS: (projectId: string) => ['getAllPaths', projectId],
 };

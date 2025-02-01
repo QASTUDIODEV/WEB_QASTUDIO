@@ -8,14 +8,22 @@ export const formatRelativeTime = (dateString: string): string => {
   const diffHours = Math.floor(diffMin / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffSec < 60) return 'a few seconds ago';
-  if (diffMin < 60) return `${diffMin} minutes ago`;
-  if (diffHours < 24) return `${diffHours} hours ago`;
-  if (diffDays < 3) return `${diffDays} days ago`;
+  if (diffSec < 60) return 'seconds ago';
+  if (diffMin < 60) return 'mins ago';
+  if (diffHours < 24) return 'hours ago';
+  if (diffDays < 7) return 'days ago';
 
-  return targetDate.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const diffWeeks = Math.floor(diffDays / 7);
+  if (diffWeeks < 4) return `${diffWeeks} weeks ago`;
+
+  const targetYear = targetDate.getFullYear();
+  const targetMonth = targetDate.getMonth();
+  const nowYear = now.getFullYear();
+  const nowMonth = now.getMonth();
+
+  const diffMonths = (nowYear - targetYear) * 12 + (nowMonth - targetMonth);
+  if (diffMonths < 12) return `${diffMonths} months ago`;
+
+  const diffYears = nowYear - targetYear;
+  return `${diffYears} years ago`;
 };

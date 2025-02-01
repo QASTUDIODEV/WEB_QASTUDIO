@@ -23,6 +23,16 @@ type TScenarioList = {
   updatedAt: string;
 };
 
+type TPageSummaryList = {
+  pageId: number;
+  pageName: string;
+  pageDescription: string;
+  path: string;
+  hasAccess: string[];
+  deniedAccess: string[];
+  scenarios: string[];
+};
+
 export type TGetCharacterListValue = {
   projectId: string;
   currentPage: number;
@@ -38,11 +48,42 @@ export type TGetSummaryProjectInfoResponse = TCommonResponse<{
   developmentSkill: STACK;
   assistantId: string;
 }>;
+
 export type TGetCharacterListResponse = TCommonResponse<{
   detailCharacters: TDetailCharacters[];
   isLast: boolean;
   isFirst: boolean;
 }>;
+
 export type TGetCharacterScenarioListResponse = TCommonResponse<{
   scenarioList: TScenarioList[];
+}>;
+
+export type TRequestPostCharacterScenarioValue = {
+  projectId: number;
+  characterName: string;
+  characterDescription: string;
+  accessPage: string[];
+};
+
+export type TRequestPatchCharacterScenarioValue = {
+  projectId: number;
+  characterId: number;
+  scenarioId: number;
+  characterName: string;
+  characterDescription: string;
+  accessPage: string[];
+};
+
+export type TRequestCharacterScenarioResponse = TCommonResponse<{
+  characterId: number;
+  characterName: string;
+  characterDescription: string;
+  accessPage: string[];
+  scenarioId: number;
+  scenarioDescription: string;
+}>;
+
+export type TResponseProjectPages = TCommonResponse<{
+  pageSummaryList: TPageSummaryList[];
 }>;
