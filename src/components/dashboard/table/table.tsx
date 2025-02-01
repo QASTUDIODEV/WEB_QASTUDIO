@@ -152,7 +152,7 @@ export default function Table() {
   let contents;
 
   if (isEmpty) {
-    contents = <S.Wrapper>No content</S.Wrapper>;
+    contents = <S.Wrapper />;
   } else {
     contents = (
       <>
