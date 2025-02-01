@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
+import AuthModal from '@/components/auth/authModal/authModal';
 import ErrorModal from '@/components/dashboard/errorModal/errorModal';
 import CharacterModal from '@/components/projectInfo/characterModal/characterModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
@@ -14,6 +15,7 @@ export const MODAL_TYPES = {
   InviteModal: 'InviteModal',
   CreatePageModal: 'CreatePageModal',
   CharacterModal: 'CharacterModal',
+  AuthModal: 'AuthModal',
 };
 
 export const MODAL_COMPONENTS = {
@@ -21,6 +23,7 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.InviteModal]: InviteModal,
   [MODAL_TYPES.CreatePageModal]: CreatePageModal,
   [MODAL_TYPES.CharacterModal]: CharacterModal,
+  [MODAL_TYPES.AuthModal]: AuthModal,
 };
 
 export default function ModalProvider() {
