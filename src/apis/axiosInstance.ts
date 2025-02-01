@@ -49,9 +49,13 @@ axiosInstance.interceptors.response.use(
 
             logout();
           } else {
-            console.log('알 수 없는 오류가 발생했습니다', refreshError);
-            store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
-            logout();
+            if (refreshError.response?.data.message === 'Incorrect password.') {
+              alert('Your email or password is incorrect.');
+            } else {
+              console.log('알 수 없는 오류가 발생했습니다', errors);
+              store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
+              logout();
+            }
           }
         } else {
           console.log('알 수 없는 오류가 발생했습니다', errors);
