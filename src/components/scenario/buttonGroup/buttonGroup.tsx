@@ -50,10 +50,12 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
       dispatch(resetChecks());
       setHasCheckedItems(true);
       if (selectedScenarioId) {
-        useDeleteSceanrio;
+        const { data: deleteScenarioData } = useDeleteSceanrio;
+        console.log(deleteScenarioData);
       }
       if (selectedCharacterId) {
-        useDeleteCharacter;
+        const { data: deleteCharacterData } = useDeleteCharacter;
+        console.log(deleteCharacterData);
       }
     }
   };
