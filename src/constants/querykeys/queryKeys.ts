@@ -32,4 +32,6 @@ export const QUERY_KEYS = {
   GET_SUMMARY_PROJECT_INFO: (projectId: string) => ['getSummaryProjectInfo', projectId],
   GET_CHARACTER_LIST: ({ currentPage, projectId }: TGetCharacterListValue) => ['getCharacterList', currentPage, projectId],
   GET_ALL_PATHS: (projectId: string) => ['getAllPaths', projectId],
+  DELETE_SCEANRIO: ['deleteSceanario'],
+  DELETE_CHARACTER: ['deleteCharacter'],
 };

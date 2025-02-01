@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
+import useEditScenario from '@/hooks/scenario/useEditScenario';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenario/buttonGroup/buttonGroup.style';
@@ -16,17 +17,28 @@ import Play from '@/assets/icons/play.svg?react';
 import { openModal } from '@/slices/modalSlice.ts';
 import { edit, resetChecks } from '@/slices/scenarioSlice';
 
-export default function ButtonGroup() {
+type TScenarioProps = {
+  projectId: string;
+};
+export default function ButtonGroup({ projectId }: TScenarioProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isEdit, characters } = useSelector((state) => state.scenario);
-
-  // 체크 여부 판단
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number[]>();
+  const [selectedScenarioId, setSelectedScenarioId] = useState<number[]>();
+  const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario({ scenarioId: selectedScenarioId || [], characterId: selectedCharacterId || [] });
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
 
-  // 선택된 역할 || 시나리오
-  const selectedCharacter = characters.find((character) => character.isSelected);
-  const selectedScenario = characters.flatMap((character) => character.scenarios).find((scenario) => scenario.isSelected);
+  useEffect(() => {
+    console.log(characters);
+    setSelectedCharacterId(characters.filter((character) => character.isChecked).map((character) => character.id));
+    setSelectedScenarioId(
+      characters
+        .flatMap((character) => character.scenarios)
+        .filter((scenario) => scenario.isChecked)
+        .map((scenario) => scenario.id),
+    );
+  }, [characters]);
 
   // Delete 버튼 클릭 함수
   const handleDeleteClick = (): void => {
@@ -37,6 +49,12 @@ export default function ButtonGroup() {
       dispatch(edit());
       dispatch(resetChecks());
       setHasCheckedItems(true);
+      if (selectedScenarioId) {
+        useDeleteSceanrio;
+      }
+      if (selectedCharacterId) {
+        useDeleteCharacter;
+      }
     }
   };
 
@@ -56,12 +74,7 @@ export default function ButtonGroup() {
 
   // Play 버튼 클릭 함수
   const handlePlayClick = (): void => {
-    navigate(`/scenarioAct/101`, {
-      state: {
-        characterId: selectedCharacter?.id || null,
-        scenarioId: selectedScenario?.id || null,
-      },
-    });
+    navigate(`/scenarioAct/${projectId}`);
   };
 
   // + Character 버튼 클릭 함수

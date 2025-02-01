@@ -35,7 +35,10 @@ const scenarioReducer = createSlice({
   initialState,
   reducers: {
     newCharacter: (state, action) => {
-      state.characters.push(action.payload);
+      state.characters = [...state.characters, action.payload];
+    },
+    resetCharacters: (state) => {
+      state.characters = []; // characters 배열 초기화
     },
     // 편집 상태
     edit: (state) => {
@@ -126,5 +129,6 @@ const scenarioReducer = createSlice({
   },
 });
 
-export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = scenarioReducer.actions;
+export const { edit, toggleAll, resetCharacters, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } =
+  scenarioReducer.actions;
 export default scenarioReducer.reducer;

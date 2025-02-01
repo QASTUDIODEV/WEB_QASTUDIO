@@ -13,7 +13,7 @@ import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import * as S from '@/pages/scenario/scenario.style';
-import { newCharacter } from '@/slices/scenarioSlice';
+import { newCharacter, resetCharacters } from '@/slices/scenarioSlice';
 
 export default function ScenarioPage() {
   const { projectId } = useParams();
@@ -24,23 +24,30 @@ export default function ScenarioPage() {
   const { data: ProjectSummaryData } = useGetProjectSummary;
   const { data: CharacterListData } = useGetCharacterList;
   const CharacterData = CharacterListData?.result.detailCharacters;
+  const characters = useSelector((state) => state.scenario.characters);
 
   useEffect(() => {
-    CharacterData?.map((character) => {
-      const characterData = {
-        title: character.characterName,
-        isChecked: false,
-        isSelected: false,
-        createdBy: character.author,
-        isExpanded: false,
-        scenarios: character.scenarioList,
-        id: character.characterId,
-        name: character.characterName,
-        createdAt: character.createdAt,
-      };
-      dispatch(newCharacter(characterData));
-    });
-  }, [CharacterData]);
+    dispatch(resetCharacters());
+    if (CharacterData) {
+      CharacterData?.forEach((character) => {
+        const exists = characters.some((char) => char.id === character.characterId);
+        if (!exists) {
+          const characterData = {
+            title: character.characterName,
+            isChecked: false,
+            isSelected: false,
+            createdBy: character.author,
+            isExpanded: false,
+            scenarios: character.scenarioList,
+            id: character.characterId,
+            name: character.characterName,
+            createdAt: character.createdAt,
+          };
+          dispatch(newCharacter(characterData));
+        }
+      });
+    }
+  }, [CharacterData, currentPage, dispatch]);
 
   const goToNextPage = () => {
     if (!CharacterListData?.result.isLast) {
@@ -67,7 +74,7 @@ export default function ScenarioPage() {
           />
         </S.Header>
 
-        <ButtonGroup />
+        <ButtonGroup projectId={projectId || ''} />
 
         <S.CharactersContainer>
           <CharacterList />

@@ -52,33 +52,33 @@ const patchCharacterScenario = async ({
   return data;
 };
 
-const GetProjectPage = async (projectId: string): Promise<TResponseProjectPages> => {
+const getProjectPage = async (projectId: string): Promise<TResponseProjectPages> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/pages`);
   return data;
 };
 
-const DeleteScenario = async () => {
-  const { data } = await axiosInstance.delete(`/api/v0/scenarios`);
+const deleteScenario = async (scenarioId: number[]) => {
+  const { data } = await axiosInstance.delete(`/api/v0/scenarios`, { data: { scenarioId } });
   return data;
 };
 
-const DeleteCharacter = async () => {
-  const { data } = await axiosInstance.get(`/api/v0/projects/characters`);
+const deleteCharacter = async (characterId: number[]) => {
+  const { data } = await axiosInstance.delete(`/api/v0/projects/characters`, { data: { characterId } });
   return data;
 };
 
-const GetAllPaths = async (projectId: string) => {
+const getAllPaths = async (projectId: string) => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/paths`);
   return data;
 };
 
 export {
-  DeleteCharacter,
-  DeleteScenario,
-  GetAllPaths,
+  deleteCharacter,
+  deleteScenario,
+  getAllPaths,
   getCharacterList,
   getCharacterScenarioList,
-  GetProjectPage,
+  getProjectPage,
   getSummaryProjectInfo,
   patchCharacterScenario,
   postCharacterScenario,
