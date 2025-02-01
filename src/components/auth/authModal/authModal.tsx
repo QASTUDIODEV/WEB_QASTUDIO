@@ -14,9 +14,6 @@ export default function AuthModal({ onClose }: TAuthModalProps) {
     <Modal title={'Login is required'} onClose={onClose} isExitButtonVisible={false}>
       <S.Container>Do you want me to go to login?</S.Container>
       <S.ButtonBox>
-        <Button color={'white_square'} onClick={() => navigate('/')}>
-          No
-        </Button>
         <Button color={'blue'} onClick={() => navigate('/')}>
           Yes
         </Button>

@@ -5,8 +5,9 @@ const Container = styled.div`
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  max-width: 950px;
+  max-width: 1000px;
   margin-top: 15px;
+  color: ${({ theme }) => theme.colors.gray.gray_300};
 `;
 
 const ButtonBox = styled.div`
