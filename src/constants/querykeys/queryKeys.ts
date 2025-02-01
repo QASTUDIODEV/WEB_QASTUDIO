@@ -1,4 +1,5 @@
 import type { TCharacterId, TProjectInfo } from '@/types/projectInfo/projectInfo';
+import type { TGetCharacterListValue } from '@/types/scenario/scenario';
 import type { TRequestTeamMember } from '@/types/sidebar/sidebar';
 import type { TGetTestListRequest } from '@/types/test/test';
 
@@ -28,4 +29,6 @@ export const QUERY_KEYS = {
     },
   },
   GET_PROJECT_INFO: ['getProjectInfo'],
+  GET_SUMMARY_PROJECT_INFO: (projectId: string) => ['getSummaryProjectInfo', projectId],
+  GET_CHARACTER_LIST: ({ currentPage, projectId }: TGetCharacterListValue) => ['getCharacterList', currentPage, projectId],
 };

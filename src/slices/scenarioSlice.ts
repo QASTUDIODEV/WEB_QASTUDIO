@@ -27,37 +27,16 @@ interface IScenarioSlice {
 
 const initialState: IScenarioSlice = {
   isEdit: false,
-  characters: [
-    {
-      id: 1,
-      title: '역할asdfasdfsdfasdfasdfadsasdfasdfasdfasfsadfsad 1',
-      isChecked: false,
-      isSelected: false,
-      createdBy: 'User 1',
-      createdAt: '8 hours ago',
-      isExpanded: false,
-      scenarios: [
-        { id: 1, name: 'Scenario 1', createdBy: 'User 1', createdAt: 'a few seconds ago', isChecked: false, isSelected: false },
-        { id: 2, name: 'Scenario 2', createdBy: 'User 2', createdAt: 'a minute ago', isChecked: false, isSelected: false },
-      ],
-    },
-    {
-      id: 2,
-      title: '역할 2',
-      isChecked: false,
-      isSelected: false,
-      createdBy: 'User 3',
-      createdAt: '18 hours ago',
-      isExpanded: false,
-      scenarios: [{ id: 3, name: 'Scenario 3', createdBy: 'User 3', createdAt: 'a few seconds ago', isChecked: false, isSelected: false }],
-    },
-  ],
+  characters: [],
 };
 
 const scenarioReducer = createSlice({
   name: 'scenario',
   initialState,
   reducers: {
+    newCharacter: (state, action) => {
+      state.characters.push(action.payload);
+    },
     // 편집 상태
     edit: (state) => {
       state.isEdit = !state.isEdit;
@@ -147,5 +126,5 @@ const scenarioReducer = createSlice({
   },
 });
 
-export const { edit, toggleAll, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = scenarioReducer.actions;
+export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } = scenarioReducer.actions;
 export default scenarioReducer.reducer;

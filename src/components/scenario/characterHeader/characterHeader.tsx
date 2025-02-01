@@ -1,3 +1,5 @@
+import { formatRelativeTime } from '@/utils/transformDate';
+
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import * as S from '@/components/scenario/characterHeader/characterHeader.style';
@@ -58,7 +60,7 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
             </S.Creater>
             <S.Elapsed>
               <Calender />
-              <p>{character.createdAt}</p>
+              <p>{formatRelativeTime(character.createdAt)}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
@@ -81,7 +83,7 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
             </S.Creater>
             <S.Elapsed>
               <Calender />
-              <p>{character.createdAt}</p>
+              <p>{formatRelativeTime(character.createdAt)}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>
