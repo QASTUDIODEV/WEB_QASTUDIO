@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 
+import { media } from '@/styles/media';
+
 export const ModalContainer = styled.div`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const description = styled.div`
@@ -42,6 +48,10 @@ export const ConfirmModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const DescriptionContainer = styled.div`
@@ -63,6 +73,7 @@ export const ScenarioContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 `;
 export const MainScenarioWrapper = styled.div`
   display: flex;
