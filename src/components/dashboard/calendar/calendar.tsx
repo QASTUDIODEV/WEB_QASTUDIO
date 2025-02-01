@@ -46,7 +46,7 @@ export default function Calendar() {
         <S.DayWrapper>
           {getDayList(selectedYearAndMonth.year, selectedYearAndMonth.month).map((e) => (
             <S.Day
-              onClick={() => handleDayClick(e)}
+              onClick={() => dispatch(handleDayClick(e))}
               key={e}
               $isSelected={e === selectedTimestamp}
               $isCurrentMonth={isCurrentMonth(e, selectedYearAndMonth.month)}

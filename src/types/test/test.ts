@@ -18,7 +18,7 @@ export type TTestListDTO = {
 export type TGetTestListRequest = {
   projectId: number;
   page?: number;
-  date?: Date;
+  date?: string;
   pageName?: string;
   state?: TEST_STATE | null;
   testName?: string;

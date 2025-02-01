@@ -20,14 +20,10 @@ const TableWrapper = styled.div`
   gap: 15px;
 `;
 
-const SearchBox = styled.div`
-  width: 190px;
-`;
-
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5%;
 `;
 
-export { Container, ContentWrapper, SearchBox, TableWrapper };
+export { Container, ContentWrapper, TableWrapper };
