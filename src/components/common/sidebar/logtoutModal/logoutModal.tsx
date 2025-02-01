@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
+import { logout } from '@/apis/auth/auth';
 
 import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/logtoutModal/logoutModal.style';
-
-import { logout } from '@/slices/authSlice';
 
 type TLogoutModalProps = {
   onClose: () => void; // 모달 닫기 함수
@@ -13,10 +12,10 @@ type TLogoutModalProps = {
 
 export default function LogoutModal({ onClose }: TLogoutModalProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const handleLogout = () => {
-    dispatch(logout());
     navigate('/', { replace: true });
+    logout();
     onClose();
   };
   return (

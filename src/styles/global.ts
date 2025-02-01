@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
 
     html, body {
         height: 100%;
+        overflow-x: hidden;
     }
 
     body {

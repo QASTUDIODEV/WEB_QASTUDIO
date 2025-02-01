@@ -39,6 +39,7 @@ const buttonTypes = {
     font-weight: 500;
     line-height: 150%; /* 14.4px */
     letter-spacing: 0.192px;
+    border-radius: 3.2px;
   `,
   tag: css`
     padding: 6.4px 9.6px;

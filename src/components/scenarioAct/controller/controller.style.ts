@@ -7,7 +7,7 @@ export const Container = styled.div`
   ${({ theme }) => theme.text.medium_20};
   min-width: 500px;
 `;
-//시나리오 실행
+
 export const ActContainer = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.primary.pri_900};
@@ -18,28 +18,31 @@ export const ActContainer = styled.div`
 `;
 
 export const Header = styled.div`
-  padding: 20px 30px;
+  padding: 16px 24px;
   align-items: center;
   display: flex;
   justify-content: space-between;
   ${({ theme }) => theme.text.bold_24};
-  border-bottom: 1px solid rgba(217, 230, 255, 0.1);
+  font-size: 19.2px;
+  border-bottom: 0.8px solid rgba(217, 230, 255, 0.1);
 `;
 export const CharacterHeader = styled.div`
-  padding: 10px 30px;
+  padding: 8px 24px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   ${({ theme }) => theme.text.medium_24};
+  font-size: 19.2px;
 `;
 
 export const ButtonContainer = styled.div`
   position: absolute;
-  bottom: 31px;
-  right: 30px;
+  bottom: 24px;
+  right: 24px;
 `;
 export const DropdownContainer = styled.div`
-  width: 160px;
-  height: 47px;
+  width: 128px;
+  height: 38px;
 `;
 export const ScenarioLIst = styled.div`
   display: flex;
@@ -48,3 +51,13 @@ export const ScenarioLIst = styled.div`
 
 // 시나리오 추가
 export const AddContainer = styled.div``;
+export const IconContainer = styled.div`
+  width: 19.2px;
+  height: 19.2px;
+  display: flex;
+  align-items: center;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;

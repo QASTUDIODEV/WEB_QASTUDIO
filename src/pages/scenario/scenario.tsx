@@ -29,9 +29,13 @@ export default function ScenarioPage() {
       </S.Container>
 
       <S.Pagination>
-        <ArrowLeft />
+        <S.IconContainer>
+          <ArrowLeft />
+        </S.IconContainer>
         <S.PageNumber>1</S.PageNumber>
-        <ArrowRight />
+        <S.IconContainer>
+          <ArrowRight />
+        </S.IconContainer>
       </S.Pagination>
     </S.Background>
   );

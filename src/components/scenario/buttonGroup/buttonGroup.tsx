@@ -56,8 +56,7 @@ export default function ButtonGroup() {
 
   // Play 버튼 클릭 함수
   const handlePlayClick = (): void => {
-    console.log(selectedCharacter?.id, selectedScenario?.id);
-    navigate(`/scenarioAct/123`, {
+    navigate(`/scenarioAct/101`, {
       state: {
         characterId: selectedCharacter?.id || null,
         scenarioId: selectedScenario?.id || null,
@@ -76,7 +75,9 @@ export default function ButtonGroup() {
       {isEdit ? (
         <S.EditButtonGroup>
           <S.AllCheckBoxGroup>
-            <CheckBox isAllCheckBox={true} />
+            <S.IconContainer>
+              <CheckBox isAllCheckBox={true} />
+            </S.IconContainer>
             <p>ALL</p>
             {!hasCheckedItems && (
               <S.ErrorMessage>

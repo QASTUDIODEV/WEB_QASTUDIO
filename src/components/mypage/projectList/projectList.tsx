@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
@@ -12,20 +12,13 @@ import * as S from './projectList.style';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-type TProjectListProps = {
-  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
-};
-export default function ProjectList({ setProjectNum }: TProjectListProps) {
+export default function ProjectList() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const { useGetMypageProjects } = useProjects(currentPage);
   const { data } = useGetMypageProjects;
 
   const projectsData = data?.result.userProjectList;
-
-  useEffect(() => {
-    setProjectNum(data?.result.totalElements || 0);
-  }, [data]);
 
   const goToNextPage = () => {
     if (!data?.result.isLast) {

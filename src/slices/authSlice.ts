@@ -12,16 +12,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
-      state.isSignup = false;
-    },
     isNowSignup: (state: TAuthState, action) => {
       state.isSignup = action.payload.isSignup;
     },
   },
 });
 
-export const { logout, isNowSignup } = authSlice.actions;
+export const { isNowSignup } = authSlice.actions;
 export const selectAuth = (state: { auth: TAuthState }) => state.auth;
 
 const authReducer = authSlice.reducer;

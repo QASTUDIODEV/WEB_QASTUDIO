@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 
 import useDebounce from '@/hooks/common/useDebounce';
+import useInviteMember from '@/hooks/projectInfo/useInviteMember';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
@@ -42,21 +44,23 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
   const debouncedEmail = useDebounce(emailValue, 800);
   const { useGetTeamMember } = useTeamMember({ projectId, email: debouncedEmail });
   const { useGetMemberEmail } = useProjectInfo({ projectId });
+  const { useInvite } = useInviteMember();
 
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
 
   const { data: memberEmail } = useGetMemberEmail;
   const { data } = useGetTeamMember;
-
+  const { mutate: inviteMember } = useInvite;
   const [memberEmails, setMemberEmails] = useState<TEmailList>([]);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (memberEmail?.result?.userEmails) {
       setMemberEmails(memberEmail.result.userEmails);
     }
   }, [memberEmail]);
-
   const members = memberEmails.map((a) => a.email);
 
   useEffect(() => {
@@ -71,7 +75,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     } else {
       setIsEmailValid(false);
     }
-  }, [data, debouncedEmail]);
+  }, [data, debouncedEmail, emails]);
   const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
 
   const handleAddEmail = () => {
@@ -79,7 +83,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
 
     const isDuplicate =
       emails.includes(debouncedEmail) || // 이미 추가된 이메일
-      members.includes(debouncedEmail); // 이미 프로젝트에 존재하는 이메일
+      members.includes(debouncedEmail);
 
     if (isDuplicate) return;
 
@@ -91,14 +95,24 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     setEmails((prev) => [...prev, debouncedEmail]);
     setValue('email', '');
   };
-
-  const handleRemoveEmail = (emailToRemove: string) => {
-    setEmails(emails.filter((email) => email !== emailToRemove));
+  const handleRemoveEmail = (remove: string) => {
+    setMemberEmailList((prev) => prev.filter((email) => email.email !== remove));
+    setEmails((prev) => prev.filter((email) => email !== remove));
   };
-
   const handleCreate = () => {
-    setEmails([]);
-    onClose();
+    inviteMember(
+      {
+        projectId: projectId,
+        memberEmailList: memberEmailList,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectMember'] });
+          setEmails([]);
+          onClose();
+        },
+      },
+    );
   };
 
   return (

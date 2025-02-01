@@ -6,14 +6,16 @@ import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel,
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums.ts';
 
-import { useDispatch } from '@/hooks/common/useCustomRedux';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useDebounce from '@/hooks/common/useDebounce';
 import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
+import SearchBar from '@/components/common/searchBar/searchBar';
 import Calendar from '@/components/dashboard/calendar/calendar';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
-import PageNameHeader from '@/components/dashboard/table/pageNameHeader.tsx';
-import StateHeader from '@/components/dashboard/table/stateHeader.tsx';
+import PageNameHeader from '@/components/dashboard/table/pageNameHeader';
+import StateHeader from '@/components/dashboard/table/stateHeader';
 import * as S from '@/components/dashboard/table/table.style';
 
 import DownArrow from '@/assets/icons/arrow_down.svg?react';
@@ -28,6 +30,13 @@ const columnHelper = createColumnHelper<TTestListDTO>();
 
 export default function Table() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { projectId } = useParams();
+  const { date } = useSelector((state) => state.calendar);
+
+  const [search, setSearch] = useState<string>('');
+  const debouncedSearch = useDebounce(search, 500);
+
   const [isClicked, setIsClicked] = useState({
     state: false,
     date: false,
@@ -36,24 +45,26 @@ export default function Table() {
   const [selectedPageName, setSelectedPageName] = useState<string | null>(null);
   const [selectState, setSelectState] = useState<TEST_STATE | null>(null);
 
-  const dispatch = useDispatch();
-  const { projectId } = useParams();
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 6,
   });
 
-  const { data: listData } = usePaginateTestList({ projectId: Number(projectId), page: pagination.pageIndex, state: selectState ?? null });
+  const { data: listData } = usePaginateTestList({
+    projectId: Number(projectId),
+    page: pagination.pageIndex,
+    state: selectState ?? null,
+    testName: debouncedSearch,
+    date: date,
+  });
 
-  console.log(selectState, selectedPageName);
+  console.log(selectedPageName);
 
-  const handleModal = (state: boolean) => {
+  const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
-      // 성공의 경우 경로 수정
-      navigate('/project/scenario/1');
+      navigate(`/scenarioAct/${projectId}`);
     } else {
-      dispatch(openModal(MODAL_TYPES.ErrorModal));
+      dispatch(openModal({ modalType: MODAL_TYPES.ErrorModal, modalProps: { testId: testId } }));
     }
   };
 
@@ -113,7 +124,10 @@ export default function Table() {
       id: 'action',
       header: 'Action',
       cell: (info) => (
-        <S.Action $isSuccess={info.row.original.state === TEST_STATE.SUCCESS} onClick={() => handleModal(info.row.original.state === TEST_STATE.SUCCESS)}>
+        <S.Action
+          $isSuccess={info.row.original.state === TEST_STATE.SUCCESS}
+          onClick={() => handleModal({ state: info.row.original.state === TEST_STATE.SUCCESS, testId: info.row.original.testId })}
+        >
           <p>{info.row.original.state === TEST_STATE.SUCCESS ? 'Run Scenario' : 'Check the error'}</p>
           {info.row.original.state === TEST_STATE.SUCCESS ? <GreenArrow /> : <RedArrow />}
         </S.Action>
@@ -134,53 +148,67 @@ export default function Table() {
     manualSorting: true,
   });
 
-  return (
-    <S.TableContainer>
-      <S.TableWrapper>
-        <S.Table>
-          <S.TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <S.Th key={header.id}> {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
-                ))}
-              </tr>
-            ))}
-          </S.TableHeader>
+  const isEmpty = listData?.result.totalElements === 0;
+  let contents;
 
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <S.Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
-                ))}
-              </S.Tr>
+  if (isEmpty) {
+    contents = <S.Wrapper />;
+  } else {
+    contents = (
+      <>
+        {table.getRowModel().rows.map((row) => (
+          <S.Tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <S.Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</S.Td>
             ))}
-          </tbody>
-        </S.Table>
-      </S.TableWrapper>
-
-      <S.PageNumberWrapper>
-        <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
-          <PreArrow />
-        </S.ArrowBox>
-        {table.getPageOptions().map((page) => (
-          <S.PageBtnBox
-            key={page}
-            onClick={() => {
-              console.log('Clicked page:', page);
-              table.setPageIndex(page);
-            }}
-            $cur={page === pagination.pageIndex}
-          >
-            {page + 1}
-          </S.PageBtnBox>
+          </S.Tr>
         ))}
+      </>
+    );
+  }
 
-        <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
-          <NextArrow />
-        </S.ArrowBox>
-      </S.PageNumberWrapper>
-    </S.TableContainer>
+  return (
+    <>
+      <S.SearchBox>
+        <SearchBar placeholder={'Search by name'} value={search} onChange={(e) => setSearch(e.target.value)} />
+      </S.SearchBox>
+      <S.TableContainer>
+        <S.TableWrapper>
+          <S.Table>
+            <S.TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <S.Th key={header.id}> {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</S.Th>
+                  ))}
+                </tr>
+              ))}
+            </S.TableHeader>
+            <tbody>{contents}</tbody>
+          </S.Table>
+        </S.TableWrapper>
+
+        <S.PageNumberWrapper>
+          <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
+            <PreArrow />
+          </S.ArrowBox>
+          {(table.getPageOptions().length ? table.getPageOptions() : [0]).map((page) => (
+            <S.PageBtnBox
+              key={page}
+              onClick={() => {
+                table.setPageIndex(page);
+              }}
+              $cur={page === pagination.pageIndex}
+            >
+              {page + 1}
+            </S.PageBtnBox>
+          ))}
+
+          <S.ArrowBox disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
+            <NextArrow />
+          </S.ArrowBox>
+        </S.PageNumberWrapper>
+      </S.TableContainer>
+    </>
   );
 }

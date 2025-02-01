@@ -52,31 +52,37 @@ const MessageWrapper2 = styled.div`
 
 const NormalInputWrapper = styled.input`
   ${({ theme }) => theme.text.medium_20};
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  height: 64px;
+  height: 51.2px;
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(153, 153, 153, 0.5);
+  padding: 12.8px 16px;
+  border-radius: 3.2px;
+  border: 0.8px solid rgba(153, 153, 153, 0.5);
   background-color: inherit;
   box-sizing: border-box;
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray.gray_300};
+    ${({ theme }) => theme.text.medium_18};
+    font-size: 16px;
   }
 `;
 
 const ThinInputWrapper = styled.input`
   ${({ theme }) => theme.text.medium_20};
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  height: 50px;
+  height: 100%;
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.primary.pri_50};
+  padding: 8px;
+  border-radius: 6.4px;
+  border: 0.8px solid ${({ theme }) => theme.colors.primary.pri_50};
   background-color: inherit;
   box-sizing: border-box;
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray.gray_300};
+    ${({ theme }) => theme.text.medium_18};
+    font-size: 16px;
   }
 `;
 

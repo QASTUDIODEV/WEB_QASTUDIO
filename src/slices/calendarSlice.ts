@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { toDate } from 'date-fns-tz';
+import { format, toDate } from 'date-fns-tz';
 
 interface IYearAndMonth {
   year: number;
@@ -50,10 +50,12 @@ const calendarSlice = createSlice({
 
     handleDayClick: (state: ICalendarState, action: PayloadAction<number>) => {
       const selectedDate = toDate(action.payload, { timeZone: 'Asia/Seoul' });
+
       state.selectedTimestamp = action.payload;
       state.selectedYearAndMonth.year = selectedDate.getFullYear();
       state.selectedYearAndMonth.month = selectedDate.getMonth();
-      state.date = new Date(selectedDate).toISOString();
+
+      state.date = format(selectedDate, 'yyyy-MM-dd', { timeZone: 'Asia/Seoul' });
     },
   },
 });
