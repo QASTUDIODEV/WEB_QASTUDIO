@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
@@ -7,6 +8,11 @@ import { logout, refresh } from './auth/auth';
 import { openModal } from '@/slices/modalSlice';
 import store from '@/store/store';
 
+interface IRefreshResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+}
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
@@ -29,15 +35,31 @@ axiosInstance.interceptors.response.use(
         if (refreshResponse.code === 200) {
           console.log('refreshToken이 재발급 되었습니다');
           isRedirecting = false;
+
           return axiosInstance(error.config);
-        } else {
-          throw new Error('Refresh failed');
         }
-      } catch (refreshError) {
-        store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
-        console.log('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.', refreshError);
-        logout();
-        return Promise.reject(refreshError);
+      } catch (errors) {
+        if (axios.isAxiosError(errors)) {
+          const refreshError = error as AxiosError<IRefreshResponse>;
+          if (refreshError.response?.data.message === 'The token is null.') {
+            store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
+          } else if (refreshError.response?.data.message === 'The token is invalid.') {
+            console.log('refreshToken이 만료되었거나 없습니다. 로그인 페이지로 이동합니다.', refreshError);
+            store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
+
+            logout();
+          } else {
+            console.log('알 수 없는 오류가 발생했습니다', refreshError);
+            store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
+            logout();
+          }
+        } else {
+          console.log('알 수 없는 오류가 발생했습니다', errors);
+          store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
+          logout();
+        }
+
+        return Promise.reject(errors);
       }
     }
 
