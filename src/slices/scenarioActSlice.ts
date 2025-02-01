@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
+//import type { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
 interface IAction {
   actionId: number;

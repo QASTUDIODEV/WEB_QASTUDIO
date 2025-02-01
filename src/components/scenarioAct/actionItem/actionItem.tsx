@@ -11,9 +11,9 @@ import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
 import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
 import ArrowRight from '@/assets/icons/arrow_right_red.svg?react';
-import CheckCircle from '@/assets/icons/check_circle.svg?react';
+//import CheckCircle from '@/assets/icons/check_circle.svg?react';
 import Click from '@/assets/icons/click.svg?react';
-import FailCircle from '@/assets/icons/fail_circle.svg?react';
+//import FailCircle from '@/assets/icons/fail_circle.svg?react';
 import Globe from '@/assets/icons/globe.svg?react';
 import UnderError from '@/assets/icons/under_error.svg?react';
 import UnderSuccess from '@/assets/icons/under_success.svg?react';
@@ -25,11 +25,11 @@ interface IActionItem {
 }
 
 // 상태 아이콘 매핑
-const stateIconMap = {
+/* const stateIconMap = {
   [ACTION_STATE.SUCCESS]: CheckCircle,
   [ACTION_STATE.ERROR]: FailCircle,
   [ACTION_STATE.UNVERIFIED]: null,
-};
+}; */
 // 액션 아이콘 매핑
 const actionIconMap = {
   [ACTION_TYPE.NAVIGATE]: Globe,
