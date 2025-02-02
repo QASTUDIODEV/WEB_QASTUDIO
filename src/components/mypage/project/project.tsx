@@ -43,7 +43,7 @@ export default function Project({ id, name, participants, date, img, onClick }: 
       <S.TD />
       <S.TD>{participants}</S.TD>
       <S.TD />
-      <S.TD>{formatRelativeTime(date)}</S.TD>
+      {formatRelativeTime(date) == null ? <S.TD>-</S.TD> : <S.TD>{formatRelativeTime(date)}</S.TD>}
     </S.TR>
   );
 }
