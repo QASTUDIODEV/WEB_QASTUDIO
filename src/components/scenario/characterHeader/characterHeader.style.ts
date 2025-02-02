@@ -53,7 +53,7 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
 export const CharacterHeaderRightSide = styled.div`
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 15px;
   justify-content: right;
 `;
 export const Creater = styled.div`

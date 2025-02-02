@@ -12,9 +12,9 @@ export const formatRelativeTime = (dateString: string | null): string | null => 
   const diffDays = Math.floor(diffHours / 24);
 
   if (diffSec < 60) return 'seconds ago';
-  if (diffMin < 60) return 'mins ago';
-  if (diffHours < 24) return 'hours ago';
-  if (diffDays < 7) return 'days ago';
+  if (diffMin < 60) return `${diffMin} mins ago`;
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays < 7) return `${diffDays} days ago`;
 
   const diffWeeks = Math.floor(diffDays / 7);
   if (diffWeeks < 4) return `${diffWeeks} weeks ago`;
