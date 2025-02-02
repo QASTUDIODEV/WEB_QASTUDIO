@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { getScenarioList } from '@/apis/scenarioAct/scenarioAct';
+import { createScenario, getScenarioList } from '@/apis/scenarioAct/scenarioAct';
 
-import { useCoreQuery } from '@/hooks/common/customQuery';
+import { useCoreMutation, useCoreQuery } from '@/hooks/common/customQuery';
 
 import { setScenarioList } from '@/slices/scenarioActSlice';
 
@@ -16,6 +16,7 @@ export default function useScenarioList(characterId: number | null | undefined) 
   const useGetScenarioList = useCoreQuery([QUERY_KEYS.GET_SCENARIO_LIST, characterId], () => getScenarioList({ characterId: characterId! }), {
     enabled: !!characterId,
   });
+  const useCreateScenario = useCoreMutation(createScenario);
 
   useEffect(() => {
     if (useGetScenarioList.data?.result?.scenarios) {
@@ -23,5 +24,5 @@ export default function useScenarioList(characterId: number | null | undefined) 
     }
   }, [useGetScenarioList.data, dispatch]);
 
-  return { useGetScenarioList };
+  return { useGetScenarioList, useCreateScenario };
 }

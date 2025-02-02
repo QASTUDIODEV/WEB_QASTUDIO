@@ -5,6 +5,7 @@ import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 import { getIcon } from '@/utils/getIcon';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useAction from '@/hooks/scenarioAct/useAction';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
@@ -52,6 +53,41 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
   const isLastAction = lastActionId === actionId;
 
+  const { useEditAction } = useAction();
+  const { mutate: editMutate, isPending } = useEditAction;
+
+  const onSubmit = () => {
+    const res = {
+      actionDescription: action?.actionDescription,
+      step: action?.step,
+      actionType: action?.actionType,
+      locator: {
+        strategy: action?.locator.strategy,
+        value: action?.locator.value,
+      },
+      action: {
+        type: action?.action.type,
+        value: action?.action.value,
+      },
+    };
+    console.log(res);
+    editMutate({
+      actionId: action?.actionId,
+      data: {
+        actionDescription: action?.actionDescription,
+        step: action?.step,
+        actionType: action?.actionType,
+        locator: {
+          strategy: action?.locator.strategy,
+          value: action?.locator.value,
+        },
+        action: {
+          type: action?.action.type,
+          value: action?.action.value,
+        },
+      },
+    });
+  };
   //모달 함수
   const handleModal = (): void => {
     dispatch(openModal('scenarioActModal'));
@@ -84,10 +120,26 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
                 <SelectDropdown options={['css_selector', 'id']} onSelect={() => {}} type="thin" />
               </S.DropdownContainer>
             </S.DescriptionRow>
-
             <S.DescriptionRow>
               <S.Input value={action?.locator.value} />
-              <Button color="blue">Apply</Button>
+              <Button color="blue" onClick={onSubmit}>
+                Apply
+              </Button>
+            </S.DescriptionRow>
+          </S.DescriptionItem>
+
+          <S.DescriptionItem>
+            <S.DescriptionRow>
+              action
+              <S.DropdownContainer>
+                <SelectDropdown options={['send_keys', 'id']} onSelect={() => {}} type="thin" />
+              </S.DropdownContainer>
+            </S.DescriptionRow>
+            <S.DescriptionRow>
+              <S.Input value={action?.action.value} />
+              <Button color="blue" onClick={onSubmit}>
+                Apply
+              </Button>
             </S.DescriptionRow>
           </S.DescriptionItem>
         </S.DescriptionContainer>
