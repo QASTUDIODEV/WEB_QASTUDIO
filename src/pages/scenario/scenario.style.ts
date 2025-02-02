@@ -5,13 +5,19 @@ export const Background = styled.div`
   padding: 6%;
   display: flex;
   flex-direction: column;
-  //justify-content: center;
   height: 100%;
   width: 100%;
   position: relative;
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
   }
+`;
+
+export const LoadingContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
 `;
 
 export const Container = styled.div`

@@ -5,30 +5,36 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
 
+import Loading from '@/components/common/loading/loading';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
 import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
 
-import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
-import ArrowRight from '@/assets/icons/arrow_right.svg?react';
+import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
+import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 import * as S from '@/pages/scenario/scenario.style';
 import { newCharacter, resetCharacters } from '@/slices/scenarioSlice';
 
 export default function ScenarioPage() {
   const { projectId } = useParams();
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(-1);
   const { isOpen } = useSelector((state) => state.modal);
   const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: ProjectSummaryData } = useGetProjectSummary;
-  const { data: CharacterListData } = useGetCharacterList;
+  const { data: CharacterListData, isPending } = useGetCharacterList;
   const CharacterData = CharacterListData?.result.characters;
   const characters = useSelector((state) => state.scenario.characters);
 
+  // play 버튼을 누르고 뒤로가기를 눌러 돌아오면 아무것도 안보이는 상황 방지하기 위함
+  useEffect(() => {
+    setCurrentPage(0);
+  }, []);
+
   useEffect(() => {
     dispatch(resetCharacters());
-    if (CharacterData) {
+    if (CharacterListData) {
       CharacterData?.forEach((character) => {
         const exists = characters.some((char) => char.id === character.characterId);
         if (!exists) {
@@ -47,7 +53,7 @@ export default function ScenarioPage() {
         }
       });
     }
-  }, [CharacterData, currentPage, dispatch]);
+  }, [CharacterListData, currentPage, dispatch]);
 
   const goToNextPage = () => {
     if (!CharacterListData?.result.isLast) {
@@ -60,6 +66,14 @@ export default function ScenarioPage() {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
+
+  if (isPending) {
+    return (
+      <S.LoadingContainer>
+        <Loading />
+      </S.LoadingContainer>
+    );
+  }
 
   return (
     <S.Background>
@@ -82,19 +96,31 @@ export default function ScenarioPage() {
       </S.Container>
 
       <S.Pagination>
-        <S.IconContainer onClick={goToPreviousPage}>
-          <ArrowLeft />
-        </S.IconContainer>
+        {!CharacterListData?.result.isFirst ? (
+          <S.IconContainer onClick={goToPreviousPage}>
+            <ArrowLeft stroke={'#DFE8F9'} />
+          </S.IconContainer>
+        ) : (
+          <S.IconContainer onClick={goToPreviousPage}>
+            <ArrowLeft stroke={'#e9e8f91a'} />
+          </S.IconContainer>
+        )}
+
         {CharacterListData?.result &&
           Array.from({ length: CharacterListData.result.totalPage }, (_, index) => (
             <S.PageNumber key={index} isActive={currentPage === index} onClick={() => setCurrentPage(index)}>
               {index + 1}
             </S.PageNumber>
           ))}
-
-        <S.IconContainer onClick={goToNextPage}>
-          <ArrowRight />
-        </S.IconContainer>
+        {!CharacterListData?.result.isLast ? (
+          <S.IconContainer onClick={goToNextPage}>
+            <ArrowRight stroke={'#DFE8F9'} />
+          </S.IconContainer>
+        ) : (
+          <S.IconContainer onClick={goToNextPage}>
+            <ArrowRight stroke={'#e9e8f91a'} />
+          </S.IconContainer>
+        )}
       </S.Pagination>
     </S.Background>
   );
