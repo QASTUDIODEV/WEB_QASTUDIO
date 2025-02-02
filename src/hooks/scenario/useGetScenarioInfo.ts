@@ -11,7 +11,7 @@ type TScenarioInfoValue = {
 export default function useGetScenarioInfo({ projectId, currentPage }: TScenarioInfoValue) {
   const useGetProjectSummary = useCoreQuery(QUERY_KEYS.GET_SUMMARY_PROJECT_INFO(projectId), () => getSummaryProjectInfo(projectId));
   const useGetCharacterList = useCoreQuery(QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage }), () => getCharacterList({ projectId, currentPage }), {
-    enabled: !!currentPage || currentPage === -1,
+    enabled: currentPage !== -1 && currentPage != null,
   });
   return { useGetProjectSummary, useGetCharacterList };
 }
