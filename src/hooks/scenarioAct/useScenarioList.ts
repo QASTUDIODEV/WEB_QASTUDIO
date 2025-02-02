@@ -19,7 +19,6 @@ export default function useScenarioList(characterId: number | null | undefined) 
 
   useEffect(() => {
     if (useGetScenarioList.data?.result?.scenarios) {
-      console.log(useGetScenarioList.data.result.scenarios);
       dispatch(setScenarioList(useGetScenarioList.data.result));
     }
   }, [useGetScenarioList.data, dispatch]);
