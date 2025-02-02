@@ -4,6 +4,7 @@ import { useSelector } from '@/hooks/common/useCustomRedux';
 import useProjectInfo from '@/hooks/scenarioAct/useProjectInfo';
 import useCharacterInfo from '@/hooks/scenarioAct/useScenarioList';
 
+import Loading from '@/components/common/loading/loading';
 import ActSection from '@/components/scenarioAct/actSection/actSection';
 import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
@@ -23,7 +24,11 @@ export default function ScenarioActPage() {
   const { isLoading: scenarioListLoading } = useGetScenarioList;
 
   if (projectInfoLoading || characterListLoading || scenarioListLoading) {
-    return <div>로딩...</div>;
+    return (
+      <S.LoadingContainer>
+        <Loading />
+      </S.LoadingContainer>
+    );
   }
 
   return (

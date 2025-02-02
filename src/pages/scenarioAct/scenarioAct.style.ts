@@ -1,5 +1,15 @@
 import styled from 'styled-components';
 
+export const LoadingContainer = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary.pri_900};
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+`;
+
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
   color: ${({ theme }) => theme.colors.white};
