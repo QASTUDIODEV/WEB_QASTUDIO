@@ -33,8 +33,8 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [scenarioId, setScenarioId] = useState<number>(-1);
-  const [characterId, setCharacterId] = useState<number>(-1);
+  const [scenarioId, setScenarioId] = useState<number>();
+  const [characterId, setCharacterId] = useState<number>();
   const [characterData, setCharacterData] = useState<TRequestCharacterScenarioResponse>();
   const [errorMessage, setErrorMessage] = useState('');
   const { useGetAllPaths, usePostCharacter, usePatchCharacter } = useGetScenarioModalInfo({ projectId });
@@ -78,26 +78,30 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
         },
       );
     } else {
-      patchCharacter(
-        {
-          projectId: Number(projectId),
-          characterName: submitData.characterName,
-          characterDescription: submitData.characterDescription,
-          accessPage: selectedOptions,
-          characterId: characterId,
-          scenarioId: scenarioId,
-        },
-        {
-          onSuccess: (data) => {
-            setErrorMessage('');
-            setCharacterData(data);
-            setIsSubmitted(true);
+      if (scenarioId !== undefined && characterId !== undefined) {
+        patchCharacter(
+          {
+            projectId: Number(projectId),
+            characterName: submitData.characterName,
+            characterDescription: submitData.characterDescription,
+            accessPage: selectedOptions,
+            characterId: characterId,
+            scenarioId: scenarioId,
           },
-          onError: () => {
-            setErrorMessage('Failed to create character');
+          {
+            onSuccess: (data) => {
+              setErrorMessage('');
+              setCharacterData(data);
+              setIsSubmitted(true);
+            },
+            onError: () => {
+              setErrorMessage('Failed to create character');
+            },
           },
-        },
-      );
+        );
+      } else {
+        setErrorMessage('Scenario ID is undefined');
+      }
     }
   };
 

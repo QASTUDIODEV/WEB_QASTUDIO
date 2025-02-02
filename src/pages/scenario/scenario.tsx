@@ -19,7 +19,7 @@ import { newCharacter, resetCharacters } from '@/slices/scenarioSlice';
 export default function ScenarioPage() {
   const { projectId } = useParams();
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState<number>(-1);
+  const [currentPage, setCurrentPage] = useState<number>();
   const { isOpen } = useSelector((state) => state.modal);
   const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: ProjectSummaryData } = useGetProjectSummary;

@@ -8,7 +8,9 @@ type TScenarioInfoModalValue = {
   projectId: string;
 };
 export default function useGetScenarioModalInfo({ projectId }: TScenarioInfoModalValue) {
-  const useGetAllPaths = useCoreQuery(QUERY_KEYS.GET_ALL_PATHS(projectId), () => getAllPaths(projectId));
+  const useGetAllPaths = useCoreQuery(QUERY_KEYS.GET_ALL_PATHS(projectId), () => getAllPaths(projectId), {
+    enabled: !!projectId,
+  });
   const usePostCharacter = useCoreMutation(postCharacterScenario);
   const usePatchCharacter = useCoreMutation(patchCharacterScenario);
 
