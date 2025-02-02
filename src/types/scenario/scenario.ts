@@ -88,7 +88,7 @@ export type TResponseProjectPages = TCommonResponse<{
   pageSummaryList: TPageSummaryList[];
 }>;
 
-type TProjectPath = {
+export type TProjectPath = {
   pageId: number;
   path: string;
 };
