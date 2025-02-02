@@ -32,7 +32,7 @@ export const InputWrapper = styled.div`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 16px;
 `;
 

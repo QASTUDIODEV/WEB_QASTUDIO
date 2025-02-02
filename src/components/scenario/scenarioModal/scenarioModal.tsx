@@ -2,13 +2,14 @@ import { useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
-import type { TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
+import type { TProjectPath, TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioModal';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
+import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/scenario/dropDown/dropDown';
 import * as S from '@/components/scenario/scenarioModal/scenarioModal.style';
@@ -35,13 +36,13 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   const [scenarioId, setScenarioId] = useState<number>(-1);
   const [characterId, setCharacterId] = useState<number>(-1);
   const [characterData, setCharacterData] = useState<TRequestCharacterScenarioResponse>();
-
+  const [errorMessage, setErrorMessage] = useState('');
   const { useGetAllPaths, usePostCharacter, usePatchCharacter } = useGetScenarioModalInfo({ projectId });
   const { data: PathData } = useGetAllPaths;
   const { mutate: postCharacter } = usePostCharacter;
   const { mutate: patchCharacter } = usePatchCharacter;
 
-  const [options] = useState<string[]>(PathData.result.projectPaths);
+  const [options] = useState<TProjectPath[]>(PathData?.result?.projectPaths || []);
 
   const {
     register,
@@ -64,11 +65,15 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
         },
         {
           onSuccess: (data) => {
+            setErrorMessage('');
             setCharacterData(data);
             setIsSubmitted(true);
             setCharacterId(data.result.characterId);
             setScenarioId(data.result.scenarioId);
             setModalStep(2);
+          },
+          onError: () => {
+            setErrorMessage('Failed to create character');
           },
         },
       );
@@ -84,8 +89,12 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
         },
         {
           onSuccess: (data) => {
+            setErrorMessage('');
             setCharacterData(data);
             setIsSubmitted(true);
+          },
+          onError: () => {
+            setErrorMessage('Failed to create character');
           },
         },
       );
@@ -143,8 +152,8 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
                 </Button>
               ))}
             </S.TagContainer>
-
             <S.ButtonContainer>
+              {errorMessage !== '' ? <ValidataionMessage message={errorMessage} isError={!!errorMessage} /> : <div />}
               <Button color="blue" onClick={handleSubmit(onSubmit)} disabled={!isValid || selectedOptions.length === 0}>
                 Create
               </Button>

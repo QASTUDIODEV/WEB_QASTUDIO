@@ -6,6 +6,7 @@ import type {
   TRequestCharacterScenarioResponse,
   TRequestPatchCharacterScenarioValue,
   TRequestPostCharacterScenarioValue,
+  TResponseGetAllPaths,
   TResponseProjectPages,
 } from '@/types/scenario/scenario';
 
@@ -67,7 +68,7 @@ const deleteCharacter = async (characterId: number[]) => {
   return data;
 };
 
-const getAllPaths = async (projectId: string) => {
+const getAllPaths = async (projectId: string): Promise<TResponseGetAllPaths> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/paths`);
   return data;
 };

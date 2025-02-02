@@ -87,3 +87,11 @@ export type TRequestCharacterScenarioResponse = TCommonResponse<{
 export type TResponseProjectPages = TCommonResponse<{
   pageSummaryList: TPageSummaryList[];
 }>;
+
+type TProjectPath = {
+  pageId: number;
+  path: string;
+};
+export type TResponseGetAllPaths = TCommonResponse<{
+  projectPaths: TProjectPath[];
+}>;
