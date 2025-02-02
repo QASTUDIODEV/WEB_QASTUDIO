@@ -5,7 +5,7 @@ export const Background = styled.div`
   padding: 6%;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   position: relative;
   p {
@@ -32,7 +32,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 54px;
+  margin-bottom: 30px;
 `;
 
 export const CharactersContainer = styled.div`
@@ -47,10 +47,11 @@ export const Pagination = styled.div`
   display: flex;
   position: absolute;
   bottom: 6%;
-  left: 50%;
   gap: 8px;
   justify-content: center;
+  align-self: center;
   align-items: center;
+
   &:hover {
     cursor: pointer;
   }
