@@ -3,16 +3,17 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 51.2px;
 `;
 
 export const DropdownHeader = styled.div`
   ${({ theme }) => theme.text.medium_20};
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.gray.gray_300};
-  height: 64px;
+  height: 51.2px;
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 4px;
+  padding: 10.4px 16px;
+  border-radius: 3.2px;
   border: 0.8px solid rgba(153, 153, 153, 0.5);
   background-color: inherit;
   box-sizing: border-box;
@@ -29,18 +30,18 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
   border: 0.8px solid rgba(153, 153, 153, 0.5);
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 3.2px 3.2px;
   border-top: none;
   z-index: 1000;
   overflow-y: auto;
-  max-height: 128px;
+  max-height: 103px;
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   flex-direction: column;
 `;
 
 export const DropdownListItem = styled.li`
   display: flex;
-  height: 64px;
+  height: 51.2px;
   width: 100%;
   padding-left: 16px;
   align-items: center;

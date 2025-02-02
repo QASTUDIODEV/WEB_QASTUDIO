@@ -36,11 +36,15 @@ const Container2 = styled.div`
 `;
 
 const Texts = styled.div`
+  ${({ theme }) => theme.text.medium_14};
   ${({ theme }) => theme.align.column_center};
+  color: ${({ theme }) => theme.colors.gray.gray_200};
+  font-weight: 500;
 `;
 
 const Title = styled.div`
   ${({ theme }) => theme.text.bold_24};
+  color: ${({ theme }) => theme.colors.primary.pri_50};
 `;
 
 const Description = styled.div`
