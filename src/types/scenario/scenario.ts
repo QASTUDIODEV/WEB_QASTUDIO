@@ -2,17 +2,20 @@ import type { DEVICE, STACK } from '@/enums/enums';
 
 import type { TCommonResponse } from '../common/common';
 
-type TDetailCharacters = {
+export type TDetailCharacters = {
   characterId: number;
   characterName: string;
   characterDescription: string;
   author: string;
   createdAt: string;
   updatedAt: string;
-  scenarios: string[];
+  scenarios: TScenarios;
 };
 
-type TScenarioList = {
+export type TScenarios = {
+  scenarioList: TScenarioList[];
+};
+export type TScenarioList = {
   scenarioId: number;
   scenarioName: string;
   author: string;

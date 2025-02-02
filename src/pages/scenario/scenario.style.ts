@@ -39,6 +39,8 @@ export const CharactersContainer = styled.div`
   margin-top: 23.6px;
   background-color: inherit;
   border-radius: 10px;
+  height: 65vh;
+  overflow-y: scroll;
 `;
 
 export const Pagination = styled.div`
@@ -55,7 +57,7 @@ export const Pagination = styled.div`
 `;
 
 interface IPageNumberProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 
 export const PageNumber = styled.div<IPageNumberProps>`
@@ -68,7 +70,7 @@ export const PageNumber = styled.div<IPageNumberProps>`
   align-items: center;
   gap: 10px;
   border-radius: 4px;
-  background: ${({ isActive }) => (isActive ? 'rgba(217, 230, 255, 0.2)' : 'none')};
+  background: ${({ $isActive }) => ($isActive ? 'rgba(217, 230, 255, 0.2)' : 'none')};
 
   ${({ theme }) => theme.text.medium_14};
 `;

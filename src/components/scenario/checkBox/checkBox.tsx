@@ -11,7 +11,7 @@ interface ICheckBoxProps {
   isAllCheckBox?: boolean;
 }
 
-export default function CheckBox({ characterId, scenarioId, isAllCheckBox = false }: ICheckBoxProps) {
+export default function CheckBox({ characterId, scenarioId, isAllCheckBox }: ICheckBoxProps) {
   const dispatch = useDispatch<TAppDispatch>();
 
   // 체크 여부 판단
@@ -24,7 +24,7 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox = fals
     if (scenarioId) {
       // 시나리오
       const character = state.scenario.characters?.find((char) => char.id === characterId);
-      const scenario = character?.scenarios?.find((scn) => scn.id === scenarioId);
+      const scenario = character?.scenarios.scenarioList?.find((scn) => scn.scenarioId === scenarioId);
       return scenario?.isChecked ?? false;
     }
     if (characterId) {

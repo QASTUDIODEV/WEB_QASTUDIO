@@ -28,6 +28,7 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
   const [selectedScenarioId, setSelectedScenarioId] = useState<number[]>();
   const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario();
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
 
   const { mutate: deleteSceanrioMutate } = useDeleteSceanrio;
   const { mutate: deleteCharacterMutate } = useDeleteCharacter;
@@ -35,19 +36,17 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
   useEffect(() => {
     setSelectedCharacterId(characters.filter((character) => character.isChecked).map((character) => character.id));
     setSelectedScenarioId(
-      characters
-        .flatMap((character) =>
-          character.scenarios && Array.isArray(character.scenarios)
-            ? character.scenarios.filter((scenario) => scenario.isChecked !== null && scenario.isChecked !== undefined && scenario.isChecked)
-            : [],
-        )
-        .map((scenario) => scenario.id),
+      characters.flatMap((character) =>
+        character.scenarios.scenarioList && Array.isArray(character.scenarios.scenarioList)
+          ? character.scenarios.scenarioList.filter((scenario) => scenario.isChecked).map((scenario) => scenario.scenarioId)
+          : [],
+      ),
     );
   }, [characters]);
 
   // Delete 버튼 클릭 함수
   const handleDeleteClick = (): void => {
-    const hasChecked = characters.some((character) => character.isChecked || character.scenarios.some((scenario) => scenario.isChecked));
+    const hasChecked = characters.some((character) => character.isChecked || character.scenarios.scenarioList.some((scenario) => scenario.isChecked));
     setHasCheckedItems(hasChecked);
 
     if (hasChecked) {
@@ -92,9 +91,9 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
     <>
       {isEdit ? (
         <S.EditButtonGroup>
-          <S.AllCheckBoxGroup>
+          <S.AllCheckBoxGroup onClick={() => setIsAllChecked(!isAllChecked)}>
             <S.IconContainer>
-              <CheckBox isAllCheckBox={true} />
+              <CheckBox isAllCheckBox={isAllChecked} />
             </S.IconContainer>
             <p>ALL</p>
             {!hasCheckedItems && (

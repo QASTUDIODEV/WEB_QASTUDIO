@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 import type { TProjectPath, TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+
+import { queryClient } from '@/apis/queryClient';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioModal';
@@ -10,6 +13,7 @@ import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioModal';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
+import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/scenario/dropDown/dropDown';
 import * as S from '@/components/scenario/scenarioModal/scenarioModal.style';
@@ -28,6 +32,11 @@ type TFormValues = {
   accessPage: string[];
 };
 
+type TItem = {
+  step: string;
+  actionDescription: string;
+};
+
 export default function ScenarioModal({ projectId }: TScenarioProps) {
   const dispatch = useDispatch();
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
@@ -39,10 +48,15 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const { useGetAllPaths, usePostCharacter, usePatchCharacter } = useGetScenarioModalInfo({ projectId });
   const { data: PathData } = useGetAllPaths;
-  const { mutate: postCharacter } = usePostCharacter;
-  const { mutate: patchCharacter } = usePatchCharacter;
+  const { mutate: postCharacter, isPending: postCharacterPending } = usePostCharacter;
+  const { mutate: patchCharacter, isPending: patchCharacterPending } = usePatchCharacter;
+  const [options, setOptions] = useState<TProjectPath[]>([]);
 
-  const [options] = useState<TProjectPath[]>(PathData?.result?.projectPaths || []);
+  useEffect(() => {
+    if (PathData?.result?.projectPaths) {
+      setOptions(PathData.result.projectPaths);
+    }
+  }, [PathData]);
 
   const {
     register,
@@ -55,6 +69,7 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   // 역할 생성 함수
 
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
+    setErrorMessage('');
     if (!isSubmitted) {
       postCharacter(
         {
@@ -71,9 +86,12 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
             setCharacterId(data.result.characterId);
             setScenarioId(data.result.scenarioId);
             setModalStep(2);
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage: 0 }) });
           },
-          onError: () => {
-            setErrorMessage('Failed to create character');
+          onError: (error) => {
+            if (error.response) {
+              setErrorMessage(error.response?.data.message);
+            }
           },
         },
       );
@@ -93,9 +111,13 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
               setErrorMessage('');
               setCharacterData(data);
               setIsSubmitted(true);
+              setModalStep(2);
+              queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage: 0 }) });
             },
-            onError: () => {
-              setErrorMessage('Failed to create character');
+            onError: (error) => {
+              if (error.response) {
+                setErrorMessage(error.response?.data.message);
+              }
             },
           },
         );
@@ -117,12 +139,19 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
     setSelectedOptions((prev) => prev.filter((option) => option !== value));
   };
 
+  const parsedData = characterData?.result.scenarioDescription ? JSON.parse(characterData.result.scenarioDescription) : null;
+
   return (
     <Modal title={'Create Character'} onClose={() => dispatch(closeModal())}>
       {modalStep === 1 && (
         // 역할 선택 단계
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.ModalContainer>
+            {(postCharacterPending || patchCharacterPending) && (
+              <S.LoadingContainer2>
+                <Loading />
+              </S.LoadingContainer2>
+            )}
             <div>
               <S.description>Define users for the registered project.</S.description>
               <S.description>QASTUDIO will create a suitable scenario for you.</S.description>
@@ -158,7 +187,11 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
             </S.TagContainer>
             <S.ButtonContainer>
               {errorMessage !== '' ? <ValidataionMessage message={errorMessage} isError={!!errorMessage} /> : <div />}
-              <Button color="blue" onClick={handleSubmit(onSubmit)} disabled={!isValid || selectedOptions.length === 0}>
+              <Button
+                color="blue"
+                onClick={handleSubmit(onSubmit)}
+                disabled={!isValid || selectedOptions.length === 0 || postCharacterPending || patchCharacterPending}
+              >
                 Create
               </Button>
             </S.ButtonContainer>
@@ -186,7 +219,11 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
           <S.ScenarioContainer>
             <S.SubTitle>Scenario</S.SubTitle>
             <S.MainScenarioWrapper>
-              <S.ScenarioDescription>{characterData?.result.scenarioDescription}</S.ScenarioDescription>
+              {parsedData.map((item: TItem) => (
+                <S.ScenarioDescription key={item.step}>
+                  {item.step}. {item.actionDescription}
+                </S.ScenarioDescription>
+              ))}
             </S.MainScenarioWrapper>
           </S.ScenarioContainer>
 

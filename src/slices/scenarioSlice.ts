@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface IScenario {
-  id: number;
-  name: string;
-  createdBy: string;
+  scenarioId: number;
+  scenarioName: string;
+  author: string;
   createdAt: string;
+  updatedAt: string;
   isChecked: boolean;
   isSelected: boolean;
+}
+
+interface IScenarioList {
+  scenarioList: IScenario[];
 }
 
 interface ICharacter {
@@ -17,7 +22,7 @@ interface ICharacter {
   createdBy: string;
   createdAt: string;
   isExpanded: boolean;
-  scenarios: IScenario[];
+  scenarios: IScenarioList;
 }
 
 interface IScenarioSlice {
@@ -37,9 +42,6 @@ const scenarioReducer = createSlice({
     newCharacter: (state, action) => {
       state.characters = [...state.characters, action.payload];
     },
-    resetCharacters: (state) => {
-      state.characters = []; // characters 배열 초기화
-    },
     edit: (state) => {
       state.isEdit = !state.isEdit;
     },
@@ -48,8 +50,8 @@ const scenarioReducer = createSlice({
       state.characters.forEach((character) => {
         character.isChecked = !allChecked;
         // scenarios가 배열일 때만 forEach 실행
-        if (Array.isArray(character.scenarios)) {
-          character.scenarios.forEach((scenario) => {
+        if (Array.isArray(character.scenarios.scenarioList)) {
+          character.scenarios.scenarioList.forEach((scenario) => {
             scenario.isChecked = !allChecked;
           });
         }
@@ -61,8 +63,8 @@ const scenarioReducer = createSlice({
         const newCheckedStatus: boolean = !character.isChecked;
         character.isChecked = newCheckedStatus;
         // scenarios가 배열일 때만 forEach 실행
-        if (Array.isArray(character.scenarios)) {
-          character.scenarios.forEach((scenario) => {
+        if (Array.isArray(character.scenarios.scenarioList)) {
+          character.scenarios.scenarioList.forEach((scenario) => {
             scenario.isChecked = newCheckedStatus;
           });
         }
@@ -73,7 +75,7 @@ const scenarioReducer = createSlice({
       const character: ICharacter | undefined = state.characters.find((char) => char.id === characterId);
 
       if (character) {
-        const scenario: IScenario | undefined = character.scenarios.find((scn) => scn.id === scenarioId);
+        const scenario: IScenario | undefined = character.scenarios.scenarioList.find((scn) => scn.scenarioId === scenarioId);
         if (scenario) {
           scenario.isChecked = !scenario.isChecked;
 
@@ -102,41 +104,8 @@ const scenarioReducer = createSlice({
         }
       });
     },
-    selectEntity: (state, action) => {
-      const { characterId, scenarioId = null }: { characterId: number | null; scenarioId: number | null } = action.payload;
-
-      // 모든 캐릭터와 시나리오의 isSelected를 초기화
-      state.characters.forEach((character) => {
-        character.isSelected = false; // 캐릭터 선택 초기화
-        // scenarios가 배열일 때만 forEach 실행
-        if (Array.isArray(character.scenarios)) {
-          character.scenarios.forEach((scenario) => {
-            scenario.isSelected = false; // 시나리오 선택 초기화
-          });
-        }
-      });
-
-      // 캐릭터 선택
-      if (characterId !== null && scenarioId === null) {
-        const character = state.characters.find((char) => char.id === characterId);
-        if (character) {
-          character.isSelected = true;
-        }
-      }
-
-      // 시나리오 선택
-      if (scenarioId !== null) {
-        state.characters.forEach((character) => {
-          const scenario = character.scenarios.find((scn) => scn.id === scenarioId);
-          if (scenario) {
-            scenario.isSelected = true;
-          }
-        });
-      }
-    },
   },
 });
 
-export const { edit, toggleAll, resetCharacters, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks, selectEntity } =
-  scenarioReducer.actions;
+export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks } = scenarioReducer.actions;
 export default scenarioReducer.reducer;

@@ -21,7 +21,6 @@ export default function Dropdown({ options, onSelect, placeholder }: IDropdownPr
     onSelect(option);
     setIsOpen(false);
   };
-
   // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

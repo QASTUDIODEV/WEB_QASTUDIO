@@ -7,6 +7,7 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
   width: 608px;
   ${media.desktop`
     width: 100%;
@@ -64,6 +65,15 @@ export const DescriptionItem = styled.div`
   gap: 40px;
 `;
 
+export const LoadingContainer2 = styled.div`
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_18};
