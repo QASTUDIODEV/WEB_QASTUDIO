@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { formatRelativeTime } from '@/utils/transformDate';
+
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/mypage/project/project.style';
 
@@ -41,7 +43,7 @@ export default function Project({ id, name, participants, date, img, onClick }: 
       <S.TD />
       <S.TD>{participants}</S.TD>
       <S.TD />
-      <S.TD>{date}</S.TD>
+      <S.TD>{formatRelativeTime(date)}</S.TD>
     </S.TR>
   );
 }

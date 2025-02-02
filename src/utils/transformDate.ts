@@ -1,4 +1,7 @@
-export const formatRelativeTime = (dateString: string): string => {
+export const formatRelativeTime = (dateString: string | null): string | null => {
+  if (dateString == null) {
+    return null;
+  }
   const targetDate = new Date(dateString);
   const now = new Date();
 
