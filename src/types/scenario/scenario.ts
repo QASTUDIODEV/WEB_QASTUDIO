@@ -7,12 +7,9 @@ type TDetailCharacters = {
   characterName: string;
   characterDescription: string;
   author: string;
-  pageCnt: number;
-  scenarioCnt: number;
-  accessPageList: string[];
-  scenarioList: string[];
   createdAt: string;
   updatedAt: string;
+  scenarios: string[];
 };
 
 type TScenarioList = {
@@ -50,7 +47,10 @@ export type TGetSummaryProjectInfoResponse = TCommonResponse<{
 }>;
 
 export type TGetCharacterListResponse = TCommonResponse<{
-  detailCharacters: TDetailCharacters[];
+  characters: TDetailCharacters[];
+  listSize: number;
+  totalPage: number;
+  totalElements: number;
   isLast: boolean;
   isFirst: boolean;
 }>;

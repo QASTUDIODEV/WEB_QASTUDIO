@@ -26,16 +26,21 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
   const { isEdit, characters } = useSelector((state) => state.scenario);
   const [selectedCharacterId, setSelectedCharacterId] = useState<number[]>();
   const [selectedScenarioId, setSelectedScenarioId] = useState<number[]>();
-  const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario({ scenarioId: selectedScenarioId || [], characterId: selectedCharacterId || [] });
+  const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario();
   const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
 
+  const { mutate: deleteSceanrioMutate } = useDeleteSceanrio;
+  const { mutate: deleteCharacterMutate } = useDeleteCharacter;
+
   useEffect(() => {
-    console.log(characters);
     setSelectedCharacterId(characters.filter((character) => character.isChecked).map((character) => character.id));
     setSelectedScenarioId(
       characters
-        .flatMap((character) => character.scenarios)
-        .filter((scenario) => scenario.isChecked)
+        .flatMap((character) =>
+          character.scenarios && Array.isArray(character.scenarios)
+            ? character.scenarios.filter((scenario) => scenario.isChecked !== null && scenario.isChecked !== undefined && scenario.isChecked)
+            : [],
+        )
         .map((scenario) => scenario.id),
     );
   }, [characters]);
@@ -49,13 +54,11 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
       dispatch(edit());
       dispatch(resetChecks());
       setHasCheckedItems(true);
-      if (selectedScenarioId) {
-        const { data: deleteScenarioData } = useDeleteSceanrio;
-        console.log(deleteScenarioData);
+      if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
+        deleteSceanrioMutate(selectedScenarioId);
       }
-      if (selectedCharacterId) {
-        const { data: deleteCharacterData } = useDeleteCharacter;
-        console.log(deleteCharacterData);
+      if (selectedCharacterId !== undefined && selectedCharacterId.length > 0) {
+        deleteCharacterMutate(selectedCharacterId);
       }
     }
   };

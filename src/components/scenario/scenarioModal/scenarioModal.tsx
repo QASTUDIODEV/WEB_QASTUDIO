@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
+import type { TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
+
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioModal';
 
@@ -30,17 +32,16 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [scenarioId, setScenarioId] = useState<number>(0);
-  const [characterId, setCharacterId] = useState<number>(0);
+  const [scenarioId, setScenarioId] = useState<number>(-1);
+  const [characterId, setCharacterId] = useState<number>(-1);
+  const [characterData, setCharacterData] = useState<TRequestCharacterScenarioResponse>();
 
   const { useGetAllPaths, usePostCharacter, usePatchCharacter } = useGetScenarioModalInfo({ projectId });
   const { data: PathData } = useGetAllPaths;
-  console.log(PathData);
   const { mutate: postCharacter } = usePostCharacter;
   const { mutate: patchCharacter } = usePatchCharacter;
 
-  // const [options] = useState<string[]>(PathData.result.projectPaths);
-  const [options] = useState<string[]>(['/', '/roadmap', '/login', '/ex1', '/ex2', '/ex3']); // 전체 옵션
+  const [options] = useState<string[]>(PathData.result.projectPaths);
 
   const {
     register,
@@ -63,9 +64,11 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
         },
         {
           onSuccess: (data) => {
+            setCharacterData(data);
             setIsSubmitted(true);
             setCharacterId(data.result.characterId);
             setScenarioId(data.result.scenarioId);
+            setModalStep(2);
           },
         },
       );
@@ -79,12 +82,14 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
           characterId: characterId,
           scenarioId: scenarioId,
         },
-        { onSuccess: () => setIsSubmitted(true) },
+        {
+          onSuccess: (data) => {
+            setCharacterData(data);
+            setIsSubmitted(true);
+          },
+        },
       );
     }
-    //역할 생성
-    console.log(submitData);
-    setModalStep(2);
   };
 
   // 선택된 옵션 추가 함수
@@ -153,25 +158,22 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
           <S.DescriptionContainer>
             <S.DescriptionItem>
               <S.SubTitle>Character</S.SubTitle>
-              <S.DescriptionContent>사용자</S.DescriptionContent>
+              <S.DescriptionContent>{characterData?.result.characterName}</S.DescriptionContent>
             </S.DescriptionItem>
             <S.DescriptionItem>
               <S.SubTitle>Description</S.SubTitle>
-              <S.DescriptionContent>로그인을 하는 사용자</S.DescriptionContent>
+              <S.DescriptionContent>{characterData?.result.characterDescription}</S.DescriptionContent>
             </S.DescriptionItem>
             <S.DescriptionItem>
               <S.SubTitle>Access control</S.SubTitle>
-              <S.DescriptionContent>/, /roadmap</S.DescriptionContent>
+              {characterData?.result.accessPage.map((page, index) => <S.DescriptionContent key={index}>{page}</S.DescriptionContent>)}
             </S.DescriptionItem>
           </S.DescriptionContainer>
 
           <S.ScenarioContainer>
             <S.SubTitle>Scenario</S.SubTitle>
             <S.MainScenarioWrapper>
-              <S.ScenarioDescription>1. 로그인 페이지에 접근한다.</S.ScenarioDescription>
-              <S.ScenarioDescription>2. 이메일 입력란에 이메일을 입력한다. </S.ScenarioDescription>
-              <S.ScenarioDescription>3. 비밀번호 입력란에 비밀번호를 입력한다.</S.ScenarioDescription>
-              <S.ScenarioDescription>4. 확인 버튼을 클릭한다.</S.ScenarioDescription>
+              <S.ScenarioDescription>{characterData?.result.scenarioDescription}</S.ScenarioDescription>
             </S.MainScenarioWrapper>
           </S.ScenarioContainer>
 

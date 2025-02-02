@@ -23,7 +23,7 @@ export default function ScenarioPage() {
   const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: ProjectSummaryData } = useGetProjectSummary;
   const { data: CharacterListData } = useGetCharacterList;
-  const CharacterData = CharacterListData?.result.detailCharacters;
+  const CharacterData = CharacterListData?.result.characters;
   const characters = useSelector((state) => state.scenario.characters);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function ScenarioPage() {
             isSelected: false,
             createdBy: character.author,
             isExpanded: false,
-            scenarios: character.scenarioList,
+            scenarios: character.scenarios,
             id: character.characterId,
             name: character.characterName,
             createdAt: character.createdAt,
@@ -56,7 +56,7 @@ export default function ScenarioPage() {
   };
 
   const goToPreviousPage = () => {
-    if (!CharacterListData?.result.isLast) {
+    if (!CharacterListData?.result.isFirst) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
@@ -82,11 +82,17 @@ export default function ScenarioPage() {
       </S.Container>
 
       <S.Pagination>
-        <S.IconContainer onClick={() => goToPreviousPage}>
+        <S.IconContainer onClick={goToPreviousPage}>
           <ArrowLeft />
         </S.IconContainer>
-        <S.PageNumber>1</S.PageNumber>
-        <S.IconContainer onClick={() => goToNextPage}>
+        {CharacterListData?.result &&
+          Array.from({ length: CharacterListData.result.totalPage }, (_, index) => (
+            <S.PageNumber key={index} isActive={currentPage === index} onClick={() => setCurrentPage(index)}>
+              {index + 1}
+            </S.PageNumber>
+          ))}
+
+        <S.IconContainer onClick={goToNextPage}>
           <ArrowRight />
         </S.IconContainer>
       </S.Pagination>

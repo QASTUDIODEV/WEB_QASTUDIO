@@ -18,17 +18,18 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox = fals
   const isChecked: boolean = useSelector((state: TRootState) => {
     if (isAllCheckBox) {
       // ALL
-      return state.scenario.characters.every((char) => char.isChecked && char.scenarios.every((scn) => scn.isChecked));
+      // state.scenario.characters가 정의되어 있는지 확인하고, 각 character.scenarios가 배열인지 확인
+      return state.scenario.characters?.every((char) => Array.isArray(char.scenarios) && char.isChecked && char.scenarios.every((scn) => scn.isChecked));
     }
     if (scenarioId) {
       // 시나리오
-      const character = state.scenario.characters.find((char) => char.id === characterId);
-      const scenario = character?.scenarios.find((scn) => scn.id === scenarioId);
+      const character = state.scenario.characters?.find((char) => char.id === characterId);
+      const scenario = character?.scenarios?.find((scn) => scn.id === scenarioId);
       return scenario?.isChecked ?? false;
     }
     if (characterId) {
       // 역할
-      const character = state.scenario.characters.find((char) => char.id === characterId);
+      const character = state.scenario.characters?.find((char) => char.id === characterId);
       return character?.isChecked ?? false;
     }
     return false;

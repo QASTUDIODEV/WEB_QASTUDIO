@@ -48,7 +48,11 @@ export const Pagination = styled.div`
   }
 `;
 
-export const PageNumber = styled.div`
+interface IPageNumberProps {
+  isActive: boolean;
+}
+
+export const PageNumber = styled.div<IPageNumberProps>`
   display: flex;
   width: 25.6px;
   height: 25.6px;
@@ -58,7 +62,8 @@ export const PageNumber = styled.div`
   align-items: center;
   gap: 10px;
   border-radius: 4px;
-  background: rgba(217, 230, 255, 0.2);
+  background: ${({ isActive }) => (isActive ? 'rgba(217, 230, 255, 0.2)' : 'none')};
+
   ${({ theme }) => theme.text.medium_14};
 `;
 

@@ -17,11 +17,11 @@ const getSummaryProjectInfo = async (projectId: string): Promise<TGetSummaryProj
 };
 
 const getCharacterList = async ({ projectId, currentPage }: TGetCharacterListValue): Promise<TGetCharacterListResponse> => {
-  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters?page=${currentPage}`);
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/paged?page=${currentPage}`);
   return data;
 };
 
-const getCharacterScenarioList = async (characterId: string): Promise<TGetCharacterScenarioListResponse> => {
+const getCharacterScenarioList = async (characterId: number): Promise<TGetCharacterScenarioListResponse> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/characters/${characterId}/scenarios`);
   return data;
 };
