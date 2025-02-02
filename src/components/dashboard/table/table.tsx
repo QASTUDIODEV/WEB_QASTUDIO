@@ -56,9 +56,8 @@ export default function Table() {
     state: selectState ?? null,
     testName: debouncedSearch,
     date: date,
+    pageName: selectedPageName ?? null,
   });
-
-  console.log(selectedPageName);
 
   const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
     if (state) {
