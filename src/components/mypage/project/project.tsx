@@ -8,10 +8,11 @@ type TProject = {
   name: string;
   participants: number;
   date: string;
+  img: string;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export default function Project({ id, name, participants, date, onClick }: TProject) {
+export default function Project({ id, name, participants, date, img, onClick }: TProject) {
   const spanRef = useRef<HTMLSpanElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -31,7 +32,7 @@ export default function Project({ id, name, participants, date, onClick }: TProj
       <S.TD>
         <S.ProjectNameTD>
           <div className="ProfileWrapper">
-            <Profile />
+            <Profile profileImg={img} />
           </div>
           <span ref={spanRef}>{name}</span>
           {isOverflowing && <div className="dropdown">{name}</div>}
