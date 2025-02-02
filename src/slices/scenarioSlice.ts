@@ -16,12 +16,7 @@ interface IScenarioList {
 
 interface ICharacter {
   id: number;
-  title: string;
   isChecked: boolean;
-  isSelected: boolean;
-  createdBy: string;
-  createdAt: string;
-  isExpanded: boolean;
   scenarios: IScenarioList;
 }
 
@@ -87,12 +82,6 @@ const scenarioReducer = createSlice({
         }
       }
     },
-    toggleExpand: (state, action) => {
-      const character: ICharacter | undefined = state.characters.find((char) => char.id === action.payload);
-      if (character) {
-        character.isExpanded = !character.isExpanded;
-      }
-    },
     resetChecks: (state) => {
       state.characters.forEach((character) => {
         character.isChecked = false;
@@ -107,5 +96,5 @@ const scenarioReducer = createSlice({
   },
 });
 
-export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, toggleExpand, resetChecks } = scenarioReducer.actions;
+export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, resetChecks } = scenarioReducer.actions;
 export default scenarioReducer.reducer;
