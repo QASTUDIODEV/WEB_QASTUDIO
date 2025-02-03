@@ -18,6 +18,7 @@ type TModuleProps = {
   top: boolean;
   pending?: boolean;
   value?: string;
+  isUndefined?: boolean;
 };
 
 type TCodeModuleProps = {
@@ -30,7 +31,7 @@ type TCodeModuleProps = {
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, valid, errorMessage, value, span, inputname, Name, isUndefined, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
@@ -48,7 +49,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
           />
           {btnName && (
             <S.ButtonWrapper>
-              <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid || pending}>
+              <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid || pending || isUndefined}>
                 {btnName}
               </AuthButton>
             </S.ButtonWrapper>

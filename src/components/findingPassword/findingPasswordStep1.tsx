@@ -10,8 +10,9 @@ type TCodeVerify = undefined | boolean;
 type TStep1 = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   step: number;
+  watchedEmail: string | undefined;
 };
-export default function FindingPasswordStep1({ setStep, step }: TStep1) {
+export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TStep1) {
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | undefined>(undefined);
   const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
@@ -22,11 +23,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
     formState: { errors },
   } = useFormContext();
 
-  const watchedEmail = useWatch({
-    control,
-    name: 'email',
-  });
-
+  console.log(watchedEmail);
   const watchedCode = useWatch({
     control,
     name: 'code',
@@ -36,7 +33,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
 
   const handleSendCode = async () => {
     setValue('code', '');
-    if (!errors.email?.message) {
+    if (!errors.email?.message && watchedEmail) {
       sendCodeMutate(watchedEmail, {
         onSuccess: (data) => {
           setAuthCode(data.result.authCode);
@@ -92,10 +89,10 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
         Name="Email"
         span="Email"
         btnName="Send"
-        disabled={codePending}
         handleSendCode={handleSendCode}
         pending={codePending}
-        valid={!errors.email?.message && !emailErrorMessage && (watchedEmail !== '' || watchedEmail !== undefined)}
+        isUndefined={watchedEmail === undefined}
+        valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}
         {...register('email')}
       />
