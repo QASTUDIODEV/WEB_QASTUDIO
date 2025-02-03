@@ -31,6 +31,7 @@ const stateIconMap = {
   [ACTION_STATE.ERROR]: FailCircle,
   [ACTION_STATE.UNVERIFIED]: null,
 };
+
 // 액션 아이콘 매핑
 const actionIconMap = {
   [ACTION_TYPE.NAVIGATE]: Globe,
@@ -40,66 +41,87 @@ const actionIconMap = {
   [ACTION_TYPE.WAITING]: null,
 };
 
+const locatorList = ['id', 'name', 'class_name', 'tag_name', 'link_text', 'partial_link_text', 'css_selector', 'xpath'];
+const actionList = ['click', 'send_keys', 'clear', 'get_attribute', 'text', 'is_displayed', 'is_enabled', 'is_selected', 'get_screenshot_as_file'];
+
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const actionState = ACTION_STATE.SUCCESS; // action?.state
-  // 액션
+  const actionState = ACTION_STATE.SUCCESS;
+
+  // 액션 가져오기
   const action = useSelector((state) =>
     state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId),
   );
-  const isError = true;
-  // 마지막 액션 추적
-  const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
-  const isLastAction = lastActionId === actionId;
+  // refetch할때 필요
+  const characterId = useSelector((state) => state.scenarioAct.characterId);
 
-  const { useEditAction } = useAction();
+  // 상태 관리
+  const [locatorStrategy, setLocatorStrategy] = useState(action?.locator.strategy || '');
+  const [actionType, setActionType] = useState(action?.action.type || '');
+  const [locatorInputValue, setLocatorInputValue] = useState(action?.locator.value || '');
+  const [actionInputValue, setActionInputValue] = useState(action?.action.value || '');
+
+  const { useEditAction } = useAction(characterId);
   const { mutate: editMutate, isPending } = useEditAction;
 
-  const onSubmit = () => {
-    const res = {
-      actionDescription: action?.actionDescription,
-      step: action?.step,
-      actionType: action?.actionType,
-      locator: {
-        strategy: action?.locator.strategy,
-        value: action?.locator.value,
-      },
-      action: {
-        type: action?.action.type,
-        value: action?.action.value,
-      },
-    };
-    console.log(res);
+  // 변경 감지하여 Apply 버튼 활성화
+  const isLocatorApplyDisabled = locatorStrategy === action?.locator.strategy && locatorInputValue === action?.locator.value;
+  const isActionApplyDisabled = actionType === action?.action.type && actionInputValue === action?.action.value;
+
+  // Locator 적용
+  const onSubmitLocator = () => {
     editMutate({
       actionId: action?.actionId,
       data: {
-        actionDescription: action?.actionDescription,
-        step: action?.step,
-        actionType: action?.actionType,
+        actionDescription: action?.actionDescription ?? '',
+        step: action?.step ?? 0,
+        actionType: action?.actionType ?? '',
         locator: {
-          strategy: action?.locator.strategy,
-          value: action?.locator.value,
+          strategy: locatorStrategy,
+          value: locatorInputValue,
+        },
+        action: action?.action ?? { type: '', value: '' },
+      },
+    });
+  };
+
+  // Action 적용
+  const onSubmitAction = () => {
+    editMutate({
+      actionId: action?.actionId,
+      data: {
+        actionDescription: action?.actionDescription ?? '',
+        step: action?.step ?? 0,
+        actionType: action?.actionType ?? '',
+        locator: {
+          strategy: locatorStrategy,
+          value: locatorInputValue,
         },
         action: {
-          type: action?.action.type,
-          value: action?.action.value,
+          type: actionType,
+          value: actionInputValue,
         },
       },
     });
   };
-  //모달 함수
+
+  // 모달 함수
   const handleModal = (): void => {
     dispatch(openModal('scenarioActModal'));
   };
 
-  //액션 오픈 함수
+  // 액션 오픈 함수
   const handleIsOpen = (): void => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
+  // 마지막 액션인지 확인
+  const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
+  const isLastAction = lastActionId === actionId;
+
   return (
-    <S.Container $isError={isError}>
+    <S.Container $isError={false}>
       {/* 헤더 */}
       <S.Header state={actionState || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
@@ -113,37 +135,45 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       {/* 세부 사항 */}
       {isOpen && (
         <S.DescriptionContainer>
+          {/* Locator */}
           <S.DescriptionItem>
             <S.DescriptionRow>
-              locator
+              Locator
               <S.DropdownContainer>
-                <SelectDropdown options={['css_selector', 'id']} onSelect={() => {}} type="thin" />
+                <SelectDropdown options={locatorList} initialValue={locatorStrategy} onSelect={setLocatorStrategy} type="thin" />
               </S.DropdownContainer>
             </S.DescriptionRow>
             <S.DescriptionRow>
-              <S.Input value={action?.locator.value} />
-              <Button color="blue" onClick={onSubmit}>
+              <S.Input value={locatorInputValue} onChange={(e) => setLocatorInputValue(e.target.value)} />
+              <Button color="blue" onClick={onSubmitLocator} disabled={isLocatorApplyDisabled || isPending}>
                 Apply
               </Button>
             </S.DescriptionRow>
           </S.DescriptionItem>
 
+          {/* Action */}
           <S.DescriptionItem>
             <S.DescriptionRow>
-              action
+              Action
               <S.DropdownContainer>
-                <SelectDropdown options={['send_keys', 'id']} onSelect={() => {}} type="thin" />
+                <SelectDropdown options={actionList} initialValue={actionType} onSelect={setActionType} type="thin" />
               </S.DropdownContainer>
             </S.DescriptionRow>
             <S.DescriptionRow>
-              <S.Input value={action?.action.value} />
-              <Button color="blue" onClick={onSubmit}>
+              {/* 특정 Action Type일 때만 Input 표시 */}
+              {['send_keys', 'get_attribute'].includes(actionType) && (
+                <S.DescriptionRow>
+                  <S.Input value={actionInputValue} onChange={(e) => setActionInputValue(e.target.value)} />
+                </S.DescriptionRow>
+              )}
+              <Button color="blue" onClick={onSubmitAction} disabled={isActionApplyDisabled || isPending}>
                 Apply
               </Button>
             </S.DescriptionRow>
           </S.DescriptionItem>
         </S.DescriptionContainer>
       )}
+
       {/* 언더라인 */}
       {isLastAction &&
         (actionState === ACTION_STATE.SUCCESS ? (

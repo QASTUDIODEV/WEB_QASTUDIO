@@ -16,13 +16,15 @@ export default function useScenarioList(characterId: number | null | undefined) 
   const useGetScenarioList = useCoreQuery([QUERY_KEYS.GET_SCENARIO_LIST, characterId], () => getScenarioList({ characterId: characterId! }), {
     enabled: !!characterId,
   });
+
   const useCreateScenario = useCoreMutation(createScenario);
 
+  // Redux Store 업데이트
   useEffect(() => {
     if (useGetScenarioList.data?.result?.scenarios) {
       dispatch(setScenarioList(useGetScenarioList.data.result));
     }
   }, [useGetScenarioList.data, dispatch]);
 
-  return { useGetScenarioList, useCreateScenario };
+  return { useGetScenarioList, useCreateScenario, refetchScenarioList: useGetScenarioList.refetch };
 }
