@@ -44,7 +44,7 @@ function SignupPage() {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
@@ -122,18 +122,18 @@ function SignupPage() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && touchedFields.email && !errors.email?.message) {
+      if (step === 0 && !errors.email?.message && watchedEmail !== '') {
         handleSendCode();
       }
-      if (step === 1 && touchedFields.code && !errors.code?.message && !codeverify) {
+      if (step === 1 && !errors.code?.message && !codeverify && watchedCode !== '') {
         handleVerifyCode();
       }
       if (
         step === 1 &&
-        touchedFields.email &&
-        touchedFields.password &&
-        touchedFields.repassword &&
-        touchedFields.code &&
+        watchedCode !== '' &&
+        watchedEmail !== '' &&
+        watchedPassword !== '' &&
+        watchedRepassword !== '' &&
         passwordMatch &&
         codeverify &&
         !errors.email?.message &&
@@ -147,7 +147,10 @@ function SignupPage() {
   };
 
   useEffect(() => {
-    if (watchedPassword === watchedRepassword) {
+    if (watchedRepassword === undefined) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else if (watchedPassword === watchedRepassword) {
       setPasswordMatch(true);
       setErrorMessage('');
     } else {
@@ -158,6 +161,7 @@ function SignupPage() {
 
   useEffect(() => {
     setStep(0);
+    console.log(watchedEmail);
   }, []);
 
   useEffect(() => {
@@ -179,7 +183,7 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             pending={codePending}
-            valid={!errors.email?.message && !emailErrorMessage && watchedEmail !== ''}
+            valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage && watchedEmail !== undefined}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}
           />
@@ -204,7 +208,7 @@ function SignupPage() {
           />
           <InputModule
             top={false}
-            valid={!errors.repassword?.message && passwordMatch && watchedRepassword !== ''}
+            valid={!errors.repassword?.message && passwordMatch && (watchedRepassword !== '' || watchedRepassword === undefined)}
             errorMessage={errors.repassword?.message || errorMessage}
             Name={'Password'}
             inputname={'password'}

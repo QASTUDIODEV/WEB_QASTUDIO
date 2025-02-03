@@ -94,16 +94,14 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
         btnName="Send"
         disabled={codePending}
         handleSendCode={handleSendCode}
-        touched={touchedFields.email}
         pending={codePending}
-        valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+        valid={!errors.email?.message && !emailErrorMessage && watchedEmail !== ''}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}
         {...register('email')}
       />
       {AuthCode && (
         <CodeModule
-          touched={touchedFields.code}
-          valid={touchedFields.code && !errors.code?.message}
+          valid={!errors.code?.message && watchedCode !== ''}
           errorMessage={errors.code?.message as string}
           Name={'Code'}
           codeverify={codeverify}

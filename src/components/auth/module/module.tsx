@@ -43,7 +43,6 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             autoComplete={inputname}
             isValid={touched ? valid : true}
             errorMessage={errorMessage}
-            // touched={touched}
             value={value}
             top={top}
             ref={ref}
@@ -62,6 +61,11 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             </S.MessageWrapper>
           )}
         </S.Wrapper2>
+        {errorMessage && !top && (
+          <S.MessageWrapper3>
+            <ValidationMessage message={errorMessage} isError={!valid} />
+          </S.MessageWrapper3>
+        )}
       </S.Wrapper>
     );
   },
