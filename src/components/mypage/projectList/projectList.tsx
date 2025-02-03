@@ -54,7 +54,7 @@ export default function ProjectList() {
                 name={project.projectName}
                 participants={project.participant}
                 date={project.lastModifiedDate}
-                onClick={() => navigate(`/project/information/${project.projectId}`)}
+                onClick={() => navigate(`/project/dashboard/${project.projectId}`)}
               />
             ))}
           </tbody>
