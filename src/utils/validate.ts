@@ -51,5 +51,4 @@ export const myPageScehma = z.object({
 export const createCharacterModalScehma = z.object({
   characterName: z.string().min(1, 'Required.'),
   characterDescription: z.string().min(1, 'Required.'),
-  accessPage: z.array(z.string()).min(1, { message: 'Required.' }),
 });

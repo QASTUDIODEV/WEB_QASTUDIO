@@ -60,10 +60,6 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
     }
   }, [PathData]);
 
-  useEffect(() => {
-    setErrorMessage('');
-  }, [selectedOptions]);
-
   const {
     register,
     handleSubmit,
@@ -73,10 +69,15 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
     resolver: zodResolver(createCharacterModalScehma),
   });
 
+  useEffect(() => {
+    setErrorMessage('');
+  }, [selectedOptions]);
+
   // 역할 생성 함수
 
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
     setErrorMessage('');
+    console.log('click');
     if (!isSubmitted) {
       postCharacter(
         {
@@ -200,7 +201,7 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
               <Button
                 color="blue"
                 onClick={handleSubmit(onSubmit)}
-                disabled={!isValid || selectedOptions.length === 0 || postCharacterPending || patchCharacterPending}
+                disabled={selectedOptions.length < 1 || postCharacterPending || patchCharacterPending || !isValid}
               >
                 Create
               </Button>
