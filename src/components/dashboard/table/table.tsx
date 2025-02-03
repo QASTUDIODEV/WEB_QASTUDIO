@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
@@ -49,6 +49,10 @@ export default function Table() {
     pageIndex: 0,
     pageSize: 6,
   });
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [selectState, selectedPageName, date, debouncedSearch]);
 
   const { data: listData } = usePaginateTestList({
     projectId: Number(projectId),
