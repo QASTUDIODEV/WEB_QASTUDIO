@@ -19,7 +19,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
     register,
     setValue,
     control,
-    formState: { touchedFields, errors },
+    formState: { errors },
   } = useFormContext();
 
   const watchedEmail = useWatch({
@@ -75,10 +75,10 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 1 && !errors.email?.message && touchedFields.email) {
+      if (step === 1 && !errors.email?.message && watchedEmail !== '') {
         handleSendCode();
       }
-      if (step === 1 && !errors.code?.message && touchedFields.code) {
+      if (step === 1 && !errors.code?.message && watchedCode !== '') {
         setStep(2);
       }
     }
@@ -94,16 +94,14 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
         btnName="Send"
         disabled={codePending}
         handleSendCode={handleSendCode}
-        touched={touchedFields.email}
         pending={codePending}
-        valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+        valid={!errors.email?.message && !emailErrorMessage && (watchedEmail !== '' || watchedEmail !== undefined)}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}
         {...register('email')}
       />
       {AuthCode && (
         <CodeModule
-          touched={touchedFields.code}
-          valid={touchedFields.code && !errors.code?.message}
+          valid={!errors.code?.message && watchedCode !== ''}
           errorMessage={errors.code?.message as string}
           Name={'Code'}
           codeverify={codeverify}

@@ -19,20 +19,22 @@ import * as S from '@/pages/findingPassword/findingPassword.style';
 type TField = z.infer<typeof findingSchema>;
 
 export default function FindingPassword() {
-  const {
-    control,
-    formState: { errors, touchedFields },
-  } = useForm<TField>({
+  const methods = useForm<TField>({
     mode: 'onChange',
     resolver: zodResolver(findingSchema),
   });
+
+  const {
+    control,
+    formState: { errors },
+  } = methods;
 
   const [step, setStep] = useState(1);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
 
   const navigate = useNavigate();
-  const methods = useForm<TField>();
+
   const { handleSubmit } = methods;
   const { useChangePassword } = useUserAuth();
   const { mutate: changePasswordMutation } = useChangePassword;
@@ -78,8 +80,8 @@ export default function FindingPassword() {
         step === 2 &&
         !errors.password?.message &&
         !errors.repassword?.message &&
-        touchedFields.password &&
-        touchedFields.repassword &&
+        watchedPassword !== '' &&
+        watchedRepassword !== '' &&
         passwordMatch &&
         !passwordErrorMessage
       ) {

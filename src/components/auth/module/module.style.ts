@@ -29,6 +29,10 @@ const MessageWrapper = styled.div`
   right: 0;
 `;
 
+const MessageWrapper3 = styled.div`
+  display: flex;
+`;
+
 const MessageWrapper2 = styled.div`
   display: flex;
 `;
@@ -44,4 +48,4 @@ const AuthButtonWrapper = styled.div`
   right: -90px;
 `;
 
-export { AuthButtonWrapper, ButtonWrapper, Container, MessageWrapper, MessageWrapper2, Wrapper, Wrapper2 };
+export { AuthButtonWrapper, ButtonWrapper, Container, MessageWrapper, MessageWrapper2, MessageWrapper3, Wrapper, Wrapper2 };
