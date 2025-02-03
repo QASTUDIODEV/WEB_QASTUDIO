@@ -37,6 +37,9 @@ const scenarioReducer = createSlice({
     newCharacter: (state, action) => {
       state.characters = [...state.characters, action.payload];
     },
+    deleteAllCharacter: (state) => {
+      state.characters = [];
+    },
     edit: (state, action) => {
       state.isEdit = action.payload;
     },
@@ -104,5 +107,6 @@ const scenarioReducer = createSlice({
   },
 });
 
-export const { edit, toggleAll, newCharacter, deleteCharacters, toggleCharacter, toggleScenario, resetChecks, deleteScenarios } = scenarioReducer.actions;
+export const { edit, toggleAll, deleteAllCharacter, newCharacter, deleteCharacters, toggleCharacter, toggleScenario, resetChecks, deleteScenarios } =
+  scenarioReducer.actions;
 export default scenarioReducer.reducer;

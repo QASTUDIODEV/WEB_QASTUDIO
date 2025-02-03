@@ -14,7 +14,7 @@ import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 import * as S from '@/pages/scenario/scenario.style';
-import { edit, newCharacter, resetChecks } from '@/slices/scenarioSlice';
+import { deleteAllCharacter, edit, newCharacter, resetChecks } from '@/slices/scenarioSlice';
 
 export default function ScenarioPage() {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ export default function ScenarioPage() {
   const { data: ProjectSummaryData } = useGetProjectSummary;
   const { data: CharacterListData, isPending } = useGetCharacterList;
   const CharacterData = CharacterListData?.result.characters;
-  const characters = useSelector((state) => state.scenario.characters);
 
   useEffect(() => {
     dispatch(resetChecks());
@@ -36,20 +35,18 @@ export default function ScenarioPage() {
 
   useEffect(() => {
     if (CharacterListData) {
+      dispatch(deleteAllCharacter());
       CharacterData?.forEach((character) => {
-        const exists = characters.some((char) => char.id === character.characterId);
-        if (!exists) {
-          const characterData = {
-            isChecked: false,
-            isSelected: false,
-            scenarios: character.scenarios,
-            id: character.characterId,
-          };
-          dispatch(newCharacter(characterData));
-        }
+        const characterData = {
+          isChecked: false,
+          isSelected: false,
+          scenarios: character.scenarios,
+          id: character.characterId,
+        };
+        dispatch(newCharacter(characterData));
       });
     }
-  }, [CharacterListData, CharacterData, currentPage, dispatch]);
+  }, [CharacterData, currentPage, dispatch]);
 
   const goToNextPage = () => {
     if (!CharacterListData?.result.isLast) {

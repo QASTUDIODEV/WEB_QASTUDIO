@@ -44,12 +44,14 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
     );
   }, [characters]);
 
-  // Delete 버튼 클릭 함수
-  const handleDeleteClick = (): void => {
+  useEffect(() => {
     const hasChecked = characters.some((character) => character.isChecked || character.scenarios.scenarioList.some((scenario) => scenario.isChecked));
     setHasCheckedItems(hasChecked);
+  }, [characters]);
 
-    if (hasChecked) {
+  // Delete 버튼 클릭 함수
+  const handleDeleteClick = (): void => {
+    if (hasCheckedItems) {
       dispatch(edit(true));
       dispatch(resetChecks());
       setHasCheckedItems(true);
