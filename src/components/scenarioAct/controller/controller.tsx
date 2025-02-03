@@ -14,6 +14,7 @@ import Delete from '@/assets/icons/delete.svg?react';
 
 export default function Controller() {
   const scenario = useSelector((state) => state.scenarioAct);
+
   const { isOpen } = useSelector((state) => state.modal);
   const [step, setStep] = useState<number>(1);
 

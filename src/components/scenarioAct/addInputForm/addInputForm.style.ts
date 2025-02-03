@@ -43,7 +43,7 @@ export const DivideInputContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 `;
-export const AddButton = styled.div<{ disabled?: boolean }>`
+export const AddButton = styled.button<{ disabled?: boolean }>`
   height: 32px;
   display: flex;
   justify-content: center;

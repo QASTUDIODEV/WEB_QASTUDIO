@@ -99,19 +99,17 @@ export type TCreateScenaioValues = {
   pageId: number;
   scenarioName: string;
   scenarioDescription: string;
-  actions: [
-    {
-      actionDescription: string;
-      step: number;
-      actionType: string;
-      locator: {
-        strategy: string;
-        value: string;
-      };
-      action: {
-        type: string;
-        value: string;
-      };
-    },
-  ];
+  actions: {
+    actionDescription: string;
+    step: number;
+    actionType: string;
+    locator: {
+      strategy: string;
+      value: string;
+    };
+    action: {
+      type: string;
+      value: string;
+    };
+  }[];
 };

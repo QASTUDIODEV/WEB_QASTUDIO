@@ -31,13 +31,26 @@ interface ICharacter {
   characterId: number;
   characterName: string;
 }
-
+interface IRecordAction {
+  actionDescription: string;
+  step: number;
+  actionType: string;
+  locator: {
+    strategy: string;
+    value: string;
+  };
+  action: {
+    type: string;
+    value: string;
+  };
+}
 interface IScenarioActSlice {
   characterId: number | null;
   projectUrl: string | null;
   projectName: string | null;
   scenarios: IScenario[];
   characters: ICharacter[];
+  recordActions: IRecordAction[];
 }
 
 interface ICharacterPayload {
@@ -61,6 +74,7 @@ const initialState: IScenarioActSlice = {
   projectName: 'QASTUDIO',
   characters: [],
   scenarios: [],
+  recordActions: [],
 };
 
 const scenarioActSlice = createSlice({
@@ -97,8 +111,16 @@ const scenarioActSlice = createSlice({
         lastActionId: null,
       }));
     },
+    // action 추가
+    addAction: (state, action: PayloadAction<IRecordAction>) => {
+      state.recordActions.push(action.payload);
+    },
+    // action 삭제
+    removeAction: (state, action: PayloadAction<number>) => {
+      state.recordActions = state.recordActions.filter((itm) => itm.step !== action.payload);
+    },
   },
 });
 
-export const { openScenario, setProjectInfo, setCharacterList, setCharacterId, setScenarioList } = scenarioActSlice.actions;
+export const { openScenario, setProjectInfo, setCharacterList, setCharacterId, setScenarioList, addAction, removeAction } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

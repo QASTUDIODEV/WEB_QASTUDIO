@@ -26,7 +26,6 @@ const getScenarioList = async ({ characterId }: TGetProjectInfoValues): Promise<
   return data;
 };
 
-//아직
 const editAction = async (editData: TEditActionValues): Promise<TEditActionResponse> => {
   const { data } = await axiosInstance.patch(`/api/v0/actions/${editData.actionId}`, editData.data);
   console.log(data);
