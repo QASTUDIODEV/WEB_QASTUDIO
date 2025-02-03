@@ -92,6 +92,7 @@ function SignupPage() {
           setEmailErrorMessage(undefined);
         },
         onError: (error) => {
+          console.log(error);
           setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
         },
       });
@@ -177,16 +178,14 @@ function SignupPage() {
             span="Email"
             btnName="Send"
             handleSendCode={handleSendCode}
-            touched={touchedFields.email}
             pending={codePending}
-            valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+            valid={!errors.email?.message && !emailErrorMessage && watchedEmail !== ''}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}
           />
           {step === 1 && (
             <CodeModule
-              touched={touchedFields.code}
-              valid={touchedFields.code && !errors.code?.message}
+              valid={!errors.code?.message && watchedCode !== ''}
               errorMessage={errors.code?.message}
               Name={'Code'}
               codeverify={codeverify}
@@ -196,8 +195,7 @@ function SignupPage() {
           )}
           <InputModule
             top={false}
-            touched={touchedFields.password}
-            valid={touchedFields.password && !errors.password?.message}
+            valid={!errors.password?.message && watchedPassword !== ''}
             errorMessage={errors.password?.message}
             Name={'Password'}
             inputname={'password'}
@@ -206,8 +204,7 @@ function SignupPage() {
           />
           <InputModule
             top={false}
-            touched={touchedFields.repassword}
-            valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+            valid={!errors.repassword?.message && passwordMatch && watchedRepassword !== ''}
             errorMessage={errors.repassword?.message || errorMessage}
             Name={'Password'}
             inputname={'password'}
@@ -219,10 +216,10 @@ function SignupPage() {
             format="normal"
             onClick={handleSubmit(onSubmit)}
             disabled={
-              !touchedFields.email ||
-              !touchedFields.code ||
-              !touchedFields.password ||
-              !touchedFields.repassword ||
+              !watchedCode ||
+              !watchedEmail ||
+              !watchedPassword ||
+              !watchedRepassword ||
               !codeverify ||
               !passwordMatch ||
               !!errors.email?.message ||

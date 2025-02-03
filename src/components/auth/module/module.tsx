@@ -9,7 +9,7 @@ import * as S from './module.style';
 
 type TModuleProps = {
   btnName?: string;
-  touched: boolean | undefined;
+  touched?: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   handleSendCode?: () => void;
@@ -22,7 +22,7 @@ type TModuleProps = {
 };
 
 type TCodeModuleProps = {
-  touched: boolean | undefined;
+  touched?: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   Name: string;
@@ -43,7 +43,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             autoComplete={inputname}
             isValid={touched ? valid : true}
             errorMessage={errorMessage}
-            touched={touched}
+            // touched={touched}
             value={value}
             top={top}
             ref={ref}
@@ -56,7 +56,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
               </AuthButton>
             </S.ButtonWrapper>
           )}
-          {errorMessage && touched && top && inputname === 'normal' && (
+          {errorMessage && top && (
             <S.MessageWrapper>
               <ValidationMessage message={errorMessage} isError={!valid} />
             </S.MessageWrapper>
