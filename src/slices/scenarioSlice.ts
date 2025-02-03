@@ -93,8 +93,16 @@ const scenarioReducer = createSlice({
         }
       });
     },
+    deleteScenarios: (state, action) => {
+      state.characters.forEach((character) => {
+        character.scenarios.scenarioList = character.scenarios.scenarioList.filter((scenario) => scenario.scenarioId !== action.payload);
+      });
+    },
+    deleteCharacters: (state, action) => {
+      state.characters = state.characters.filter((character) => character.id !== action.payload);
+    },
   },
 });
 
-export const { edit, toggleAll, newCharacter, toggleCharacter, toggleScenario, resetChecks } = scenarioReducer.actions;
+export const { edit, toggleAll, newCharacter, deleteCharacters, toggleCharacter, toggleScenario, resetChecks, deleteScenarios } = scenarioReducer.actions;
 export default scenarioReducer.reducer;

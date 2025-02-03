@@ -15,7 +15,7 @@ import Edit from '@/assets/icons/edit.svg?react';
 import ExclamationCircle from '@/assets/icons/exclamation_circle.svg?react';
 import Play from '@/assets/icons/play.svg?react';
 import { openModal } from '@/slices/modalSlice.ts';
-import { edit, resetChecks } from '@/slices/scenarioSlice';
+import { deleteCharacters, deleteScenarios, edit, resetChecks } from '@/slices/scenarioSlice';
 
 type TScenarioProps = {
   projectId: string;
@@ -54,10 +54,18 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
       dispatch(resetChecks());
       setHasCheckedItems(true);
       if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
-        deleteSceanrioMutate(selectedScenarioId);
+        deleteSceanrioMutate(selectedScenarioId, {
+          onSuccess: (_, variables) => {
+            variables.map((id) => deleteScenarios(id));
+          },
+        });
       }
       if (selectedCharacterId !== undefined && selectedCharacterId.length > 0) {
-        deleteCharacterMutate(selectedCharacterId);
+        deleteCharacterMutate(selectedCharacterId, {
+          onSuccess: (_, variables) => {
+            variables.map((id) => deleteCharacters(id));
+          },
+        });
       }
     }
   };
