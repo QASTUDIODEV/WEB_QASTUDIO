@@ -19,7 +19,7 @@ export type TGetTestListRequest = {
   projectId: number;
   page?: number;
   date?: string;
-  pageName?: string;
+  pageName?: string | null;
   state?: TEST_STATE | null;
   testName?: string;
 };
