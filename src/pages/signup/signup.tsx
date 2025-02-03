@@ -161,7 +161,6 @@ function SignupPage() {
 
   useEffect(() => {
     setStep(0);
-    console.log(watchedEmail);
   }, []);
 
   useEffect(() => {
@@ -183,7 +182,8 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             pending={codePending}
-            valid={!errors.email?.message && !emailErrorMessage && (watchedEmail !== undefined || watchedEmail !== '')}
+            isUndefined={watchedEmail === undefined}
+            valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}
           />
