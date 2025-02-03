@@ -9,7 +9,6 @@ import * as S from './module.style';
 
 type TModuleProps = {
   btnName?: string;
-  touched?: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   handleSendCode?: () => void;
@@ -22,7 +21,6 @@ type TModuleProps = {
 };
 
 type TCodeModuleProps = {
-  touched?: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   Name: string;
@@ -32,7 +30,7 @@ type TCodeModuleProps = {
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, touched, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
@@ -41,7 +39,7 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             placeholder={Name}
             type={inputname}
             autoComplete={inputname}
-            isValid={touched ? valid : true}
+            isValid={valid}
             errorMessage={errorMessage}
             value={value}
             top={top}
@@ -73,12 +71,12 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
 
 // CodeModule 컴포넌트
 export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
-  ({ touched, valid, errorMessage, Name, codeverify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
+  ({ valid, errorMessage, Name, codeverify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
     return (
       <S.Wrapper>
-        <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeverify ? true : false) : false) : undefined} ref={ref} {...rest} />
+        <CodeInput placeholder={Name} isValid={valid ? (codeverify ? true : false) : false} ref={ref} {...rest} />
         <S.MessageWrapper2>
-          {touched && errorMessage ? (
+          {errorMessage ? (
             <ValidationMessage message={errorMessage} isError={!valid} />
           ) : codeverify ? (
             <ValidationMessage message={'Authentication completed'} isError={false} />

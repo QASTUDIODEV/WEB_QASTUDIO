@@ -19,7 +19,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
     register,
     setValue,
     control,
-    formState: { touchedFields, errors },
+    formState: { errors },
   } = useFormContext();
 
   const watchedEmail = useWatch({
@@ -75,10 +75,10 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 1 && !errors.email?.message && touchedFields.email) {
+      if (step === 1 && !errors.email?.message && watchedEmail !== '') {
         handleSendCode();
       }
-      if (step === 1 && !errors.code?.message && touchedFields.code) {
+      if (step === 1 && !errors.code?.message && watchedCode !== '') {
         setStep(2);
       }
     }
@@ -95,7 +95,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
         disabled={codePending}
         handleSendCode={handleSendCode}
         pending={codePending}
-        valid={!errors.email?.message && !emailErrorMessage && watchedEmail !== ''}
+        valid={!errors.email?.message && !emailErrorMessage && (watchedEmail !== '' || watchedEmail !== undefined)}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}
         {...register('email')}
       />

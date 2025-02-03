@@ -183,7 +183,7 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             pending={codePending}
-            valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage && watchedEmail !== undefined}
+            valid={!errors.email?.message && !emailErrorMessage && (watchedEmail !== undefined || watchedEmail !== '')}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}
           />
