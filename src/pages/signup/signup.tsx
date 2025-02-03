@@ -161,7 +161,6 @@ function SignupPage() {
 
   useEffect(() => {
     setStep(0);
-    console.log(watchedEmail);
   }, []);
 
   useEffect(() => {
