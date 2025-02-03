@@ -25,10 +25,18 @@ export const SubTitle = styled.p`
   white-space: nowrap;
 `;
 
+export const ValidationWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  top: 6px;
+  right: 0;
+`;
+
 export const InputWrapper = styled.div`
   flex-direction: column;
   display: flex;
   gap: 10px;
+  position: relative;
 `;
 
 export const ButtonContainer = styled.div`

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
@@ -14,9 +14,10 @@ import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 import * as S from '@/pages/scenario/scenario.style';
-import { newCharacter } from '@/slices/scenarioSlice';
+import { edit, newCharacter, resetChecks } from '@/slices/scenarioSlice';
 
 export default function ScenarioPage() {
+  const navigate = useNavigate();
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -27,6 +28,11 @@ export default function ScenarioPage() {
   const { data: CharacterListData, isPending } = useGetCharacterList;
   const CharacterData = CharacterListData?.result.characters;
   const characters = useSelector((state) => state.scenario.characters);
+
+  useEffect(() => {
+    dispatch(resetChecks());
+    dispatch(edit(false));
+  }, [navigate]);
 
   useEffect(() => {
     if (CharacterListData) {
@@ -99,11 +105,21 @@ export default function ScenarioPage() {
         )}
 
         {CharacterListData?.result &&
-          Array.from({ length: CharacterListData.result.totalPage }, (_, index) => (
-            <S.PageNumber key={index} $isActive={currentPage === index} onClick={() => setCurrentPage(index)}>
-              {index + 1}
-            </S.PageNumber>
-          ))}
+          (() => {
+            const totalPages = CharacterListData.result.totalPage;
+            const startPage = Math.max(0, Math.min(currentPage - 2, totalPages - 5));
+            const endPage = Math.min(totalPages - 1, startPage + 4);
+
+            return Array.from({ length: endPage - startPage + 1 }, (_, index) => {
+              const pageIndex = startPage + index;
+              return (
+                <S.PageNumber key={pageIndex} $isActive={currentPage === pageIndex} onClick={() => setCurrentPage(pageIndex)}>
+                  {pageIndex + 1}
+                </S.PageNumber>
+              );
+            });
+          })()}
+
         {!CharacterListData?.result.isLast ? (
           <S.IconContainer onClick={goToNextPage}>
             <ArrowRight stroke={'#DFE8F9'} />

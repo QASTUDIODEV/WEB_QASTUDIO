@@ -1,6 +1,22 @@
+import type { UseMutationOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+
 import type { DEVICE, STACK } from '@/enums/enums';
 
 import type { TCommonResponse } from '../common/common';
+
+export type TUseMutationCustomAIOptions<TData = unknown, TVariables = unknown> = Omit<
+  UseMutationOptions<TData, TResponseAIError, TVariables, unknown>,
+  'mutationFn'
+>;
+
+export type TResponseAIError = AxiosError<{
+  type: string;
+  title: string;
+  statusCode: number;
+  detail: string;
+  instance: string;
+}>;
 
 export type TDetailCharacters = {
   characterId: number;

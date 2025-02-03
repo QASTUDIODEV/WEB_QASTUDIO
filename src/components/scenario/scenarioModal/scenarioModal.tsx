@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TProjectPath, TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
+import { createCharacterModalScehma } from '@/utils/validate';
 import { queryClient } from '@/apis/queryClient';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
@@ -58,12 +60,17 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
     }
   }, [PathData]);
 
+  useEffect(() => {
+    setErrorMessage('');
+  }, [selectedOptions]);
+
   const {
     register,
     handleSubmit,
-    formState: { isValid },
+    formState: { isValid, errors, touchedFields },
   } = useForm<TFormValues>({
     mode: 'onChange',
+    resolver: zodResolver(createCharacterModalScehma),
   });
 
   // 역할 생성 함수
@@ -90,7 +97,7 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
           },
           onError: (error) => {
             if (error.response) {
-              setErrorMessage(error.response?.data.message);
+              setErrorMessage(error.response.data.detail);
             }
           },
         },
@@ -116,7 +123,7 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
             },
             onError: (error) => {
               if (error.response) {
-                setErrorMessage(error.response?.data.message);
+                setErrorMessage(error.response.data.detail);
               }
             },
           },
@@ -159,22 +166,25 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
 
             <S.InputWrapper>
               <S.SubTitle>Name</S.SubTitle>
-              <Input
-                placeholder="Define the target character in one sentence."
-                type="normal"
-                {...register('characterName', { required: 'Name is required' })}
-              />
+              {errors.characterName?.message && touchedFields.characterName && (
+                <S.ValidationWrapper>
+                  <ValidataionMessage message={errors.characterName.message} isError={true} />
+                </S.ValidationWrapper>
+              )}
+              <Input type="normal" placeholder="Define the target character in one sentence." {...register('characterName')} />
             </S.InputWrapper>
             <S.InputWrapper>
               <S.SubTitle>Description</S.SubTitle>
-              <Input
-                placeholder="Explain the character's purpose for using the project."
-                type="normal"
-                {...register('characterDescription', { required: 'Description is required' })}
-              />
+              {errors.characterDescription?.message && touchedFields.characterDescription && (
+                <S.ValidationWrapper>
+                  <ValidataionMessage message={errors.characterDescription.message} isError={true} />
+                </S.ValidationWrapper>
+              )}
+              <Input placeholder="Explain the character's purpose for using the project." type="normal" {...register('characterDescription')} />
             </S.InputWrapper>
             <S.InputWrapper>
               <S.SubTitle>Access page</S.SubTitle>
+
               <Dropdown options={options} onSelect={handleSelect} placeholder="Select pages accessible to the character." />
             </S.InputWrapper>
 

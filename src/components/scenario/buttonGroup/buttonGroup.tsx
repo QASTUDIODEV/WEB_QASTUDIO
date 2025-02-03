@@ -50,7 +50,7 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
     setHasCheckedItems(hasChecked);
 
     if (hasChecked) {
-      dispatch(edit());
+      dispatch(edit(true));
       dispatch(resetChecks());
       setHasCheckedItems(true);
       if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
@@ -64,14 +64,14 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
 
   // Done 버튼 클릭 함수
   const handleDoneClick = (): void => {
-    dispatch(edit());
+    dispatch(edit(false));
     dispatch(resetChecks());
     setHasCheckedItems(true);
   };
 
   // Edit 버튼 클릭 함수
   const handleEditClick = (): void => {
-    dispatch(edit());
+    dispatch(edit(true));
     dispatch(resetChecks());
     setHasCheckedItems(true);
   };

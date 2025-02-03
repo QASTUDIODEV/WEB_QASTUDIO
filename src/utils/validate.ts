@@ -47,4 +47,9 @@ export const userSettingSchema = z.object({
 export const myPageScehma = z.object({
   nickname: z.string().min(1, 'Nickname is required.').max(20, 'Invalid format.').regex(nicknamePattern, 'Invalid format.'),
 });
-//refine이 작동을 안함.. 이유는 모름... whyrano
+
+export const createCharacterModalScehma = z.object({
+  characterName: z.string().min(1, 'Required.'),
+  characterDescription: z.string().min(1, 'Required.'),
+  accessPage: z.array(z.string()).min(1, { message: 'Required.' }),
+});

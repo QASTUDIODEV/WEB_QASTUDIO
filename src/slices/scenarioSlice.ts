@@ -37,8 +37,8 @@ const scenarioReducer = createSlice({
     newCharacter: (state, action) => {
       state.characters = [...state.characters, action.payload];
     },
-    edit: (state) => {
-      state.isEdit = !state.isEdit;
+    edit: (state, action) => {
+      state.isEdit = action.payload;
     },
     toggleAll: (state) => {
       const allChecked: boolean = state.characters.every((character) => character.isChecked); // 전체 체크 여부
