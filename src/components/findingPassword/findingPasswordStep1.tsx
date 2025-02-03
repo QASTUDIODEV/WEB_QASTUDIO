@@ -23,7 +23,6 @@ export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TS
     formState: { errors },
   } = useFormContext();
 
-  console.log(watchedEmail);
   const watchedCode = useWatch({
     control,
     name: 'code',
