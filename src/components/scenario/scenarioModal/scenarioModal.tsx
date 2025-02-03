@@ -77,7 +77,6 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
 
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
     setErrorMessage('');
-    console.log('click');
     if (!isSubmitted) {
       postCharacter(
         {
