@@ -149,7 +149,15 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   const parsedData = characterData?.result.scenarioDescription ? JSON.parse(characterData.result.scenarioDescription) : null;
 
   return (
-    <Modal title={'Create Character'} onClose={() => dispatch(closeModal())}>
+    <Modal
+      title={'Create Character'}
+      onClose={() => {
+        if (!postCharacterPending && !patchCharacterPending) {
+          dispatch(closeModal());
+        }
+      }}
+      clickOutside={false}
+    >
       {modalStep === 1 && (
         // 역할 선택 단계
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -15,7 +15,7 @@ import Web from '@/assets/icons/web.svg?react';
 
 type TProjectTitleProps = {
   title?: string;
-  profileImg?: string | undefined;
+  profileImg?: string | null;
   device: DEVICE | undefined;
   stack: STACK | undefined;
 };

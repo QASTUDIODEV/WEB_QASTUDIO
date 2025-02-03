@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import type { TProjectPath } from '@/types/scenario/scenario';
 
+import useClickOutside from '@/hooks/common/useClickOutside';
+
 import * as S from '@/components/scenario/dropDown/dropDown.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
@@ -21,19 +23,8 @@ export default function Dropdown({ options, onSelect, placeholder }: IDropdownPr
     onSelect(option);
     setIsOpen(false);
   };
-  // 외부 클릭 감지
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useClickOutside(dropdownRef, () => setIsOpen(false));
 
   return (
     <S.DropdownContainer ref={dropdownRef}>

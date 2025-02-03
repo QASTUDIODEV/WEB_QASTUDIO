@@ -20,6 +20,7 @@ export default function ScenarioPage() {
   const navigate = useNavigate();
   const { projectId } = useParams();
   const dispatch = useDispatch();
+  const { isEdit } = useSelector((state) => state.scenario);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [selectedIdx, setSelectedIdx] = useState<number>(-1);
   const { isOpen } = useSelector((state) => state.modal);
@@ -46,7 +47,7 @@ export default function ScenarioPage() {
         dispatch(newCharacter(characterData));
       });
     }
-  }, [CharacterData, currentPage, dispatch]);
+  }, [CharacterData, currentPage, dispatch, isEdit]);
 
   const goToNextPage = () => {
     if (!CharacterListData?.result.isLast) {
@@ -81,7 +82,7 @@ export default function ScenarioPage() {
           />
         </S.Header>
 
-        <ButtonGroup projectId={projectId || ''} />
+        <ButtonGroup projectId={projectId || ''} currentPage={currentPage} />
 
         <S.CharactersContainer>
           {CharacterListData?.result.characters.map((character) => (

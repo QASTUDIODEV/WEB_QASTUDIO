@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+
+import { queryClient } from '@/apis/queryClient';
+
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useEditScenario from '@/hooks/scenario/useEditScenario';
 
@@ -19,8 +23,9 @@ import { deleteCharacters, deleteScenarios, edit, resetChecks } from '@/slices/s
 
 type TScenarioProps = {
   projectId: string;
+  currentPage: number;
 };
-export default function ButtonGroup({ projectId }: TScenarioProps) {
+export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isEdit, characters } = useSelector((state) => state.scenario);
@@ -34,14 +39,16 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
   const { mutate: deleteCharacterMutate } = useDeleteCharacter;
 
   useEffect(() => {
-    setSelectedCharacterId(characters.filter((character) => character.isChecked).map((character) => character.id));
-    setSelectedScenarioId(
-      characters.flatMap((character) =>
-        character.scenarios.scenarioList && Array.isArray(character.scenarios.scenarioList)
-          ? character.scenarios.scenarioList.filter((scenario) => scenario.isChecked).map((scenario) => scenario.scenarioId)
-          : [],
-      ),
+    const selectedIds = characters.filter((character) => character.isChecked).map((character) => character.id);
+
+    const selectedScenarios = characters.flatMap((character) =>
+      !selectedIds.includes(character.id) && character.scenarios.scenarioList && Array.isArray(character.scenarios.scenarioList)
+        ? character.scenarios.scenarioList.filter((scenario) => scenario.isChecked).map((scenario) => scenario.scenarioId)
+        : [],
     );
+
+    setSelectedCharacterId(selectedIds);
+    setSelectedScenarioId(selectedScenarios);
   }, [characters]);
 
   useEffect(() => {
@@ -55,17 +62,23 @@ export default function ButtonGroup({ projectId }: TScenarioProps) {
       dispatch(edit(true));
       dispatch(resetChecks());
       setHasCheckedItems(true);
-      if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
-        deleteSceanrioMutate(selectedScenarioId, {
-          onSuccess: (_, variables) => {
-            variables.map((id) => deleteScenarios(id));
-          },
-        });
-      }
       if (selectedCharacterId !== undefined && selectedCharacterId.length > 0) {
         deleteCharacterMutate(selectedCharacterId, {
           onSuccess: (_, variables) => {
+            console.log(variables);
             variables.map((id) => deleteCharacters(id));
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ currentPage, projectId }) });
+            dispatch(edit(false));
+          },
+        });
+      }
+      if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
+        deleteSceanrioMutate(selectedScenarioId, {
+          onSuccess: (_, variables) => {
+            console.log(variables);
+            variables.map((id) => deleteScenarios(id));
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ currentPage, projectId }) });
+            dispatch(edit(false));
           },
         });
       }

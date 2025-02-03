@@ -58,13 +58,13 @@ const getProjectPage = async (projectId: string): Promise<TResponseProjectPages>
   return data;
 };
 
-const deleteScenario = async (scenarioId: number[]) => {
-  const { data } = await axiosInstance.delete(`/api/v0/scenarios`, { data: { scenarioId } });
+const deleteScenario = async (scenarioIds: number[]) => {
+  const { data } = await axiosInstance.delete(`/api/v0/scenarios`, { data: { scenarioIds } });
   return data;
 };
 
-const deleteCharacter = async (characterId: number[]) => {
-  const { data } = await axiosInstance.delete(`/api/v0/projects/characters`, { data: { characterId } });
+const deleteCharacter = async (characterIds: number[]) => {
+  const { data } = await axiosInstance.delete(`/api/v0/projects/characters`, { data: { characterIds } });
   return data;
 };
 
