@@ -1,11 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Frame, { useFrame } from 'react-frame-component';
 
 import getCssSelector from '@/utils/getCssSelector';
 
+import { useWebSocket } from '@/hooks/scenarioAct/useWebsocket';
+
 import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
 export default function ActSection() {
+  // WebSocket
+  const [socketId, setSocketId] = useState<string | null>(null);
+  const { isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, {
+    onMessage: (message) => {
+      console.log('수신된 메시지:', message);
+      setSocketId(message);
+    },
+    onOpen: () => {
+      console.log('WebSocket 연결 성공');
+    },
+    onClose: () => {
+      console.log('WebSocket 연결 종료');
+    },
+    onError: (error) => {
+      console.error('WebSocket 에러:', error);
+    },
+  });
+
   //  HTML
   const htmlContent: string = `
     <div>
@@ -59,6 +79,16 @@ export default function ActSection() {
     }
 </style></head><body><div id="mountHere"></div></body></html>`;
 
+  // STOP 명령 전송
+  const sendStopCommand = () => {
+    if (isConnected) {
+      sendMessage('STOP');
+      console.log('STOP 명령 전송');
+    } else {
+      console.error('WebSocket이 연결되지 않았습니다.');
+    }
+  };
+
   return (
     <S.Container>
       <Frame
@@ -71,6 +101,13 @@ export default function ActSection() {
       >
         <InnerComponent htmlContent={htmlContent} />
       </Frame>
+      <div style={{ marginTop: '20px' }}>
+        <p>WebSocket 상태: {isConnected ? '연결됨' : '연결 안 됨'}</p>
+        <p>WebSocket ID: {socketId || '받는 중...'}</p>
+        <button onClick={sendStopCommand} disabled={!isConnected}>
+          STOP 명령 보내기
+        </button>
+      </div>
     </S.Container>
   );
 }

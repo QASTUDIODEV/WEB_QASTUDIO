@@ -25,7 +25,7 @@ export default function ScenarioActPage() {
   const { useGetScenarioList } = useScenarioList(selectedCharacterId);
   const { isLoading: scenarioListLoading } = useGetScenarioList;
 
-  // Redux Store 업데이트
+  // 시나리오 리스트는 refetch할 때 선언되서 useEffect빼놈
   const dispatch = useDispatch();
   useEffect(() => {
     if (useGetScenarioList.data?.result?.scenarios) {
