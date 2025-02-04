@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { ACTION_TYPE } from '@/enums/enums';
 
@@ -44,30 +44,34 @@ export default function AddInputForm() {
 
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
-    console.log('Scenario Submitted:', data);
+    console.log(data);
     createMutate({
       characterId: characterId || 0,
-      pageId: 18,
+      pageId: 18, //페이지 아이디 수정
       scenarioName: data.scenarioName,
       scenarioDescription: data.scenarioDescription,
       actions: recordActions,
     });
   };
 
-  // 액션 생성
+  // 액션record 생성
   const onSubmitAction = (data: any) => {
     const newAction = {
       actionDescription: data.actionTitle,
       step: recordActions.length + 1,
       actionType: data.actionType,
       locator: { strategy: data.strategy, value: data.locatorValue },
-      action: { type: data.actionType, value: data.actionValue },
+      action: { type: data.actionType, value: data.actionValue || '' },
     };
 
     dispatch(addAction(newAction));
-    resetActionForm();
+    resetActionForm({
+      actionTitle: '',
+      locatorValue: '',
+      actionValue: '',
+    });
   };
-
+  const actionType = useWatch({ control: actionControl, name: 'actionType' });
   return (
     <S.Container>
       {/* 시나리오 입력 폼 */}
@@ -117,7 +121,7 @@ export default function AddInputForm() {
           <S.DetailContainer>
             {recordActions.map((action) => (
               <RecordItem key={action.step} title={action.actionDescription} />
-            ))}{' '}
+            ))}
             <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
             <S.DivideInputContainer>
               <Controller
@@ -135,7 +139,9 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select key action." />}
               />
-              <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+              {['send_keys', 'get_attribute'].includes(actionType) && (
+                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+              )}
             </S.DivideInputContainer>
             <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
               {isActionValid ? <Add /> : <AddDark />}

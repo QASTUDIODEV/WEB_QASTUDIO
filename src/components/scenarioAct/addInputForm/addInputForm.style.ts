@@ -42,7 +42,12 @@ export const DivideInputContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+
+  & > *:only-child {
+    grid-column: span 2;
+  }
 `;
+
 export const AddButton = styled.button<{ disabled?: boolean }>`
   height: 32px;
   display: flex;

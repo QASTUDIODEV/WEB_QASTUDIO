@@ -10,7 +10,16 @@ export default function useScenarioList(characterId: number | null | undefined) 
     enabled: !!characterId,
   });
 
-  const useCreateScenario = useCoreMutation(createScenario);
+  // refetch 함수 가져오기
+  const refetchScenarioList = useGetScenarioList.refetch;
 
-  return { useGetScenarioList, useCreateScenario, refetchScenarioList: useGetScenarioList.refetch };
+  // 시나리오 추가
+  const useCreateScenario = useCoreMutation(createScenario, {
+    onSuccess: () => {
+      console.log(1);
+      refetchScenarioList();
+    },
+  });
+
+  return { useGetScenarioList, useCreateScenario, refetchScenarioList };
 }
