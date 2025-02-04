@@ -11,11 +11,9 @@ export const ScenarioItem = styled.div<{ $isChecked: boolean; $isSelected?: bool
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
 `;
 export const IconContainer = styled.div`
-  width: 19.2px;
-  height: 19.2px;
   svg {
-    width: 100%;
-    height: 100%;
+    min-width: 19.2px;
+    min-height: 19.2px;
   }
 `;
 export const ScenarioItemLeftSide = styled.div`
@@ -26,7 +24,7 @@ export const ScenarioItemLeftSide = styled.div`
 `;
 export const ScenarioRightSide = styled.div`
   display: flex;
-  gap: 32px;
+  gap: 15px;
 `;
 
 export const Creater = styled.div`
@@ -34,8 +32,17 @@ export const Creater = styled.div`
   height: 100%;
   align-items: center;
   gap: 6.4px;
-  width: 74.6px;
+  width: 90px;
   ${({ theme }) => theme.text.medium_14};
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  svg {
+    min-width: 24px;
+    min-height: 24px;
+  }
 `;
 
 export const Elapsed = styled.div`
@@ -43,7 +50,7 @@ export const Elapsed = styled.div`
   height: 100%;
   align-items: center;
   gap: 8px;
-  width: 174px;
+  width: 120px;
   ${({ theme }) => theme.text.medium_14};
 `;
 export const ScenarioTitle = styled.p`
