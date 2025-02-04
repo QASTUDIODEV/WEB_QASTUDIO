@@ -84,7 +84,7 @@ const scenarioActSlice = createSlice({
     // 시나리오 선택
     openScenario: (state, action: PayloadAction<number>) => {
       state.scenarios.forEach((scenario) => {
-        scenario.isOpen = scenario.scenarioId === action.payload ? !scenario.isOpen : false;
+        scenario.isOpen = scenario.scenarioId == action.payload ? !scenario.isOpen : false;
       });
     },
     // 프로젝트 정보 설정

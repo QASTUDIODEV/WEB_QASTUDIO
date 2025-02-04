@@ -16,13 +16,13 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
 
-  const toggleDropdown = () => {
+  const handleOpen = () => {
     dispatch(openScenario(scenarioId));
   };
 
   return (
     <S.Container>
-      <S.ScenarioHeader onClick={toggleDropdown} $isOpen={scenario?.isOpen}>
+      <S.ScenarioHeader onClick={handleOpen} $isOpen={scenario?.isOpen}>
         {scenario?.isOpen ? (
           <S.IconContainer>
             <ArrowUp />

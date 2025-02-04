@@ -63,7 +63,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const [actionInputValue, setActionInputValue] = useState(action?.action.value || '');
 
   const { useEditAction } = useAction(characterId);
-  const { mutate: editMutate, isPending } = useEditAction;
+  //const { mutate: editMutate, isPending } = useEditAction;
 
   // 변경 감지하여 Apply 버튼 활성화
   const isLocatorApplyDisabled = locatorStrategy === action?.locator.strategy && locatorInputValue === action?.locator.value;
@@ -71,7 +71,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
 
   // Locator 적용
   const onSubmitLocator = () => {
-    editMutate({
+    /*     editMutate({
       actionId: action?.actionId,
       data: {
         actionDescription: action?.actionDescription ?? '',
@@ -83,12 +83,12 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
         },
         action: action?.action ?? { type: '', value: '' },
       },
-    });
+    }); */
   };
 
   // Action 적용
   const onSubmitAction = () => {
-    editMutate({
+    /*     editMutate({
       actionId: action?.actionId,
       data: {
         actionDescription: action?.actionDescription ?? '',
@@ -103,7 +103,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
           value: actionInputValue,
         },
       },
-    });
+    }); */
   };
 
   // 모달 함수
@@ -145,7 +145,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             </S.DescriptionRow>
             <S.DescriptionRow>
               <S.Input value={locatorInputValue} onChange={(e) => setLocatorInputValue(e.target.value)} />
-              <Button color="blue" onClick={onSubmitLocator} disabled={isLocatorApplyDisabled || isPending}>
+              <Button color="blue" onClick={onSubmitLocator} disabled={isLocatorApplyDisabled}>
                 Apply
               </Button>
             </S.DescriptionRow>
@@ -166,7 +166,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
                   <S.Input value={actionInputValue} onChange={(e) => setActionInputValue(e.target.value)} />
                 </S.DescriptionRow>
               )}
-              <Button color="blue" onClick={onSubmitAction} disabled={isActionApplyDisabled || isPending}>
+              <Button color="blue" onClick={onSubmitAction} disabled={isActionApplyDisabled}>
                 Apply
               </Button>
             </S.DescriptionRow>

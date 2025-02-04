@@ -16,6 +16,8 @@ import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
 import { addAction } from '@/slices/scenarioActSlice';
 
+const locatorList = ['id', 'name', 'class_name', 'tag_name', 'link_text', 'partial_link_text', 'css_selector', 'xpath'];
+const actionList = ['click', 'send_keys', 'clear', 'get_attribute', 'text', 'is_displayed', 'is_enabled', 'is_selected', 'get_screenshot_as_file'];
 export default function AddInputForm() {
   const dispatch = useDispatch();
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
@@ -45,7 +47,7 @@ export default function AddInputForm() {
     console.log('Scenario Submitted:', data);
     createMutate({
       characterId: characterId || 0,
-      pageId: data,
+      pageId: 18,
       scenarioName: data.scenarioName,
       scenarioDescription: data.scenarioDescription,
       actions: recordActions,
@@ -57,9 +59,9 @@ export default function AddInputForm() {
     const newAction = {
       actionDescription: data.actionTitle,
       step: recordActions.length + 1,
-      actionType: data.action,
-      locator: { strategy: data.strategy, value: data.key },
-      action: { type: data.type, value: data.key },
+      actionType: data.actionType,
+      locator: { strategy: data.strategy, value: data.locatorValue },
+      action: { type: data.actionType, value: data.actionValue },
     };
 
     dispatch(addAction(newAction));
@@ -115,29 +117,26 @@ export default function AddInputForm() {
           <S.DetailContainer>
             {recordActions.map((action) => (
               <RecordItem key={action.step} title={action.actionDescription} />
-            ))}
-
+            ))}{' '}
             <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
-            <Controller
-              name="strategy"
-              control={actionControl}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <ThinDropdown options={['click', 'send_keys']} value={field.value} onChange={field.onChange} placeholder="Select action." />
-              )}
-            />
             <S.DivideInputContainer>
               <Controller
-                name="type"
+                name="strategy"
                 control={actionControl}
                 rules={{ required: true }}
-                render={({ field }) => (
-                  <ThinDropdown options={['get_attribute', 'set_value']} value={field.value} onChange={field.onChange} placeholder="Select key action." />
-                )}
+                render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
               />
-              <Input placeholder="Enter key." type="thin" {...registerAction('key', { required: true })} />
+              <Input placeholder="Enter key." type="thin" {...registerAction('locatorValue', { required: true })} />
             </S.DivideInputContainer>
-
+            <S.DivideInputContainer>
+              <Controller
+                name="actionType"
+                control={actionControl}
+                rules={{ required: true }}
+                render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select key action." />}
+              />
+              <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+            </S.DivideInputContainer>
             <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
               {isActionValid ? <Add /> : <AddDark />}
             </S.AddButton>

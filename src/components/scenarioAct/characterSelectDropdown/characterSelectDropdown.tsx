@@ -33,8 +33,8 @@ export default function CharacterSelectDropdown() {
 
   // 캐릭터 선택 함수
   const handleOptionClick = (characterId: number) => {
-    dispatch(setCharacterId(characterId)); // Redux 상태 업데이트
-    setIsOpen(false); // 드롭다운 닫기
+    dispatch(setCharacterId(characterId));
+    setIsOpen(false);
   };
 
   // 외부 클릭 시 드롭다운 닫기
