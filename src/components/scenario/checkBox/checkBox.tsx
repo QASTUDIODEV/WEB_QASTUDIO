@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CheckBoxFalseIcon from '@/assets/icons/check box_false.svg?react';
@@ -10,11 +10,16 @@ interface ICheckBoxProps {
   characterId?: number;
   scenarioId?: number;
   isButtonGroup: boolean;
+  currentPage?: number;
 }
 
-export default function CheckBox({ characterId, scenarioId, isButtonGroup }: ICheckBoxProps) {
+export default function CheckBox({ characterId, scenarioId, isButtonGroup, currentPage }: ICheckBoxProps) {
   const dispatch = useDispatch<TAppDispatch>();
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsAllChecked(false);
+  }, [currentPage]);
   // 체크 여부 판단
   const isChecked: boolean = useSelector((state: TRootState) => {
     if (isButtonGroup) {

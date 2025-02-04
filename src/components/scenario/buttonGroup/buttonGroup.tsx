@@ -49,6 +49,10 @@ export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) 
   }, [characters]);
 
   useEffect(() => {
+    console.log(selectedCharacterId, selectedScenarioId);
+  }, [selectedCharacterId, selectedScenarioId]);
+
+  useEffect(() => {
     const hasChecked = (selectedCharacterId?.length ?? 0) > 0 || (selectedScenarioId?.length ?? 0) > 0;
     setHasCheckedItems(hasChecked);
   }, [characters]);
@@ -113,7 +117,7 @@ export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) 
         <S.EditButtonGroup>
           <S.AllCheckBoxGroup>
             <S.IconContainer>
-              <CheckBox isButtonGroup={true} />
+              <CheckBox isButtonGroup={true} currentPage={currentPage} />
             </S.IconContainer>
             <p>ALL</p>
             {hasCheckedItems === false && isFirst === false && (
