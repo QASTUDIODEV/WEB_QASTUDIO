@@ -28,7 +28,7 @@ export default function CharacterHeader({ characterData, setIsExpanded, isExpand
   //시나리오 가져오기
   const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterData.characterId));
   //편집 상태 판단
-  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
+  const isEdit = useSelector((state) => state.scenario.isEdit);
 
   if (!character) {
     return null;
@@ -40,7 +40,7 @@ export default function CharacterHeader({ characterData, setIsExpanded, isExpand
         <S.CharacterHeader $isChecked={character.isChecked && true} $isEdit={isEdit}>
           <S.CheckboxContainer>
             <S.IconContainer>
-              <CheckBox characterId={characterId} />
+              <CheckBox characterId={characterId} isButtonGroup={false} />
             </S.IconContainer>
           </S.CheckboxContainer>
           <S.Container2 onClick={() => setIsExpanded(!isExpanded)}>

@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
-import { getCharacterList, getSummaryProjectInfo } from '@/apis/scenario/scenario';
+import { getAllPaths, getCharacterList, getSummaryProjectInfo } from '@/apis/scenario/scenario';
 
 import { useCoreQuery } from '../common/customQuery';
 
@@ -13,5 +13,9 @@ export default function useGetScenarioInfo({ projectId, currentPage }: TScenario
   const useGetCharacterList = useCoreQuery(QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage }), () => getCharacterList({ projectId, currentPage }), {
     enabled: currentPage !== -1 && currentPage != null,
   });
-  return { useGetProjectSummary, useGetCharacterList };
+  const useGetAllPaths = useCoreQuery(QUERY_KEYS.GET_ALL_PATHS(projectId), () => getAllPaths(projectId), {
+    enabled: !!projectId,
+  });
+
+  return { useGetProjectSummary, useGetCharacterList, useGetAllPaths };
 }

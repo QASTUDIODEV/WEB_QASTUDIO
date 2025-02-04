@@ -29,6 +29,8 @@ export const ErrorMessage = styled.div`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.28px;
+  gap: 2px;
+  text-align: center;
 `;
 
 export const IconContainer = styled.div`

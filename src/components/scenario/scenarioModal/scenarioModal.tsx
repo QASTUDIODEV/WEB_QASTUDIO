@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { TProjectPath, TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
+import type { TRequestCharacterScenarioResponse } from '@/types/scenario/scenario';
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 
 import { createCharacterModalScehma } from '@/utils/validate';
 import { queryClient } from '@/apis/queryClient';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
-import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioModal';
+import useChangeScenarioInfo from '@/hooks/scenario/useChangeScenarioInfo.ts';
+import useGetScenarioModalInfo from '@/hooks/scenario/useGetScenarioInfo';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -25,6 +26,7 @@ import { closeModal } from '@/slices/modalSlice.ts';
 
 type TScenarioProps = {
   projectId: string;
+  currentPage: number;
 };
 
 type TFormValues = {
@@ -39,26 +41,25 @@ type TItem = {
   actionDescription: string;
 };
 
-export default function ScenarioModal({ projectId }: TScenarioProps) {
+export default function ScenarioModal({ projectId, currentPage }: TScenarioProps) {
   const dispatch = useDispatch();
-  const [modalStep, setModalStep] = useState(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
+
+  const [modalStep, setModalStep] = useState<number>(1); // 모달 단계 상태 (1: 역할 선택, 2: 역할 확인)
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // 선택된 옵션
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [scenarioId, setScenarioId] = useState<number>();
   const [characterId, setCharacterId] = useState<number>();
   const [characterData, setCharacterData] = useState<TRequestCharacterScenarioResponse>();
   const [errorMessage, setErrorMessage] = useState('');
-  const { useGetAllPaths, usePostCharacter, usePatchCharacter } = useGetScenarioModalInfo({ projectId });
+
+  const { useGetAllPaths } = useGetScenarioModalInfo({ projectId, currentPage });
+  const { usePostCharacter, usePatchCharacter } = useChangeScenarioInfo();
+
   const { data: PathData } = useGetAllPaths;
   const { mutate: postCharacter, isPending: postCharacterPending } = usePostCharacter;
   const { mutate: patchCharacter, isPending: patchCharacterPending } = usePatchCharacter;
-  const [options, setOptions] = useState<TProjectPath[]>([]);
 
-  useEffect(() => {
-    if (PathData?.result?.projectPaths) {
-      setOptions(PathData.result.projectPaths);
-    }
-  }, [PathData]);
+  const options = useMemo(() => PathData?.result?.projectPaths ?? [], [PathData]);
 
   const {
     register,
@@ -74,6 +75,12 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
   }, [selectedOptions]);
 
   // 역할 생성 함수
+
+  const invalidateQueries = () => {
+    queryClient.invalidateQueries({
+      queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage }),
+    });
+  };
 
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
     setErrorMessage('');
@@ -93,12 +100,10 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
             setCharacterId(data.result.characterId);
             setScenarioId(data.result.scenarioId);
             setModalStep(2);
-            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage: 0 }) });
+            invalidateQueries();
           },
           onError: (error) => {
-            if (error.response) {
-              setErrorMessage(error.response.data.detail);
-            }
+            setErrorMessage(error.response?.data?.detail || 'An error occurred');
           },
         },
       );
@@ -119,17 +124,15 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
               setCharacterData(data);
               setIsSubmitted(true);
               setModalStep(2);
-              queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage: 0 }) });
+              invalidateQueries();
             },
             onError: (error) => {
-              if (error.response) {
-                setErrorMessage(error.response.data.detail);
-              }
+              setErrorMessage(error.response?.data?.detail || 'An error occurred');
             },
           },
         );
       } else {
-        setErrorMessage('Scenario ID is undefined');
+        setErrorMessage('An error occurred');
       }
     }
   };
@@ -217,7 +220,6 @@ export default function ScenarioModal({ projectId }: TScenarioProps) {
         </form>
       )}
       {modalStep == 2 && (
-        // 역할 확인 상태
         <S.ConfirmModalContainer>
           <S.DescriptionContainer>
             <S.DescriptionItem>

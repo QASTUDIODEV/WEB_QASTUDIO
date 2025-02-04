@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { getPageNumbers } from '@/utils/getPageNumbers';
+
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
 
@@ -18,15 +20,19 @@ import { deleteAllCharacter, edit, newCharacter, resetChecks } from '@/slices/sc
 
 export default function ScenarioPage() {
   const navigate = useNavigate();
-  const { projectId } = useParams();
   const dispatch = useDispatch();
+
+  const { projectId } = useParams();
   const { isEdit } = useSelector((state) => state.scenario);
+  const { isOpen } = useSelector((state) => state.modal);
+
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [selectedIdx, setSelectedIdx] = useState<number>(-1);
-  const { isOpen } = useSelector((state) => state.modal);
+
   const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: ProjectSummaryData } = useGetProjectSummary;
   const { data: CharacterListData, isPending } = useGetCharacterList;
+
   const CharacterData = CharacterListData?.result.characters;
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export default function ScenarioPage() {
 
   return (
     <S.Background>
-      {isOpen && <ScenarioModal projectId={projectId || ''} />}
+      {isOpen && <ScenarioModal projectId={projectId || ''} currentPage={currentPage} />}
       <S.Container>
         <S.Header>
           <ProjectTitle
@@ -103,20 +109,11 @@ export default function ScenarioPage() {
         )}
 
         {CharacterListData?.result &&
-          (() => {
-            const totalPages = CharacterListData.result.totalPage;
-            const startPage = Math.max(0, Math.min(currentPage - 2, totalPages - 5));
-            const endPage = Math.min(totalPages - 1, startPage + 4);
-
-            return Array.from({ length: endPage - startPage + 1 }, (_, index) => {
-              const pageIndex = startPage + index;
-              return (
-                <S.PageNumber key={pageIndex} $isActive={currentPage === pageIndex} onClick={() => setCurrentPage(pageIndex)}>
-                  {pageIndex + 1}
-                </S.PageNumber>
-              );
-            });
-          })()}
+          getPageNumbers({ totalPages: CharacterListData.result.totalPage, currentPage }).map((pageIndex) => (
+            <S.PageNumber key={pageIndex} $isActive={currentPage === pageIndex} onClick={() => setCurrentPage(pageIndex)}>
+              {pageIndex + 1}
+            </S.PageNumber>
+          ))}
 
         {!CharacterListData?.result.isLast ? (
           <S.IconContainer onClick={goToNextPage}>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CheckBoxFalseIcon from '@/assets/icons/check box_false.svg?react';
@@ -8,17 +9,16 @@ import type { TAppDispatch, TRootState } from '@/store/store';
 interface ICheckBoxProps {
   characterId?: number;
   scenarioId?: number;
-  isAllCheckBox?: boolean;
+  isButtonGroup: boolean;
 }
 
-export default function CheckBox({ characterId, scenarioId, isAllCheckBox }: ICheckBoxProps) {
+export default function CheckBox({ characterId, scenarioId, isButtonGroup }: ICheckBoxProps) {
   const dispatch = useDispatch<TAppDispatch>();
-
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   // 체크 여부 판단
   const isChecked: boolean = useSelector((state: TRootState) => {
-    if (isAllCheckBox) {
+    if (isButtonGroup) {
       // ALL
-      // state.scenario.characters가 정의되어 있는지 확인하고, 각 character.scenarios가 배열인지 확인
       return state.scenario.characters?.every((char) => Array.isArray(char.scenarios) && char.isChecked && char.scenarios.every((scn) => scn.isChecked));
     }
     if (scenarioId) {
@@ -37,7 +37,8 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox }: ICh
 
   // 클릭 함수
   const handleCheckBoxClick = (): void => {
-    if (isAllCheckBox) {
+    if (isButtonGroup) {
+      setIsAllChecked(!isAllChecked);
       dispatch(toggleAll());
     } else if (scenarioId && characterId) {
       dispatch(toggleScenario({ characterId, scenarioId }));
@@ -46,7 +47,11 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox }: ICh
     }
   };
 
-  return (
+  return isButtonGroup ? (
+    <div onClick={handleCheckBoxClick} style={{ cursor: 'pointer' }}>
+      {isAllChecked ? <CheckBoxTrueIcon /> : <CheckBoxFalseIcon />}
+    </div>
+  ) : (
     <div onClick={handleCheckBoxClick} style={{ cursor: 'pointer' }}>
       {isChecked ? <CheckBoxTrueIcon /> : <CheckBoxFalseIcon />}
     </div>

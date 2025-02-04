@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
@@ -6,7 +6,7 @@ import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 import { queryClient } from '@/apis/queryClient';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
-import useEditScenario from '@/hooks/scenario/useEditScenario';
+import useEditScenario from '@/hooks/scenario/useChangeScenarioInfo.ts';
 
 import Button from '@/components/common/button/button';
 import * as S from '@/components/scenario/buttonGroup/buttonGroup.style';
@@ -28,98 +28,95 @@ type TScenarioProps = {
 export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isEdit, characters } = useSelector((state) => state.scenario);
-  const [selectedCharacterId, setSelectedCharacterId] = useState<number[]>();
-  const [selectedScenarioId, setSelectedScenarioId] = useState<number[]>();
-  const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario();
-  const [hasCheckedItems, setHasCheckedItems] = useState<boolean>(false);
-  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
 
+  const { isEdit, characters } = useSelector((state) => state.scenario);
+
+  const [hasCheckedItems, setHasCheckedItems] = useState<boolean | undefined>(undefined);
+  const [isFirst, setIsFirst] = useState<boolean>(true);
+
+  const { useDeleteSceanrio, useDeleteCharacter } = useEditScenario();
   const { mutate: deleteSceanrioMutate } = useDeleteSceanrio;
   const { mutate: deleteCharacterMutate } = useDeleteCharacter;
 
-  useEffect(() => {
-    const selectedIds = characters.filter((character) => character.isChecked).map((character) => character.id);
-
-    const selectedScenarios = characters.flatMap((character) =>
-      !selectedIds.includes(character.id) && character.scenarios.scenarioList && Array.isArray(character.scenarios.scenarioList)
-        ? character.scenarios.scenarioList.filter((scenario) => scenario.isChecked).map((scenario) => scenario.scenarioId)
+  const selectedCharacterId = useMemo(() => characters.filter((char) => char.isChecked).map((char) => char.id), [characters]);
+  const selectedScenarioId = useMemo(() => {
+    const selectedCharacterIds = new Set(characters.filter((char) => char.isChecked).map((char) => char.id));
+    return characters.flatMap((char) =>
+      !selectedCharacterIds.has(char.id) && char.scenarios?.scenarioList
+        ? char.scenarios.scenarioList.filter((scn) => scn.isChecked).map((scn) => scn.scenarioId)
         : [],
     );
-
-    setSelectedCharacterId(selectedIds);
-    setSelectedScenarioId(selectedScenarios);
   }, [characters]);
 
   useEffect(() => {
-    const hasChecked = characters.some((character) => character.isChecked || character.scenarios.scenarioList.some((scenario) => scenario.isChecked));
+    const hasChecked = (selectedCharacterId?.length ?? 0) > 0 || (selectedScenarioId?.length ?? 0) > 0;
     setHasCheckedItems(hasChecked);
   }, [characters]);
 
   // Delete 버튼 클릭 함수
   const handleDeleteClick = (): void => {
+    setIsFirst(false);
     if (hasCheckedItems) {
       dispatch(edit(true));
       dispatch(resetChecks());
       setHasCheckedItems(true);
-      if (selectedCharacterId !== undefined && selectedCharacterId.length > 0) {
+      if (selectedCharacterId.length > 0) {
         deleteCharacterMutate(selectedCharacterId, {
           onSuccess: (_, variables) => {
-            console.log(variables);
             variables.map((id) => deleteCharacters(id));
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ currentPage, projectId }) });
             dispatch(edit(false));
+            setIsFirst(true);
           },
         });
       }
-      if (selectedScenarioId !== undefined && selectedScenarioId.length > 0) {
+      if (selectedScenarioId.length > 0) {
         deleteSceanrioMutate(selectedScenarioId, {
           onSuccess: (_, variables) => {
-            console.log(variables);
             variables.map((id) => deleteScenarios(id));
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ currentPage, projectId }) });
             dispatch(edit(false));
+            setIsFirst(true);
           },
         });
       }
+    } else {
+      setHasCheckedItems(false);
     }
   };
 
   // Done 버튼 클릭 함수
   const handleDoneClick = (): void => {
+    setHasCheckedItems(undefined);
+    setIsFirst(true);
     dispatch(edit(false));
     dispatch(resetChecks());
-    setHasCheckedItems(true);
   };
 
   // Edit 버튼 클릭 함수
   const handleEditClick = (): void => {
+    setHasCheckedItems(undefined);
+    setIsFirst(true);
     dispatch(edit(true));
     dispatch(resetChecks());
-    setHasCheckedItems(true);
   };
 
   // Play 버튼 클릭 함수
-  const handlePlayClick = (): void => {
-    navigate(`/scenarioAct/${projectId}`);
-  };
+  const handlePlayClick = () => navigate(`/scenarioAct/${projectId}`);
 
   // + Character 버튼 클릭 함수
-  const handleAddClick = (): void => {
-    // 역할 추가 모달 띄우기
-    dispatch(openModal('scenarioModal'));
-  };
+  const handleAddClick = () => dispatch(openModal('scenarioModal'));
 
   return (
     <>
       {isEdit ? (
         <S.EditButtonGroup>
-          <S.AllCheckBoxGroup onClick={() => setIsAllChecked(!isAllChecked)}>
+          <S.AllCheckBoxGroup>
             <S.IconContainer>
-              <CheckBox isAllCheckBox={isAllChecked} />
+              <CheckBox isButtonGroup={true} />
             </S.IconContainer>
             <p>ALL</p>
-            {!hasCheckedItems && (
+            {hasCheckedItems === false && isFirst === false && (
               <S.ErrorMessage>
                 <ExclamationCircle />
                 You must select at least one.
