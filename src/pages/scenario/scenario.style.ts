@@ -39,7 +39,7 @@ export const CharactersContainer = styled.div`
   margin-top: 23.6px;
   background-color: inherit;
   border-radius: 10px;
-  height: 65vh;
+  height: 60vh;
   overflow-y: scroll;
 `;
 
