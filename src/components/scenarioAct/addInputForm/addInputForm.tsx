@@ -100,12 +100,6 @@ export default function AddInputForm() {
         <Input placeholder="Describe the scenario." type="thin" {...registerScenario('scenarioDescription', { required: true })} />
       </S.InputContainer>
 
-      <S.ButtonContainer>
-        <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
-          Save Scenario
-        </Button>
-      </S.ButtonContainer>
-
       {/* 선택 토글 */}
       <S.SelectToggle>
         <S.Select $active={step === 1} onClick={() => setStep(1)}>
@@ -120,7 +114,7 @@ export default function AddInputForm() {
         <>
           <S.DetailContainer>
             {recordActions.map((action) => (
-              <RecordItem key={action.step} title={action.actionDescription} />
+              <RecordItem key={action.step} step={action.step} />
             ))}
             <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
             <S.DivideInputContainer>
@@ -146,11 +140,16 @@ export default function AddInputForm() {
             <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
               {isActionValid ? <Add /> : <AddDark />}
             </S.AddButton>
+            <S.ButtonContainer>
+              <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
+                Save
+              </Button>
+            </S.ButtonContainer>
           </S.DetailContainer>
         </>
       ) : (
         <div>
-          <RecordItem title="Navigate to Sign up" type={ACTION_TYPE.NAVIGATE} />
+          {/* <RecordItem  /> */}
           <S.ButtonContainer>
             <Button type="normal" color="default">
               Record
