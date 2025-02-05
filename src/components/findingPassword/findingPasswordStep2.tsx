@@ -15,7 +15,7 @@ export default function FindingPasswordStep2({ setPasswordMatch, passwordMatch, 
   const {
     register,
     control,
-    formState: { touchedFields, errors, isValid },
+    formState: { errors, isValid },
   } = useFormContext();
 
   const watchedPassword = useWatch({
@@ -29,7 +29,10 @@ export default function FindingPasswordStep2({ setPasswordMatch, passwordMatch, 
   });
 
   useEffect(() => {
-    if (watchedPassword === watchedRepassword) {
+    if (watchedRepassword === undefined) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else if (watchedPassword === watchedRepassword) {
       setPasswordMatch(true);
       setErrorMessage('');
     } else {
@@ -46,8 +49,7 @@ export default function FindingPasswordStep2({ setPasswordMatch, passwordMatch, 
     <>
       <InputModule
         top={false}
-        touched={touchedFields.password}
-        valid={touchedFields.password && !errors.password?.message && !passwordErrorMessage}
+        valid={!errors.password?.message && !passwordErrorMessage && watchedPassword !== ''}
         errorMessage={(errors.password?.message as string) || passwordErrorMessage}
         Name={'Password'}
         inputname={'password'}
@@ -56,15 +58,14 @@ export default function FindingPasswordStep2({ setPasswordMatch, passwordMatch, 
       />
       <InputModule
         top={false}
-        touched={touchedFields.repassword}
-        valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+        valid={!errors.repassword?.message && passwordMatch && (watchedRepassword !== '' || watchedRepassword === undefined)}
         errorMessage={(errors.repassword?.message as string) || errorMessage}
         Name={'Password'}
         inputname={'password'}
         span={'Re-enter Password'}
         {...register('repassword')}
       />
-      <AuthButton type="submit" disabled={!isValid || !passwordMatch || !!passwordErrorMessage || !touchedFields.password || !touchedFields.repassword}>
+      <AuthButton type="submit" disabled={!isValid || !passwordMatch || !!passwordErrorMessage}>
         Go to the login
       </AuthButton>
     </>

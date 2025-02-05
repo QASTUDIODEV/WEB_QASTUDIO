@@ -50,7 +50,7 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TMyProfileValues>({
     mode: 'onChange',
     resolver: zodResolver(myPageScehma),
@@ -199,8 +199,7 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
                 <input ref={inputRefs.profile} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'profile')} />
                 <S.UserInfo>
                   <InputModule
-                    touched={touchedFields.nickname}
-                    valid={!errors.nickname?.message}
+                    valid={!errors.nickname?.message && watchedNickname !== ''}
                     errorMessage={errors.nickname?.message}
                     Name={'Nickname'}
                     inputname={'normal'}

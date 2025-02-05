@@ -48,6 +48,7 @@ export default function OtherUserProjectList({ userId }: { userId: string }) {
           <tbody>
             {projectsData?.map((project: TUserProjectListResponse) => (
               <Project
+                img={project.projectImage}
                 key={project.projectId}
                 id={project.projectId}
                 name={project.projectName}

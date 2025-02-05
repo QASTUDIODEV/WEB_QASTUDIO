@@ -38,6 +38,7 @@ export type TUserProjectListResponse = {
   projectName: string;
   participant: number;
   lastModifiedDate: string;
+  projectImage: string;
 };
 
 export type TGetUserProjectsResponse = TCommonResponse<{
