@@ -1,4 +1,10 @@
-import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
+import React from 'react';
+
+import type { TDetailCharacters } from '@/types/scenario/scenario';
+
+import { formatRelativeTime } from '@/utils/transformDate';
+
+import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 
 import * as S from '@/components/scenario/characterHeader/characterHeader.style';
 
@@ -9,30 +15,20 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Calender from '@/assets/icons/calender.svg?react';
 import UserCircle from '@/assets/icons/user_circle.svg?react';
 import UserProfile from '@/assets/icons/user_profile.svg?react';
-import { selectEntity, toggleExpand } from '@/slices/scenarioSlice';
 
 interface ICharacterHeaderProps {
-  characterId: number;
+  characterData: TDetailCharacters;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  isExpanded: boolean;
+  isSelected: boolean;
 }
 
-export default function CharacterHeader({ characterId }: ICharacterHeaderProps) {
-  const dispatch = useDispatch();
-
+export default function CharacterHeader({ characterData, setIsExpanded, isExpanded, isSelected }: ICharacterHeaderProps) {
+  const characterId = characterData.characterId;
   //시나리오 가져오기
-  const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterId));
-
+  const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterData.characterId));
   //편집 상태 판단
-  const isEdit: boolean = useSelector((state) => state.scenario.isEdit);
-
-  // 펼치기 토글 함수
-  const handleExpandToggle = () => {
-    dispatch(toggleExpand(characterId));
-  };
-
-  //선택 함수
-  const handleSelect = () => {
-    dispatch(selectEntity({ characterId, scenarioId: null }));
-  };
+  const isEdit = useSelector((state) => state.scenario.isEdit);
 
   if (!character) {
     return null;
@@ -42,46 +38,47 @@ export default function CharacterHeader({ characterId }: ICharacterHeaderProps) 
     <>
       {isEdit ? (
         <S.CharacterHeader $isChecked={character.isChecked && true} $isEdit={isEdit}>
-          <S.CharacterHeaderLeftSide>
+          <S.CheckboxContainer>
             <S.IconContainer>
-              <CheckBox characterId={characterId} />
+              <CheckBox characterId={characterId} isButtonGroup={false} />
             </S.IconContainer>
-            <S.IconContainer>
-              <UserProfile />
-            </S.IconContainer>
-            <S.CharacterTitle>{character.title}</S.CharacterTitle>
-          </S.CharacterHeaderLeftSide>
-          <S.CharacterHeaderRightSide>
-            <S.Creater>
-              <UserCircle />
-              <p>{character.createdBy}</p>
-            </S.Creater>
-            <S.Elapsed>
-              <Calender />
-              <p>{character.createdAt}</p>
-            </S.Elapsed>
-          </S.CharacterHeaderRightSide>
+          </S.CheckboxContainer>
+          <S.Container2 onClick={() => setIsExpanded(!isExpanded)}>
+            <S.CharacterHeaderLeftSide>
+              <S.IconContainer>
+                <UserProfile />
+              </S.IconContainer>
+              <S.CharacterTitle>{characterData.characterName}</S.CharacterTitle>
+            </S.CharacterHeaderLeftSide>
+            <S.CharacterHeaderRightSide>
+              <S.Creater>
+                <UserCircle />
+                <p>{characterData.author}</p>
+              </S.Creater>
+              <S.Elapsed>
+                <Calender />
+                <p>{formatRelativeTime(characterData.createdAt)}</p>
+              </S.Elapsed>
+            </S.CharacterHeaderRightSide>
+          </S.Container2>
         </S.CharacterHeader>
       ) : (
-        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} $isSelected={character.isSelected} onClick={handleSelect}>
+        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} $isSelected={isSelected} onClick={() => setIsExpanded(!isExpanded)}>
           <S.CharacterHeaderLeftSide>
-            <div onClick={handleExpandToggle} style={{ cursor: 'pointer' }}>
-              {character.isExpanded ? <ArrowUp /> : <ArrowDown />}
-            </div>
-
+            <div style={{ cursor: 'pointer' }}>{isExpanded ? <ArrowUp /> : <ArrowDown />}</div>
             <S.IconContainer>
               <UserProfile />
             </S.IconContainer>
-            <S.CharacterTitle>{character.title}</S.CharacterTitle>
+            <S.CharacterTitle>{characterData.characterName}</S.CharacterTitle>
           </S.CharacterHeaderLeftSide>
           <S.CharacterHeaderRightSide>
             <S.Creater>
               <UserCircle />
-              <p>{character.createdBy}</p>
+              <p>{characterData.author}</p>
             </S.Creater>
             <S.Elapsed>
               <Calender />
-              <p>{character.createdAt}</p>
+              <p>{formatRelativeTime(characterData.createdAt)}</p>
             </S.Elapsed>
           </S.CharacterHeaderRightSide>
         </S.CharacterHeader>

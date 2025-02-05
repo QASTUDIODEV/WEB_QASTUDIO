@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CheckBoxFalseIcon from '@/assets/icons/check box_false.svg?react';
@@ -8,27 +9,32 @@ import type { TAppDispatch, TRootState } from '@/store/store';
 interface ICheckBoxProps {
   characterId?: number;
   scenarioId?: number;
-  isAllCheckBox?: boolean;
+  isButtonGroup: boolean;
+  currentPage?: number;
 }
 
-export default function CheckBox({ characterId, scenarioId, isAllCheckBox = false }: ICheckBoxProps) {
+export default function CheckBox({ characterId, scenarioId, isButtonGroup, currentPage }: ICheckBoxProps) {
   const dispatch = useDispatch<TAppDispatch>();
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
 
+  useEffect(() => {
+    setIsAllChecked(false);
+  }, [currentPage]);
   // 체크 여부 판단
   const isChecked: boolean = useSelector((state: TRootState) => {
-    if (isAllCheckBox) {
+    if (isButtonGroup) {
       // ALL
-      return state.scenario.characters.every((char) => char.isChecked && char.scenarios.every((scn) => scn.isChecked));
+      return state.scenario.characters?.every((char) => Array.isArray(char.scenarios) && char.isChecked && char.scenarios.every((scn) => scn.isChecked));
     }
     if (scenarioId) {
       // 시나리오
-      const character = state.scenario.characters.find((char) => char.id === characterId);
-      const scenario = character?.scenarios.find((scn) => scn.id === scenarioId);
+      const character = state.scenario.characters?.find((char) => char.id === characterId);
+      const scenario = character?.scenarios.scenarioList?.find((scn) => scn.scenarioId === scenarioId);
       return scenario?.isChecked ?? false;
     }
     if (characterId) {
       // 역할
-      const character = state.scenario.characters.find((char) => char.id === characterId);
+      const character = state.scenario.characters?.find((char) => char.id === characterId);
       return character?.isChecked ?? false;
     }
     return false;
@@ -36,7 +42,8 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox = fals
 
   // 클릭 함수
   const handleCheckBoxClick = (): void => {
-    if (isAllCheckBox) {
+    if (isButtonGroup) {
+      setIsAllChecked(!isAllChecked);
       dispatch(toggleAll());
     } else if (scenarioId && characterId) {
       dispatch(toggleScenario({ characterId, scenarioId }));
@@ -45,7 +52,11 @@ export default function CheckBox({ characterId, scenarioId, isAllCheckBox = fals
     }
   };
 
-  return (
+  return isButtonGroup ? (
+    <div onClick={handleCheckBoxClick} style={{ cursor: 'pointer' }}>
+      {isAllChecked ? <CheckBoxTrueIcon /> : <CheckBoxFalseIcon />}
+    </div>
+  ) : (
     <div onClick={handleCheckBoxClick} style={{ cursor: 'pointer' }}>
       {isChecked ? <CheckBoxTrueIcon /> : <CheckBoxFalseIcon />}
     </div>

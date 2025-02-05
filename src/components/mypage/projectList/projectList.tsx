@@ -48,12 +48,13 @@ export default function ProjectList() {
           <tbody>
             {projectsData?.map((project: TUserProjectListResponse) => (
               <Project
+                img={project.projectImage}
                 key={project.projectId}
                 id={project.projectId}
                 name={project.projectName}
                 participants={project.participant}
                 date={project.lastModifiedDate}
-                onClick={() => navigate(`/project/information/${project.projectId}`)}
+                onClick={() => navigate(`/project/dashboard/${project.projectId}`)}
               />
             ))}
           </tbody>

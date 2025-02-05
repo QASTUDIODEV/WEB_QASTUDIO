@@ -9,7 +9,6 @@ import * as S from './module.style';
 
 type TModuleProps = {
   btnName?: string;
-  touched: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   handleSendCode?: () => void;
@@ -19,10 +18,10 @@ type TModuleProps = {
   top: boolean;
   pending?: boolean;
   value?: string;
+  isUndefined?: boolean;
 };
 
 type TCodeModuleProps = {
-  touched: boolean | undefined;
   valid: boolean | undefined;
   errorMessage: string | undefined;
   Name: string;
@@ -32,7 +31,7 @@ type TCodeModuleProps = {
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, touched, valid, errorMessage, value, span, inputname, Name, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, valid, errorMessage, value, span, inputname, Name, isUndefined, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
@@ -41,9 +40,8 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
             placeholder={Name}
             type={inputname}
             autoComplete={inputname}
-            isValid={touched ? valid : true}
+            isValid={valid}
             errorMessage={errorMessage}
-            touched={touched}
             value={value}
             top={top}
             ref={ref}
@@ -51,17 +49,22 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
           />
           {btnName && (
             <S.ButtonWrapper>
-              <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid || pending}>
+              <AuthButton type="button" format="small" onClick={handleSendCode} disabled={!valid || pending || isUndefined}>
                 {btnName}
               </AuthButton>
             </S.ButtonWrapper>
           )}
-          {errorMessage && touched && top && inputname === 'normal' && (
+          {errorMessage && top && (
             <S.MessageWrapper>
               <ValidationMessage message={errorMessage} isError={!valid} />
             </S.MessageWrapper>
           )}
         </S.Wrapper2>
+        {errorMessage && !top && (
+          <S.MessageWrapper3>
+            <ValidationMessage message={errorMessage} isError={!valid} />
+          </S.MessageWrapper3>
+        )}
       </S.Wrapper>
     );
   },
@@ -69,12 +72,12 @@ export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
 
 // CodeModule 컴포넌트
 export const CodeModule = React.forwardRef<HTMLInputElement, TCodeModuleProps>(
-  ({ touched, valid, errorMessage, Name, codeverify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
+  ({ valid, errorMessage, Name, codeverify, handleVerifyCode, ...rest }: TCodeModuleProps, ref) => {
     return (
       <S.Wrapper>
-        <CodeInput placeholder={Name} isValid={touched ? (valid ? (codeverify ? true : false) : false) : undefined} ref={ref} {...rest} />
+        <CodeInput placeholder={Name} isValid={valid ? (codeverify ? true : false) : false} ref={ref} {...rest} />
         <S.MessageWrapper2>
-          {touched && errorMessage ? (
+          {errorMessage ? (
             <ValidationMessage message={errorMessage} isError={!valid} />
           ) : codeverify ? (
             <ValidationMessage message={'Authentication completed'} isError={false} />

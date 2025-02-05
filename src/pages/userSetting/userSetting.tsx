@@ -41,7 +41,7 @@ export default function UserSetting() {
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, errors, touchedFields },
+    formState: { isValid, errors },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(userSettingSchema),
@@ -54,6 +54,10 @@ export default function UserSetting() {
     contentInputRef.current?.click();
   };
 
+  const watchedNickname = useWatch({
+    control,
+    name: 'nickname',
+  });
   const watchedImage = useWatch({
     control,
     name: 'profileImage',
@@ -115,7 +119,7 @@ export default function UserSetting() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (touchedFields.nickname && !errors.nickname?.message && !getPresignedUrlPending && !uploadImageToPresignedUrlPending) {
+      if (watchedNickname !== '' && !errors.nickname?.message && !getPresignedUrlPending && !uploadImageToPresignedUrlPending) {
         handleSubmit(onSubmit);
       }
     }
@@ -140,8 +144,7 @@ export default function UserSetting() {
           inputname="nickname"
           Name="Nickname"
           span="Nickname"
-          touched={touchedFields.nickname}
-          valid={touchedFields.nickname && !errors.nickname?.message}
+          valid={watchedNickname !== '' && !errors.nickname?.message}
           errorMessage={errors.nickname?.message}
           {...register('nickname')}
         />

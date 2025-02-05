@@ -3,24 +3,43 @@ import styled from 'styled-components';
 export const CharacterHeaderLeftSide = styled.div`
   display: flex;
   gap: 6.4px;
-  min-width: 100px;
-  align-items: center;
+  width: fit-content;
+  align-items: flex-start;
+  justify-content: flex-start;
 `;
+
+export const TotalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
 export const IconContainer = styled.div`
   width: 19.2px;
   height: 19.2px;
   margin-right: 6.4px;
+  z-index: 10;
   svg {
     width: 100%;
     height: 100%;
   }
 `;
 
+export const CheckboxContainer = styled.div`
+  display: flex;
+`;
+
+export const Container2 = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 16px;
+`;
+
 export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolean; $isSelected?: boolean }>`
   display: flex;
   padding: 24px 16px;
   align-items: center;
-  gap: 40px;
   align-self: stretch;
   justify-content: space-between;
   border-radius: 8px;
@@ -34,7 +53,8 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
 export const CharacterHeaderRightSide = styled.div`
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 15px;
+  justify-content: right;
 `;
 export const Creater = styled.div`
   display: flex;
@@ -43,6 +63,10 @@ export const Creater = styled.div`
   gap: 8px;
   width: 93px;
   ${({ theme }) => theme.text.medium_14};
+  p {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
 `;
 
 export const Elapsed = styled.div`

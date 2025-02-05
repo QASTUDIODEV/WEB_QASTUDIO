@@ -44,7 +44,7 @@ function SignupPage() {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
@@ -92,6 +92,7 @@ function SignupPage() {
           setEmailErrorMessage(undefined);
         },
         onError: (error) => {
+          console.log(error);
           setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
         },
       });
@@ -121,18 +122,18 @@ function SignupPage() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 0 && touchedFields.email && !errors.email?.message) {
+      if (step === 0 && !errors.email?.message && watchedEmail !== '') {
         handleSendCode();
       }
-      if (step === 1 && touchedFields.code && !errors.code?.message && !codeverify) {
+      if (step === 1 && !errors.code?.message && !codeverify && watchedCode !== '') {
         handleVerifyCode();
       }
       if (
         step === 1 &&
-        touchedFields.email &&
-        touchedFields.password &&
-        touchedFields.repassword &&
-        touchedFields.code &&
+        watchedCode !== '' &&
+        watchedEmail !== '' &&
+        watchedPassword !== '' &&
+        watchedRepassword !== '' &&
         passwordMatch &&
         codeverify &&
         !errors.email?.message &&
@@ -146,7 +147,10 @@ function SignupPage() {
   };
 
   useEffect(() => {
-    if (watchedPassword === watchedRepassword) {
+    if (watchedRepassword === undefined) {
+      setPasswordMatch(true);
+      setErrorMessage('');
+    } else if (watchedPassword === watchedRepassword) {
       setPasswordMatch(true);
       setErrorMessage('');
     } else {
@@ -177,16 +181,15 @@ function SignupPage() {
             span="Email"
             btnName="Send"
             handleSendCode={handleSendCode}
-            touched={touchedFields.email}
             pending={codePending}
-            valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+            isUndefined={watchedEmail === undefined}
+            valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
             errorMessage={errors.email?.message || emailErrorMessage}
             {...register('email')}
           />
           {step === 1 && (
             <CodeModule
-              touched={touchedFields.code}
-              valid={touchedFields.code && !errors.code?.message}
+              valid={!errors.code?.message && watchedCode !== ''}
               errorMessage={errors.code?.message}
               Name={'Code'}
               codeverify={codeverify}
@@ -196,8 +199,7 @@ function SignupPage() {
           )}
           <InputModule
             top={false}
-            touched={touchedFields.password}
-            valid={touchedFields.password && !errors.password?.message}
+            valid={!errors.password?.message && watchedPassword !== ''}
             errorMessage={errors.password?.message}
             Name={'Password'}
             inputname={'password'}
@@ -206,8 +208,7 @@ function SignupPage() {
           />
           <InputModule
             top={false}
-            touched={touchedFields.repassword}
-            valid={touchedFields.repassword && !errors.repassword?.message && passwordMatch}
+            valid={!errors.repassword?.message && passwordMatch && (watchedRepassword !== '' || watchedRepassword === undefined)}
             errorMessage={errors.repassword?.message || errorMessage}
             Name={'Password'}
             inputname={'password'}
@@ -219,10 +220,10 @@ function SignupPage() {
             format="normal"
             onClick={handleSubmit(onSubmit)}
             disabled={
-              !touchedFields.email ||
-              !touchedFields.code ||
-              !touchedFields.password ||
-              !touchedFields.repassword ||
+              !watchedCode ||
+              !watchedEmail ||
+              !watchedPassword ||
+              !watchedRepassword ||
               !codeverify ||
               !passwordMatch ||
               !!errors.email?.message ||

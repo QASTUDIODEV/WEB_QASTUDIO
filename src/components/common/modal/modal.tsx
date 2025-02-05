@@ -12,9 +12,10 @@ type TModalProps = {
   children: ReactNode;
   isExitButtonVisible?: boolean;
   onClose: () => void;
+  clickOutside?: boolean;
 };
 
-export default function Modal({ isOpen = true, children, title, onClose, isExitButtonVisible = true }: TModalProps) {
+export default function Modal({ isOpen = true, children, title, onClose, isExitButtonVisible = true, clickOutside }: TModalProps) {
   const [isVisible, setIsVisible] = useState(isOpen);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function Modal({ isOpen = true, children, title, onClose, isExitB
 
   return createPortal(
     isVisible && (
-      <S.Container onClick={onClose}>
+      <S.Container onClick={clickOutside ? onClose : undefined}>
         <S.Wrapper
           viewport={{ once: true }}
           whileInView={{ opacity: 1, y: 0 }}
