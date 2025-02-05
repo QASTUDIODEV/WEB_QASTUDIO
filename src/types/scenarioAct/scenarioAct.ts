@@ -115,7 +115,7 @@ export type TCreateScenaioValues = {
 };
 
 export type TExecuteScenarioValues = {
-  sessionId: string;
-  scenarioId: number;
-  baseUrl: string;
+  sessionId: string | null;
+  scenarioId: number | null;
+  baseUrl: string | null;
 };

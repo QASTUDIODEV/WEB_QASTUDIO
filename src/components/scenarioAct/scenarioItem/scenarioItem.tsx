@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useExecuteScenario from '@/hooks/scenarioAct/useExecuteScenario';
 
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
 import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
@@ -15,26 +16,28 @@ interface IScenarioDropdownProp {
 export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) {
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
+  const project = useSelector((state) => state.scenarioAct);
+
+  const { usePlayScenario } = useExecuteScenario();
+  const { mutate: executeScenario } = usePlayScenario;
+  const handlePlay = () => {
+    executeScenario({
+      sessionId: project.sessionId,
+      scenarioId: scenario?.scenarioId || null,
+      baseUrl: project.projectUrl,
+    });
+  };
 
   const handleOpen = () => {
     dispatch(openScenario(scenarioId));
   };
-
   return (
     <S.Container>
-      <S.ScenarioHeader onClick={handleOpen} $isOpen={scenario?.isOpen}>
-        {scenario?.isOpen ? (
-          <S.IconContainer>
-            <ArrowUp />
-          </S.IconContainer>
-        ) : (
-          <S.IconContainer>
-            <ArrowDown />
-          </S.IconContainer>
-        )}
+      <S.ScenarioHeader $isOpen={scenario?.isOpen}>
+        <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
         <S.Title>{scenario?.scenarioName || '타이틀'}</S.Title>
         <S.IconContainer>
-          <Play />
+          <Play onClick={handlePlay} />
         </S.IconContainer>
       </S.ScenarioHeader>
 

@@ -51,6 +51,7 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
   characters: ICharacter[];
   recordActions: IRecordAction[];
+  sessionId: string | null;
 }
 
 interface ICharacterPayload {
@@ -75,6 +76,7 @@ const initialState: IScenarioActSlice = {
   characters: [],
   scenarios: [],
   recordActions: [],
+  sessionId: null,
 };
 
 const scenarioActSlice = createSlice({
@@ -117,18 +119,19 @@ const scenarioActSlice = createSlice({
     },
     // action 삭제
     removeAction: (state, action: PayloadAction<number | undefined>) => {
-      // 삭제할 step 찾기
       const deletedStep = action.payload;
       if (deletedStep === undefined) return;
-
-      // recordActions에서 해당 step 삭제
       state.recordActions = state.recordActions.filter((itm) => itm.step !== deletedStep);
-
-      // 삭제된 step 이후의 step 값을 -1씩 감소
+      //재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
+    },
+    // 웹소켓 ID 설정
+    setSessionId: (state, action: PayloadAction<string | null>) => {
+      state.sessionId = action.payload;
     },
   },
 });
 
-export const { openScenario, setProjectInfo, setCharacterList, setCharacterId, setScenarioList, addAction, removeAction } = scenarioActSlice.actions;
+export const { openScenario, setProjectInfo, setCharacterList, setCharacterId, setScenarioList, addAction, removeAction, setSessionId } =
+  scenarioActSlice.actions;
 export default scenarioActSlice.reducer;
