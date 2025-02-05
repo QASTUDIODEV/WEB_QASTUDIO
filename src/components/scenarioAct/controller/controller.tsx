@@ -44,9 +44,7 @@ export default function Controller() {
           {/* 역할 선택 */}
           <S.CharacterHeader>
             <p>Character</p>
-            <S.DropdownContainer>
-              <CharacterSelectDropdown />
-            </S.DropdownContainer>
+            <CharacterSelectDropdown />
           </S.CharacterHeader>
 
           {/* 시나리오 리스트 */}

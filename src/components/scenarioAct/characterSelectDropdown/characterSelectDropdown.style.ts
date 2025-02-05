@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 145px;
   position: relative;
   ${({ theme }) => theme.text.medium_18};
+  height: 47px;
 `;
 
 export const Header = styled.div<{ $isOpen: boolean }>`

@@ -39,8 +39,8 @@ const createScenario = async (scenario: TCreateScenaioValues): Promise<TCreateSc
 };
 
 //아직
-const executeScenario = async (props: TExecuteScenarioValues): Promise<TCreateScenarioResponse> => {
-  const { data } = await axiosInstance.post(`/api/v0/scenarios/${props.scenarioId}/sessions/${props.sessionId}/execute`, props.baseUrl);
+const executeScenario = async (values: TExecuteScenarioValues): Promise<TCreateScenarioResponse> => {
+  const { data } = await axiosInstance.post(`/api/v0/scenarios/${values.scenarioId}/sessions/${values.sessionId}/execute`, values.baseUrl);
   return data;
 };
 
