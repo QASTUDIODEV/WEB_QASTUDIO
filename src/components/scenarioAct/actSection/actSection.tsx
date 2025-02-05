@@ -79,16 +79,6 @@ export default function ActSection() {
     }
 </style></head><body><div id="mountHere"></div></body></html>`;
 
-  // STOP 명령 전송
-  const sendStopCommand = () => {
-    if (isConnected) {
-      sendMessage('STOP');
-      console.log('STOP 명령 전송');
-    } else {
-      console.error('WebSocket이 연결되지 않았습니다.');
-    }
-  };
-
   return (
     <S.Container>
       <Frame
@@ -101,13 +91,6 @@ export default function ActSection() {
       >
         <InnerComponent htmlContent={htmlContent} />
       </Frame>
-      <div style={{ marginTop: '20px' }}>
-        <p>WebSocket 상태: {isConnected ? '연결됨' : '연결 안 됨'}</p>
-        <p>WebSocket ID: {socketId || '받는 중...'}</p>
-        <button onClick={sendStopCommand} disabled={!isConnected}>
-          STOP 명령 보내기
-        </button>
-      </div>
     </S.Container>
   );
 }
