@@ -32,7 +32,7 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
             <ArrowDown />
           </S.IconContainer>
         )}
-        <S.Title>{scenario?.name || '타이틀'}</S.Title>
+        <S.Title>{scenario?.scenarioName || '타이틀'}</S.Title>
         <S.IconContainer>
           <Play />
         </S.IconContainer>
@@ -40,7 +40,7 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
 
       {scenario?.isOpen && (
         <div>
-          <S.ActionDescription># 사용자가 로그인 페이지로 이동하고 로그인한다.</S.ActionDescription>
+          <S.ActionDescription># {scenario.scenarioDescription}</S.ActionDescription>
           <S.ActionList>
             {scenario.actions.map((act) => (
               <ActionItem key={act.actionId} scenarioId={scenarioId} actionId={act.actionId} />

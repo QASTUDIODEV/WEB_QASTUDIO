@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom';
 
+import { useSelector } from '@/hooks/common/useCustomRedux';
 import useProjectInfo from '@/hooks/scenarioAct/useProjectInfo';
+import useCharacterInfo from '@/hooks/scenarioAct/useScenarioList';
 
+import Loading from '@/components/common/loading/loading';
 import ActSection from '@/components/scenarioAct/actSection/actSection';
 import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
@@ -9,18 +12,29 @@ import Header from '@/components/scenarioAct/header/header';
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
 
 export default function ScenarioActPage() {
-  const { projectId } = useParams();
-  console.log(projectId);
+  const { projectId: stringProjectId } = useParams<{ projectId: string }>();
+  const projectId = stringProjectId ? Number(stringProjectId) : undefined;
+  const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
 
-  const { useGetProjectInfo } = useProjectInfo(projectId);
-  const { data, isLoading, error } = useGetProjectInfo;
-  console.log(data);
-  console.log(isLoading);
-  console.log(error);
+  const { useGetProjectInfo, useGetCharacterList } = useProjectInfo(projectId);
+  const { isLoading: projectInfoLoading } = useGetProjectInfo;
+  const { isLoading: characterListLoading } = useGetCharacterList;
+
+  const { useGetScenarioList } = useCharacterInfo(selectedCharacterId);
+  const { isLoading: scenarioListLoading } = useGetScenarioList;
+
+  if (projectInfoLoading || characterListLoading || scenarioListLoading) {
+    return (
+      <S.LoadingContainer>
+        <Loading />
+      </S.LoadingContainer>
+    );
+  }
+
   return (
     <S.Container>
       <S.Header>
-        <Header textURL="URL경로" />
+        <Header />
       </S.Header>
 
       <S.Controller>

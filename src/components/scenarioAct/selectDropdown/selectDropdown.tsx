@@ -11,7 +11,7 @@ interface IDropdownProps {
   type?: 'thin' | 'normal';
 }
 
-export default function CharacterSelectDropdown({ options, onSelect, type = 'normal' }: IDropdownProps) {
+export default function CharacterSelectDropdown({ options, onSelect, type = 'thin' }: IDropdownProps) {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
   const [selectedOption, setSelectedOption] = useState(options[0]); // 선택된 옵션
   const dropdownRef = useRef<HTMLDivElement>(null);

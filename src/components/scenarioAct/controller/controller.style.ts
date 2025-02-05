@@ -11,9 +11,6 @@ export const Container = styled.div`
 export const ActContainer = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  //box-shadow: 10px 20px 100px 0px rgba(35, 104, 232, 0.2);
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-  ${({ theme }) => theme.text.medium_20};
   height: 100%;
 `;
 
@@ -50,7 +47,11 @@ export const ScenarioLIst = styled.div`
 `;
 
 // 시나리오 추가
-export const AddContainer = styled.div``;
+export const AddContainer = styled.div`
+  position: relative;
+  background: ${({ theme }) => theme.colors.primary.pri_900};
+  height: 100%;
+`;
 export const IconContainer = styled.div`
   width: 19.2px;
   height: 19.2px;
