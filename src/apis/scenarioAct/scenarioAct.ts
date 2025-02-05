@@ -3,6 +3,7 @@ import type {
   TCreateScenarioResponse,
   TEditActionResponse,
   TEditActionValues,
+  TExecuteScenarioValues,
   TGetCharacterListResponse,
   TGetProjectInfoResponse,
   TGetProjectInfoValues,
@@ -31,10 +32,16 @@ const editAction = async (editData: TEditActionValues): Promise<TEditActionRespo
   console.log(data);
   return data;
 };
-//아직
+
 const createScenario = async (scenario: TCreateScenaioValues): Promise<TCreateScenarioResponse> => {
   const { data } = await axiosInstance.post(`/api/v0/scenarios`, scenario);
   return data;
 };
 
-export { createScenario, editAction, getCharacterList, getProjectInfo, getScenarioList };
+//아직
+const executeScenario = async (props: TExecuteScenarioValues): Promise<TCreateScenarioResponse> => {
+  const { data } = await axiosInstance.post(`/api/v0/scenarios/${props.scenarioId}/sessions/${props.sessionId}/execute`, props.baseUrl);
+  return data;
+};
+
+export { createScenario, editAction, executeScenario, getCharacterList, getProjectInfo, getScenarioList };

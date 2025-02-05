@@ -11,6 +11,7 @@ import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
 
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
+import Exit from '@/assets/icons/exit.svg?react';
 
 export default function Controller() {
   const scenario = useSelector((state) => state.scenarioAct);
@@ -23,6 +24,9 @@ export default function Controller() {
     setStep(selectedStep);
   };
 
+  const handleGoBack = () => {
+    window.history.back();
+  };
   return (
     <S.Container>
       {step === 1 ? (
@@ -31,8 +35,10 @@ export default function Controller() {
           {isOpen && <ScenarioActModal />}
           {/* 헤더 */}
           <S.Header>
-            <br />
             <p>{scenario.projectName}</p>
+            <S.IconContainer>
+              <Exit onClick={handleGoBack} />
+            </S.IconContainer>
           </S.Header>
 
           {/* 역할 선택 */}

@@ -53,6 +53,7 @@ export const AddContainer = styled.div`
   height: 100%;
 `;
 export const IconContainer = styled.div`
+  cursor: pointer;
   width: 19.2px;
   height: 19.2px;
   display: flex;
