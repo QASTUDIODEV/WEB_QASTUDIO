@@ -38,6 +38,7 @@ export default function ScenarioPage() {
   useEffect(() => {
     dispatch(resetChecks());
     dispatch(edit(false));
+    setCurrentPage(0);
   }, [navigate]);
 
   useEffect(() => {
