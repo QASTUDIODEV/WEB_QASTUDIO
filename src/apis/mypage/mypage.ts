@@ -8,7 +8,6 @@ import type {
 
 import { axiosInstance } from '../axiosInstance';
 
-//아직 api가 미완성이라 추후 연결 예정입니다
 const getUserInfo = async (): Promise<TGetUserInfoResponse> => {
   const { data } = await axiosInstance.get('/api/v0/users');
   return data;

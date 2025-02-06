@@ -1,5 +1,5 @@
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,12 +30,21 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { isValid, errors, touchedFields },
+    control,
+    formState: { isValid, errors },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(loginSchema),
   });
 
+  const watchedPassword = useWatch({
+    control,
+    name: 'password',
+  });
+  const watchedEmail = useWatch({
+    control,
+    name: 'password',
+  });
   const navigate = useNavigate();
 
   const { useDefaultLogin } = useUserAuth();
@@ -72,8 +81,7 @@ export default function LoginPage() {
             Name="Email"
             span="Email"
             top={true}
-            touched={touchedFields.email}
-            valid={touchedFields.email && !errors.email?.message}
+            valid={!errors.email?.message && watchedEmail !== ''}
             errorMessage={errors.email?.message}
             {...register('email')}
           />
@@ -83,8 +91,7 @@ export default function LoginPage() {
             Name="Password"
             span="Password"
             top={false}
-            touched={touchedFields.password}
-            valid={touchedFields.password && !errors.password}
+            valid={!errors.password && watchedPassword !== ''}
             errorMessage={errors.password?.message}
             {...register('password')}
           />

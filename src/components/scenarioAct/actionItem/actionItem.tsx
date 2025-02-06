@@ -42,12 +42,12 @@ const actionIconMap = {
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-
+  const actionState = ACTION_STATE.SUCCESS; // action?.state
   // 액션
   const action = useSelector((state) =>
     state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId),
   );
-  const isError = action?.state === ACTION_STATE.ERROR;
+  const isError = true;
   // 마지막 액션 추적
   const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
   const isLastAction = lastActionId === actionId;
@@ -65,13 +65,13 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   return (
     <S.Container $isError={isError}>
       {/* 헤더 */}
-      <S.Header state={action?.state || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
+      <S.Header state={actionState || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
           {action?.actionType && <S.IconContainer>{getIcon(actionIconMap, action.actionType)}</S.IconContainer>}
-          <S.ActionName>{action?.name || '액션'}</S.ActionName>
+          <S.ActionName>{action?.actionDescription || '액션'}</S.ActionName>
           <S.ActionType>{action?.actionType}</S.ActionType>
         </S.Content>
-        {action?.state && <S.IconContainer>{getIcon(stateIconMap, action.state)}</S.IconContainer>}
+        {actionState && <S.IconContainer>{getIcon(stateIconMap, actionState)}</S.IconContainer>}
       </S.Header>
 
       {/* 세부 사항 */}
@@ -86,7 +86,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             </S.DescriptionRow>
 
             <S.DescriptionRow>
-              <S.Input />
+              <S.Input value={action?.locator.value} />
               <Button color="blue">Apply</Button>
             </S.DescriptionRow>
           </S.DescriptionItem>
@@ -94,11 +94,11 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       )}
       {/* 언더라인 */}
       {isLastAction &&
-        (action?.state === ACTION_STATE.SUCCESS ? (
+        (actionState === ACTION_STATE.SUCCESS ? (
           <S.UnderIcon>
             <UnderSuccess />
           </S.UnderIcon>
-        ) : action?.state === ACTION_STATE.ERROR ? (
+        ) : actionState === ACTION_STATE.ERROR ? (
           <div>
             <S.UnderIcon>
               <UnderError />

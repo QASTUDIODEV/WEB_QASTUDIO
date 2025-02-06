@@ -42,11 +42,11 @@ axiosInstance.interceptors.response.use(
         if (axios.isAxiosError(errors)) {
           const refreshError = error as AxiosError<IRefreshResponse>;
           if (refreshError.response?.data.message === 'The token is null.') {
+            console.log('refreshToken이 없습니다. 로그인 페이지로 이동합니다.');
             store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
           } else if (refreshError.response?.data.message === 'The token is invalid.') {
-            console.log('refreshToken이 만료되었거나 없습니다. 로그인 페이지로 이동합니다.', refreshError);
+            console.log('refreshToken이 만료되었습니다. 로그인 페이지로 이동합니다.');
             store.dispatch(openModal({ modalType: MODAL_TYPES.AuthModal }));
-
             logout();
           } else {
             if (refreshError.response?.data.message === 'Incorrect password.') {

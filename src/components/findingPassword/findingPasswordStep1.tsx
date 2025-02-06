@@ -10,8 +10,9 @@ type TCodeVerify = undefined | boolean;
 type TStep1 = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   step: number;
+  watchedEmail: string | undefined;
 };
-export default function FindingPasswordStep1({ setStep, step }: TStep1) {
+export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TStep1) {
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | undefined>(undefined);
   const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
@@ -19,13 +20,8 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
     register,
     setValue,
     control,
-    formState: { touchedFields, errors },
+    formState: { errors },
   } = useFormContext();
-
-  const watchedEmail = useWatch({
-    control,
-    name: 'email',
-  });
 
   const watchedCode = useWatch({
     control,
@@ -36,7 +32,7 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
 
   const handleSendCode = async () => {
     setValue('code', '');
-    if (!errors.email?.message) {
+    if (!errors.email?.message && watchedEmail) {
       sendCodeMutate(watchedEmail, {
         onSuccess: (data) => {
           setAuthCode(data.result.authCode);
@@ -75,10 +71,10 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.code === 'Enter') {
       e.preventDefault();
-      if (step === 1 && !errors.email?.message && touchedFields.email) {
+      if (step === 1 && !errors.email?.message && watchedEmail !== '') {
         handleSendCode();
       }
-      if (step === 1 && !errors.code?.message && touchedFields.code) {
+      if (step === 1 && !errors.code?.message && watchedCode !== '') {
         setStep(2);
       }
     }
@@ -92,18 +88,16 @@ export default function FindingPasswordStep1({ setStep, step }: TStep1) {
         Name="Email"
         span="Email"
         btnName="Send"
-        disabled={codePending}
         handleSendCode={handleSendCode}
-        touched={touchedFields.email}
         pending={codePending}
-        valid={touchedFields.email && !errors.email?.message && !emailErrorMessage}
+        isUndefined={watchedEmail === undefined}
+        valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}
         {...register('email')}
       />
       {AuthCode && (
         <CodeModule
-          touched={touchedFields.code}
-          valid={touchedFields.code && !errors.code?.message}
+          valid={!errors.code?.message && watchedCode !== ''}
           errorMessage={errors.code?.message as string}
           Name={'Code'}
           codeverify={codeverify}

@@ -58,17 +58,16 @@ export default function ActSection() {
         }
     }
 </style></head><body><div id="mountHere"></div></body></html>`;
-
+  const style = {
+    width: '100%',
+    height: '100%',
+    border: 'none',
+    margin: '0px',
+    padding: '0px',
+  };
   return (
     <S.Container>
-      <Frame
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        initialContent={initialContent}
-        mountTarget="#mountHere"
-      >
+      <Frame style={style} initialContent={initialContent} mountTarget="#mountHere">
         <InnerComponent htmlContent={htmlContent} />
       </Frame>
     </S.Container>

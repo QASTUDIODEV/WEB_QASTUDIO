@@ -15,9 +15,9 @@ import Web from '@/assets/icons/web.svg?react';
 
 type TProjectTitleProps = {
   title?: string;
-  profileImg?: string;
-  device: DEVICE;
-  stack: STACK;
+  profileImg?: string | null;
+  device: DEVICE | undefined;
+  stack: STACK | undefined;
 };
 // 아이콘 맵핑
 export const stackIconMap: Record<STACK, React.FunctionComponent> = {
@@ -35,11 +35,11 @@ export default function ProjectTitle({ title = 'UNTITLED', profileImg, device = 
   return (
     <S.Container>
       <S.IconContainer>
-        <Profile profileImg={profileImg} />
+        <Profile profileImg={profileImg || undefined} />
       </S.IconContainer>
       <S.Title>{title}</S.Title>
-      <S.IconContainer>{getIcon(deviceIconMap, device)}</S.IconContainer>
-      <S.IconContainer>{getIcon(stackIconMap, stack)}</S.IconContainer>
+      {device && <S.IconContainer>{getIcon(deviceIconMap, device)}</S.IconContainer>}
+      {stack && <S.IconContainer>{getIcon(stackIconMap, stack)}</S.IconContainer>}
     </S.Container>
   );
 }
