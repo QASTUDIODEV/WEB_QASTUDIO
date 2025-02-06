@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
-// import { useGetScenario } from '@/hooks/projectInfo/useGetScenario';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
@@ -50,11 +50,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const notAccessed = summary?.map((a) => a.deniedAccess);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
-  // const { useScenario } = useGetScenario({
-  //   characterId: selectedCharacterId || 0,
-  // });
-  // const { data: scenarioList } = useScenario;
-  // const currentScenario = scenarioList?.result.scenarioList.map((a) => a.scenarioName) || [];
   const handleMouseEnter = (characterId: number) => {
     setActiveTooltip(characterId);
   };
@@ -101,6 +96,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
     }
     setPreContent(e.target.value);
   };
+  const navigate = useNavigate();
   return (
     <S.Container>
       <S.Profile>
@@ -121,7 +117,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
           </Button>
         </S.Wrapper>
       </S.Profile>
-      <S.Box height="20%">
+      <S.Box height="6%">
         <S.Title>Introduction to the Project</S.Title>
         {!isEdit ? (
           <>
@@ -145,99 +141,103 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       </S.Box>
       <S.SemiBox>
         <S.Left>
-          {isStructureVisible ? (
-            <S.Box
-              height="59%"
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              <S.Title>Project structure</S.Title>
-              <S.TextBold>Summary</S.TextBold>
-              <S.TextLight>{content}</S.TextLight>
-              <S.Wrapper top="16px" right="24px">
-                <Plus
-                  onClick={() =>
-                    modalDispatch(
-                      openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }),
-                    )
-                  }
-                />
-              </S.Wrapper>
-              <S.InnerBox>
-                <div style={{ flex: 1 }}>
-                  <S.Table>
-                    <thead>
-                      <tr>
-                        <S.TH>
-                          <File /> Page
-                        </S.TH>
-                        <S.TH>
-                          <Branch /> Path
-                        </S.TH>
-                        <S.TH>
-                          <Rights /> Access Rights
-                        </S.TH>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {summary &&
-                        summary.map((a, index) => (
-                          <S.TR
-                            key={a.pageId}
-                            onClick={() => {
-                              setIsStructureVisible(false);
-                              setSelectedPage(index);
-                            }}
-                          >
-                            <S.TD>{a.pageName}</S.TD>
-                            <S.TD>{a.path}</S.TD>
-                            <S.TD>
-                              <S.AccessRights>
-                                <S.Button>
-                                  <Button type="small_round" color="green">
-                                    접근 가능
-                                  </Button>
-                                </S.Button>
-                                {accessed &&
-                                  accessed[index].map((role, i) => (
-                                    <S.Button key={i}>
-                                      <Button type="small_round" color="white_round">
-                                        {role}
-                                      </Button>
-                                    </S.Button>
-                                  ))}
+          <S.Box
+            height="59%"
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            {isStructureVisible ? (
+              <>
+                <S.Title>Project structure</S.Title>
+                <S.TextBold>Summary</S.TextBold>
+                <S.TextLight>{content}</S.TextLight>
+                <S.Wrapper top="16px" right="24px">
+                  <Plus
+                    onClick={() =>
+                      modalDispatch(
+                        openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }),
+                      )
+                    }
+                  />
+                </S.Wrapper>
+                <S.InnerBox>
+                  <div style={{ flex: 1 }}>
+                    <S.Table>
+                      <thead>
+                        <tr>
+                          <S.TH>
+                            <File /> Page
+                          </S.TH>
+                          <S.TH>
+                            <Branch /> Path
+                          </S.TH>
+                          <S.TH>
+                            <Rights /> Access Rights
+                          </S.TH>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {summary &&
+                          summary.map((a, index) => (
+                            <S.TR
+                              key={a.pageId}
+                              onClick={() => {
+                                setIsStructureVisible(false);
+                                setSelectedPage(index);
+                              }}
+                            >
+                              <S.TD>{a.pageName}</S.TD>
+                              <S.TD>{a.path}</S.TD>
+                              <S.TD>
+                                <S.AccessRights>
+                                  <S.Button>
+                                    <Button type="small_round" color="green">
+                                      접근 가능
+                                    </Button>
+                                  </S.Button>
+                                  {accessed &&
+                                    accessed[index].map((role, i) => (
+                                      <S.Button key={i}>
+                                        <Button type="small_round" color="white_round">
+                                          {role}
+                                        </Button>
+                                      </S.Button>
+                                    ))}
 
-                                <S.Button>
-                                  <Button type="small_round" color="red">
-                                    접근 불가능
-                                  </Button>
-                                </S.Button>
-                                {notAccessed &&
-                                  notAccessed[index].map((role, i) => (
-                                    <S.Button key={i}>
-                                      <Button type="small_round" color="white_round">
-                                        {role}
-                                      </Button>
-                                    </S.Button>
-                                  ))}
-                              </S.AccessRights>
-                            </S.TD>
-                          </S.TR>
-                        ))}
-                    </tbody>
-                  </S.Table>
-                </div>
-              </S.InnerBox>
-            </S.Box>
-          ) : (
-            <ProjectStructure
-              selectedPage={selectedPage}
-              setSelectedPage={(page) => setSelectedPage(page)}
-              onBackToSummary={() => setIsStructureVisible(true)}
-              pageData={summary}
-            />
-          )}
+                                  <S.Button>
+                                    <Button type="small_round" color="red">
+                                      접근 불가능
+                                    </Button>
+                                  </S.Button>
+                                  {notAccessed &&
+                                    notAccessed[index].map((role, i) => (
+                                      <S.Button key={i}>
+                                        <Button type="small_round" color="white_round">
+                                          {role}
+                                        </Button>
+                                      </S.Button>
+                                    ))}
+                                </S.AccessRights>
+                              </S.TD>
+                            </S.TR>
+                          ))}
+                      </tbody>
+                    </S.Table>
+                  </div>
+                </S.InnerBox>
+              </>
+            ) : (
+              <ProjectStructure
+                selectedPage={selectedPage}
+                setSelectedPage={(page) => setSelectedPage(page)}
+                onBackToSummary={() => setIsStructureVisible(true)}
+                pageData={summary}
+                projectId={Number(result?.projectId)}
+                character={character}
+              />
+            )}
+          </S.Box>
           <S.Box height="35%">
             <S.Title>Character</S.Title>
             <S.Character>
@@ -279,7 +279,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
             <S.Title>Team Members</S.Title>
             <S.MemberContainer>
               {member?.map((a, i) => (
-                <S.Member key={i}>
+                <S.Member key={i} onClick={() => navigate(`/userInfo/${a.userId}`)}>
                   <S.MemberBox>
                     <S.ProfileWrapper>
                       <Profile profileImg={a.profileImage} />
