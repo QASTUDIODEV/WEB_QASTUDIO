@@ -178,15 +178,15 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
         <S.ProfileWrapper>
           <input ref={inputRefs.banner} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'banner')} />
           {bannerPreview ? (
-            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} />
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} $isEdit={true} />
           ) : (
-            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} $isEdit={true} />
           )}
 
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
-                <S.ProfileImg onClick={() => handleInputClick('profile')}>
+                <S.ProfileImg onClick={() => handleInputClick('profile')} $isEdit={true}>
                   {profilePreview ? (
                     <Profile profileImg={import.meta.env.VITE_API_IMAGE_ACCESS + profilePreview} />
                   ) : (
@@ -237,11 +237,11 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
         </S.ProfileWrapper>
       ) : (
         <S.ProfileWrapper>
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={userData?.result.bannerImage} />
+          <S.BannerImg url={userData?.result.bannerImage} $isEdit={false} />
           <S.Profile>
             <S.Container2>
               <S.ProfileUserInfo>
-                <S.ProfileImg>
+                <S.ProfileImg $isEdit={false}>
                   <Profile profileImg={userData?.result.profileImage} />
                 </S.ProfileImg>
                 <S.UserInfo>
