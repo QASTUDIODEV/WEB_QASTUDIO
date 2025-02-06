@@ -74,7 +74,7 @@ export const Elapsed = styled.div`
   height: 100%;
   align-items: center;
   gap: 8px;
-  width: 195px;
+  width: 130px;
   ${({ theme }) => theme.text.medium_14};
 `;
 
