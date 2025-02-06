@@ -142,6 +142,7 @@ const Title = styled.p`
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
+  min-height: 20px;
   letter-spacing: 0.352px;
   margin-bottom: 12px;
   @media (max-width: 530px) {
@@ -164,27 +165,31 @@ const TextLight = styled.p`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.224px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: pre-line;
   overflow: hidden;
+  text-overflow: ellipsis;
   min-height: 40px;
-  white-space: pre;
+  word-wrap: break-word;
   ${media.desktop`
     font-size: 12px;
   `}
+  @media (max-width: 610px) {
+    white-space: pre;
+  }
 `;
 
 const Text = styled.p`
   max-width: 100%;
   color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
-  font-size: 14.4px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 140%;
   letter-spacing: 0.288px;
-  white-space: pre;
+  white-space: pre-line;
   overflow: hidden;
+  text-overflow: ellipsis;
   scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
@@ -193,6 +198,7 @@ const Text = styled.p`
   }
   @media (max-width: 610px) {
     width: 60%;
+    white-space: pre;
   }
 `;
 
@@ -315,10 +321,10 @@ export const Wrapper = styled.div<TWrapperProps>`
 
 export const Input = styled.textarea`
   width: 80%;
-  height: 57%;
+  height: 100%;
   color: ${({ theme }) => theme.colors.white};
   font-family: Pretendard;
-  font-size: 14.4px;
+  font-size: 11.2px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 21.6px */
