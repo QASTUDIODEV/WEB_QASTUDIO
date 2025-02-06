@@ -49,10 +49,6 @@ export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) 
   }, [characters]);
 
   useEffect(() => {
-    console.log(selectedCharacterId, selectedScenarioId);
-  }, [selectedCharacterId, selectedScenarioId]);
-
-  useEffect(() => {
     const hasChecked = (selectedCharacterId?.length ?? 0) > 0 || (selectedScenarioId?.length ?? 0) > 0;
     setHasCheckedItems(hasChecked);
   }, [characters]);
