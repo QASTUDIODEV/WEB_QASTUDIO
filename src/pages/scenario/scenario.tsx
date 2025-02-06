@@ -36,9 +36,12 @@ export default function ScenarioPage() {
   const CharacterData = CharacterListData?.result.characters;
 
   useEffect(() => {
+    setCurrentPage(0);
+  }, [projectId]);
+
+  useEffect(() => {
     dispatch(resetChecks());
     dispatch(edit(false));
-    setCurrentPage(0);
   }, [navigate]);
 
   useEffect(() => {
