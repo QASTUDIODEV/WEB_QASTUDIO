@@ -64,7 +64,7 @@ export default function ScenarioModalStep1({
 
   const { data: PathData } = useGetAllPaths;
 
-  const options = useMemo(() => PathData?.result?.projectPaths ?? [], [PathData]);
+  const options = useMemo(() => PathData?.result?.projectPaths?.map((pathData) => pathData.path) ?? [], [PathData]);
 
   const {
     register,
