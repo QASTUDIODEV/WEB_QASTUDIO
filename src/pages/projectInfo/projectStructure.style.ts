@@ -39,18 +39,6 @@ type TWrapperProps = {
   left?: string;
 };
 
-const Box = styled.div<{ height: string }>`
-  height: ${(props) => props.height};
-  background: var(--primary-pri_back_grad, linear-gradient(76deg, #0e2245 0%, #000714 100.13%));
-  border-radius: 8px;
-  padding: 16px 24px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  border: 0.8px solid rgba(32, 75, 153, 0.2);
-`;
-
 const Title = styled.p`
   color: ${({ theme }) => theme.colors.primary.pri_50};
   font-family: Pretendard;
@@ -152,4 +140,4 @@ export const ButtonItem = styled.div`
   white-space: nowrap;
 `;
 
-export { AccessBox, AccessRights, Box, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };
+export { AccessBox, AccessRights, ButtonWrapper, InnerBox, InnerBoxTitle, LRBox, Path, TextBold, TextLight, Title, TitleBox, Wrap, Wrapper };
