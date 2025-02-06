@@ -29,13 +29,15 @@ export default function AddProjectPage() {
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
       const firstProjectId = projectList.result.projectList[0].projectId;
-      if (firstProjectId) {
+      const currentPath = location.pathname;
+      if (firstProjectId && !currentPath.includes(`/project/information/`)) {
         navigate(`/project/information/${firstProjectId}`);
         hasNavigated.current = true;
       }
     }
     queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
   }, [isProjectListLoaded, projectList, navigate]);
+
   const { mutate: uploadZipFile, isError, isSuccess: success, isPending } = useUploadFile;
   const zipFileRef = useRef<HTMLInputElement | null>(null);
 
