@@ -32,6 +32,7 @@ export default function FindingPassword() {
   const [step, setStep] = useState(1);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>('');
+  const [sendCodeSuccess, setSendCodeSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -107,7 +108,15 @@ export default function FindingPassword() {
       <Logo style={{ width: '48px', height: '48px' }} />
       <FormProvider {...methods}>
         <S.Form onKeyDown={(e) => handleKeyDown(e)} onSubmit={handleSubmit(onSubmit)}>
-          {step === 1 && <FindingPasswordStep1 setStep={setStep} step={step} watchedEmail={watchedEmail} />}
+          {step === 1 && (
+            <FindingPasswordStep1
+              setStep={setStep}
+              step={step}
+              watchedEmail={watchedEmail}
+              setSendCodeSuccess={setSendCodeSuccess}
+              sendCodeSuccess={sendCodeSuccess}
+            />
+          )}
           {step === 2 && (
             <FindingPasswordStep2
               setPasswordMatch={setPasswordMatch}
