@@ -4,7 +4,7 @@ export const CharacterHeaderLeftSide = styled.div`
   display: flex;
   gap: 6.4px;
   width: fit-content;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 `;
 
@@ -46,8 +46,8 @@ export const CharacterHeader = styled.div<{ $isChecked: boolean; $isEdit: boolea
 
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
   border-top: ${({ $isEdit }) => ($isEdit ? '0.8px solid rgba(217, 230, 255, 0.2)' : 'none')};
-  background: ${({ $isSelected, $isChecked }) =>
-    $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
+  background: ${({ $isSelected, $isChecked, $isEdit }) =>
+    $isEdit ? 'inherit' : $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
 `;
 
 export const CharacterHeaderRightSide = styled.div`
@@ -74,7 +74,7 @@ export const Elapsed = styled.div`
   height: 100%;
   align-items: center;
   gap: 8px;
-  width: 195px;
+  width: 130px;
   ${({ theme }) => theme.text.medium_14};
 `;
 

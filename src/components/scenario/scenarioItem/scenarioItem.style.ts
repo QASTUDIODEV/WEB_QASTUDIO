@@ -12,8 +12,8 @@ export const ScenarioItem = styled.div<{ $isChecked: boolean; $isSelected?: bool
 `;
 export const IconContainer = styled.div`
   svg {
-    min-width: 19.2px;
-    min-height: 19.2px;
+    width: 19.2px;
+    height: 19.2px;
   }
 `;
 export const ScenarioItemLeftSide = styled.div`
@@ -21,6 +21,7 @@ export const ScenarioItemLeftSide = styled.div`
   align-items: center;
   gap: 6.4px;
   min-width: 100px;
+  padding-left: 20px;
 `;
 export const ScenarioRightSide = styled.div`
   display: flex;
@@ -40,8 +41,8 @@ export const Creater = styled.div`
     text-overflow: ellipsis;
   }
   svg {
-    min-width: 24px;
-    min-height: 24px;
+    min-width: 19px;
+    min-height: 19px;
   }
 `;
 
