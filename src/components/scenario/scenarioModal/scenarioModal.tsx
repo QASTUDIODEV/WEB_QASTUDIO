@@ -49,7 +49,6 @@ export default function ScenarioModal({ projectId, currentPage }: TScenarioProps
           dispatch(closeModal());
         }
       }}
-      clickOutside={false}
     >
       <FormProvider {...methods}>
         {modalStep === 1 && (
