@@ -4,7 +4,7 @@ export const CharacterHeaderLeftSide = styled.div`
   display: flex;
   gap: 6.4px;
   width: fit-content;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 `;
 

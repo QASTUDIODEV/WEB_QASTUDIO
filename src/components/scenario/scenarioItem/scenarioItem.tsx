@@ -30,49 +30,29 @@ export default function ScenarioItem({ characterId, scenarioData }: IScenarioIte
   }
 
   return (
-    <>
-      {isEdit ? (
-        <S.ScenarioItem $isChecked={scenario.isChecked} $isEdit={isEdit}>
-          <S.ScenarioItemLeftSide>
-            <S.IconContainer>
-              <CheckBox scenarioId={scenarioId} characterId={characterId} isButtonGroup={false} />
-            </S.IconContainer>
-            <S.IconContainer>
-              <File />
-            </S.IconContainer>
-            <S.ScenarioTitle>{scenarioData.scenarioName}</S.ScenarioTitle>
-          </S.ScenarioItemLeftSide>
-          <S.ScenarioRightSide>
-            <S.Creater>
-              <UserCircle />
-              <p>{scenarioData.author}</p>
-            </S.Creater>
-            <S.Elapsed>
-              <Calender />
-              <p>{formatRelativeTime(scenarioData.createdAt)}</p>
-            </S.Elapsed>
-          </S.ScenarioRightSide>
-        </S.ScenarioItem>
-      ) : (
-        <S.ScenarioItem $isChecked={scenario.isChecked} $isSelected={scenario.isSelected}>
-          <S.ScenarioItemLeftSide>
-            <S.IconContainer>
-              <File />
-            </S.IconContainer>
-            <S.ScenarioTitle>{scenarioData.scenarioName}</S.ScenarioTitle>
-          </S.ScenarioItemLeftSide>
-          <S.ScenarioRightSide>
-            <S.Creater>
-              <UserCircle />
-              <p>{scenarioData.author}</p>
-            </S.Creater>
-            <S.Elapsed>
-              <Calender />
-              <p>{formatRelativeTime(scenarioData.createdAt)}</p>
-            </S.Elapsed>
-          </S.ScenarioRightSide>
-        </S.ScenarioItem>
-      )}
-    </>
+    <S.ScenarioItem $isChecked={scenario.isChecked} $isEdit={isEdit}>
+      <S.ScenarioItemLeftSide>
+        {isEdit && (
+          <S.IconContainer>
+            <CheckBox scenarioId={scenarioId} characterId={characterId} isButtonGroup={false} />
+          </S.IconContainer>
+        )}
+
+        <S.IconContainer>
+          <File />
+        </S.IconContainer>
+        <S.ScenarioTitle>{scenarioData.scenarioName}</S.ScenarioTitle>
+      </S.ScenarioItemLeftSide>
+      <S.ScenarioRightSide>
+        <S.Creater>
+          <UserCircle />
+          <p>{scenarioData.author}</p>
+        </S.Creater>
+        <S.Elapsed>
+          <Calender />
+          <p>{formatRelativeTime(scenarioData.createdAt)}</p>
+        </S.Elapsed>
+      </S.ScenarioRightSide>
+    </S.ScenarioItem>
   );
 }
