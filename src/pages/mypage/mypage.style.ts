@@ -40,4 +40,10 @@ const Projects = styled.div`
   }
 `;
 
-export { Container, Projects, Title };
+const LoadingContainer = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export { Container, LoadingContainer, Projects, Title };

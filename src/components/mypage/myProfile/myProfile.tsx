@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
+import type { TGetUserInfoResponse } from '@/types/userController/userController';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
@@ -26,13 +27,13 @@ import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 type TProjectListProps = {
-  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+  isLoading: boolean;
+  userData: TGetUserInfoResponse | undefined;
 };
-export default function MyProfile({ setProjectNum }: TProjectListProps) {
+export default function MyProfile({ isLoading, userData }: TProjectListProps) {
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
-  const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
+  const { usePatchUserInfo } = useUserInfo();
 
-  const { data: userData, isLoading } = useGetUserInfo;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
   const { mutate: patchUserInfoMutation } = usePatchUserInfo;
@@ -165,7 +166,6 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
 
   useEffect(() => {
     if (userData) {
-      setProjectNum(userData.result.projectCnt);
       setValue('nickname', userData.result.nickname);
       setValue('profileImage', userData.result.profileImage);
       setValue('bannerImage', userData.result.bannerImage);

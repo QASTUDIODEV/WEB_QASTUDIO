@@ -3,7 +3,7 @@ import * as S from './projectNum.style';
 import Package from '@/assets/icons/package.svg?react';
 
 type TProjectNum = {
-  projectNum: number;
+  projectNum: number | undefined;
 };
 export default function ProjectNum({ projectNum }: TProjectNum) {
   return (
