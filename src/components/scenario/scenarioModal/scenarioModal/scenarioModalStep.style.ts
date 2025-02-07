@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const ModalContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
   position: relative;
   width: 608px;
   ${media.desktop`
@@ -15,8 +15,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const description = styled.div`
-  ${({ theme }) => theme.text.medium_22};
-  font-size: 19.2px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const SubTitle = styled.p`
@@ -35,7 +34,7 @@ export const ValidationWrapper = styled.div`
 export const InputWrapper = styled.div`
   flex-direction: column;
   display: flex;
-  gap: 10px;
+  gap: 3px;
   position: relative;
 `;
 
@@ -47,6 +46,8 @@ export const ButtonContainer = styled.div`
 
 export const TagContainer = styled.div`
   display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
   gap: 8px;
   height: 30px;
 `;

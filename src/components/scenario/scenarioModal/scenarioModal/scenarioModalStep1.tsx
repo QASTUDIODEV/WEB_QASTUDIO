@@ -69,7 +69,7 @@ export default function ScenarioModalStep1({
   const {
     register,
     handleSubmit,
-    formState: { isValid, errors, touchedFields },
+    formState: { isValid, errors },
   } = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(createCharacterModalScehma),
@@ -160,14 +160,14 @@ export default function ScenarioModalStep1({
             <Loading />
           </S.LoadingContainer2>
         )}
-        <div>
+        <div className="descriptionWrapper">
           <S.description>Define users for the registered project.</S.description>
           <S.description>QASTUDIO will create a suitable scenario for you.</S.description>
         </div>
 
         <S.InputWrapper>
           <S.SubTitle>Name</S.SubTitle>
-          {errors.characterName?.message && touchedFields.characterName && (
+          {errors.characterName?.message && (
             <S.ValidationWrapper>
               <ValidataionMessage message={errors.characterName.message} isError={true} />
             </S.ValidationWrapper>
@@ -176,7 +176,7 @@ export default function ScenarioModalStep1({
         </S.InputWrapper>
         <S.InputWrapper>
           <S.SubTitle>Description</S.SubTitle>
-          {errors.characterDescription?.message && touchedFields.characterDescription && (
+          {errors.characterDescription?.message && (
             <S.ValidationWrapper>
               <ValidataionMessage message={errors.characterDescription.message} isError={true} />
             </S.ValidationWrapper>
