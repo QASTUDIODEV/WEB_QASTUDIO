@@ -68,7 +68,6 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail });
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
   const FirstValid = errors.email?.message;
-  const [imgValid, setImgValid] = useState(true);
   let isImg: boolean = true;
 
   const { data } = useGetTeamMember;
@@ -105,10 +104,6 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
     setMemberEmailList((prev) => prev.filter((e) => e.email !== emailToRemove));
   };
   const handleCreate = async () => {
-    if (!keyName) {
-      setImgValid(false);
-      return;
-    }
     addProject(
       {
         projectImage: keyName,
@@ -125,8 +120,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       },
     );
   };
-  const isCreateDisabled =
-    !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0 || isPending;
+  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       isImg = false;
@@ -137,7 +131,6 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       {
         onSuccess(img) {
           isImg = true;
-          setImgValid(true);
           uploadImageToPresignedUrlMutate(
             {
               url: img.result.url,
@@ -150,7 +143,6 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
               },
               onError: (err) => {
                 console.error('Image upload failed:', err);
-                setImgValid(false);
               },
             },
           );
@@ -174,7 +166,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
-          <S.ModalText>Project Image</S.ModalText>
+          <S.ModalText>Project Image (Optional)</S.ModalText>
           <S.Preview>
             <label htmlFor="photo">
               <Cam style={{ cursor: 'pointer' }} />
@@ -183,7 +175,6 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
             <Profile profileImg={imgFile} />
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
-          {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>
@@ -232,7 +223,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
           {errors.projectUrl?.message && <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />}
         </S.PostBox>
         <S.PostBox>
-          <S.ModalText>Share this project</S.ModalText>
+          <S.ModalText>Share this project (Optional)</S.ModalText>
           <S.BtnWrapper>
             <Controller
               name="email"
