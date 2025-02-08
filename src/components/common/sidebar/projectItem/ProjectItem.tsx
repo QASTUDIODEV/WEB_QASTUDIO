@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/projectItem/projectItem.style';
+import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
@@ -57,7 +57,7 @@ export default function ProjectItem({ projects }: TProjectItemProps) {
               <S.Project onClick={() => toggleMenu(index)}>
                 <S.SemiBox>
                   <S.ProjectProfile className="show content">
-                    <Profile profileImg={project.projectImage || ''} />
+                    <ProjectProfile profileImg={project.projectImage || ''} />
                   </S.ProjectProfile>
                   <S.ProjectName className="menu">{project.projectName}</S.ProjectName>
                 </S.SemiBox>

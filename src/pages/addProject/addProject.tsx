@@ -9,7 +9,7 @@ import useProjectList from '@/hooks/sidebar/sidebar';
 import Button from '@/components/common/button/button';
 import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
-import Profile from '@/components/common/profile/profile';
+import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import ProjectInfoPage from '../projectInfo/projectInfo';
 
@@ -100,7 +100,7 @@ export default function AddProjectPage() {
             <S.ProfileWrapper>
               <S.Profile>
                 <S.Wrapper>
-                  <Profile profileImg={data.result.projectImage} />
+                  <ProjectProfile profileImg={data.result.projectImage} />
                 </S.Wrapper>
                 <S.ProfileName>{data.result.projectName}</S.ProfileName>
               </S.Profile>

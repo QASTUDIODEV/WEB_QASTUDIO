@@ -1,6 +1,6 @@
 import * as S from '@/components/common/sidebar/projectProfile/projectProfile.style';
 
-import DefaultLogo from '/public/icons/logo.svg?react';
+import DefaultLogo from '@/assets/icons/logo.svg?react';
 
 type TProfileProps = {
   profileImg?: string;
