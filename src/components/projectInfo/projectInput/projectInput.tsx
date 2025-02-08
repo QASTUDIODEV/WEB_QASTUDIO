@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
@@ -23,13 +23,11 @@ type TProjectIntroProps = {
     | undefined;
 };
 
-export default function ProjectInfoPage({ result }: TProjectIntroProps) {
+export default function ProjectInput({ result }: TProjectIntroProps) {
   const queryClient = useQueryClient();
   const [isEdit, setIsEdit] = useState(false);
-  const [content, setContent] = useState(result?.introduction || '');
   const preContent = useRef(result?.introduction || '');
   const { useEditIntroduce } = useProjectInfo({ projectId: Number(result?.projectId) });
-
   const { mutate: editIntroduce } = useEditIntroduce;
   const handleEdit = () => {
     setIsEdit(false);
@@ -47,26 +45,13 @@ export default function ProjectInfoPage({ result }: TProjectIntroProps) {
   };
   useEffect(() => {
     preContent.current = result?.introduction || '';
-    setContent(result?.introduction || '');
   }, [result?.projectId]);
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const maxRows = 2;
-    const textarea = e.target;
-
-    const computedStyle = window.getComputedStyle(textarea);
-    const lineHeight = parseInt(computedStyle.lineHeight, 10);
-    const currentRows = Math.floor(textarea.scrollHeight / lineHeight);
-    if (currentRows > maxRows) {
-      return;
-    }
-    preContent.current = e.target.value;
-  };
   return (
     <>
       <S.Title>Introduction to the Project</S.Title>
       {!isEdit ? (
         <>
-          <S.Text>{content}</S.Text>
+          <S.Text>{result?.introduction}</S.Text>
           <S.Wrapper bottom="16px" right="24px">
             <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
               Edit
@@ -75,7 +60,7 @@ export default function ProjectInfoPage({ result }: TProjectIntroProps) {
         </>
       ) : (
         <>
-          <S.Input onChange={(e) => handleInputChange(e)} value={preContent.current} rows={2} />
+          <S.Input onChange={(e) => (preContent.current = e.target.value)} rows={3} />
           <S.Wrapper bottom="16px" right="24px">
             <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
               Done

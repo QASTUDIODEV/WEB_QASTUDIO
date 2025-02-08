@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 
@@ -10,6 +9,7 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
+import ProjectInput from '@/components/projectInfo/projectInput/projectInput';
 import ProjectIntro from '@/components/projectInfo/projectIntroduction/projectIntro';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
@@ -18,7 +18,6 @@ import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Book from '@/assets/icons/book.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
-import Edit from '@/assets/icons/edit.svg?react';
 import File from '@/assets/icons/files.svg?react';
 import Page from '@/assets/icons/page.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
@@ -27,20 +26,15 @@ import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
 
 export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetProjectInfo }) {
-  const queryClient = useQueryClient();
   const result = projectInfo?.result;
   const [isStructureVisible, setIsStructureVisible] = useState(true);
   const [selectedPage, setSelectedPage] = useState(0);
-  const [isEdit, setIsEdit] = useState(false);
-  const [content, setContent] = useState(result?.introduction || '');
-  const [preContent, setPreContent] = useState(result?.introduction || '');
-  const { useEditIntroduce, useGetProjectMember, useGetPageSummary, useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { useGetProjectMember, useGetPageSummary, useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: members } = useGetProjectMember;
   const { data: summaryList } = useGetPageSummary;
   const { data: characterList } = useGetCharacter;
   const summary = summaryList?.result.pageSummaryList;
 
-  const { mutate: editIntroduce } = useEditIntroduce;
   const modalDispatch = useDispatch();
   const character = characterList?.result.detailCharacters;
   const member = members?.result.members;
@@ -58,65 +52,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
     }
   };
-  const handleEdit = () => {
-    const maxRows = 2;
-    const lines = preContent.split('\n');
-    const modifiedText = lines.slice(0, maxRows).join('\n');
-    setContent(modifiedText);
-    setIsEdit(false);
-    editIntroduce(
-      {
-        projectId: Number(result?.projectId),
-        introduce: preContent,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['getProjectInfo', Number(result?.projectId)] });
-        },
-      },
-    );
-  };
-  useEffect(() => {
-    setPreContent(result?.introduction || '');
-    setContent(result?.introduction || '');
-  }, [result?.projectId]);
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const maxRows = 2;
-    const textarea = e.target;
-
-    const computedStyle = window.getComputedStyle(textarea);
-    const lineHeight = parseInt(computedStyle.lineHeight, 10);
-    const currentRows = Math.floor(textarea.scrollHeight / lineHeight);
-    if (currentRows > maxRows) {
-      return;
-    }
-    setPreContent(e.target.value);
-  };
   const navigate = useNavigate();
   return (
     <S.Container>
       <ProjectIntro result={result} />
       <S.Box height="6%">
-        <S.Title>Introduction to the Project</S.Title>
-        {!isEdit ? (
-          <>
-            <S.Text>{content}</S.Text>
-            <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
-                Edit
-              </Button>
-            </S.Wrapper>
-          </>
-        ) : (
-          <>
-            <S.Input onChange={(e) => handleInputChange(e)} value={preContent} rows={2} />
-            <S.Wrapper bottom="16px" right="24px">
-              <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
-                Done
-              </Button>
-            </S.Wrapper>
-          </>
-        )}
+        <ProjectInput result={result} />
       </S.Box>
       <S.SemiBox>
         <S.Left>
@@ -130,7 +71,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
               <>
                 <S.Title>Project structure</S.Title>
                 <S.TextBold>Summary</S.TextBold>
-                <S.TextLight>{content}</S.TextLight>
+                <S.TextLight>{result?.introduction}</S.TextLight>
                 <S.Wrapper top="16px" right="24px">
                   <Plus
                     onClick={() =>
