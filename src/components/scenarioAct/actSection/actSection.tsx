@@ -11,39 +11,7 @@ import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
 import testHtml from './testHtml';
 
-import { setSessionId } from '@/slices/scenarioActSlice';
-
-interface IWebSocketMessage {
-  sessionId?: string;
-  html?: string;
-  css?: string;
-}
-
 export default function ActSection() {
-  const dispatch = useDispatch();
-  console.log('on/off');
-  const { isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, {
-    onMessage: (message: string) => {
-      try {
-        const parsedMessage: IWebSocketMessage = JSON.parse(message);
-        console.log('수신된 메시지:', parsedMessage);
-        dispatch(setSessionId(parsedMessage.sessionId || null));
-      } catch (error) {
-        console.error('WebSocket 메시지 파싱 에러:', error);
-      }
-    },
-    onOpen: () => {
-      console.log('WebSocket 연결 성공');
-    },
-    onClose: () => {
-      console.log('WebSocket 연결 종료');
-      dispatch(setSessionId(null));
-    },
-    onError: (error) => {
-      console.error('WebSocket 에러:', error);
-    },
-  });
-
   const style = {
     width: '100%',
     height: '100%',

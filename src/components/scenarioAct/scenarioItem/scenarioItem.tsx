@@ -1,5 +1,8 @@
+import { useEffect, useState } from 'react';
+
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useExecuteScenario from '@/hooks/scenarioAct/useExecuteScenario';
+import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
 
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
 import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
@@ -18,24 +21,43 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
   const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
   const project = useSelector((state) => state.scenarioAct);
 
+  // API 실행
   const { usePlayScenario } = useExecuteScenario();
   const { mutate: executeScenario } = usePlayScenario;
-  const handlePlay = () => {
+
+  // WebSocket 관리
+  const [isWebSocketActive, setIsWebSocketActive] = useState(false);
+  const { sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, isWebSocketActive);
+
+  useEffect(() => {
+    if (!project.webSocket.sessionId) return;
+
+    console.log('WebSocket에서 받은 sessionId:', project.webSocket.sessionId);
     executeScenario({
-      sessionId: project.sessionId,
+      sessionId: project.webSocket.sessionId,
       scenarioId: scenario?.scenarioId || null,
-      baseUrl: project.projectUrl,
+      baseUrl: 'https://example.com',
     });
+  }, [project.webSocket.sessionId, executeScenario, scenario]);
+
+  const handlePlay = () => {
+    if (!isWebSocketActive) {
+      setIsWebSocketActive(true);
+      return;
+    }
+
+    sendMessage('REQUEST_SESSION_ID');
   };
 
   const handleOpen = () => {
     dispatch(openScenario(scenarioId));
   };
+
   return (
     <S.Container>
       <S.ScenarioHeader $isOpen={scenario?.isOpen}>
         <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
-        <S.Title>{scenario?.scenarioName || '타이틀'}</S.Title>
+        <S.Title>{scenario?.scenarioName}</S.Title>
         <S.IconContainer>
           <Play onClick={handlePlay} />
         </S.IconContainer>

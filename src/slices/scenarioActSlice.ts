@@ -2,9 +2,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface IWebSocketState {
-  socket: WebSocket | null;
   isConnected: boolean;
   messages: string[];
+  sessionId: string | null;
 }
 
 interface IAction {
@@ -57,8 +57,9 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
   characters: ICharacter[];
   recordActions: IRecordAction[];
-  sessionId: string | null;
   webSocket: IWebSocketState;
+  currentHtml: string | null;
+  currentCss: string | null;
 }
 
 interface ICharacterPayload {
@@ -84,12 +85,13 @@ const initialState: IScenarioActSlice = {
   characters: [],
   scenarios: [],
   recordActions: [],
-  sessionId: null,
   webSocket: {
-    socket: null,
     isConnected: false,
     messages: [],
+    sessionId: null,
   },
+  currentHtml: '',
+  currentCss: '',
 };
 
 const scenarioActSlice = createSlice({
@@ -138,53 +140,19 @@ const scenarioActSlice = createSlice({
       // 재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
     },
-    // 웹소켓 ID 설정
+    //웹 소켓
+    setWebSocketConnected: (state, action: PayloadAction<boolean>) => {
+      state.webSocket.isConnected = action.payload;
+    },
+    addWebSocketMessage: (state, action: PayloadAction<string>) => {
+      state.webSocket.messages.push(action.payload);
+    },
     setSessionId: (state, action: PayloadAction<string | null>) => {
-      state.sessionId = action.payload;
+      state.webSocket.sessionId = action.payload;
     },
-    // WebSocket 연결
-    connectWebSocket: (state, action: PayloadAction<string>) => {
-      if (!state.webSocket.socket) {
-        const socket = new WebSocket(action.payload);
-
-        socket.onopen = () => {
-          console.log('WebSocket 연결 성공');
-          state.webSocket.isConnected = true;
-        };
-
-        socket.onmessage = (event) => {
-          console.log('수신된 메시지:', event.data);
-          state.webSocket.messages.push(event.data);
-        };
-
-        socket.onerror = (error) => {
-          console.error('WebSocket 에러 발생:', error);
-        };
-
-        socket.onclose = () => {
-          console.log('WebSocket 연결 종료');
-          state.webSocket.isConnected = false;
-          state.webSocket.socket = null;
-        };
-
-        state.webSocket.socket = socket;
-      }
-    },
-    // WebSocket 메시지 전송
-    sendWebSocketMessage: (state, action: PayloadAction<string>) => {
-      if (state.webSocket.socket && state.webSocket.isConnected) {
-        state.webSocket.socket.send(action.payload);
-      } else {
-        console.error('WebSocket이 연결되지 않음');
-      }
-    },
-    // WebSocket 연결 해제
-    disconnectWebSocket: (state) => {
-      if (state.webSocket.socket) {
-        state.webSocket.socket.close();
-        state.webSocket.socket = null;
-        state.webSocket.isConnected = false;
-      }
+    updateIframeContent: (state, action: PayloadAction<{ html: string; css: string }>) => {
+      state.currentHtml = action.payload.html;
+      state.currentCss = action.payload.css;
     },
   },
 });
@@ -197,9 +165,9 @@ export const {
   setScenarioList,
   addAction,
   removeAction,
+  setWebSocketConnected,
+  addWebSocketMessage,
   setSessionId,
-  connectWebSocket,
-  sendWebSocketMessage,
-  disconnectWebSocket,
+  updateIframeContent,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

@@ -36,13 +36,11 @@ const stateIconMap = {
 const actionIconMap = {
   [ACTION_TYPE.NAVIGATE]: Globe,
   [ACTION_TYPE.CLICK]: Click,
-  [ACTION_TYPE.HOVER]: null,
-  [ACTION_TYPE.FILL_TEXT]: null,
-  [ACTION_TYPE.WAITING]: null,
+  [ACTION_TYPE.SEND_KEYS]: null,
 };
 
-const locatorList = ['id', 'name', 'class_name', 'tag_name', 'link_text', 'partial_link_text', 'css_selector', 'xpath'];
-const actionList = ['click', 'send_keys', 'clear', 'get_attribute', 'text', 'is_displayed', 'is_enabled', 'is_selected', 'get_screenshot_as_file'];
+const locatorList = ['id', 'css_selector', 'xpath'];
+const actionList = ['click', 'send_keys'];
 
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
@@ -126,7 +124,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
       <S.Header state={actionState || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
           {action?.actionType && <S.IconContainer>{getIcon(actionIconMap, action.actionType)}</S.IconContainer>}
-          <S.ActionName>{action?.actionDescription || '액션'}</S.ActionName>
+          <S.ActionName>{action?.actionDescription}</S.ActionName>
           <S.ActionType>{action?.actionType}</S.ActionType>
         </S.Content>
         {actionState && <S.IconContainer>{getIcon(stateIconMap, actionState)}</S.IconContainer>}
@@ -161,7 +159,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             </S.DescriptionRow>
             <S.DescriptionRow>
               {/* 특정 Action Type일 때만 Input 표시 */}
-              {['send_keys', 'get_attribute'].includes(actionType) && (
+              {['send_keys'].includes(actionType) && (
                 <S.DescriptionRow>
                   <S.Input value={actionInputValue} onChange={(e) => setActionInputValue(e.target.value)} />
                 </S.DescriptionRow>
