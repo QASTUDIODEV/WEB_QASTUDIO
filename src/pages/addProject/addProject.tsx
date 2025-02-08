@@ -54,24 +54,23 @@ export default function AddProjectPage() {
     setModal(false);
   };
 
-  // ✅ ZIP 파일을 최초 한 번만 업로드하도록 변경
   const handleFileUpload = async (file: File) => {
     if (!file.type.startsWith('application/zip') || isUploaded) {
-      return; // ZIP 파일이 아니거나 이미 업로드되었으면 요청하지 않음
+      return;
     }
 
-    setIsUploaded(true); // 업로드 시작 시 상태 변경
+    setIsUploaded(true);
 
     uploadZipFile(
       { projectId: Number(projectId), zipFile: file },
       {
         onSuccess: (res) => {
           console.log('Upload success:', res);
-          setIsUploaded(true); // 업로드 성공 후 다시 요청 방지
+          setIsUploaded(true);
         },
         onError: (err) => {
           console.error('Upload failed:', err);
-          setIsUploaded(false); // 실패 시 다시 업로드 가능하도록 설정
+          setIsUploaded(false);
         },
       },
     );
