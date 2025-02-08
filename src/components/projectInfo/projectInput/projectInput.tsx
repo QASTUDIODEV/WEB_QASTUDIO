@@ -1,29 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
+import type { TInfoDTO } from '@/types/projectInfo/projectInfo';
+
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
+import * as S from '@/components/projectInfo/projectInput/projectInput.style';
 
 import Edit from '@/assets/icons/edit.svg?react';
-import * as S from '@/pages/projectInfo/projectInfo.style';
 
-type TProjectIntroProps = {
-  result:
-    | {
-        projectId: number;
-        projectImage: string;
-        projectName: string;
-        projectUrl: string;
-        introduction: string;
-        viewType: string;
-        developmentSkill: string;
-        assistantId: string;
-      }
-    | undefined;
-};
-
-export default function ProjectInput({ result }: TProjectIntroProps) {
+export default function ProjectInput({ result }: TInfoDTO) {
   const queryClient = useQueryClient();
   const [isEdit, setIsEdit] = useState(false);
   const preContent = useRef(result?.introduction || '');
@@ -52,7 +39,7 @@ export default function ProjectInput({ result }: TProjectIntroProps) {
       {!isEdit ? (
         <>
           <S.Text>{result?.introduction}</S.Text>
-          <S.Wrapper bottom="16px" right="24px">
+          <S.Wrapper>
             <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={() => setIsEdit(true)}>
               Edit
             </Button>
@@ -61,7 +48,7 @@ export default function ProjectInput({ result }: TProjectIntroProps) {
       ) : (
         <>
           <S.Input onChange={(e) => (preContent.current = e.target.value)} rows={3} />
-          <S.Wrapper bottom="16px" right="24px">
+          <S.Wrapper>
             <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
               Done
             </Button>

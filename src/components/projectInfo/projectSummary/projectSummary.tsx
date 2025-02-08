@@ -1,35 +1,22 @@
 import { useState } from 'react';
 
+import type { TInfoDTO } from '@/types/projectInfo/projectInfo';
+
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
+import * as S from '@/components/projectInfo/projectSummary/projectSumary.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
 import File from '@/assets/icons/files.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
-import * as S from '@/pages/projectInfo/projectInfo.style';
 import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
 
-type TProjectInfoProps = {
-  result:
-    | {
-        projectId: number;
-        projectImage: string;
-        projectName: string;
-        projectUrl: string;
-        introduction: string;
-        viewType: string;
-        developmentSkill: string;
-        assistantId: string;
-      }
-    | undefined;
-};
-
-export default function ProjectInfoPage({ result }: TProjectInfoProps) {
+export default function ProjectInfoPage({ result }: TInfoDTO) {
   const modalDispatch = useDispatch();
   const [isStructureVisible, setIsStructureVisible] = useState(true);
   const [selectedPage, setSelectedPage] = useState(0);
@@ -47,7 +34,7 @@ export default function ProjectInfoPage({ result }: TProjectInfoProps) {
           <S.Title>Project structure</S.Title>
           <S.TextBold>Summary</S.TextBold>
           <S.TextLight>{result?.introduction}</S.TextLight>
-          <S.Wrapper top="16px" right="24px">
+          <S.Wrapper>
             <Plus
               onClick={() =>
                 modalDispatch(openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }))

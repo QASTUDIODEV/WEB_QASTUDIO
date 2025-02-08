@@ -1,5 +1,20 @@
 import type { TCommonResponse } from '../common/common';
 
+export type TInfoDTO = {
+  result:
+    | {
+        projectId: number;
+        projectImage: string;
+        projectName: string;
+        projectUrl: string;
+        introduction: string;
+        viewType: string;
+        developmentSkill: string;
+        assistantId: string;
+      }
+    | undefined;
+};
+
 export type TPageSummaryDTO = {
   pageId: number;
   pageName: string;
