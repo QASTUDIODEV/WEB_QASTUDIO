@@ -18,7 +18,7 @@ const Wrapper = styled(motion.div)`
   margin: 1.5rem auto;
   max-width: 80%;
   min-width: 500px;
-  max-height: 80%;
+  max-height: 90%;
   padding: 40px 50px;
   box-shadow: 10px 20px 100px 0 rgba(35, 104, 232, 0.2);
   border-radius: 16px;

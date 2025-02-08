@@ -1,4 +1,7 @@
+import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+
 import Button from '@/components/common/button/button';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 
 import * as S from '@/pages/projectInfo/projectStructure.style.ts';
 
@@ -6,6 +9,7 @@ import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch.svg?react';
 import FileBranch from '@/assets/icons/file_branch.svg?react';
 import Rights from '@/assets/icons/rights.svg?react';
+import { openModal } from '@/slices/modalSlice.ts';
 
 type TProjectStructureProps = {
   selectedPage: number;
@@ -22,16 +26,27 @@ type TProjectStructureProps = {
         scenarios: string[];
       }[]
     | undefined;
+  projectId: number;
+  character:
+    | {
+        characterId: number;
+        characterName: string;
+        characterDescription: string;
+        pageCnt: number;
+        scenarioCnt: number;
+        accessPageList: string[];
+        scenarioList: string[];
+        author: string;
+        createdAt: Date;
+        updatedAt: Date;
+      }[]
+    | undefined;
 };
 
-function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, pageData }: TProjectStructureProps) {
+function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, pageData, projectId, character }: TProjectStructureProps) {
+  const modalDispatch = useDispatch();
   return (
-    <S.Box
-      height="59%"
-      style={{
-        cursor: 'pointer',
-      }}
-    >
+    <>
       <S.Title>Project structure</S.Title>
       <S.TitleBox>
         <S.Wrap>
@@ -73,7 +88,9 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, page
       </S.TitleBox>
       {pageData && <S.TextLight>{pageData[selectedPage].pageDescription}</S.TextLight>}
       <S.Wrapper top="16px" right="24px">
-        <Plus />
+        <Plus
+          onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: projectId, character: character } }))}
+        />
       </S.Wrapper>
       <S.InnerBox>
         <S.LRBox width="41.66666667%">
@@ -124,7 +141,7 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, page
           </S.Scenario>
         </S.LRBox>
       </S.InnerBox>
-    </S.Box>
+    </>
   );
 }
 

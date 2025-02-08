@@ -6,6 +6,7 @@ import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
 import AddProjectPage from '@/pages/addProject/addProject';
 import DashboardPage from '@/pages/dashboard/dashboard';
+import ErrorPage from '@/pages/error/error';
 import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
 import LoginRedirect from '@/pages/loginRedirect/loginRedirect';
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
         <ModalProvider />
       </>
     ),
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <LoginPage /> },
       {
