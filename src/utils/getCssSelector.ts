@@ -1,4 +1,3 @@
-// CSS 선택자 생성 함수
 function getCssSelector(element: HTMLElement): string {
   let path = '';
   while (element.parentElement) {

@@ -2,15 +2,17 @@ import { useEffect } from 'react';
 import Frame, { useFrame } from 'react-frame-component';
 
 import getCssSelector from '@/utils/getCssSelector';
+import getXPath from '@/utils/getXPath';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux';
 import { useWebSocket } from '@/hooks/scenarioAct/useWebsocket';
 
 import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
+import testHtml from './testHtml';
+
 import { setSessionId } from '@/slices/scenarioActSlice';
 
-// WebSocket 메시지의 타입 정의
 interface IWebSocketMessage {
   sessionId?: string;
   html?: string;
@@ -19,8 +21,7 @@ interface IWebSocketMessage {
 
 export default function ActSection() {
   const dispatch = useDispatch();
-
-  // WebSocket 연결 및 메시지 처리
+  console.log('on/off');
   const { isConnected, sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, {
     onMessage: (message: string) => {
       try {
@@ -43,50 +44,6 @@ export default function ActSection() {
     },
   });
 
-  // iframe에 표시할 HTML/CSS 초기 값
-  const htmlContent: string = `
-    <div>
-      <h1>Example Domain</h1>
-      <p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p>
-      <p><a href="https://www.iana.org/domains/example">More information...</a></p>
-    </div>
-  `;
-
-  const initialContent: string = `<!DOCTYPE html>
-  <html>
-    <head>
-      <style>
-        body {
-          background-color: #f0f0f2;
-          margin: 0;
-          padding: 0;
-          font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-        div {
-          width: 600px;
-          margin: 5em auto;
-          padding: 2em;
-          background-color: #fdfdff;
-          border-radius: 0.5em;
-          box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
-        }
-        a:link, a:visited {
-          color: #38488f;
-          text-decoration: none;
-        }
-        @media (max-width: 700px) {
-          div {
-            margin: 0 auto;
-            width: auto;
-          }
-        }
-      </style>
-    </head>
-    <body>
-      <div id="mountHere"></div>
-    </body>
-  </html>`;
-
   const style = {
     width: '100%',
     height: '100%',
@@ -94,44 +51,62 @@ export default function ActSection() {
     margin: '0px',
     padding: '0px',
   };
-
+  const css = `<!DOCTYPE html>
+    <html>
+      <head>
+        <style>${testHtml.css}
+          .highlighted-element {
+            outline: 3px solid #ffeb3b;
+            background-color: rgba(255, 235, 59, 0.2);
+          } 
+        </style>
+      </head>
+      <body>
+        <div id="mountHere"></div>
+      </body>
+    </html>
+ `;
   return (
     <S.Container>
-      <Frame style={style} initialContent={initialContent} mountTarget="#mountHere">
-        <InnerComponent htmlContent={htmlContent} />
+      <Frame style={style} initialContent={css} mountTarget="#mountHere">
+        <InnerComponent htmlContent={testHtml.html} />
       </Frame>
     </S.Container>
   );
 }
 
-interface IInnerComponentProps {
-  htmlContent: string;
-}
-
-function InnerComponent({ htmlContent }: IInnerComponentProps) {
+function InnerComponent({ htmlContent }: { htmlContent: string }) {
   const { document } = useFrame();
 
   useEffect(() => {
     if (!document) return;
+
     document.body.innerHTML = htmlContent;
 
-    // 클릭 이벤트 리스너 추가
+    let lastHighlightedElement: HTMLElement | null = null;
+
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (target) {
-        console.log('=== Element Details ===');
-        console.log(`Tag: ${target.tagName}`);
-        console.log(`ID: ${target.id ? `#${target.id}` : '(none)'}`);
-        console.log(`Class: ${target.className ? `.${target.className.split(' ').join('.')}` : '(none)'}`);
-        console.log(`CSS Selector: ${getCssSelector(target)}`);
-        console.log(`Inner HTML: ${target.innerHTML}`);
+      const cssSelector = getCssSelector(target);
+      const xPath = getXPath(target);
+
+      console.log('=== Element Details ===');
+      console.log(cssSelector);
+      console.log(xPath);
+
+      if (lastHighlightedElement) {
+        lastHighlightedElement.classList.remove('highlighted-element');
       }
+
+      target.classList.add('highlighted-element');
+      lastHighlightedElement = target;
     };
 
     document.body.addEventListener('click', handleClick);
 
     return () => {
-      document.body.removeEventListener('click', handleClick);
+      console.log('언마운트');
+      //document.body.removeEventListener('click', handleClick);
     };
   }, [document, htmlContent]);
 
