@@ -2,8 +2,7 @@ import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
-
-import * as S from '@/pages/projectInfo/projectStructure.style.ts';
+import * as S from '@/components/projectInfo/projectStructure/projectStructure.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch.svg?react';
