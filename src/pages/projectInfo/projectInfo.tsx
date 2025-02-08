@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
 import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
-import { DEVICE, STACK } from '@/enums/enums';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
@@ -11,11 +10,10 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import Profile from '@/components/common/profile/profile';
-import ProjectTitle from '@/components/common/projectTitle/projectTitle';
+import ProjectIntro from '@/components/projectInfo/projectIntroduction/projectIntro';
 import ToolTip from '@/components/projectInfo/toolTip/toolTip';
 
 import Plus from '@/assets/icons/add.svg?react';
-import Goto from '@/assets/icons/arrow_goto.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Book from '@/assets/icons/book.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
@@ -60,8 +58,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       tooltipRef.current.style.left = `${e.clientX + 15}px`; // 마우스 오른쪽에 표시
     }
   };
-  const type = DEVICE[result?.viewType as keyof typeof DEVICE] ?? DEVICE.PC;
-  const stack = STACK[result?.developmentSkill as keyof typeof STACK] ?? STACK.NEXT;
   const handleEdit = () => {
     const maxRows = 2;
     const lines = preContent.split('\n');
@@ -99,24 +95,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const navigate = useNavigate();
   return (
     <S.Container>
-      <S.Profile>
-        <ProjectTitle title={result?.projectName} profileImg={result?.projectImage} stack={stack} device={type} />
-        <S.Wrapper top="7.2px" right="0" className="buttonShow">
-          <Button
-            type="normal"
-            color="default"
-            icon={<Goto />}
-            iconPosition="right"
-            onClick={() => {
-              if (result?.projectUrl) {
-                window.location.href = result.projectUrl;
-              }
-            }}
-          >
-            Go to Site
-          </Button>
-        </S.Wrapper>
-      </S.Profile>
+      <ProjectIntro result={result} />
       <S.Box height="6%">
         <S.Title>Introduction to the Project</S.Title>
         {!isEdit ? (
