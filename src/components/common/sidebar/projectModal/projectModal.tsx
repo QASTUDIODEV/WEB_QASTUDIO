@@ -50,7 +50,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   const {
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -67,7 +67,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
   const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail });
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
-  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
+  const FirstValid = errors.email?.message;
   const [imgValid, setImgValid] = useState(true);
   let isImg: boolean = true;
 
@@ -203,9 +203,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
               </>
             )}
           />
-          {touchedFields.projectName && errors.projectName?.message && (
-            <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />
-          )}
+          {errors.projectName?.message && <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project URL</S.ModalText>
@@ -231,9 +229,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
               </>
             )}
           />
-          {touchedFields.projectUrl && errors.projectUrl?.message && (
-            <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />
-          )}
+          {errors.projectUrl?.message && <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Share this project</S.ModalText>
