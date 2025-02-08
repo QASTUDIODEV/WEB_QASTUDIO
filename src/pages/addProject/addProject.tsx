@@ -94,40 +94,44 @@ export default function AddProjectPage() {
     <ProjectInfoPage projectInfo={data} />
   ) : (
     <S.Container>
-      {projectId && isSuccess && (
-        <S.ProfileWrapper>
-          <S.Profile>
-            <S.Wrapper>
-              <Profile profileImg={data.result.projectImage} />
-            </S.Wrapper>
-            <S.ProfileName>{data.result.projectName}</S.ProfileName>
-          </S.Profile>
-        </S.ProfileWrapper>
-      )}
-      <S.Title>Add Project File</S.Title>
-      <S.Text>
-        Please enter the project folder for AI to understand the project. <br />
-        Please compress and enter the React JS/TS file.
-      </S.Text>
-      <S.Box>
-        <label htmlFor="zipFile">
-          <Button type="normal" color="blue" icon={<Upload />} iconPosition="left" disabled={isUploaded}>
-            {isUploaded ? 'File Uploaded' : 'Upload Project File (.zip)'}
-          </Button>
-          <S.HiddenInput type="file" id="zipFile" name="zipFile" accept=".zip, .ZIP" ref={zipFileRef} onChange={(e) => handleInputChange(e)} />
-        </label>
-      </S.Box>
-      {modal && (
-        <Modal title="Request Failed" onClose={ModalClose}>
-          <S.ModalBox>
-            File extensions are only .zip files.
-            <S.BtnWrapper>
-              <Button type="normal" color="blue" onClick={ModalClose}>
-                OK
+      {projectList?.result.projectList[0] && (
+        <>
+          {projectId && isSuccess && (
+            <S.ProfileWrapper>
+              <S.Profile>
+                <S.Wrapper>
+                  <Profile profileImg={data.result.projectImage} />
+                </S.Wrapper>
+                <S.ProfileName>{data.result.projectName}</S.ProfileName>
+              </S.Profile>
+            </S.ProfileWrapper>
+          )}
+          <S.Title>Add Project File</S.Title>
+          <S.Text>
+            Please enter the project folder for AI to understand the project. <br />
+            Please compress and enter the React JS/TS file.
+          </S.Text>
+          <S.Box>
+            <label htmlFor="zipFile">
+              <Button type="normal" color="blue" icon={<Upload />} iconPosition="left" disabled={isUploaded}>
+                {isUploaded ? 'File Uploaded' : 'Upload Project File (.zip)'}
               </Button>
-            </S.BtnWrapper>
-          </S.ModalBox>
-        </Modal>
+              <S.HiddenInput type="file" id="zipFile" name="zipFile" accept=".zip, .ZIP" ref={zipFileRef} onChange={(e) => handleInputChange(e)} />
+            </label>
+          </S.Box>
+          {modal && (
+            <Modal title="Request Failed" onClose={ModalClose}>
+              <S.ModalBox>
+                File extensions are only .zip files.
+                <S.BtnWrapper>
+                  <Button type="normal" color="blue" onClick={ModalClose}>
+                    OK
+                  </Button>
+                </S.BtnWrapper>
+              </S.ModalBox>
+            </Modal>
+          )}
+        </>
       )}
     </S.Container>
   );
