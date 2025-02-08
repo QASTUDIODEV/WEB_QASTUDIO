@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import AuthModal from '@/components/auth/authModal/authModal';
+import LogoutModal from '@/components/common/sidebar/logtoutModal/logoutModal';
+import ProjectModal from '@/components/common/sidebar/projectModal/projectModal';
 import ErrorModal from '@/components/dashboard/errorModal/errorModal';
 import CharacterModal from '@/components/projectInfo/characterModal/characterModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
@@ -16,6 +18,8 @@ export const MODAL_TYPES = {
   CreatePageModal: 'CreatePageModal',
   CharacterModal: 'CharacterModal',
   AuthModal: 'AuthModal',
+  CreateProjectModal: 'CreateProjectModal',
+  LogoutModal: 'LogoutModal',
 };
 
 export const MODAL_COMPONENTS = {
@@ -24,6 +28,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.CreatePageModal]: CreatePageModal,
   [MODAL_TYPES.CharacterModal]: CharacterModal,
   [MODAL_TYPES.AuthModal]: AuthModal,
+  [MODAL_TYPES.CreateProjectModal]: ProjectModal,
+  [MODAL_TYPES.LogoutModal]: LogoutModal,
 };
 
 export default function ModalProvider() {

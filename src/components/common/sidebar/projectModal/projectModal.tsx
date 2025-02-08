@@ -18,7 +18,7 @@ import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TProjectModalProps = {
-  projectLength: number | undefined;
+  projectLength?: number | undefined;
   onClose: () => void; // 모달 닫기 함수
 };
 type TFormData = {
@@ -30,7 +30,7 @@ type TEmailList = {
   userId: number;
   email: string;
 }[];
-export default function ProjectModal({ projectLength, onClose }: TProjectModalProps) {
+export default function ProjectModal({ projectLength = 0, onClose }: TProjectModalProps) {
   let projectId = 0;
   if (projectLength) {
     projectId = projectLength;
