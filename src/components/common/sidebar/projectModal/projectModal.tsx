@@ -19,7 +19,7 @@ import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TProjectModalProps = {
   projectLength?: number | undefined;
-  onClose: () => void; // 모달 닫기 함수
+  onClose: () => void;
 };
 type TFormData = {
   email: string;
@@ -35,7 +35,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   if (projectLength) {
     projectId = projectLength;
   }
-  const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
+  const [emails, setEmails] = useState<string[]>([]);
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
   const { mutate: addProject, isPending } = useAddProject;
@@ -65,7 +65,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   const debouncedProjectName = useDebounce(projectNameValue, 500);
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
   const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
-  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail }); // 이메일 유효성 확인
+  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail });
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
   const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
   const [imgValid, setImgValid] = useState(true);
@@ -78,26 +78,26 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
 
       if (newEmails.length > 0) {
-        setMemberEmailList((prev) => [...prev, ...newEmails]); // 유효한 이메일만 추가
-        setIsEmailValid(true); // 이메일 유효성 상태 업데이트
+        setMemberEmailList((prev) => [...prev, ...newEmails]);
+        setIsEmailValid(true);
       }
     } else {
-      setIsEmailValid(false); // 이메일이 유효하지 않음
+      setIsEmailValid(false);
     }
   }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
     if (!debouncedEmail || emails.includes(debouncedEmail)) {
-      return; // 이메일이 비어 있거나 이미 추가된 경우
+      return;
     }
 
     if (!isEmailValid) {
       setValue('email', '');
-      return; // 유효하지 않은 이메일이면 추가하지 않음
+      return;
     }
 
-    setEmails((prev) => [...prev, debouncedEmail]); // 이메일 추가
-    setValue('email', ''); // 입력 필드 초기화
+    setEmails((prev) => [...prev, debouncedEmail]);
+    setValue('email', '');
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
@@ -120,7 +120,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
           setEmails([]);
-          onClose(); // 모달 닫기
+          onClose();
         },
       },
     );
