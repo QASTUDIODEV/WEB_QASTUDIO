@@ -11,8 +11,8 @@ import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
-import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
+import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
@@ -172,7 +172,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            <Profile profileImg={imgFile} />
+            <ProjectProfile profileImg={imgFile} />
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
         </S.PostBox>
