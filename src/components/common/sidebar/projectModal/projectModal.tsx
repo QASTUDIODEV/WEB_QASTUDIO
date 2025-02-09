@@ -11,15 +11,15 @@ import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
-import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
+import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TProjectModalProps = {
-  projectLength: number | undefined;
-  onClose: () => void; // 모달 닫기 함수
+  projectLength?: number | undefined;
+  onClose: () => void;
 };
 type TFormData = {
   email: string;
@@ -30,12 +30,12 @@ type TEmailList = {
   userId: number;
   email: string;
 }[];
-export default function ProjectModal({ projectLength, onClose }: TProjectModalProps) {
+export default function ProjectModal({ projectLength = 0, onClose }: TProjectModalProps) {
   let projectId = 0;
   if (projectLength) {
     projectId = projectLength;
   }
-  const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
+  const [emails, setEmails] = useState<string[]>([]);
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
   const { mutate: addProject, isPending } = useAddProject;
@@ -50,7 +50,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const {
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -65,10 +65,9 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
   const debouncedProjectName = useDebounce(projectNameValue, 500);
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
   const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
-  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail }); // 이메일 유효성 확인
+  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail });
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
-  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
-  const [imgValid, setImgValid] = useState(true);
+  const FirstValid = errors.email?.message;
   let isImg: boolean = true;
 
   const { data } = useGetTeamMember;
@@ -78,26 +77,26 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
 
       if (newEmails.length > 0) {
-        setMemberEmailList((prev) => [...prev, ...newEmails]); // 유효한 이메일만 추가
-        setIsEmailValid(true); // 이메일 유효성 상태 업데이트
+        setMemberEmailList((prev) => [...prev, ...newEmails]);
+        setIsEmailValid(true);
       }
     } else {
-      setIsEmailValid(false); // 이메일이 유효하지 않음
+      setIsEmailValid(false);
     }
   }, [data, debouncedEmail]);
 
   const handleAddEmail = () => {
     if (!debouncedEmail || emails.includes(debouncedEmail)) {
-      return; // 이메일이 비어 있거나 이미 추가된 경우
+      return;
     }
 
     if (!isEmailValid) {
       setValue('email', '');
-      return; // 유효하지 않은 이메일이면 추가하지 않음
+      return;
     }
 
-    setEmails((prev) => [...prev, debouncedEmail]); // 이메일 추가
-    setValue('email', ''); // 입력 필드 초기화
+    setEmails((prev) => [...prev, debouncedEmail]);
+    setValue('email', '');
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
@@ -105,10 +104,6 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
     setMemberEmailList((prev) => prev.filter((e) => e.email !== emailToRemove));
   };
   const handleCreate = async () => {
-    if (!keyName) {
-      setImgValid(false);
-      return;
-    }
     addProject(
       {
         projectImage: keyName,
@@ -120,13 +115,12 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
           setEmails([]);
-          onClose(); // 모달 닫기
+          onClose();
         },
       },
     );
   };
-  const isCreateDisabled =
-    !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || emails.length === 0 || isPending;
+  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       isImg = false;
@@ -137,7 +131,6 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       {
         onSuccess(img) {
           isImg = true;
-          setImgValid(true);
           uploadImageToPresignedUrlMutate(
             {
               url: img.result.url,
@@ -150,7 +143,6 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               },
               onError: (err) => {
                 console.error('Image upload failed:', err);
-                setImgValid(false);
               },
             },
           );
@@ -174,16 +166,15 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
-          <S.ModalText>Project Image</S.ModalText>
+          <S.ModalText>Project Image (Optional)</S.ModalText>
           <S.Preview>
             <label htmlFor="photo">
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            <Profile profileImg={imgFile} />
+            <ProjectProfile profileImg={imgFile} />
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
-          {isImg && !imgValid && <ValidataionMessage message={'Please upload an image.'} isError={!imgValid} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>
@@ -203,9 +194,7 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               </>
             )}
           />
-          {touchedFields.projectName && errors.projectName?.message && (
-            <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />
-          )}
+          {errors.projectName?.message && <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project URL</S.ModalText>
@@ -231,12 +220,10 @@ export default function ProjectModal({ projectLength, onClose }: TProjectModalPr
               </>
             )}
           />
-          {touchedFields.projectUrl && errors.projectUrl?.message && (
-            <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />
-          )}
+          {errors.projectUrl?.message && <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />}
         </S.PostBox>
         <S.PostBox>
-          <S.ModalText>Share this project</S.ModalText>
+          <S.ModalText>Share this project (Optional)</S.ModalText>
           <S.BtnWrapper>
             <Controller
               name="email"
