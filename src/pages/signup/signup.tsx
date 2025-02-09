@@ -53,7 +53,7 @@ function SignupPage() {
   const [step, setStep] = useState(0);
 
   const [AuthCode, setAuthCode] = useState('');
-
+  const [sendCodeSuccess, setSendCodeSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | undefined>(undefined);
 
@@ -90,6 +90,7 @@ function SignupPage() {
           setAuthCode(data.result.authCode);
           setStep(1);
           setEmailErrorMessage(undefined);
+          setSendCodeSuccess(true);
         },
         onError: (error) => {
           console.log(error);
@@ -167,6 +168,7 @@ function SignupPage() {
     setCodeVerify(undefined);
     setEmailErrorMessage(undefined);
     setStep(0);
+    setSendCodeSuccess(false);
   }, [watchedEmail]);
 
   return (
@@ -182,6 +184,7 @@ function SignupPage() {
             btnName="Send"
             handleSendCode={handleSendCode}
             pending={codePending}
+            success={sendCodeSuccess}
             isUndefined={watchedEmail === undefined}
             valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
             errorMessage={errors.email?.message || emailErrorMessage}
