@@ -89,6 +89,7 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, page
       <S.Wrapper top="16px" right="24px">
         <Plus
           onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: projectId, character: character } }))}
+          style={{ cursor: 'pointer' }}
         />
       </S.Wrapper>
       <S.InnerBox>

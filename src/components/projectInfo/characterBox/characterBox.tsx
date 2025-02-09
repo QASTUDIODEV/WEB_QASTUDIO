@@ -60,7 +60,7 @@ export default function CharacterBox({ result }: TInfoDTO) {
             ))}
         </S.CharacterList>
         <S.CharacterAddBox
-          onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.CharacterModal, modalProps: { projectId: Number(result?.projectId) } }))}
+          onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.ScenarioModal, modalProps: { projectId: result?.projectId, currentPage: 0 } }))}
         >
           <Plus />
         </S.CharacterAddBox>
