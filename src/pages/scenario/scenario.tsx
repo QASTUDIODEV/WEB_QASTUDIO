@@ -81,7 +81,6 @@ export default function ScenarioPage() {
 
   return (
     <S.Background>
-      {isOpen && <ScenarioModal projectId={projectId || ''} currentPage={currentPage} />}
       <S.Container>
         <S.Header>
           <ProjectTitle
