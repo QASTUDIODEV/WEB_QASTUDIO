@@ -8,7 +8,7 @@ type TProfileImg = {
   $isEdit?: boolean;
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   width: 100%;
   justify-self: center;
@@ -19,38 +19,8 @@ const Container = styled.div`
   gap: 20px;
   overflow-y: scroll;
 `;
-const Title = styled.div`
-  width: 79px;
-  height: 29px;
-  top: 80px;
-  left: 352px;
-  gap: 0px;
-  opacity: 0px;
-  font-family: Pretendard;
-  font-size: 19.2px;
-  font-weight: 500;
-  line-height: 28.8px;
-  letter-spacing: 0.02em;
-  text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-`;
 
-const LoadingOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-`;
-const ProfileWrapper = styled.div`
+export const ProfileWrapper = styled.div`
   display: flex;
   position: relative;
   height: 45%;
@@ -59,24 +29,18 @@ const ProfileWrapper = styled.div`
   align-items: end;
   min-height: 155px;
   justify-content: space-between;
+  padding: 20px 30px;
 `;
 
-const Profile = styled.div`
-  display: flex;
-  position: absolute;
-  bottom: 10px;
-  left: 0px;
-  width: 100%;
-  gap: 20px;
-  z-index: 1;
-  height: 133px;
-  align-items: center;
-`;
-
-const BannerImg = styled.div<TBannerImg>`
+export const BannerImg = styled.div<TBannerImg>`
   border-radius: 12.8px;
   width: 100%;
   height: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
   background-color: rgba(255, 255, 255, 0.2) !important;
   background: ${({ url }) =>
     url
@@ -90,12 +54,7 @@ const BannerImg = styled.div<TBannerImg>`
   }
 `;
 
-const InputValidateWrapper = styled.div`
-  position: relative;
-  display: flex;
-`;
-
-const UserInfo = styled.div`
+export const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,6 +62,7 @@ const UserInfo = styled.div`
   padding: 16px 0;
   gap: 6.4px;
   max-width: 60%;
+  z-index: 1;
   span {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     font-size: 38.4px;
@@ -115,7 +75,7 @@ const UserInfo = styled.div`
   }
 `;
 
-const Account = styled.div`
+export const Account = styled.div`
   display: flex;
   font-size: 19.2px;
   font-weight: 500;
@@ -127,7 +87,7 @@ const Account = styled.div`
   text-decoration-skip-ink: none;
 `;
 
-const PlusWrapper = styled.button`
+export const PlusWrapper = styled.button`
   display: flex;
   position: relative;
   justify-content: center;
@@ -146,7 +106,7 @@ const PlusWrapper = styled.button`
   }
 `;
 
-const AccoutWrapper = styled.div`
+export const AccoutWrapper = styled.div`
   display: flex;
   height: 26px;
   width: 100%;
@@ -158,109 +118,19 @@ const AccoutWrapper = styled.div`
   }
 `;
 
-const ProjectNum = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(76.11deg, #001945 0%, #000714 100.13%);
-  padding: 32px 24px;
-  gap: 16.8px;
-  border-radius: 12.8px;
-  max-width: 184px;
-  height: 210px;
-  svg {
-    width: 51.2px;
-    height: 51.2px;
-  }
-  .ProjectNumber {
-    font-size: 32px;
-    font-weight: 700;
-    color: #ffffff;
-  }
-  span {
-    font-size: 14.4px;
-  }
-`;
-
-const Projects = styled.div`
-  display: flex;
-  flex: 1;
-  gap: 20px;
-`;
-
-const ProjectList = styled.div`
-  display: flex;
-  background: #d9e6ff1a;
-  flex: 1;
-  margin-left: 20px;
-  padding: 20px;
-  height: auto; /* 자동으로 크기 조정 */
-  border-radius: 12.8px;
-  overflow-x: scroll;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  height: auto;
-  table-layout: auto;
-  .right {
-    padding-right: 2rem;
-  }
-`;
-
-const ButtonWrapper = styled.div`
+export const ButtonWrapper = styled.div`
   z-index: 2;
   align-self: end;
   padding: 5px 0;
+  width: fit-content;
+  height: fit-content;
+
   @media (max-width: 560px) {
     display: none;
   }
 `;
 
-const TH = styled.th`
-  ${({ theme }) => theme.text.medium_18}
-  text-align: left;
-  height: 26px;
-  padding-bottom: 16px;
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-`;
-
-const TD = styled.td`
-  ${({ theme }) => theme.text.medium_14}
-  height: 26px;
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  gap: 8px;
-  flex: none;
-  svg {
-    width: 19.2px;
-    height: 19.2px;
-  }
-`;
-
-const ProjectNameTD = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  ${({ theme }) => theme.text.medium_14}
-  .ProfileWrapper {
-    width: 19.2px;
-    height: 19.2px;
-  }
-`;
-
-const TR = styled.tr`
-  height: 26px;
-`;
-
-const TBody = styled.tbody`
-  height: auto;
-  gap: 8px;
-`;
-
-const ProfileImg = styled.div<TProfileImg>`
+export const ProfileImg = styled.div<TProfileImg>`
   min-width: 112px;
   min-height: 112px;
   max-width: 112px;
@@ -278,14 +148,8 @@ const ProfileImg = styled.div<TProfileImg>`
     height: 24px;
   }
 `;
-const MessageWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  top: -24px;
-  left: 0;
-`;
 
-const ProfileEditBtn = styled.button`
+export const ProfileEditBtn = styled.button`
   background-color: ${({ theme }) => theme.colors.point.point_2};
   border-radius: 100%;
   ${({ theme }) => theme.align.row_center};
@@ -306,21 +170,14 @@ const ProfileEditBtn = styled.button`
   }
 `;
 
-const Container2 = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  padding: 20px;
-  height: 152px;
-`;
-
-const ProfileUserInfo = styled.div`
+export const ProfileUserInfo = styled.div`
   display: flex;
   gap: 15px;
   width: 100%;
+  height: 133px;
 `;
 
-const SocialLogoWrapper = styled.div`
+export const SocialLogoWrapper = styled.div`
   display: flex;
   background-color: rgba(22, 24, 28, 1);
   border: 0.8px solid rgba(8, 38, 89, 1);
@@ -330,34 +187,3 @@ const SocialLogoWrapper = styled.div`
   bottom: -55px;
   left: 0;
 `;
-
-export {
-  Account,
-  AccoutWrapper,
-  BannerImg,
-  Buttons,
-  ButtonWrapper,
-  Container,
-  Container2,
-  InputValidateWrapper,
-  LoadingOverlay,
-  MessageWrapper,
-  PlusWrapper,
-  Profile,
-  ProfileEditBtn,
-  ProfileImg,
-  ProfileUserInfo,
-  ProfileWrapper,
-  ProjectList,
-  ProjectNameTD,
-  ProjectNum,
-  Projects,
-  SocialLogoWrapper,
-  Table,
-  TBody,
-  TD,
-  TH,
-  Title,
-  TR,
-  UserInfo,
-};
