@@ -36,9 +36,8 @@ export default function ProjectInfoPage({ result }: TInfoDTO) {
           <S.TextLight>{result?.introduction}</S.TextLight>
           <S.Wrapper>
             <Plus
-              onClick={() =>
-                modalDispatch(openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: Number(result?.projectId), character: character } }))
-              }
+              onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.ScenarioModal, modalProps: { projectId: result?.projectId, currentPage: 0 } }))}
+              style={{ cursor: 'pointer' }}
             />
           </S.Wrapper>
           <S.InnerBox>

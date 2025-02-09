@@ -24,7 +24,6 @@ export const Title = styled.p`
 `;
 export const TextBold = styled.p`
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  font-family: Pretendard;
   font-size: 22.4px;
   font-style: normal;
   font-weight: 700;
@@ -62,7 +61,6 @@ export const InnerBox = styled.div`
   border-radius: 6.4px;
   padding: 7px 10px;
   position: relative;
-  margin-top: 16px;
   overflow: scroll;
   scrollbar-width: none;
   height: inherit;
@@ -104,16 +102,16 @@ export const TH = styled.th`
   height: 22px;
   padding-bottom: 16px;
   background: transparent;
-  font-family: Pretendard;
   font-size: 14.4px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%; /* 21.6px */
+  line-height: 150%;
   letter-spacing: 0.288px;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   text-align: left;
 `;
 export const TR = styled.tr`
+  cursor: pointer;
   border-radius: 99px;
   padding: 3.2px 8px;
   &:hover {
@@ -122,11 +120,10 @@ export const TR = styled.tr`
 `;
 export const TD = styled.td`
   padding: 3.2px 8px;
-  font-family: Pretendard;
   font-size: 9.6px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%; /* 14.4px */
+  line-height: 150%;
   letter-spacing: 0.192px;
   color: ${({ theme }) => theme.colors.white};
 
