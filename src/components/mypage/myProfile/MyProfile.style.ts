@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 type TBannerImg = {
   url?: string;
+  $isEdit?: boolean;
+};
+type TProfileImg = {
+  $isEdit?: boolean;
 };
 
 const Container = styled.div`
@@ -67,11 +71,6 @@ const Profile = styled.div`
   z-index: 1;
   height: 133px;
   align-items: center;
-  .hover {
-    &:hover {
-      cursor: pointer;
-    }
-  }
 `;
 
 const BannerImg = styled.div<TBannerImg>`
@@ -85,8 +84,9 @@ const BannerImg = styled.div<TBannerImg>`
       : 'linear-gradient(rgba(0, 7, 20, 0) 0%, rgba(0, 7, 20, 0.9) 100%)'};
   background-size: cover;
   background-position: center;
+  z-index: 1;
   &:hover {
-    cursor: pointer;
+    cursor: ${({ $isEdit }) => ($isEdit ? 'pointer' : 'default')};
   }
 `;
 
@@ -260,7 +260,7 @@ const TBody = styled.tbody`
   gap: 8px;
 `;
 
-const ProfileImg = styled.div`
+const ProfileImg = styled.div<TProfileImg>`
   min-width: 112px;
   min-height: 112px;
   max-width: 112px;
@@ -270,7 +270,9 @@ const ProfileImg = styled.div`
   ${({ theme }) => theme.align.row_center};
   position: relative;
   z-index: 1;
-
+  &:hover {
+    cursor: ${({ $isEdit }) => ($isEdit ? 'pointer' : 'default')};
+  }
   svg {
     width: 24px;
     height: 24px;
