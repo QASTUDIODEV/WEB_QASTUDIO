@@ -7,13 +7,13 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
+import ProjectStructure from '@/components/projectInfo/projectStructure/projectStructure';
 import * as S from '@/components/projectInfo/projectSummary/projectSumary.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch_white.svg?react';
 import File from '@/assets/icons/files.svg?react';
 import Rights from '@/assets/icons/shield.svg?react';
-import ProjectStructure from '@/pages/projectInfo/projectStructure';
 import { openModal } from '@/slices/modalSlice.ts';
 
 export default function ProjectInfoPage({ result }: TInfoDTO) {
