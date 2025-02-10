@@ -31,12 +31,14 @@ export default function AddProjectPage() {
   const queryClient = useQueryClient();
   const hasNavigated = useRef(false);
 
-  if (localStorage.getItem('InvitationResponse') === 'success') {
-    dispatch(openModal({ modalType: MODAL_TYPES.InviteSuccessModal }));
-  }
-  if (localStorage.getItem('InvitationResponse') === 'error') {
-    dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
-  }
+  useEffect(() => {
+    if (localStorage.getItem('InvitationResponse') === 'success') {
+      dispatch(openModal({ modalType: MODAL_TYPES.InviteSuccessModal }));
+    }
+    if (localStorage.getItem('InvitationResponse') === 'error') {
+      dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
+    }
+  }, []);
 
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {

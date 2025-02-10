@@ -125,8 +125,8 @@ export default function UserSetting() {
                   navigate(`/project/information/${inviteResponse?.result.projectId}`);
                 },
                 onError: () => {
-                  navigate('/project');
                   localStorage.setItem('InvitationResponse', 'error');
+                  navigate('/project');
                 },
               },
             );

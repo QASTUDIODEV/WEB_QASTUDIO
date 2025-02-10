@@ -42,8 +42,8 @@ export type TInviteAcceptNewMemberValues = {
 };
 export type TInviteAcceptResponse = TCommonResponse<{
   projectId: number;
-  userId: number | null;
 }>;
+
 export type TMailSendCode = string;
 
 export type TSignupResponse = { isSuccess: boolean; code: string; message: string };
