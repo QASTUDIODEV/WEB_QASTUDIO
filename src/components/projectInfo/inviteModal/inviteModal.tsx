@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 
-import useDebounce from '@/hooks/common/useDebounce';
 import useInviteMember from '@/hooks/projectInfo/useInviteMember';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
-import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
+// import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
+import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/projectInfo/inviteModal/inviteModal.style';
 
 import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TInviteModalProps = {
-  onClose: () => void; // 모달 닫기 함수
+  onClose: () => void;
   projectId?: number;
 };
 
@@ -24,80 +24,59 @@ type TFormData = {
   email: string;
 };
 type TEmailList = {
-  userId: number;
   email: string;
 }[];
 export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProps) {
-  const [emails, setEmails] = useState<string[]>([]); // 입력된 이메일 리스트
+  const [emails, setEmails] = useState<string[]>([]);
   const {
     control,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
       email: '',
     },
   });
-
+  const email = useRef('');
   const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
-  const debouncedEmail = useDebounce(emailValue, 800);
-  const { useGetTeamMember } = useTeamMember({ projectId, email: debouncedEmail });
   const { useGetMemberEmail } = useProjectInfo({ projectId });
   const { useInvite } = useInviteMember();
-
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  // const { useGetTeamMember } = useTeamMember({ projectId, email: email.current });
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
-
+  // const { data } = useGetTeamMember;
   const { data: memberEmail } = useGetMemberEmail;
-  const { data } = useGetTeamMember;
-  const { mutate: inviteMember } = useInvite;
-  const [memberEmails, setMemberEmails] = useState<TEmailList>([]);
-
+  const { mutate: inviteMember, isPending } = useInvite;
+  const [memberEmails, setMemberEmails] = useState<string[]>();
+  const [error, setError] = useState(false);
   const queryClient = useQueryClient();
-
   useEffect(() => {
     if (memberEmail?.result?.userEmails) {
-      setMemberEmails(memberEmail.result.userEmails);
+      setMemberEmails(memberEmail.result.userEmails.map((a) => a.email));
     }
   }, [memberEmail]);
-  const members = memberEmails.map((a) => a.email);
-
   useEffect(() => {
-    if (data?.result?.userEmails.some((userEmail) => userEmail.email === debouncedEmail)) {
-      const existingEmails = memberEmailList.map((member) => member.email);
-      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
-
-      if (newEmails.length > 0) {
-        setMemberEmailList((prev) => [...prev, ...newEmails]);
-        setIsEmailValid(true);
-      }
-    } else {
-      setIsEmailValid(false);
+    if (emailValue && error) {
+      setError(false);
     }
-  }, [data, debouncedEmail, emails]);
-  const FirstValid: boolean = (touchedFields.email && errors.email?.message) as boolean;
-
+  }, [emailValue]);
   const handleAddEmail = () => {
-    if (!debouncedEmail.trim()) return;
-
-    const isDuplicate =
-      emails.includes(debouncedEmail) || // 이미 추가된 이메일
-      members.includes(debouncedEmail);
-
-    if (isDuplicate) return;
-
-    if (!isEmailValid) {
+    email.current = emailValue;
+    let isDuplicate = emails.includes(email.current) || memberEmails?.includes(email.current);
+    if (isDuplicate) {
+      setError(true);
       setValue('email', '');
+      isDuplicate = false;
       return;
+    } else {
+      setEmails((prev) => [...prev, email.current]);
+      setMemberEmailList((prev) => [...prev, { email: email.current }]);
+      setValue('email', '');
     }
-
-    setEmails((prev) => [...prev, debouncedEmail]);
-    setValue('email', '');
   };
   const handleRemoveEmail = (remove: string) => {
-    setMemberEmailList((prev) => prev.filter((email) => email.email !== remove));
-    setEmails((prev) => prev.filter((email) => email !== remove));
+    setMemberEmailList((prev) => prev.filter((e) => e.email !== remove));
+    setEmails((prev) => prev.filter((e) => e !== remove));
   };
   const handleCreate = () => {
     inviteMember(
@@ -114,9 +93,13 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
       },
     );
   };
-
   return (
     <Modal title="Invite Member" onClose={onClose}>
+      {isPending && (
+        <S.LoadingContainer>
+          <Loading />
+        </S.LoadingContainer>
+      )}
       <S.ModalBox>
         <S.ModalText>Enter the new member's email.</S.ModalText>
         <S.ModalText>Share this project</S.ModalText>
@@ -131,22 +114,18 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
                 message: 'Invalid email address',
               },
             }}
-            render={({ field }) => (
-              <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} touched={touchedFields.email} />
-            )}
+            render={({ field }) => <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} />}
           />
-          <Button type="act" color="blue" onClick={handleAddEmail} disabled={!debouncedEmail.trim() || !isEmailValid}>
+          <Button type="act" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
             Share
           </Button>
         </S.BtnWrapper>
-        {FirstValid && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-        {!FirstValid && !isEmailValid && debouncedEmail && (
-          <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />
-        )}
+        {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+        {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
         <S.tagWrapper>
-          {emails.map((email) => (
-            <Button key={email} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(email)}>
-              {email}
+          {emails.map((e) => (
+            <Button key={e} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(e)}>
+              {e}
             </Button>
           ))}
         </S.tagWrapper>

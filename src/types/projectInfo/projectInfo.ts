@@ -70,7 +70,6 @@ export type TProjectMember = TCommonResponse<{
 export type TRequestInvite = {
   projectId: number;
   memberEmailList: {
-    userId: number;
     email: string;
   }[];
 };

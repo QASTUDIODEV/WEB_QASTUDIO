@@ -6,6 +6,8 @@ import { getTeamMember } from '@/apis/sidebar/sidebar';
 import { useCoreQuery } from '../common/customQuery';
 
 export default function useTeamMember({ projectId, email }: TRequestTeamMember) {
-  const useGetTeamMember = useCoreQuery(QUERY_KEYS.TEAM_MEMBER({ projectId, email }), () => getTeamMember({ projectId, email }));
+  const useGetTeamMember = useCoreQuery(QUERY_KEYS.TEAM_MEMBER({ projectId, email }), () => getTeamMember({ projectId, email }), {
+    enabled: !!email,
+  });
   return { useGetTeamMember };
 }

@@ -54,3 +54,14 @@ export const InputWrapper = styled.div`
   align-items: center;
   width: 100%;
 `;
+export const LoadingContainer = styled.div`
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
