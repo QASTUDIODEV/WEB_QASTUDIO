@@ -24,13 +24,20 @@ export default function AddProjectPage() {
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isSuccess } = useProjectExtractInfo;
+  const { data, isSuccess, isError: projectInfoError } = useProjectExtractInfo;
   const { useGetProjectList } = useProjectList();
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hasNavigated = useRef(false);
-  const InvitationResponse = localStorage.getItem('InvitationResponse') || '';
+
+  if (localStorage.getItem('InvitationResponse') === 'success') {
+    dispatch(openModal({ modalType: MODAL_TYPES.InviteSuccessModal }));
+  }
+  if (localStorage.getItem('InvitationResponse') === 'error') {
+    dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
+  }
+
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
       const firstProjectId = projectList.result.projectList[0].projectId;
@@ -49,16 +56,6 @@ export default function AddProjectPage() {
   const [modal, setModal] = useState(false);
 
   const [isUploaded, setIsUploaded] = useState(false);
-
-  useEffect(() => {
-    if (InvitationResponse === 'success') {
-      dispatch(openModal({ modalType: MODAL_TYPES.InviteSuccessModal }));
-      localStorage.removeItem('InvitationResponse');
-    } else {
-      dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
-      localStorage.removeItem('InvitationResponse');
-    }
-  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -103,6 +100,13 @@ export default function AddProjectPage() {
     return (
       <S.Container>
         <Loading />
+      </S.Container>
+    );
+  }
+  if (projectInfoError) {
+    return (
+      <S.Container>
+        <S.Error>권한이 없습니다</S.Error>
       </S.Container>
     );
   }

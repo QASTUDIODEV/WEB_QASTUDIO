@@ -1,13 +1,23 @@
+import { useDispatch } from 'react-redux';
+
 import Modal from '@/components/common/modal/modal';
 
 import * as S from './inviteErrorModal.style';
 
-type TAuthModalProps = {
-  onClose: () => void;
-};
-export default function InviteSuccessModal({ onClose }: TAuthModalProps) {
+import { closeModal } from '@/slices/modalSlice';
+
+export default function InviteSuccessModal() {
+  const dispatch = useDispatch();
+
   return (
-    <Modal title={'Invitation Accepted'} onClose={onClose} isExitButtonVisible={true}>
+    <Modal
+      title={'Invitation Accepted'}
+      onClose={() => {
+        dispatch(closeModal());
+        localStorage.removeItem('InvitationResponse');
+      }}
+      isExitButtonVisible={true}
+    >
       <S.Container>You have successfully accepted the invitation. Welcome, QASTUDIO!</S.Container>
     </Modal>
   );
