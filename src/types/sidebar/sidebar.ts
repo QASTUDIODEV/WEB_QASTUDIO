@@ -20,7 +20,6 @@ export type TAddProjectValue = {
   projectName: string;
   projectUrl: string;
   memberEmailList: {
-    userId: number;
     email: string;
   }[];
 };
