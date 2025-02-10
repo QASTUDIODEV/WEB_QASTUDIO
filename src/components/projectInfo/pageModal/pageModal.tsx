@@ -7,9 +7,12 @@ import useAddPage from '@/hooks/projectInfo/useAddPage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
+import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 import * as S from '@/components/projectInfo/pageModal/pageModal.style';
+
+import { LoadingContainer } from '../inviteModal/inviteModal.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import PlusDark from '@/assets/icons/add_dark.svg?react';
@@ -42,7 +45,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
   const [selectedIdList, setSelectedIdList] = useState<number[]>([]);
   const [modalStep, setModalStep] = useState(1);
   const { usePage } = useAddPage();
-  const { mutate: addPage } = usePage;
+  const { mutate: addPage, isPending } = usePage;
   const {
     control,
     handleSubmit,
@@ -106,6 +109,11 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
   };
   return (
     <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
+      {isPending && (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      )}
       {modalStep === 1 ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.ModalBox>
@@ -275,7 +283,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
             </S.Btn>
           </S.PostBox>
           <S.Position2>
-            <Button type="normal" color="blue" disabled={!isValid} onClick={handleCreate}>
+            <Button type="normal" color="blue" disabled={!isValid || isPending} onClick={handleCreate}>
               Create
             </Button>
           </S.Position2>
