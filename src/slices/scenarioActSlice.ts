@@ -49,6 +49,11 @@ interface IRecordAction {
     value: string;
   };
 }
+interface ICurrentLocator {
+  id: string | null;
+  xPath: string | null;
+  cssSelector: string | null;
+}
 
 interface IScenarioActSlice {
   characterId: number | null;
@@ -58,8 +63,9 @@ interface IScenarioActSlice {
   characters: ICharacter[];
   recordActions: IRecordAction[];
   webSocket: IWebSocketState;
-  currentHtml: string | null;
-  currentCss: string | null;
+  currentHtml: string;
+  currentCss: string;
+  currentLocator: ICurrentLocator;
 }
 
 interface ICharacterPayload {
@@ -90,8 +96,9 @@ const initialState: IScenarioActSlice = {
     messages: [],
     sessionId: null,
   },
-  currentHtml: '',
-  currentCss: '',
+  currentHtml: ``,
+  currentCss: ``,
+  currentLocator: { id: null, xPath: null, cssSelector: null },
 };
 
 const scenarioActSlice = createSlice({
@@ -140,6 +147,11 @@ const scenarioActSlice = createSlice({
       // 재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
     },
+    // 클릭 시 로케이터 설정
+    setCurrentLocator: (state, action: PayloadAction<ICurrentLocator>) => {
+      console.log(action.payload);
+      state.currentLocator = action.payload;
+    },
     //웹 소켓
     setWebSocketConnected: (state, action: PayloadAction<boolean>) => {
       state.webSocket.isConnected = action.payload;
@@ -148,9 +160,12 @@ const scenarioActSlice = createSlice({
       state.webSocket.messages.push(action.payload);
     },
     setSessionId: (state, action: PayloadAction<string | null>) => {
+      console.log(action.payload);
       state.webSocket.sessionId = action.payload;
     },
     updateIframeContent: (state, action: PayloadAction<{ html: string; css: string }>) => {
+      console.log(action.payload.html);
+      console.log(action.payload.css);
       state.currentHtml = action.payload.html;
       state.currentCss = action.payload.css;
     },
@@ -165,6 +180,7 @@ export const {
   setScenarioList,
   addAction,
   removeAction,
+  setCurrentLocator,
   setWebSocketConnected,
   addWebSocketMessage,
   setSessionId,

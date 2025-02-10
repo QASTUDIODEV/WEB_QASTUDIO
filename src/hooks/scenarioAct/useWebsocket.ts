@@ -7,6 +7,11 @@ const useWebSocket = (url: string, isActive: boolean) => {
   const dispatch = useDispatch();
   const socketRef = useRef<WebSocket | null>(null);
 
+  // 이스케이프 문자 처리
+  const decodeHtml = (escapedStr: string) => {
+    return escapedStr.replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\"/g, '"').replace(/\\\//g, '/');
+  };
+
   useEffect(() => {
     if (!isActive || socketRef.current) return;
 
@@ -14,25 +19,45 @@ const useWebSocket = (url: string, isActive: boolean) => {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log('WebSocket 연결 성공:', url);
+      console.log('✅ WebSocket 연결 성공:', url);
       dispatch(setWebSocketConnected(true));
     };
 
-    socket.onmessage = (event) => {
-      console.log('수신된 메시지:', event.data);
+    socket.onmessage = async (event) => {
+      console.log('📩 수신된 메시지 (Raw):', event.data);
 
       try {
-        const parsedMessage = JSON.parse(event.data);
+        let parsedMessage;
+        if (event.data instanceof Blob) {
+          console.log('🔍 Blob 데이터 감지');
+          const text = await event.data.text();
+          parsedMessage = JSON.parse(text);
+        } else if (typeof event.data === 'string') {
+          console.log('🔍 문자열 데이터 감지');
+          parsedMessage = JSON.parse(event.data);
+        } else {
+          console.log('🔍 JSON 객체 감지');
+          parsedMessage = event.data;
+        }
+
+        console.log('파싱된 메시지:', parsedMessage);
 
         if (parsedMessage.sessionId) {
+          console.log(1);
           dispatch(setSessionId(parsedMessage.sessionId));
         } else if (parsedMessage.html && parsedMessage.css) {
-          dispatch(updateIframeContent({ html: parsedMessage.html, css: parsedMessage.css }));
+          console.log('🎨 iframe 업데이트 실행');
+          dispatch(
+            updateIframeContent({
+              html: decodeHtml(parsedMessage.html),
+              css: decodeHtml(parsedMessage.css),
+            }),
+          );
         } else {
-          dispatch(addWebSocketMessage(event.data));
+          dispatch(addWebSocketMessage(parsedMessage));
         }
       } catch (error) {
-        console.error('WebSocket 메시지 파싱 오류:', error);
+        console.error('WebSocket 메시지 파싱 오류:', error, '원본 메시지:', event.data);
       }
     };
 

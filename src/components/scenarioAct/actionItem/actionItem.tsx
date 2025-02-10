@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
 
@@ -51,6 +51,8 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const action = useSelector((state) =>
     state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId),
   );
+  // Redux에서 현재 선택된 요소 정보 가져오기
+  const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   // refetch할때 필요
   const characterId = useSelector((state) => state.scenarioAct.characterId);
 
@@ -59,6 +61,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const [actionType, setActionType] = useState(action?.action.type || '');
   const [locatorInputValue, setLocatorInputValue] = useState(action?.locator.value || '');
   const [actionInputValue, setActionInputValue] = useState(action?.action.value || '');
+  const [isFocused, setIsFocused] = useState(false);
 
   const { useEditAction } = useAction(characterId);
   const { mutate: editMutate, isPending } = useEditAction;
@@ -66,6 +69,14 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   // 변경 감지하여 Apply 버튼 활성화
   const isLocatorApplyDisabled = locatorStrategy === action?.locator.strategy && locatorInputValue === action?.locator.value;
   const isActionApplyDisabled = actionType === action?.action.type && actionInputValue === action?.action.value;
+
+  useEffect(() => {
+    if (isFocused) {
+      setLocatorInputValue(
+        locatorStrategy === 'id' ? currentLocator.id : locatorStrategy === 'css_selector' ? currentLocator.cssSelector : currentLocator.xPath,
+      );
+    }
+  }, [currentLocator, isFocused, locatorStrategy]);
 
   // Locator 적용
   const onSubmitLocator = () => {
@@ -142,7 +153,12 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
               </S.DropdownContainer>
             </S.DescriptionRow>
             <S.DescriptionRow>
-              <S.Input value={locatorInputValue} onChange={(e) => setLocatorInputValue(e.target.value)} />
+              <S.Input
+                value={locatorInputValue}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                onChange={(e) => setLocatorInputValue(e.target.value)}
+              />
               <Button color="blue" onClick={onSubmitLocator} disabled={isLocatorApplyDisabled}>
                 Apply
               </Button>

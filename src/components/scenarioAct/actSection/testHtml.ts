@@ -2,16 +2,6 @@ const testHtml = {
   status: 'SUCCESS',
   executionLogs: ['실시간 HTML & CSS 업데이트'],
   html: `<html>
- <head>
-  <title>Example Domains</title>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/_css/2025.01/iana_website.css">
-  <link rel="shortcut icon" type="image/ico" href="/_img/bookmark_icon.ico">
-  <script type="text/javascript" src="/_js/jquery.js"></script>
-  <script type="text/javascript" src="/_js/iana.js"></script>
- </head>
  <body>
   <header>
    <div id="header">
