@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -9,14 +10,17 @@ import useProjectList from '@/hooks/sidebar/sidebar';
 import Button from '@/components/common/button/button';
 import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import ProjectInfoPage from '../projectInfo/projectInfo';
 
 import Upload from '@/assets/icons/upload.svg?react';
 import * as S from '@/pages/addProject/addProject.style';
+import { openModal } from '@/slices/modalSlice';
 
 export default function AddProjectPage() {
+  const dispatch = useDispatch();
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
@@ -26,6 +30,7 @@ export default function AddProjectPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hasNavigated = useRef(false);
+  const invitationError = localStorage.getItem('InvitationError') || '';
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
       const firstProjectId = projectList.result.projectList[0].projectId;
@@ -42,7 +47,15 @@ export default function AddProjectPage() {
   const zipFileRef = useRef<HTMLInputElement | null>(null);
 
   const [modal, setModal] = useState(false);
+
   const [isUploaded, setIsUploaded] = useState(false);
+
+  useEffect(() => {
+    if (invitationError !== '') {
+      dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
+      localStorage.removeItem('InvitationError');
+    }
+  }, []);
 
   useEffect(() => {
     if (isError) {

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -6,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema } from '@/utils/validate';
 
+import useInvite from '@/hooks/auth/useInvite';
 import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
@@ -26,6 +28,8 @@ type TFormValues = {
 export default function LoginPage() {
   sessionStorage.removeItem('loginHandled');
   localStorage.setItem('route', 'login');
+  const token = localStorage.getItem('inviteToken');
+  const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const {
     register,
@@ -48,9 +52,9 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const { useDefaultLogin } = useUserAuth();
-
+  const { useInviteAccept } = useInvite();
   const { mutate: loginMutate, isPending } = useDefaultLogin;
-
+  const { mutate: inviteMutate, isPending: invitePending } = useInviteAccept;
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
     loginMutate(
       { email: submitData.email, password: submitData.password },
@@ -59,9 +63,22 @@ export default function LoginPage() {
           if (data?.result?.nickname === '') {
             dispatch(isNowSignup({ isSignup: true }));
             navigate('/signup/userSetting');
+          } else if (token !== '' && token != null) {
+            inviteMutate(
+              { token },
+              {
+                onSuccess: (inviteResponse) => {
+                  localStorage.removeItem('inviteToken');
+                  navigate(`/project/information/${inviteResponse?.result.projectId}`);
+                },
+              },
+            );
           } else {
             navigate('/project');
           }
+        },
+        onError: (error) => {
+          setErrorMessage(error.response?.data.message as string);
         },
       },
     );
@@ -81,8 +98,8 @@ export default function LoginPage() {
             Name="Email"
             span="Email"
             top={true}
-            valid={!errors.email?.message && watchedEmail !== ''}
-            errorMessage={errors.email?.message}
+            valid={!errors.email?.message && watchedEmail !== '' && !errorMessage}
+            errorMessage={errors.email?.message || errorMessage}
             {...register('email')}
           />
 
@@ -96,7 +113,7 @@ export default function LoginPage() {
             {...register('password')}
           />
         </S.Form>
-        <AuthButton format="normal" disabled={!isValid || isPending} onClick={handleSubmit(onSubmit)}>
+        <AuthButton format="normal" disabled={!isValid || isPending || invitePending} onClick={handleSubmit(onSubmit)}>
           Login
         </AuthButton>
 

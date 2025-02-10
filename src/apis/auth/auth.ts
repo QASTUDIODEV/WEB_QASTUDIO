@@ -3,6 +3,7 @@ import { axiosInstance } from '@/apis/axiosInstance';
 import type {
   TChangePasswordResponse,
   TChangePasswordValues,
+  TInviteAcceptNewMemberValues,
   TInviteAcceptResponse,
   TInviteAcceptValues,
   TLoginResponse,
@@ -59,4 +60,20 @@ const inviteAccept = async ({ token }: TInviteAcceptValues): Promise<TInviteAcce
   const { data } = await axiosInstance.get(`/api/v0/projects/team-members/invite?token=${token}`);
   return data;
 };
-export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, inviteAccept, logout, refresh, userSetting };
+
+const inviteAcceptNewMember = async ({ token, email }: TInviteAcceptNewMemberValues): Promise<TInviteAcceptResponse> => {
+  const { data } = await axiosInstance.post(`/api/v0/projects/team-members/email-invite`, { email, token });
+  return data;
+};
+export {
+  authSendEmailCode,
+  changePassword,
+  defaultLogin,
+  defaultSignup,
+  findingSendEmailCode,
+  inviteAccept,
+  inviteAcceptNewMember,
+  logout,
+  refresh,
+  userSetting,
+};

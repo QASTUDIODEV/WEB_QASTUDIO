@@ -35,6 +35,11 @@ export type TChangePasswordValues = {
 export type TInviteAcceptValues = {
   token: string;
 };
+
+export type TInviteAcceptNewMemberValues = {
+  token: string;
+  email: string;
+};
 export type TInviteAcceptResponse = TCommonResponse<{
   projectId: number;
   userId: number | null;

@@ -13,6 +13,9 @@ function LoginRedirect() {
   const dispatch = useDispatch();
 
   const { useGetSidebarUserInfo } = useProjectList();
+  const { useInviteAccept } = useInvite();
+  const { mutate: inviteMutate } = useInviteAccept;
+
   const { data: userInfo, isError } = useGetSidebarUserInfo;
   const urlParams = new URLSearchParams(location.search);
   const status = urlParams.get('status') || '';
@@ -35,9 +38,15 @@ function LoginRedirect() {
         if (localStorage.getItem('route') === 'mypage') {
           navigate('/mypage');
         } else if (token != null) {
-          const { useInviteAccept } = useInvite(token);
-          const { data } = useInviteAccept;
-          navigate(`/project/information/${data?.result.projectId}`);
+          inviteMutate(
+            { token },
+            {
+              onSuccess: (inviteResponse) => {
+                localStorage.removeItem('inviteToken');
+                navigate(`/project/information/${inviteResponse?.result.projectId}`);
+              },
+            },
+          );
         } else {
           navigate('/project');
         }

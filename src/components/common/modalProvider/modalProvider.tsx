@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import AuthModal from '@/components/auth/authModal/authModal';
+import InviteErrorModal from '@/components/auth/inviteModal/inviteModal';
 import LogoutModal from '@/components/common/sidebar/logtoutModal/logoutModal';
 import ProjectModal from '@/components/common/sidebar/projectModal/projectModal';
 import ErrorModal from '@/components/dashboard/errorModal/errorModal';
@@ -20,11 +21,13 @@ export const MODAL_TYPES = {
   CreateProjectModal: 'CreateProjectModal',
   LogoutModal: 'LogoutModal',
   ScenarioModal: 'ScenarioModal',
+  InviteErrorModal: 'InviteErrorModal',
 };
 
 export const MODAL_COMPONENTS = {
   [MODAL_TYPES.ErrorModal]: ErrorModal,
   [MODAL_TYPES.InviteModal]: InviteModal,
+  [MODAL_TYPES.InviteErrorModal]: InviteErrorModal,
   [MODAL_TYPES.CreatePageModal]: CreatePageModal,
   [MODAL_TYPES.AuthModal]: AuthModal,
   [MODAL_TYPES.CreateProjectModal]: ProjectModal,

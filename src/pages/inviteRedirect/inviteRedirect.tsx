@@ -8,14 +8,28 @@ function InviteRedirect() {
   const location = useLocation();
 
   const urlParams = new URLSearchParams(location.search);
-  const token = urlParams.get('invite') || '';
+  const token = urlParams.get('token') || '';
+
   localStorage.setItem('inviteToken', token);
-  const { useInviteAccept } = useInvite(token);
-  const { data } = useInviteAccept;
+  const { useInviteAccept } = useInvite();
+  const { mutate: inviteMutate } = useInviteAccept;
+
   useEffect(() => {
-    if (data) {
-      localStorage.removeItem('inviteToken');
-      navigate(`/project/information/${data.result.projectId}`);
+    try {
+      inviteMutate(
+        { token },
+        {
+          onSuccess: (inviteResponse) => {
+            localStorage.removeItem('inviteToken');
+            navigate(`/project/information/${inviteResponse?.result.projectId}`);
+          },
+          onError: () => {
+            navigate('/');
+          },
+        },
+      );
+    } catch {
+      navigate('/');
     }
   }, [navigate, location]);
 

@@ -10,6 +10,7 @@ import { userSettingSchema } from '@/utils/validate';
 import useInvite from '@/hooks/auth/useInvite';
 import useUserAuth from '@/hooks/auth/useUserAuth';
 import { useImage } from '@/hooks/images/useImage';
+import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -31,6 +32,8 @@ export default function UserSetting() {
   const token = localStorage.getItem('inviteToken');
   const [previewImg, setPreviewImg] = useState('');
   const { isSignup } = useSelector(selectAuth);
+  const { useInviteAcceptNewMember } = useInvite();
+  const { mutate: inviteMutate } = useInviteAcceptNewMember;
   useEffect(() => {
     if (!isSignup) {
       navigate('/');
@@ -67,6 +70,8 @@ export default function UserSetting() {
 
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { useSettingUserInfo } = useUserAuth();
+  const { useGetUserInfo } = useUserInfo();
+  const { data: userData } = useGetUserInfo;
 
   const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
@@ -111,10 +116,20 @@ export default function UserSetting() {
       { nickname: data.nickname, profileImage: watchedImage },
       {
         onSuccess: () => {
-          if (token) {
-            const { useInviteAccept } = useInvite(token);
-            const { data: inviteData } = useInviteAccept;
-            navigate(`/project/information/${inviteData?.result.projectId}`, { replace: true });
+          if (token && userData?.result.email) {
+            inviteMutate(
+              { email: userData?.result.email, token },
+              {
+                onSuccess: (inviteResponse) => {
+                  localStorage.removeItem('inviteToken');
+                  navigate(`/project/information/${inviteResponse?.result.projectId}`);
+                },
+                onError: () => {
+                  navigate('/project');
+                  localStorage.setItem('InvitationError', 'true');
+                },
+              },
+            );
             dispatch(isNowSignup({ isSignup: false }));
           } else {
             navigate('/project', { replace: true });
