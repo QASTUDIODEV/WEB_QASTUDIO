@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import useInvite from '@/hooks/auth/useInvite';
 import useProjectList from '@/hooks/sidebar/sidebar';
 
 import { isNowSignup } from '@/slices/authSlice';
@@ -16,6 +17,7 @@ function LoginRedirect() {
   const urlParams = new URLSearchParams(location.search);
   const status = urlParams.get('status') || '';
   const message = urlParams.get('message') || '';
+  const token = localStorage.getItem('inviteToken');
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
       if (isError || status === 'error') {
@@ -32,6 +34,10 @@ function LoginRedirect() {
       } else {
         if (localStorage.getItem('route') === 'mypage') {
           navigate('/mypage');
+        } else if (token != null) {
+          const { useInviteAccept } = useInvite(token);
+          const { data } = useInviteAccept;
+          navigate(`/project/information/${data?.result.projectId}`);
         } else {
           navigate('/project');
         }

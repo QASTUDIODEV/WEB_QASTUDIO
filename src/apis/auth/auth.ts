@@ -3,6 +3,8 @@ import { axiosInstance } from '@/apis/axiosInstance';
 import type {
   TChangePasswordResponse,
   TChangePasswordValues,
+  TInviteAcceptResponse,
+  TInviteAcceptValues,
   TLoginResponse,
   TLoginValues,
   TMailSendCode,
@@ -52,4 +54,9 @@ const changePassword = async ({ email, newPassword }: TChangePasswordValues): Pr
   const { data } = await axiosInstance.post('/api/v0/auth/update/password', { email: email, newPassword: newPassword });
   return data;
 };
-export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, logout, refresh, userSetting };
+
+const inviteAccept = async ({ token }: TInviteAcceptValues): Promise<TInviteAcceptResponse> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/team-members/invite?token=${token}`);
+  return data;
+};
+export { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, inviteAccept, logout, refresh, userSetting };
