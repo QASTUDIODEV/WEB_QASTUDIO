@@ -14,6 +14,7 @@ export default function InviteErrorModal() {
       onClose={() => {
         dispatch(closeModal());
         localStorage.removeItem('InvitationResponse');
+        localStorage.removeItem('inviteToken');
       }}
       isExitButtonVisible={true}
     >

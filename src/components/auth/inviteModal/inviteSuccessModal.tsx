@@ -14,6 +14,7 @@ export default function InviteSuccessModal() {
       title={'Invitation Accepted'}
       onClose={() => {
         dispatch(closeModal());
+        localStorage.removeItem('inviteToken');
         localStorage.removeItem('InvitationResponse');
       }}
       isExitButtonVisible={true}
