@@ -130,7 +130,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
           ))}
         </S.tagWrapper>
         <S.Position>
-          <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0}>
+          <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0 || isPending}>
             Create
           </Button>
         </S.Position>
