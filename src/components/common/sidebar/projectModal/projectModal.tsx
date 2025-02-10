@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 
-import useDebounce from '@/hooks/common/useDebounce';
 import { useImage } from '@/hooks/images/useImage';
 import useProjectList from '@/hooks/sidebar/sidebar';
-import useTeamMember from '@/hooks/sidebar/useGetTeamMember';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -13,12 +11,14 @@ import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
+import { LoadingContainer } from '@/components/projectInfo/inviteModal/inviteModal.style';
+
+import Loading from '../../loading/loading';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
 
 type TProjectModalProps = {
-  projectLength?: number | undefined;
   onClose: () => void;
 };
 type TFormData = {
@@ -27,14 +27,9 @@ type TFormData = {
   projectUrl: string;
 };
 type TEmailList = {
-  userId: number;
   email: string;
 }[];
-export default function ProjectModal({ projectLength = 0, onClose }: TProjectModalProps) {
-  let projectId = 0;
-  if (projectLength) {
-    projectId = projectLength;
-  }
+export default function ProjectModal({ onClose }: TProjectModalProps) {
   const [emails, setEmails] = useState<string[]>([]);
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
@@ -42,10 +37,8 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const ImgRef = useRef<HTMLInputElement | null>(null);
   const [keyName, setKeyName] = useState<string>();
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
   const [imgFile, setImgFile] = useState('');
-
   const queryClient = useQueryClient();
   const {
     control,
@@ -59,44 +52,32 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       projectUrl: '',
     },
   });
+  const email = useRef('');
   const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
-  const debouncedEmail = useDebounce(emailValue, 800);
   const projectNameValue = useWatch({ control, name: 'projectName' }) || '';
-  const debouncedProjectName = useDebounce(projectNameValue, 500);
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
-  const debouncedProjectUrl = useDebounce(projectUrlValue, 500);
-  const { useGetTeamMember } = useTeamMember({ projectId: projectId, email: debouncedEmail });
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
-  const FirstValid = errors.email?.message;
   let isImg: boolean = true;
-
-  const { data } = useGetTeamMember;
+  const [error, setError] = useState(false);
   useEffect(() => {
-    if (data && data.result.userEmails.some((userEmail) => userEmail.email === debouncedEmail)) {
-      const existingEmails = memberEmailList.map((member) => member.email);
-      const newEmails = data.result.userEmails.filter((userEmail) => userEmail.email === debouncedEmail && !existingEmails.includes(userEmail.email));
-
-      if (newEmails.length > 0) {
-        setMemberEmailList((prev) => [...prev, ...newEmails]);
-        setIsEmailValid(true);
-      }
-    } else {
-      setIsEmailValid(false);
+    if (emailValue && error) {
+      setError(false);
     }
-  }, [data, debouncedEmail]);
+  }, [emailValue]);
 
   const handleAddEmail = () => {
-    if (!debouncedEmail || emails.includes(debouncedEmail)) {
-      return;
-    }
-
-    if (!isEmailValid) {
+    email.current = emailValue;
+    let isDuplicate = emails.includes(email.current);
+    if (isDuplicate) {
+      setError(true);
       setValue('email', '');
+      isDuplicate = false;
       return;
+    } else {
+      setEmails((prev) => [...prev, email.current]);
+      setMemberEmailList((prev) => [...prev, { email: email.current }]);
+      setValue('email', '');
     }
-
-    setEmails((prev) => [...prev, debouncedEmail]);
-    setValue('email', '');
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
@@ -107,8 +88,8 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
     addProject(
       {
         projectImage: keyName,
-        projectName: debouncedProjectName,
-        projectUrl: debouncedProjectUrl,
+        projectName: projectNameValue,
+        projectUrl: projectUrlValue,
         memberEmailList: memberEmailList,
       },
       {
@@ -120,7 +101,7 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
       },
     );
   };
-  const isCreateDisabled = !debouncedProjectName.trim() || !debouncedProjectUrl.trim() || !!errors.projectName || !!errors.projectUrl || isPending;
+  const isCreateDisabled = !projectNameValue.trim() || !projectUrlValue.trim() || !!errors.projectName || !!errors.projectUrl || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       isImg = false;
@@ -163,6 +144,11 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
   };
   return (
     <Modal title="Create Project" onClose={onClose}>
+      {isPending && (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      )}
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
@@ -238,19 +224,12 @@ export default function ProjectModal({ projectLength = 0, onClose }: TProjectMod
                 <Input type="thin" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
-            <Button
-              type="normal"
-              color="blue"
-              onClick={handleAddEmail}
-              disabled={!debouncedEmail.trim() || emails.includes(debouncedEmail.trim()) || !!errors.email || !isEmailValid}
-            >
+            <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
               Share
             </Button>
           </S.BtnWrapper>
-          {FirstValid && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-          {!FirstValid && !isEmailValid && debouncedEmail && (
-            <ValidataionMessage message={'This email is either unregistered or already added.'} isError={!isEmailValid} />
-          )}
+          {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
           <S.tagWrapper>
             {emails.map((em) => (
               <Button key={em} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(em)}>
