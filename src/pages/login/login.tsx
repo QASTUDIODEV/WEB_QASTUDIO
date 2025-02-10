@@ -68,8 +68,13 @@ export default function LoginPage() {
               { token },
               {
                 onSuccess: (inviteResponse) => {
+                  localStorage.setItem('InvitationResponse', 'success');
                   localStorage.removeItem('inviteToken');
                   navigate(`/project/information/${inviteResponse?.result.projectId}`);
+                },
+                onError: () => {
+                  navigate('/project');
+                  localStorage.setItem('InvitationResponse', 'error');
                 },
               },
             );

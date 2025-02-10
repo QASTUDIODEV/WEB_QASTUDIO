@@ -30,7 +30,7 @@ export default function AddProjectPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hasNavigated = useRef(false);
-  const invitationError = localStorage.getItem('InvitationError') || '';
+  const InvitationResponse = localStorage.getItem('InvitationResponse') || '';
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
       const firstProjectId = projectList.result.projectList[0].projectId;
@@ -51,9 +51,12 @@ export default function AddProjectPage() {
   const [isUploaded, setIsUploaded] = useState(false);
 
   useEffect(() => {
-    if (invitationError !== '') {
+    if (InvitationResponse === 'success') {
+      dispatch(openModal({ modalType: MODAL_TYPES.InviteSuccessModal }));
+      localStorage.removeItem('InvitationResponse');
+    } else {
       dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
-      localStorage.removeItem('InvitationError');
+      localStorage.removeItem('InvitationResponse');
     }
   }, []);
 

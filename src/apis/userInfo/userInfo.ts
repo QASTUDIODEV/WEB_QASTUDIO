@@ -1,4 +1,4 @@
-import type { TGetUserInfoResponse, TGetUserProjectsResponse, TGetUserProjectsValues } from '@/types/userController/userController';
+import type { TGetUserEmailResponse, TGetUserInfoResponse, TGetUserProjectsResponse, TGetUserProjectsValues } from '@/types/userController/userController';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -12,4 +12,9 @@ const getOtherUserProjectList = async ({ page, userId }: TGetUserProjectsValues)
   return data;
 };
 
-export { getOtherUserInfo, getOtherUserProjectList };
+const getUserEmail = async (): Promise<TGetUserEmailResponse> => {
+  const { data } = await axiosInstance.get('api/v0/users/email');
+  return data;
+};
+
+export { getOtherUserInfo, getOtherUserProjectList, getUserEmail };

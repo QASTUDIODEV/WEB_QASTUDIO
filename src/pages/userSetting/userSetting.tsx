@@ -10,7 +10,6 @@ import { userSettingSchema } from '@/utils/validate';
 import useInvite from '@/hooks/auth/useInvite';
 import useUserAuth from '@/hooks/auth/useUserAuth';
 import { useImage } from '@/hooks/images/useImage';
-import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 import AuthButton from '@/components/auth/authButton/authButton';
 import { InputModule } from '@/components/auth/module/module';
@@ -70,8 +69,8 @@ export default function UserSetting() {
 
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { useSettingUserInfo } = useUserAuth();
-  const { useGetUserInfo } = useUserInfo();
-  const { data: userData } = useGetUserInfo;
+  const { useGetUserEmail } = useInvite();
+  const { data: userData } = useGetUserEmail;
 
   const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
@@ -121,12 +120,13 @@ export default function UserSetting() {
               { email: userData?.result.email, token },
               {
                 onSuccess: (inviteResponse) => {
+                  localStorage.setItem('InvitationResponse', 'success');
                   localStorage.removeItem('inviteToken');
                   navigate(`/project/information/${inviteResponse?.result.projectId}`);
                 },
                 onError: () => {
                   navigate('/project');
-                  localStorage.setItem('InvitationError', 'true');
+                  localStorage.setItem('InvitationResponse', 'error');
                 },
               },
             );

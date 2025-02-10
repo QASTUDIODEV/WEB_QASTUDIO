@@ -1,6 +1,6 @@
 import Modal from '@/components/common/modal/modal';
 
-import * as S from './inviteModal.style';
+import * as S from './inviteErrorModal.style';
 
 type TAuthModalProps = {
   onClose: () => void;
