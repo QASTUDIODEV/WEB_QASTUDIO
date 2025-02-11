@@ -22,7 +22,6 @@ export const patchUserInfo = async ({ nickname, profileImage, bannerImage }: TPa
 };
 
 export const getUserProjectList = async ({ page }: TGetUserProjectsValues): Promise<TGetUserProjectsResponse> => {
-  const queryString = page ? `?page=${page}` : '';
-  const { data } = await axiosInstance.get(`/api/v0/users/projects${queryString}`);
+  const { data } = await axiosInstance.get(`/api/v0/users/projects?page=${page}`);
   return data;
 };

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import useInvite from '@/hooks/auth/useInvite';
 import useProjectList from '@/hooks/sidebar/sidebar';
 
 import { isNowSignup } from '@/slices/authSlice';
@@ -12,10 +13,14 @@ function LoginRedirect() {
   const dispatch = useDispatch();
 
   const { useGetSidebarUserInfo } = useProjectList();
+  const { useInviteAccept } = useInvite();
+  const { mutate: inviteMutate } = useInviteAccept;
+
   const { data: userInfo, isError } = useGetSidebarUserInfo;
   const urlParams = new URLSearchParams(location.search);
   const status = urlParams.get('status') || '';
   const message = urlParams.get('message') || '';
+  const token = localStorage.getItem('inviteToken');
   useEffect(() => {
     if (sessionStorage.getItem('loginHandled') == null) {
       if (isError || status === 'error') {
@@ -32,6 +37,26 @@ function LoginRedirect() {
       } else {
         if (localStorage.getItem('route') === 'mypage') {
           navigate('/mypage');
+        } else if (token != null) {
+          inviteMutate(
+            { token },
+            {
+              onSuccess: (inviteResponse) => {
+                localStorage.setItem('InvitationResponse', 'success');
+                localStorage.removeItem('inviteToken');
+                navigate(`/project/information/${inviteResponse?.result.projectId}`);
+              },
+              onError: (error) => {
+                if (error.response?.data.message === 'Invitation token is expired.') {
+                  navigate('/project');
+                  localStorage.setItem('InvitationResponse', 'expired');
+                } else if (error.response?.data.message === 'The user does not have permission to approve the invitation request.') {
+                  navigate('/project');
+                  localStorage.setItem('InvitationResponse', 'error');
+                }
+              },
+            },
+          );
         } else {
           navigate('/project');
         }

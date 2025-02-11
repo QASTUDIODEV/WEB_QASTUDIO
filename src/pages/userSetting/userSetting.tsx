@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSettingSchema } from '@/utils/validate';
 
+import useInvite from '@/hooks/auth/useInvite';
 import useUserAuth from '@/hooks/auth/useUserAuth';
 import { useImage } from '@/hooks/images/useImage';
 
@@ -27,8 +28,11 @@ type TFormValues = {
 export default function UserSetting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = localStorage.getItem('inviteToken');
   const [previewImg, setPreviewImg] = useState('');
   const { isSignup } = useSelector(selectAuth);
+  const { useInviteAcceptNewMember } = useInvite();
+  const { mutate: inviteMutate } = useInviteAcceptNewMember;
   useEffect(() => {
     if (!isSignup) {
       navigate('/');
@@ -65,6 +69,8 @@ export default function UserSetting() {
 
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
   const { useSettingUserInfo } = useUserAuth();
+  const { useGetUserEmail } = useInvite();
+  const { data: userData } = useGetUserEmail;
 
   const { mutate: getPresignedUrlMutate, isPending: getPresignedUrlPending } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate, isPending: uploadImageToPresignedUrlPending } = useImageToUploadPresignedUrl;
@@ -109,8 +115,31 @@ export default function UserSetting() {
       { nickname: data.nickname, profileImage: watchedImage },
       {
         onSuccess: () => {
-          navigate('/project', { replace: true });
-          dispatch(isNowSignup({ isSignup: false }));
+          if (token && userData?.result.email) {
+            inviteMutate(
+              { email: userData?.result.email, token },
+              {
+                onSuccess: (inviteResponse) => {
+                  localStorage.setItem('InvitationResponse', 'success');
+                  localStorage.removeItem('inviteToken');
+                  navigate(`/project/information/${inviteResponse?.result.projectId}`);
+                },
+                onError: (error) => {
+                  if (error.response?.data.message === 'Invitation token is expired.') {
+                    navigate('/project');
+                    localStorage.setItem('InvitationResponse', 'expired');
+                  } else if (error.response?.data.message === 'The user does not have permission to approve the invitation request.') {
+                    navigate('/project');
+                    localStorage.setItem('InvitationResponse', 'error');
+                  }
+                },
+              },
+            );
+            dispatch(isNowSignup({ isSignup: false }));
+          } else {
+            navigate('/project', { replace: true });
+            dispatch(isNowSignup({ isSignup: false }));
+          }
         },
       },
     );

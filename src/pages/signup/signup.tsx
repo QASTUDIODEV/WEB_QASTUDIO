@@ -84,6 +84,7 @@ function SignupPage() {
 
   const handleSendCode = async () => {
     setValue('code', '');
+    setSendCodeSuccess(false);
     if (!errors.email?.message) {
       sendCodeMutate(watchedEmail, {
         onSuccess: (data) => {
