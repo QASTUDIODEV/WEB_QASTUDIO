@@ -23,13 +23,15 @@ export const Title = styled.p`
   `}
 `;
 export const MemberContainer = styled.div`
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 100%;
   max-height: 78%;
   ${media.desktop`
     max-height: 80%;
   `}
+  &:hover {
+    overflow-y: overlay;
+  }
 `;
 export const Member = styled.div`
   ${({ theme }) => theme.align.row_space_between};

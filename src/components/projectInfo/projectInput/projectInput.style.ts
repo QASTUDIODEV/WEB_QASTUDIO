@@ -34,7 +34,6 @@ export const Text = styled.p`
   white-space: pre-line;
   overflow: hidden;
   text-overflow: ellipsis;
-  scrollbar-width: none;
   width: 85%;
   word-wrap: break-word;
   @media (max-width: 840px) {
