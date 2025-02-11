@@ -46,9 +46,14 @@ function LoginRedirect() {
                 localStorage.removeItem('inviteToken');
                 navigate(`/project/information/${inviteResponse?.result.projectId}`);
               },
-              onError: () => {
-                navigate('/project');
-                localStorage.setItem('InvitationResponse', 'error');
+              onError: (error) => {
+                if (error.response?.data.message === 'Invitation token is expired.') {
+                  navigate('/project');
+                  localStorage.setItem('InvitationResponse', 'expired');
+                } else if (error.response?.data.message === 'The user does not have permission to approve the invitation request.') {
+                  navigate('/project');
+                  localStorage.setItem('InvitationResponse', 'error');
+                }
               },
             },
           );

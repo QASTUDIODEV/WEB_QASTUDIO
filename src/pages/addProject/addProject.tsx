@@ -37,6 +37,9 @@ export default function AddProjectPage() {
   if (localStorage.getItem('InvitationResponse') === 'error') {
     dispatch(openModal({ modalType: MODAL_TYPES.InviteErrorModal }));
   }
+  if (localStorage.getItem('InvitationResponse') === 'expired') {
+    dispatch(openModal({ modalType: MODAL_TYPES.InviteTokenExpiredModal }));
+  }
 
   useEffect(() => {
     if (!hasNavigated.current && isProjectListLoaded && projectList?.result?.projectList?.length) {
