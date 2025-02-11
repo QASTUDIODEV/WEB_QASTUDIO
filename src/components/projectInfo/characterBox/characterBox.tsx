@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import type { TInfoDTO } from '@/types/projectInfo/projectInfo';
 
@@ -16,6 +17,7 @@ import { openModal } from '@/slices/modalSlice.ts';
 
 export default function CharacterBox({ result }: TInfoDTO) {
   const modalDispatch = useDispatch();
+  const navigate = useNavigate();
   const { useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: characterList } = useGetCharacter;
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
@@ -31,7 +33,7 @@ export default function CharacterBox({ result }: TInfoDTO) {
     }
   };
   return (
-    <>
+    <S.Container onClick={() => navigate(`/project/scenario/${result?.projectId}`)}>
       <S.Title>Character</S.Title>
       <S.Character>
         <S.CharacterList>
@@ -65,6 +67,6 @@ export default function CharacterBox({ result }: TInfoDTO) {
           <Plus />
         </S.CharacterAddBox>
       </S.Character>
-    </>
+    </S.Container>
   );
 }
