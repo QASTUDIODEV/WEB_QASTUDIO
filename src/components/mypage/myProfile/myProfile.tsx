@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import type { TMyProfileValues } from '@/types/mypage/mypage';
+import type { TGetUserInfoResponse } from '@/types/userController/userController';
 import type { SOCIAL } from '@/enums/enums';
 
 import findUnlinkedSocials from '@/utils/findUnlinkedSocials';
@@ -26,13 +27,13 @@ import Edit from '@/assets/icons/edit.svg?react';
 import ProfileEdit from '@/assets/icons/profileEdit.svg?react';
 
 type TProjectListProps = {
-  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
+  isLoading: boolean;
+  userData: TGetUserInfoResponse | undefined;
 };
-export default function MyProfile({ setProjectNum }: TProjectListProps) {
+export default function MyProfile({ isLoading, userData }: TProjectListProps) {
   const { useImageToUploadPresignedUrl, useGetPresignedUrl } = useImage();
-  const { usePatchUserInfo, useGetUserInfo } = useUserInfo();
+  const { usePatchUserInfo } = useUserInfo();
 
-  const { data: userData, isLoading } = useGetUserInfo;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
   const { mutate: patchUserInfoMutation } = usePatchUserInfo;
@@ -165,7 +166,6 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
 
   useEffect(() => {
     if (userData) {
-      setProjectNum(userData.result.projectCnt);
       setValue('nickname', userData.result.nickname);
       setValue('profileImage', userData.result.profileImage);
       setValue('bannerImage', userData.result.bannerImage);
@@ -178,89 +178,76 @@ export default function MyProfile({ setProjectNum }: TProjectListProps) {
         <S.ProfileWrapper>
           <input ref={inputRefs.banner} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'banner')} />
           {bannerPreview ? (
-            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} />
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={import.meta.env.VITE_API_IMAGE_ACCESS + bannerPreview} $isEdit={true} />
           ) : (
-            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} />
+            <S.BannerImg onClick={() => handleInputClick('banner')} url={watchedBannerUrl} $isEdit={true} />
           )}
-
-          <S.Profile>
-            <S.Container2>
-              <S.ProfileUserInfo>
-                <S.ProfileImg onClick={() => handleInputClick('profile')}>
-                  {profilePreview ? (
-                    <Profile profileImg={import.meta.env.VITE_API_IMAGE_ACCESS + profilePreview} />
-                  ) : (
-                    <Profile profileImg={watchedProfileUrl} />
-                  )}
-                  <S.ProfileEditBtn>
-                    <ProfileEdit />
-                  </S.ProfileEditBtn>
-                </S.ProfileImg>
-                <input ref={inputRefs.profile} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'profile')} />
-                <S.UserInfo>
-                  <InputModule
-                    valid={!errors.nickname?.message && watchedNickname !== ''}
-                    errorMessage={errors.nickname?.message}
-                    Name={'Nickname'}
-                    inputname={'normal'}
-                    value={watchedNickname}
-                    top={true}
-                    {...register('nickname')}
-                  />
-                  <S.AccoutWrapper>
-                    <S.Account>{userData?.result.email}</S.Account>
-                    <div className="socialLogoWrapper">
-                      <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
-                    </div>
-                    <div ref={containerRef}>
-                      {unlinkedSocials.length > 0 && (
-                        <S.PlusWrapper onClick={() => setShow(true)}>
-                          <Plus />
-                          {show && (
-                            <S.SocialLogoWrapper ref={contentRef}>
-                              <SocialLogo gap={8} size="small" id={unlinkedSocials} addAccount={true} />
-                            </S.SocialLogoWrapper>
-                          )}
-                        </S.PlusWrapper>
+          <S.ProfileUserInfo>
+            <S.ProfileImg onClick={() => handleInputClick('profile')} $isEdit={true}>
+              {profilePreview ? <Profile profileImg={import.meta.env.VITE_API_IMAGE_ACCESS + profilePreview} /> : <Profile profileImg={watchedProfileUrl} />}
+              <S.ProfileEditBtn>
+                <ProfileEdit />
+              </S.ProfileEditBtn>
+            </S.ProfileImg>
+            <input ref={inputRefs.profile} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleInputChange(e, 'profile')} />
+            <S.UserInfo>
+              <InputModule
+                valid={!errors.nickname?.message && watchedNickname !== ''}
+                errorMessage={errors.nickname?.message}
+                Name={'Nickname'}
+                inputname={'normal'}
+                value={watchedNickname}
+                top={true}
+                {...register('nickname')}
+              />
+              <S.AccoutWrapper>
+                <S.Account>{userData?.result.email}</S.Account>
+                <div className="socialLogoWrapper">
+                  <SocialLogo gap={8} size="small" id={socialLogin} disable={true} />
+                </div>
+                <div ref={containerRef}>
+                  {unlinkedSocials.length > 0 && (
+                    <S.PlusWrapper onClick={() => setShow(true)}>
+                      <Plus />
+                      {show && (
+                        <S.SocialLogoWrapper ref={contentRef}>
+                          <SocialLogo gap={8} size="small" id={unlinkedSocials} addAccount={true} />
+                        </S.SocialLogoWrapper>
                       )}
-                    </div>
-                  </S.AccoutWrapper>
-                </S.UserInfo>
-              </S.ProfileUserInfo>
-              <S.ButtonWrapper>
-                <Button type="small_square" color="default" disabled={!!errors.nickname?.message || isLoading} icon={<Done />} onClick={handleSubmit(onSubmit)}>
-                  Done
-                </Button>
-              </S.ButtonWrapper>
-            </S.Container2>
-          </S.Profile>
+                    </S.PlusWrapper>
+                  )}
+                </div>
+              </S.AccoutWrapper>
+            </S.UserInfo>
+          </S.ProfileUserInfo>
+          <S.ButtonWrapper>
+            <Button type="small_square" color="default" disabled={!!errors.nickname?.message || isLoading} icon={<Done />} onClick={handleSubmit(onSubmit)}>
+              Done
+            </Button>
+          </S.ButtonWrapper>
         </S.ProfileWrapper>
       ) : (
         <S.ProfileWrapper>
-          <S.BannerImg onClick={() => handleInputClick('banner')} url={userData?.result.bannerImage} />
-          <S.Profile>
-            <S.Container2>
-              <S.ProfileUserInfo>
-                <S.ProfileImg>
-                  <Profile profileImg={userData?.result.profileImage} />
-                </S.ProfileImg>
-                <S.UserInfo>
-                  <span>{userData?.result.nickname}</span>
-                  <S.AccoutWrapper>
-                    <S.Account>{userData?.result.email}</S.Account>
-                    <div className="socialLogoWrapper">
-                      <SocialLogo gap={8} size="small" disable={true} id={socialLogin} />
-                    </div>
-                  </S.AccoutWrapper>
-                </S.UserInfo>
-              </S.ProfileUserInfo>
-              <S.ButtonWrapper>
-                <Button type="small_square" color="default" icon={<Edit />} onClick={handleStartChange}>
-                  Edit
-                </Button>
-              </S.ButtonWrapper>
-            </S.Container2>
-          </S.Profile>
+          <S.BannerImg url={userData?.result.bannerImage} $isEdit={false} />
+          <S.ProfileUserInfo>
+            <S.ProfileImg $isEdit={false}>
+              <Profile profileImg={userData?.result.profileImage} />
+            </S.ProfileImg>
+            <S.UserInfo>
+              <span>{userData?.result.nickname}</span>
+              <S.AccoutWrapper>
+                <S.Account>{userData?.result.email}</S.Account>
+                <div className="socialLogoWrapper">
+                  <SocialLogo gap={8} size="small" disable={true} id={socialLogin} />
+                </div>
+              </S.AccoutWrapper>
+            </S.UserInfo>
+          </S.ProfileUserInfo>
+          <S.ButtonWrapper>
+            <Button type="small_square" color="default" icon={<Edit />} onClick={handleStartChange}>
+              Edit
+            </Button>
+          </S.ButtonWrapper>
         </S.ProfileWrapper>
       )}
     </>

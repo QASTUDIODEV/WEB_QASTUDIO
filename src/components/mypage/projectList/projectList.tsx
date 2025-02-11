@@ -1,9 +1,7 @@
-import { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import type { TUserProjectListResponse } from '@/types/userController/userController';
-
-import useProjects from '@/hooks/project/useProject';
+import type { TGetUserProjectsResponse, TUserProjectListResponse } from '@/types/userController/userController';
 
 import Project from '@/components/mypage/project/project';
 
@@ -12,22 +10,23 @@ import * as S from './projectList.style';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function ProjectList() {
+type TProjectListProps = {
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  projectData: TGetUserProjectsResponse | undefined;
+};
+export default function ProjectList({ setCurrentPage, projectData }: TProjectListProps) {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(0);
-  const { useGetMypageProjects } = useProjects(currentPage);
-  const { data } = useGetMypageProjects;
 
-  const projectsData = data?.result.userProjectList;
+  const projectsData = projectData?.result.userProjectList;
 
   const goToNextPage = () => {
-    if (!data?.result.isLast) {
+    if (!projectData?.result.isLast) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const goToPreviousPage = () => {
-    if (!data?.result.isFirst) {
+    if (!projectData?.result.isFirst) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
@@ -63,7 +62,7 @@ export default function ProjectList() {
 
       <div>
         <S.Buttons>
-          {!data?.result.isFirst ? (
+          {!projectData?.result.isFirst ? (
             <S.Button $disable={false}>
               <ArrowLeft stroke={'#DFE8F9'} onClick={goToPreviousPage} />
             </S.Button>
@@ -72,7 +71,7 @@ export default function ProjectList() {
               <ArrowLeft stroke={'#e9e8f91a'} />
             </S.Button>
           )}
-          {!data?.result.isLast ? (
+          {!projectData?.result.isLast ? (
             <S.Button $disable={false}>
               <ArrowRight stroke={'#DFE8F9'} onClick={goToNextPage} />
             </S.Button>

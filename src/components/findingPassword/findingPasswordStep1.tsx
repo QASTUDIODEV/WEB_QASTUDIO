@@ -11,8 +11,10 @@ type TStep1 = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   step: number;
   watchedEmail: string | undefined;
+  sendCodeSuccess: boolean;
+  setSendCodeSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TStep1) {
+export default function FindingPasswordStep1({ setStep, step, watchedEmail, setSendCodeSuccess, sendCodeSuccess }: TStep1) {
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | undefined>(undefined);
   const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [AuthCode, setAuthCode] = useState('');
@@ -38,6 +40,7 @@ export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TS
           setAuthCode(data.result.authCode);
           setStep(1);
           setEmailErrorMessage(undefined);
+          setSendCodeSuccess(true);
         },
         onError: (error) => {
           setEmailErrorMessage(error.response?.data.message || 'An error occurred.');
@@ -90,6 +93,7 @@ export default function FindingPasswordStep1({ setStep, step, watchedEmail }: TS
         btnName="Send"
         handleSendCode={handleSendCode}
         pending={codePending}
+        success={sendCodeSuccess}
         isUndefined={watchedEmail === undefined}
         valid={watchedEmail !== '' && !errors.email?.message && !emailErrorMessage}
         errorMessage={(errors.email?.message as string) || emailErrorMessage}

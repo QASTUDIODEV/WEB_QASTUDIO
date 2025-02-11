@@ -34,7 +34,12 @@ export const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <MainLayout />,
+    element: (
+      <>
+        <MainLayout />
+        <ModalProvider />
+      </>
+    ),
     children: [{ index: true, element: <MyPage /> }],
   },
   {

@@ -17,13 +17,13 @@ import ScenarioModalStep2 from '@/components/scenario/scenarioModal/scenarioModa
 import { closeModal } from '@/slices/modalSlice.ts';
 
 type TScenarioProps = {
-  projectId: string;
-  currentPage: number;
+  projectId?: string;
+  currentPage?: number;
 };
 
 type TField = z.infer<typeof createCharacterModalScehma>;
 
-export default function ScenarioModal({ projectId, currentPage }: TScenarioProps) {
+export default function ScenarioModal({ projectId = '0', currentPage = 0 }: TScenarioProps) {
   const dispatch = useDispatch();
   const methods = useForm<TField>({
     mode: 'onChange',

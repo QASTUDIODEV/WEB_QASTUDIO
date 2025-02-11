@@ -7,9 +7,12 @@ import useAddPage from '@/hooks/projectInfo/useAddPage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
+import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 import * as S from '@/components/projectInfo/pageModal/pageModal.style';
+
+import { LoadingContainer } from '../inviteModal/inviteModal.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import PlusDark from '@/assets/icons/add_dark.svg?react';
@@ -42,13 +45,13 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
   const [selectedIdList, setSelectedIdList] = useState<number[]>([]);
   const [modalStep, setModalStep] = useState(1);
   const { usePage } = useAddPage();
-  const { mutate: addPage } = usePage;
+  const { mutate: addPage, isPending } = usePage;
   const {
     control,
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors, isValid, touchedFields },
+    formState: { errors, isValid },
   } = useForm<TFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -106,6 +109,11 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
   };
   return (
     <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
+      {isPending && (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      )}
       {modalStep === 1 ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.ModalBox>
@@ -128,9 +136,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
                 render={({ field }) => (
                   <>
                     <Input placeholder="Enter page name to add." type="normal" {...field} errorMessage={errors.pageName?.message} touched={!!errors.pageName} />
-                    {touchedFields.pageName && errors.pageName?.message && (
-                      <ValidataionMessage message={errors.pageName?.message || ''} isError={!!errors.pageName} />
-                    )}
+                    {errors.pageName?.message && <ValidataionMessage message={errors.pageName?.message || ''} isError={!!errors.pageName} />}
                   </>
                 )}
               />
@@ -160,7 +166,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
                       errorMessage={errors.pageDescription?.message}
                       touched={!!errors.pageDescription}
                     />
-                    {touchedFields.pageDescription && errors.pageDescription?.message && (
+                    {errors.pageDescription?.message && (
                       <ValidataionMessage message={errors.pageDescription?.message || ''} isError={!!errors.pageDescription} />
                     )}
                   </>
@@ -186,9 +192,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
                 render={({ field }) => (
                   <>
                     <Input placeholder="Enter the page path." type="normal" {...field} errorMessage={errors.pagePath?.message} touched={!!errors.pagePath} />
-                    {touchedFields.pagePath && errors.pagePath?.message && (
-                      <ValidataionMessage message={errors.pagePath?.message || ''} isError={!!errors.pagePath} />
-                    )}
+                    {errors.pagePath?.message && <ValidataionMessage message={errors.pagePath?.message || ''} isError={!!errors.pagePath} />}
                   </>
                 )}
               />
@@ -258,7 +262,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
                     )}
                   />
                 </S.InputWrapper>
-                {touchedFields.scenarios?.[index]?.value && errors.scenarios?.[index]?.value?.message && (
+                {errors.scenarios?.[index]?.value?.message && (
                   <ValidataionMessage message={errors.scenarios?.[index]?.value?.message || ''} isError={!!errors.scenarios?.[index]?.value} />
                 )}
               </>
@@ -279,7 +283,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
             </S.Btn>
           </S.PostBox>
           <S.Position2>
-            <Button type="normal" color="blue" disabled={!isValid} onClick={handleCreate}>
+            <Button type="normal" color="blue" disabled={!isValid || isPending} onClick={handleCreate}>
               Create
             </Button>
           </S.Position2>

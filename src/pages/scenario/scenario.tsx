@@ -11,7 +11,6 @@ import Loading from '@/components/common/loading/loading';
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
-import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
 
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
@@ -24,7 +23,6 @@ export default function ScenarioPage() {
 
   const { projectId } = useParams();
   const { isEdit } = useSelector((state) => state.scenario);
-  const { isOpen } = useSelector((state) => state.modal);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [selectedIdx, setSelectedIdx] = useState<number>(-1);
@@ -81,7 +79,6 @@ export default function ScenarioPage() {
 
   return (
     <S.Background>
-      {isOpen && <ScenarioModal projectId={projectId || ''} currentPage={currentPage} />}
       <S.Container>
         <S.Header>
           <ProjectTitle

@@ -16,11 +16,10 @@ export type TAddProject = TCommonResponse<{
   memberEmails: string[];
 }>;
 export type TAddProjectValue = {
-  projectImage: string;
+  projectImage?: string;
   projectName: string;
   projectUrl: string;
   memberEmailList: {
-    userId: number;
     email: string;
   }[];
 };
