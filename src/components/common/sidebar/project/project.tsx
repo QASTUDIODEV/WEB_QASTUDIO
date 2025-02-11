@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import type { TProjectDTO } from '@/types/sidebar/sidebar';
-import { projectItem } from '@/constants/projectToggle/projectToggle';
 
+import ProjectItems from '@/components/common/sidebar/project/projectItems.tsx';
 import * as S from '@/components/common/sidebar/projectItems/projectItems.style';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
@@ -23,16 +23,7 @@ export default function Project({ projectImage, projectId, projectName }: TProje
         {isClicked ? <UpArrow className="menu" /> : <DownArrow className="menu" />}
       </S.Project>
       <S.ProjectContents $isOpen={isClicked} className="menu">
-        {projectItem.map((item) => (
-          <S.StyledNavLink to={`/project/${item.name.toLowerCase()}/${projectId}`} key={item.name}>
-            {({ isActive }) => (
-              <S.ProjectContent $isActive={isActive}>
-                <item.svg width={19.2} height={19.2} />
-                <S.ProjectContentName>{item.name}</S.ProjectContentName>
-              </S.ProjectContent>
-            )}
-          </S.StyledNavLink>
-        ))}
+        <ProjectItems projectId={projectId as number} />
       </S.ProjectContents>
     </div>
   );
