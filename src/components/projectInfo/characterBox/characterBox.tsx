@@ -33,7 +33,7 @@ export default function CharacterBox({ result }: TInfoDTO) {
     }
   };
   return (
-    <S.Container onClick={() => navigate(`/project/scenario/${result?.projectId}`)}>
+    <>
       <S.Title>Character</S.Title>
       <S.Character>
         <S.CharacterList>
@@ -44,6 +44,7 @@ export default function CharacterBox({ result }: TInfoDTO) {
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => handleMouseEnter(a.characterId)}
                 onMouseLeave={() => setActiveTooltip(null)}
+                onClick={() => navigate(`/project/scenario/${result?.projectId}`)}
               >
                 {activeTooltip === a.characterId && (
                   <S.TooltipWrapper ref={tooltipRef} visible={true}>
@@ -67,6 +68,6 @@ export default function CharacterBox({ result }: TInfoDTO) {
           <Plus />
         </S.CharacterAddBox>
       </S.Character>
-    </S.Container>
+    </>
   );
 }
