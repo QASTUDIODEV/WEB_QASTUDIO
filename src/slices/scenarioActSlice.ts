@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface IWebSocketState {
+  runningScenarioId: number | null;
   isConnected: boolean;
   messages: string[];
   sessionId: string | null;
@@ -50,9 +51,12 @@ interface IRecordAction {
   };
 }
 interface ICurrentLocator {
+  actionId: number | null;
   id: string | null;
   xPath: string | null;
   cssSelector: string | null;
+  isInputFocused: boolean;
+  isClicked: boolean;
 }
 
 interface IScenarioActSlice {
@@ -92,13 +96,56 @@ const initialState: IScenarioActSlice = {
   scenarios: [],
   recordActions: [],
   webSocket: {
+    runningScenarioId: null,
     isConnected: false,
     messages: [],
     sessionId: null,
   },
-  currentHtml: ``,
-  currentCss: ``,
-  currentLocator: { id: null, xPath: null, cssSelector: null },
+  currentHtml: `<div >
+  <h1 >Example Domain</h1>
+  <p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p>
+  <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>`,
+  currentCss: `<!DOCTYPE html>
+<html>
+<head>
+      <style >
+        body {
+          background-color: #f0f0f2;
+          margin: 0;
+          padding: 0;
+          font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        div {
+          width: 600px;
+          margin: 5em auto;
+          padding: 2em;
+          background-color: #fdfdff;
+          border-radius: 0.5em;
+          box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+        }
+        a:link, a:visited {
+          color: #38488f;
+          text-decoration: none;
+        }
+        .highlighted-element {
+          outline: 3px solid #ffeb3b;
+          background-color: rgba(255, 235, 59, 0.2);
+        }
+        @media (max-width: 700px) {
+          div {
+            margin: 0 auto;
+            width: auto;
+          }
+        }
+          
+      </style>
+    </head>
+<body>
+  <div id="mountHere"></div>
+</body>
+</html>`,
+  currentLocator: { actionId: null, id: null, xPath: null, cssSelector: null, isInputFocused: false, isClicked: false },
 };
 
 const scenarioActSlice = createSlice({
@@ -135,6 +182,7 @@ const scenarioActSlice = createSlice({
         lastActionId: null,
       }));
     },
+
     // action 추가
     addAction: (state, action: PayloadAction<IRecordAction>) => {
       state.recordActions.push(action.payload);
@@ -147,11 +195,28 @@ const scenarioActSlice = createSlice({
       // 재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
     },
+
     // 클릭 시 로케이터 설정
-    setCurrentLocator: (state, action: PayloadAction<ICurrentLocator>) => {
-      console.log(action.payload);
-      state.currentLocator = action.payload;
+    focusLocatorInput: (state, action: PayloadAction<number>) => {
+      state.currentLocator.actionId = action.payload;
+      state.currentLocator.isInputFocused = true;
     },
+    blurLocatorInput: (state) => {
+      state.currentLocator.isInputFocused = false;
+    },
+    clickLocatorInput: (state, action: PayloadAction<boolean>) => {
+      console.log('클릭');
+      state.currentLocator.isClicked = action.payload;
+    },
+    setCurrentLocator: (state, action: PayloadAction<{ actionId: number; id: string; cssSelector: string; xPath: string }>) => {
+      if (state.currentLocator.isInputFocused && state.currentLocator.actionId === action.payload.actionId) {
+        state.currentLocator.id = action.payload.id;
+        state.currentLocator.cssSelector = action.payload.cssSelector;
+        state.currentLocator.xPath = action.payload.xPath;
+        state.currentLocator.isInputFocused = false; // 선택 후 자동 해제
+      }
+    },
+
     //웹 소켓
     setWebSocketConnected: (state, action: PayloadAction<boolean>) => {
       state.webSocket.isConnected = action.payload;
@@ -169,6 +234,10 @@ const scenarioActSlice = createSlice({
       state.currentHtml = action.payload.html;
       state.currentCss = action.payload.css;
     },
+    // 실행중인 시나리오
+    setRunningScenario: (state, action: PayloadAction<number | null>) => {
+      state.webSocket.runningScenarioId = action.payload;
+    },
   },
 });
 
@@ -180,10 +249,14 @@ export const {
   setScenarioList,
   addAction,
   removeAction,
-  setCurrentLocator,
   setWebSocketConnected,
   addWebSocketMessage,
   setSessionId,
   updateIframeContent,
+  focusLocatorInput,
+  blurLocatorInput,
+  setCurrentLocator,
+  setRunningScenario,
+  clickLocatorInput,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

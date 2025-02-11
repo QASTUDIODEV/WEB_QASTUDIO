@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
-import { setCurrentLocator } from '@/slices/scenarioActSlice';
+import { clickLocatorInput, setCurrentLocator } from '@/slices/scenarioActSlice';
 
 export default function ActSection() {
   const currentHtml = useSelector((state) => state.scenarioAct.currentHtml);
@@ -37,6 +37,42 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
   const lastHighlightedElement = useRef<HTMLElement | null>(null);
   const styleTagRef = useRef<HTMLStyleElement | null>(null);
 
+  // 🔹 `useRef`를 사용하여 최신 `currentLocator` 상태 유지
+  const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
+  const latestLocator = useRef(currentLocator);
+
+  useEffect(() => {
+    latestLocator.current = currentLocator;
+  }, [currentLocator]);
+
+  // 클릭 이벤트 핸들러 (최신 상태 반영)
+  const handleClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+
+    // 선택된 요소 하이라이트 적용
+    if (lastHighlightedElement.current) {
+      lastHighlightedElement.current.classList.remove('highlighted-element');
+    }
+    target.classList.add('highlighted-element');
+    lastHighlightedElement.current = target;
+
+    // 최신 상태 반영
+    const id = target.id || '';
+    const cssSelector = getCssSelector(target);
+    const xPath = getXPath(target);
+
+    console.log('=== Element Details ===');
+    console.log('id: ', id);
+    console.log('css: ', cssSelector);
+    console.log('xPath: ', xPath);
+    console.log(latestLocator.current.isInputFocused, latestLocator.current.actionId);
+
+    if (!latestLocator.current.isInputFocused || latestLocator.current.actionId === null) return; // 포커스 상태일 때만 동작
+
+    dispatch(setCurrentLocator({ actionId: latestLocator.current.actionId, id, cssSelector, xPath }));
+    dispatch(clickLocatorInput(true));
+  };
+
   useEffect(() => {
     if (!document) return;
 
@@ -51,37 +87,18 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
         styleTagRef.current.parentNode.removeChild(styleTagRef.current);
       }
     } catch (error) {
-      console.warn('⚠ `removeChild` 실행 중 노드가 존재하지 않음:', error);
+      console.warn(' `removeChild` 실행 중 노드가 존재하지 않음:', error);
     }
 
     const styleTag = document.createElement('style');
     styleTag.innerHTML = cssContent;
     document.head.appendChild(styleTag);
-    styleTagRef.current = styleTag; // styleTagRef 업데이트
+    styleTagRef.current = styleTag;
 
-    // ✅ 클릭 이벤트 핸들러
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const id = target.id || '';
-      const cssSelector = getCssSelector(target);
-      const xPath = getXPath(target);
-
-      console.log('=== Element Details ===');
-      console.log('css: ', cssSelector);
-      console.log('xPath: ', xPath);
-      dispatch(setCurrentLocator({ id, cssSelector, xPath }));
-
-      if (lastHighlightedElement.current) {
-        lastHighlightedElement.current.classList.remove('highlighted-element');
-      }
-
-      target.classList.add('highlighted-element');
-      lastHighlightedElement.current = target;
-    };
-
+    // 클릭 이벤트 등록
     document.body.addEventListener('click', handleClick);
 
-    // ✅ 링크 클릭 차단
+    // 링크 클릭 차단
     const disableLinks = (event: MouseEvent) => {
       const target = event.target as HTMLAnchorElement;
       if (target.tagName.toLowerCase() === 'a') {
@@ -100,7 +117,7 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
         link.removeEventListener('click', disableLinks);
       });
 
-      // ✅ 기존 스타일 제거 (부모 노드가 있는 경우에만)
+      // 🔹 기존 스타일 제거
       try {
         if (styleTagRef.current && styleTagRef.current.parentNode) {
           styleTagRef.current.parentNode.removeChild(styleTagRef.current);
@@ -109,7 +126,7 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
         console.warn('⚠ Cleanup에서 `removeChild` 실행 중 노드가 존재하지 않음:', error);
       }
     };
-  }, [document, htmlContent, cssContent]); // ✅ 상태 변경 시 useEffect 실행
+  }, [document, htmlContent, cssContent]);
 
   return null;
 }

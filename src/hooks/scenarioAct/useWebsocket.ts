@@ -19,24 +19,24 @@ const useWebSocket = (url: string, isActive: boolean) => {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log('✅ WebSocket 연결 성공:', url);
+      console.log('WebSocket 연결 성공:', url);
       dispatch(setWebSocketConnected(true));
     };
 
     socket.onmessage = async (event) => {
-      console.log('📩 수신된 메시지 (Raw):', event.data);
+      console.log('수신된 메시지 (Raw):', event.data);
 
       try {
         let parsedMessage;
         if (event.data instanceof Blob) {
-          console.log('🔍 Blob 데이터 감지');
+          console.log('Blob 데이터 감지');
           const text = await event.data.text();
           parsedMessage = JSON.parse(text);
         } else if (typeof event.data === 'string') {
-          console.log('🔍 문자열 데이터 감지');
+          console.log('문자열 데이터 감지');
           parsedMessage = JSON.parse(event.data);
         } else {
-          console.log('🔍 JSON 객체 감지');
+          console.log('JSON 객체 감지');
           parsedMessage = event.data;
         }
 

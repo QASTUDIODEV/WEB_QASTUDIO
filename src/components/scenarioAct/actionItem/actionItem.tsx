@@ -19,6 +19,7 @@ import Globe from '@/assets/icons/globe.svg?react';
 import UnderError from '@/assets/icons/under_error.svg?react';
 import UnderSuccess from '@/assets/icons/under_success.svg?react';
 import { openModal } from '@/slices/modalSlice';
+import { blurLocatorInput, clickLocatorInput, focusLocatorInput } from '@/slices/scenarioActSlice';
 
 interface IActionItem {
   scenarioId: number;
@@ -55,13 +56,13 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   // refetch할때 필요
   const characterId = useSelector((state) => state.scenarioAct.characterId);
-
+  const isInputFocused = currentLocator.isInputFocused && currentLocator.actionId === actionId;
+  const isClicked = currentLocator.isClicked;
   // 상태 관리
   const [locatorStrategy, setLocatorStrategy] = useState(action?.locator.strategy || '');
   const [actionType, setActionType] = useState(action?.action.type || '');
   const [locatorInputValue, setLocatorInputValue] = useState(action?.locator.value || '');
   const [actionInputValue, setActionInputValue] = useState(action?.action.value || '');
-  const [isFocused, setIsFocused] = useState(false);
 
   const { useEditAction } = useAction(characterId);
   const { mutate: editMutate, isPending } = useEditAction;
@@ -71,12 +72,14 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const isActionApplyDisabled = actionType === action?.action.type && actionInputValue === action?.action.value;
 
   useEffect(() => {
-    if (isFocused) {
+    if (isInputFocused && isClicked) {
+      console.log(1);
       setLocatorInputValue(
-        locatorStrategy === 'id' ? currentLocator.id : locatorStrategy === 'css_selector' ? currentLocator.cssSelector : currentLocator.xPath,
+        locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '',
       );
+      dispatch(clickLocatorInput(false));
     }
-  }, [currentLocator, isFocused, locatorStrategy]);
+  }, [currentLocator, isInputFocused, locatorStrategy, isClicked]);
 
   // Locator 적용
   const onSubmitLocator = () => {
@@ -124,7 +127,14 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const handleIsOpen = (): void => {
     setIsOpen((prev) => !prev);
   };
-
+  const handleFocus = () => {
+    dispatch(focusLocatorInput(actionId));
+  };
+  const handleBlur = () => {
+    setTimeout(() => {
+      dispatch(blurLocatorInput());
+    }, 100);
+  };
   // 마지막 액션인지 확인
   const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
   const isLastAction = lastActionId === actionId;
@@ -153,12 +163,8 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
               </S.DropdownContainer>
             </S.DescriptionRow>
             <S.DescriptionRow>
-              <S.Input
-                value={locatorInputValue}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                onChange={(e) => setLocatorInputValue(e.target.value)}
-              />
+              <S.Input value={locatorInputValue} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => setLocatorInputValue(e.target.value)} />
+
               <Button color="blue" onClick={onSubmitLocator} disabled={isLocatorApplyDisabled}>
                 Apply
               </Button>
