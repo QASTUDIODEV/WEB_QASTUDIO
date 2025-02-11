@@ -2,6 +2,9 @@ import styled from 'styled-components';
 
 import { media } from '@/styles/media';
 
+export const Container = styled.div`
+  display: contents;
+`;
 export const Title = styled.p`
   color: ${({ theme }) => theme.colors.primary.pri_50};
   font-size: 17.6px;
