@@ -26,7 +26,7 @@ export const Header = styled.div<{ state: ACTION_STATE; $isLastAction: boolean; 
       $isLastAction
         ? state === ACTION_STATE.SUCCESS
           ? theme.colors.point.point_1
-          : state === ACTION_STATE.ERROR
+          : state === ACTION_STATE.FAIL
             ? theme.colors.error.error_500
             : 'transparent'
         : 'transparent'};

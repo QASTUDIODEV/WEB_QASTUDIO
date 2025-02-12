@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
-import { ACTION_TYPE } from '@/enums/enums';
-
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useScenario from '@/hooks/scenarioAct/useScenario';
 

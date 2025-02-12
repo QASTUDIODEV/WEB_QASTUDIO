@@ -16,7 +16,6 @@ export default function useScenarioList(characterId: number | null | undefined) 
   // 시나리오 추가
   const useCreateScenario = useCoreMutation(createScenario, {
     onSuccess: () => {
-      console.log(1);
       refetchScenarioList();
     },
   });

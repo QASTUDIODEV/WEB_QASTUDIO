@@ -12,7 +12,7 @@ import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
 
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
-import { setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
+import { setCharacterId, setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
 
 export default function ScenarioActPage() {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ export default function ScenarioActPage() {
   const { isLoading: projectInfoLoading } = useGetProjectInfo;
   const { isLoading: characterListLoading } = useGetCharacterList;
 
+  // 케릭터 id선택시 에러나는 이유
   const { useGetScenarioList } = useScenarioList(selectedCharacterId);
   const { isLoading: scenarioListLoading } = useGetScenarioList;
   // 시나리오 리스트는 refetch할 때 선언되서 useEffect 분리

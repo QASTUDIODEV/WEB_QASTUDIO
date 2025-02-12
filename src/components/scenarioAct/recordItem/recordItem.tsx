@@ -18,11 +18,8 @@ interface IRecordItemProps {
 
 // 액션 아이콘 매핑
 const actionIconMap = {
-  [ACTION_TYPE.NAVIGATE]: Globe,
+  [ACTION_TYPE.SEND_KEYS]: Globe,
   [ACTION_TYPE.CLICK]: Click,
-  [ACTION_TYPE.HOVER]: null,
-  [ACTION_TYPE.FILL_TEXT]: null,
-  [ACTION_TYPE.WAITING]: null,
 };
 
 export default function RecordItem({ step }: IRecordItemProps) {

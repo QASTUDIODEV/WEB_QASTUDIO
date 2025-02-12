@@ -68,7 +68,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const [actionInputValue, setActionInputValue] = useState(action?.action.value || '');
 
   const { useEditAction } = useAction(characterId);
-  const { mutate: editMutate, isPending } = useEditAction;
+  const { mutate: editMutate } = useEditAction;
 
   //Apply 버튼 활성화
   const isLocatorApplyDisabled = locatorStrategy === action?.locator.strategy && locatorInputValue === action?.locator.value;
