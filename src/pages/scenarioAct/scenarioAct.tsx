@@ -12,7 +12,7 @@ import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
 
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
-import { setCharacterId, setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
+import { setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
 
 export default function ScenarioActPage() {
   const dispatch = useDispatch();
