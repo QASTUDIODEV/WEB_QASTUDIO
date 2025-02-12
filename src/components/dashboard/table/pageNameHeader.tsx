@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import type { TFilter } from '@/hooks/dashborad/useTableFilter.ts';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import SelectBox from '@/components/dashboard/selectBox/selectBox';
@@ -8,7 +9,11 @@ import * as S from '@/components/dashboard/table/table.style';
 
 import { DownArrow, UpArrow } from '@/assets/icons';
 
-export default function PageNameHeader() {
+interface IProps {
+  setFilters: (filter: TFilter) => void;
+}
+
+export default function PageNameHeader({ setFilters }: IProps) {
   const [isClicked, setIsClicked] = useState(false);
   const { projectId } = useParams();
   const { useGetPageSummary } = useProjectInfo({ projectId: Number(projectId) });
@@ -22,7 +27,7 @@ export default function PageNameHeader() {
         <p>Page</p>
         {isClicked ? <UpArrow /> : <DownArrow />}
       </S.ButtonHeader>
-      {isClicked && <SelectBox<string> selectList={PAGE_NAMES} filterKey={'pageName'} />}
+      {isClicked && <SelectBox<string> selectList={PAGE_NAMES} setFilters={setFilters} filterKey={'pageName'} />}
     </S.HeaderWrapper>
   );
 }

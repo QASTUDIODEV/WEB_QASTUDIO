@@ -66,7 +66,7 @@ export default function Table() {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('pageName', {
-      header: () => <PageNameHeader />,
+      header: () => <PageNameHeader setFilters={setFilters} />,
       size: 200,
       cell: (info) => info.getValue(),
     }),
@@ -76,7 +76,7 @@ export default function Table() {
       cell: (info) => <ProgressBar percent={info.getValue()} />,
     }),
     columnHelper.accessor('state', {
-      header: () => <StateHeader />,
+      header: () => <StateHeader setFilters={setFilters} />,
       size: 200,
       cell: (info) => <S.State $isSuccess={info.getValue() === TEST_STATE.SUCCESS}>{getSelectName(info.getValue())}</S.State>,
     }),

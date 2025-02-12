@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import type { TEST_STATE } from '@/enums/enums';
+import type { TEST_STATE } from '@/enums/enums.ts';
 
 export type TFilter = {
   testName?: string;
