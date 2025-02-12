@@ -136,7 +136,7 @@ const initialState: IScenarioActSlice = {
           color: #38488f;
           text-decoration: none;
         }
-        .highlighted-element {
+        .qa-highlighted-element {
           outline: 3px solid #ffeb3b;
           background-color: rgba(255, 235, 59, 0.2);
         }
@@ -243,7 +243,12 @@ const scenarioActSlice = createSlice({
       console.log(action.payload.html);
       console.log(action.payload.css);
       state.currentHtml = action.payload.html;
-      state.currentCss = action.payload.css;
+      state.currentCss =
+        action.payload.css +
+        `.qa-highlighted-element {
+          outline: 3px solid #ffeb3b;
+          background-color: rgba(255, 235, 59, 0.2);
+        }`;
     },
     // 실행중인 시나리오
     setRunningScenario: (state, action: PayloadAction<number | null>) => {

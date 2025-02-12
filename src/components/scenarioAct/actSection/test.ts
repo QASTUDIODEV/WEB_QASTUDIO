@@ -28,7 +28,7 @@ const initialContent: string = `<!DOCTYPE html>
           color: #38488f;
           text-decoration: none;
         }
-        .highlighted-element {
+        .qa-highlighted-element {
           outline: 3px solid #ffeb3b;
           background-color: rgba(255, 235, 59, 0.2);
         }

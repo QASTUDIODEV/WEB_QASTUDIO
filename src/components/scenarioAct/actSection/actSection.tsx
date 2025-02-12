@@ -51,9 +51,9 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
 
     // 선택된 요소 하이라이트 적용
     if (lastHighlightedElement.current) {
-      lastHighlightedElement.current.classList.remove('highlighted-element');
+      lastHighlightedElement.current.classList.remove('qa-highlighted-element');
     }
-    target.classList.add('highlighted-element');
+    target.classList.add('qa-highlighted-element');
     lastHighlightedElement.current = target;
 
     // 최신 상태 반영
