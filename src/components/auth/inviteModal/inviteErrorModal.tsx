@@ -1,24 +1,33 @@
 import { useDispatch } from 'react-redux';
 
+import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
 
-import * as S from './inviteErrorModal.style';
+import * as S from './inviteModal.style';
 
 import { closeModal } from '@/slices/modalSlice';
 
-export default function InviteErrorModal() {
+type TAuthModalProps = {
+  onClose: () => void;
+};
+
+export default function InviteErrorModal({ onClose }: TAuthModalProps) {
   const dispatch = useDispatch();
   return (
-    <Modal
-      title={'Email Mismatch'}
-      onClose={() => {
-        dispatch(closeModal());
-        localStorage.removeItem('InvitationResponse');
-        localStorage.removeItem('inviteToken');
-      }}
-      isExitButtonVisible={true}
-    >
-      <S.Container>This invitation was sent to a different email. Please check the correct one.</S.Container>
+    <Modal title={'Invalid Request'} onClose={onClose} isExitButtonVisible={false}>
+      <S.Container>This invitation cannot be processed. Please check your access or contact the administrator for assistance.</S.Container>
+      <S.ButtonBox>
+        <Button
+          color="blue"
+          onClick={() => {
+            dispatch(closeModal());
+            localStorage.removeItem('inviteToken');
+            localStorage.removeItem('InvitationResponse');
+          }}
+        >
+          Go Back
+        </Button>
+      </S.ButtonBox>
     </Modal>
   );
 }
