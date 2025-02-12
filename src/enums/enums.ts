@@ -1,4 +1,3 @@
-// 프로젝트 호환 디바이스
 export enum DEVICE {
   PC = 'pc',
   MOBILE = 'mobile',
@@ -33,6 +32,7 @@ export enum SOCIAL {
 }
 
 export enum TEST_STATE {
+  ALL = 'ALL',
   FAIL = 'FAIL',
   SUCCESS = 'SUCCESS',
 }
