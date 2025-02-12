@@ -2,10 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider/modalProvider';
 
+import InviteRedirect from '../pages/inviteRedirect/inviteRedirect';
+
 import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
 import AddProjectPage from '@/pages/addProject/addProject';
 import DashboardPage from '@/pages/dashboard/dashboard';
+import ErrorPage from '@/pages/error/error';
 import FindingPassword from '@/pages/findingPassword/findingPassword';
 import LoginPage from '@/pages/login/login.tsx';
 import LoginRedirect from '@/pages/loginRedirect/loginRedirect';
@@ -33,12 +36,21 @@ export const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <MainLayout />,
+    element: (
+      <>
+        <MainLayout />
+        <ModalProvider />
+      </>
+    ),
     children: [{ index: true, element: <MyPage /> }],
   },
   {
     path: '/login/success',
     element: <LoginRedirect />,
+  },
+  {
+    path: '/invite',
+    element: <InviteRedirect />,
   },
   {
     path: `/`,
@@ -48,6 +60,7 @@ export const router = createBrowserRouter([
         <ModalProvider />
       </>
     ),
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <LoginPage /> },
       {

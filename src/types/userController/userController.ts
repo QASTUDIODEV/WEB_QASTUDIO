@@ -49,3 +49,7 @@ export type TGetUserProjectsResponse = TCommonResponse<{
   isFirst: boolean;
   isLast: boolean;
 }>;
+
+export type TGetUserEmailResponse = TCommonResponse<{
+  email: string;
+}>;

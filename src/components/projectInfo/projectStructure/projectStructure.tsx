@@ -2,8 +2,7 @@ import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 
 import Button from '@/components/common/button/button';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
-
-import * as S from '@/pages/projectInfo/projectStructure.style.ts';
+import * as S from '@/components/projectInfo/projectStructure/projectStructure.style';
 
 import Plus from '@/assets/icons/add.svg?react';
 import Branch from '@/assets/icons/branch.svg?react';
@@ -90,6 +89,7 @@ function ProjectStructure({ selectedPage, setSelectedPage, onBackToSummary, page
       <S.Wrapper top="16px" right="24px">
         <Plus
           onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.CreatePageModal, modalProps: { projectId: projectId, character: character } }))}
+          style={{ cursor: 'pointer' }}
         />
       </S.Wrapper>
       <S.InnerBox>

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useEditScenario from '@/hooks/scenario/useChangeScenarioInfo.ts';
 
 import Button from '@/components/common/button/button';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx';
 import * as S from '@/components/scenario/buttonGroup/buttonGroup.style';
 import CheckBox from '@/components/scenario/checkBox/checkBox';
 
@@ -28,6 +29,7 @@ type TScenarioProps = {
 export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const modalDispatch = useDispatch();
 
   const { isEdit, characters } = useSelector((state) => state.scenario);
 
@@ -47,10 +49,6 @@ export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) 
         : [],
     );
   }, [characters]);
-
-  useEffect(() => {
-    console.log(selectedCharacterId, selectedScenarioId);
-  }, [selectedCharacterId, selectedScenarioId]);
 
   useEffect(() => {
     const hasChecked = (selectedCharacterId?.length ?? 0) > 0 || (selectedScenarioId?.length ?? 0) > 0;
@@ -109,8 +107,8 @@ export default function ButtonGroup({ projectId, currentPage }: TScenarioProps) 
   const handlePlayClick = () => navigate(`/scenarioAct/${projectId}`);
 
   // + Character 버튼 클릭 함수
-  const handleAddClick = () => dispatch(openModal('scenarioModal'));
-
+  const handleAddClick = () =>
+    modalDispatch(openModal({ modalType: MODAL_TYPES.ScenarioModal, modalProps: { projectId: projectId, currentPage: currentPage } }));
   return (
     <>
       {isEdit ? (

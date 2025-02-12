@@ -7,7 +7,7 @@ import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/logtoutModal/logoutModal.style';
 
 type TLogoutModalProps = {
-  onClose: () => void; // 모달 닫기 함수
+  onClose: () => void;
 };
 
 export default function LogoutModal({ onClose }: TLogoutModalProps) {

@@ -3,13 +3,13 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 51.2px;
 `;
 
 export const DropdownHeader = styled.div`
-  ${({ theme }) => theme.text.medium_20};
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.gray.gray_300};
-  height: 64px;
+  height: 51.2px;
   width: 100%;
   padding: 16px 20px;
   border-radius: 4px;

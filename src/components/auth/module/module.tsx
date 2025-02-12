@@ -4,8 +4,11 @@ import AuthButton from '@/components/auth/authButton/authButton';
 import CodeInput from '@/components/auth/codeInput/codeInput';
 import Input from '@/components/common/input/input';
 import ValidationMessage from '@/components/common/input/validationMessage';
+import LoadingSpinner from '@/components/common/loading/loadingSpinner';
 
 import * as S from './module.style';
+
+import CheckCircle from '@/assets/icons/check_circle_pri50.svg?react';
 
 type TModuleProps = {
   btnName?: string;
@@ -19,6 +22,7 @@ type TModuleProps = {
   pending?: boolean;
   value?: string;
   isUndefined?: boolean;
+  success?: boolean;
 };
 
 type TCodeModuleProps = {
@@ -31,10 +35,20 @@ type TCodeModuleProps = {
 
 // InputModule 컴포넌트
 export const InputModule = React.forwardRef<HTMLInputElement, TModuleProps>(
-  ({ btnName, valid, errorMessage, value, span, inputname, Name, isUndefined, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
+  ({ btnName, valid, errorMessage, value, span, inputname, Name, isUndefined, success, handleSendCode, top, pending, ...rest }: TModuleProps, ref) => {
     return (
       <S.Wrapper>
         {span && <span>{span}</span>}
+        {pending && !!btnName && (
+          <S.LoadingWrapper>
+            <LoadingSpinner />
+          </S.LoadingWrapper>
+        )}
+        {success && !!btnName && (
+          <S.LoadingWrapper>
+            <CheckCircle />
+          </S.LoadingWrapper>
+        )}
         <S.Wrapper2>
           <Input
             placeholder={Name}

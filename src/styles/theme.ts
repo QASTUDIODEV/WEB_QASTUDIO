@@ -101,6 +101,12 @@ const text = {
     line-height: 150%; 
     letter-spacing: 0.48px;
   `,
+  bold_32: `
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 150%;
+    letter-spacing: 0.96px;
+    `,
   medium_24: `
     font-size: 24px;
     font-weight: 500;

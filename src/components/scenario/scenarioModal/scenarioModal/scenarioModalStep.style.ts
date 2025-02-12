@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const ModalContainer = styled.div`
-  margin-top: 16px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
+  position: relative;
   width: 608px;
   ${media.desktop`
     width: 100%;
@@ -14,50 +15,53 @@ export const ModalContainer = styled.div`
 `;
 
 export const description = styled.div`
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-  font-family: Pretendard;
-  font-size: 19.2px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 28.8px */
-  letter-spacing: 0.384px;
+  ${({ theme }) => theme.text.medium_18};
 `;
 
 export const SubTitle = styled.p`
-  color: ${({ theme }) => theme.colors.primary.pri_50};
-  font-family: Pretendard;
+  ${({ theme }) => theme.text.medium_22};
   font-size: 17.6px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 26.4px */
-  letter-spacing: 0.352px;
+  white-space: nowrap;
+`;
+
+export const ValidationWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  top: 6px;
+  right: 0;
 `;
 
 export const InputWrapper = styled.div`
   flex-direction: column;
   display: flex;
-  gap: 10px;
+  gap: 3px;
+  position: relative;
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  justify-content: flex-end;
 `;
 
 export const TagContainer = styled.div`
   display: flex;
-  gap: 10px;
-  height: 40px;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+  height: 30px;
 `;
 
+//step:2
 export const ConfirmModalContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  width: 850px;
+  gap: 32px;
+  max-width: 608px;
+  ${media.desktop`
+    width: 100%;
+  `}
 `;
 
 export const DescriptionContainer = styled.div`
@@ -70,25 +74,31 @@ export const DescriptionItem = styled.div`
   gap: 40px;
 `;
 
+export const LoadingContainer2 = styled.div`
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
-  font-family: Pretendard;
+  ${({ theme }) => theme.text.medium_18};
   font-size: 14.4px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 21.6px */
-  letter-spacing: 0.288px;
 `;
 export const ScenarioContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
 `;
 export const MainScenarioWrapper = styled.div`
   display: flex;
-  height: 277px;
-  padding: 20px;
-  border-radius: 6.4px;
+  height: 222px;
+  padding: 16px;
+
   flex-direction: column;
   align-items: center;
   align-self: stretch;
@@ -102,12 +112,6 @@ export const ScenarioDescription = styled.div`
   flex-direction: column;
   gap: 10px;
   color: white;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: Pretendard;
+  ${({ theme }) => theme.text.medium_18};
   font-size: 17.6px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 26.4px */
-  letter-spacing: 0.352px;
 `;

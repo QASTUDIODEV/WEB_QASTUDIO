@@ -35,54 +35,33 @@ export default function CharacterHeader({ characterData, setIsExpanded, isExpand
   }
 
   return (
-    <>
-      {isEdit ? (
-        <S.CharacterHeader $isChecked={character.isChecked && true} $isEdit={isEdit}>
-          <S.CheckboxContainer>
-            <S.IconContainer>
-              <CheckBox characterId={characterId} isButtonGroup={false} />
-            </S.IconContainer>
-          </S.CheckboxContainer>
-          <S.Container2 onClick={() => setIsExpanded(!isExpanded)}>
-            <S.CharacterHeaderLeftSide>
-              <S.IconContainer>
-                <UserProfile />
-              </S.IconContainer>
-              <S.CharacterTitle>{characterData.characterName}</S.CharacterTitle>
-            </S.CharacterHeaderLeftSide>
-            <S.CharacterHeaderRightSide>
-              <S.Creater>
-                <UserCircle />
-                <p>{characterData.author}</p>
-              </S.Creater>
-              <S.Elapsed>
-                <Calender />
-                <p>{formatRelativeTime(characterData.createdAt)}</p>
-              </S.Elapsed>
-            </S.CharacterHeaderRightSide>
-          </S.Container2>
-        </S.CharacterHeader>
-      ) : (
-        <S.CharacterHeader $isChecked={character.isChecked} $isEdit={isEdit} $isSelected={isSelected} onClick={() => setIsExpanded(!isExpanded)}>
-          <S.CharacterHeaderLeftSide>
-            <div style={{ cursor: 'pointer' }}>{isExpanded ? <ArrowUp /> : <ArrowDown />}</div>
-            <S.IconContainer>
-              <UserProfile />
-            </S.IconContainer>
-            <S.CharacterTitle>{characterData.characterName}</S.CharacterTitle>
-          </S.CharacterHeaderLeftSide>
-          <S.CharacterHeaderRightSide>
-            <S.Creater>
-              <UserCircle />
-              <p>{characterData.author}</p>
-            </S.Creater>
-            <S.Elapsed>
-              <Calender />
-              <p>{formatRelativeTime(characterData.createdAt)}</p>
-            </S.Elapsed>
-          </S.CharacterHeaderRightSide>
-        </S.CharacterHeader>
+    <S.CharacterHeader $isChecked={character.isChecked && true} $isSelected={isSelected} $isEdit={isEdit}>
+      {isEdit && (
+        <S.CheckboxContainer>
+          <S.IconContainer>
+            <CheckBox characterId={characterId} isButtonGroup={false} />
+          </S.IconContainer>
+        </S.CheckboxContainer>
       )}
-    </>
+      <S.Container2 onClick={() => setIsExpanded(!isExpanded)}>
+        <S.CharacterHeaderLeftSide>
+          {isEdit === false && <div style={{ cursor: 'pointer' }}>{isExpanded ? <ArrowUp /> : <ArrowDown />}</div>}
+          <S.IconContainer>
+            <UserProfile />
+          </S.IconContainer>
+          <S.CharacterTitle>{characterData.characterName}</S.CharacterTitle>
+        </S.CharacterHeaderLeftSide>
+        <S.CharacterHeaderRightSide>
+          <S.Creater>
+            <UserCircle />
+            <p>{characterData.author}</p>
+          </S.Creater>
+          <S.Elapsed>
+            <Calender />
+            <p>{formatRelativeTime(characterData.createdAt)}</p>
+          </S.Elapsed>
+        </S.CharacterHeaderRightSide>
+      </S.Container2>
+    </S.CharacterHeader>
   );
 }

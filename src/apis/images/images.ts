@@ -7,10 +7,12 @@ import type {
   TUploadImageToPresignedUrlValue,
 } from '@/types/images/images';
 
+import { sanitizeFilename } from '@/utils/santizeFilename';
 import { axiosInstance } from '@/apis/axiosInstance';
 
 const getSinglePresignedUrl = async (fileName: TGetSinglePresignedUrlValue): Promise<TGetSinglePresignedUrlResponse> => {
-  const { data } = await axiosInstance.post('/api/v0/s3/presigned/upload', fileName);
+  const name = sanitizeFilename(fileName.fileName); // 파일명의 공백 _ 로 치환하는 함수
+  const { data } = await axiosInstance.post('/api/v0/s3/presigned/upload', { fileName: name });
   return data;
 };
 
