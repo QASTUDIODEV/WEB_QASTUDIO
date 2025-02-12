@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   max-width: 1000px;
@@ -15,9 +16,9 @@ const ButtonBox = styled.div`
   justify-content: end;
   width: 100%;
   gap: 10px;
-
+  margin-top: 20px;
   button {
-    padding: 7px 20px;
+    padding: 10px 20px;
   }
 `;
 
