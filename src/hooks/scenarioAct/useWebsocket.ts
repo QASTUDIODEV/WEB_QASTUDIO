@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { addWebSocketMessage, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
+import { addWebSocketMessage, setActionState, setLastActionId, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
 
 const useWebSocket = (url: string, isActive: boolean) => {
   const dispatch = useDispatch();
@@ -20,7 +20,6 @@ const useWebSocket = (url: string, isActive: boolean) => {
 
     socket.onopen = () => {
       console.log('WebSocket 연결 성공:', url);
-      dispatch(setWebSocketConnected(true));
     };
 
     socket.onmessage = async (event) => {
@@ -43,10 +42,13 @@ const useWebSocket = (url: string, isActive: boolean) => {
         console.log('파싱된 메시지:', parsedMessage);
 
         if (parsedMessage.sessionId) {
-          console.log(1);
           dispatch(setSessionId(parsedMessage.sessionId));
         } else if (parsedMessage.html && parsedMessage.css) {
-          console.log('🎨 iframe 업데이트 실행');
+          if (parsedMessage.phase === 'AFTER_ACTION') {
+            console.log('액션 원활');
+            dispatch(setLastActionId(parsedMessage.actionId));
+            dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
+          }
           dispatch(
             updateIframeContent({
               html: decodeHtml(parsedMessage.html),

@@ -10,7 +10,7 @@ import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Play from '@/assets/icons/play.svg?react';
-import { openScenario, setRunningScenario } from '@/slices/scenarioActSlice';
+import { openScenario, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
 interface IScenarioDropdownProp {
   scenarioId: number;
@@ -29,12 +29,11 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
   const { mutate: executeScenario } = usePlayScenario;
 
   // WebSocket 관리
-  const [isWebSocketActive, setIsWebSocketActive] = useState(false);
-  const { sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, isWebSocketActive);
+  const { sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, project.webSocket.isConnected);
 
   // WebSocket 메시지 수신 시, 현재 실행 중인 시나리오와 비교
   useEffect(() => {
-    if (!project.webSocket.sessionId || runningScenarioId !== scenarioId) return;
+    if (!project.webSocket.sessionId || !project.webSocket.isConnected || runningScenarioId !== scenarioId) return;
     console.log(`🔹 WebSocket에서 받은 sessionId: ${project.webSocket.sessionId}, 실행할 시나리오: ${scenarioId}`);
 
     executeScenario({
@@ -42,15 +41,12 @@ export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) 
       scenarioId,
       baseUrl: 'https://example.com',
     });
-
-    // 실행 후 실행 중인 시나리오 ID 초기화
-    dispatch(setRunningScenario(null));
   }, [project.webSocket.sessionId, runningScenarioId, executeScenario, scenarioId, dispatch]);
 
   // Play 버튼 클릭 시 실행 중인 시나리오 ID 설정
   const handlePlay = () => {
     // 실행 중인 시나리오 설정
-    setIsWebSocketActive(true);
+    dispatch(setWebSocketConnected(true));
     dispatch(setRunningScenario(scenarioId));
   };
 

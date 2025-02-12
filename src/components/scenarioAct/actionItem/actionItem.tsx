@@ -29,15 +29,14 @@ interface IActionItem {
 // 상태 아이콘 매핑
 const stateIconMap = {
   [ACTION_STATE.SUCCESS]: CheckCircle,
-  [ACTION_STATE.ERROR]: FailCircle,
+  [ACTION_STATE.FAIL]: FailCircle,
   [ACTION_STATE.UNVERIFIED]: null,
 };
 
 // 액션 아이콘 매핑
 const actionIconMap = {
-  [ACTION_TYPE.NAVIGATE]: Globe,
   [ACTION_TYPE.CLICK]: Click,
-  [ACTION_TYPE.SEND_KEYS]: null,
+  [ACTION_TYPE.SEND_KEYS]: Globe,
 };
 
 const locatorList = ['id', 'css_selector', 'xpath'];
@@ -46,12 +45,15 @@ const actionList = ['click', 'send_keys'];
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const actionState = ACTION_STATE.SUCCESS;
 
   // 액션 가져오기
   const action = useSelector((state) =>
     state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId),
   );
+  const actionState =
+    useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId)?.state) ||
+    null;
+
   // Redux에서 현재 선택된 요소 정보 가져오기
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   // refetch할때 필요
@@ -73,7 +75,6 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
 
   useEffect(() => {
     if (isInputFocused && isClicked) {
-      console.log(1);
       setLocatorInputValue(
         locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '',
       );
@@ -136,7 +137,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
     }, 100);
   };
   // 마지막 액션인지 확인
-  const lastActionId = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.lastActionId);
+  const lastActionId = useSelector((state) => state.scenarioAct.webSocket.lastActionId);
   const isLastAction = lastActionId === actionId;
 
   return (
@@ -148,7 +149,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
           <S.ActionName>{action?.actionDescription}</S.ActionName>
           <S.ActionType>{action?.actionType}</S.ActionType>
         </S.Content>
-        {actionState && <S.IconContainer>{getIcon(stateIconMap, actionState)}</S.IconContainer>}
+        <S.IconContainer>{actionState !== null ? getIcon(stateIconMap, actionState) : null}</S.IconContainer>
       </S.Header>
 
       {/* 세부 사항 */}
@@ -196,11 +197,11 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
 
       {/* 언더라인 */}
       {isLastAction &&
-        (actionState === ACTION_STATE.SUCCESS ? (
+        (actionState == ACTION_STATE.SUCCESS ? (
           <S.UnderIcon>
             <UnderSuccess />
           </S.UnderIcon>
-        ) : actionState === ACTION_STATE.ERROR ? (
+        ) : actionState == ACTION_STATE.FAIL ? (
           <div>
             <S.UnderIcon>
               <UnderError />

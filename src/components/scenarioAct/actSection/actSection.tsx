@@ -37,7 +37,7 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
   const lastHighlightedElement = useRef<HTMLElement | null>(null);
   const styleTagRef = useRef<HTMLStyleElement | null>(null);
 
-  // 🔹 `useRef`를 사용하여 최신 `currentLocator` 상태 유지
+  // `useRef`를 사용하여 최신 `currentLocator` 상태 유지
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   const latestLocator = useRef(currentLocator);
 
@@ -117,7 +117,7 @@ function InnerComponent({ htmlContent, cssContent }: { htmlContent: string; cssC
         link.removeEventListener('click', disableLinks);
       });
 
-      // 🔹 기존 스타일 제거
+      // 기존 스타일 제거
       try {
         if (styleTagRef.current && styleTagRef.current.parentNode) {
           styleTagRef.current.parentNode.removeChild(styleTagRef.current);

@@ -1,11 +1,14 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { ACTION_STATE } from '@/enums/enums';
+
 interface IWebSocketState {
   runningScenarioId: number | null;
   isConnected: boolean;
   messages: string[];
   sessionId: string | null;
+  lastActionId: number | null;
 }
 
 interface IAction {
@@ -13,6 +16,7 @@ interface IAction {
   actionDescription: string;
   step: number;
   actionType: string;
+  state: ACTION_STATE;
   locator: {
     strategy: string;
     value: string;
@@ -29,7 +33,6 @@ interface IScenario {
   scenarioDescription: string;
   actions: IAction[];
   isOpen: boolean;
-  lastActionId: number | null;
 }
 
 interface ICharacter {
@@ -86,6 +89,10 @@ interface IScenarioPayload {
     },
   ];
 }
+interface IActionPayload {
+  actionId: number;
+  state: ACTION_STATE;
+}
 
 // 초기 상태
 const initialState: IScenarioActSlice = {
@@ -100,6 +107,7 @@ const initialState: IScenarioActSlice = {
     isConnected: false,
     messages: [],
     sessionId: null,
+    lastActionId: null,
   },
   currentHtml: `<div >
   <h1 >Example Domain</h1>
@@ -176,10 +184,15 @@ const scenarioActSlice = createSlice({
     },
     // 시나리오 리스트 설정
     setScenarioList: (state, action: PayloadAction<IScenarioPayload>) => {
+      console.log(action.payload.scenarios);
       state.scenarios = action.payload.scenarios.map((scn) => ({
         ...scn,
         isOpen: false,
         lastActionId: null,
+        actions: scn.actions.map((act) => ({
+          ...act,
+          state: ACTION_STATE.UNVERIFIED, // state: null
+        })),
       }));
     },
 
@@ -205,7 +218,6 @@ const scenarioActSlice = createSlice({
       state.currentLocator.isInputFocused = false;
     },
     clickLocatorInput: (state, action: PayloadAction<boolean>) => {
-      console.log('클릭');
       state.currentLocator.isClicked = action.payload;
     },
     setCurrentLocator: (state, action: PayloadAction<{ actionId: number; id: string; cssSelector: string; xPath: string }>) => {
@@ -225,7 +237,6 @@ const scenarioActSlice = createSlice({
       state.webSocket.messages.push(action.payload);
     },
     setSessionId: (state, action: PayloadAction<string | null>) => {
-      console.log(action.payload);
       state.webSocket.sessionId = action.payload;
     },
     updateIframeContent: (state, action: PayloadAction<{ html: string; css: string }>) => {
@@ -237,6 +248,24 @@ const scenarioActSlice = createSlice({
     // 실행중인 시나리오
     setRunningScenario: (state, action: PayloadAction<number | null>) => {
       state.webSocket.runningScenarioId = action.payload;
+    },
+    // 가장최근 실행된 액션
+    setLastActionId: (state, action: PayloadAction<number | null>) => {
+      state.webSocket.lastActionId = action.payload;
+    },
+    // 액션상태
+    setActionState: (state, action: PayloadAction<IActionPayload>) => {
+      // 실행 중인 시나리오 찾기
+      const scenarioIndex = state.scenarios.findIndex((scn) => scn.scenarioId === state.webSocket.runningScenarioId);
+      if (scenarioIndex === -1) return;
+      // 시나리오 내부의 액션 찾기
+      const actionIndex = state.scenarios[scenarioIndex].actions.findIndex((act) => act.actionId === action.payload.actionId);
+      if (actionIndex === -1) return;
+      // 새로운 배열로 업데이트 (불변성 유지)
+      state.scenarios[scenarioIndex].actions[actionIndex] = {
+        ...state.scenarios[scenarioIndex].actions[actionIndex],
+        state: action.payload.state,
+      };
     },
   },
 });
@@ -258,5 +287,7 @@ export const {
   setCurrentLocator,
   setRunningScenario,
   clickLocatorInput,
+  setLastActionId,
+  setActionState,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

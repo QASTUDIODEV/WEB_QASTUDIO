@@ -11,9 +11,9 @@ export enum STACK {
 }
 // 액션 상태
 export enum ACTION_STATE {
-  SUCCESS = 'success',
-  ERROR = 'error',
-  UNVERIFIED = 'null',
+  SUCCESS = 'SUCCESS',
+  FAIL = 'FAIL',
+  UNVERIFIED = 'UNVERIFIED',
 }
 // 액션 상태
 export enum ACTION_TYPE {
