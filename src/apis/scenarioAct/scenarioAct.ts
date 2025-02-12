@@ -4,6 +4,8 @@ import type {
   TEditActionResponse,
   TEditActionValues,
   TExecuteScenarioValues,
+  TFetchPageSourceResponse,
+  TFetchPageSourceValues,
   TGetCharacterListResponse,
   TGetProjectInfoResponse,
   TGetProjectInfoValues,
@@ -45,4 +47,10 @@ const executeScenario = async (values: TExecuteScenarioValues): Promise<TCreateS
   return data;
 };
 
-export { createScenario, editAction, executeScenario, getCharacterList, getProjectInfo, getScenarioList };
+const fetchPageSource = async ({ targetUrl }: TFetchPageSourceValues): Promise<TFetchPageSourceResponse> => {
+  console.log(targetUrl);
+  const { data } = await axiosInstance.post(`/api/v0/selenium/fetchPageSource`, { targetUrl });
+  return data;
+};
+
+export { createScenario, editAction, executeScenario, fetchPageSource, getCharacterList, getProjectInfo, getScenarioList };

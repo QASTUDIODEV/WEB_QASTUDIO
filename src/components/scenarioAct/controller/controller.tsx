@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useSelector } from '@/hooks/common/useCustomRedux';
+import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
 
 import Button from '@/components/common/button/button';
 import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
@@ -23,10 +24,11 @@ export default function Controller() {
   const handleStep = (selectedStep: number) => {
     setStep(selectedStep);
   };
-
+  useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
   const handleGoBack = () => {
     window.history.back();
   };
+
   return (
     <S.Container>
       {step === 1 ? (
@@ -72,7 +74,7 @@ export default function Controller() {
             <p>Add Scenario</p>
           </S.Header>
 
-          {/* 수많은 인풋들 */}
+          {/*인풋들 */}
           <AddInputForm />
         </S.AddContainer>
       )}

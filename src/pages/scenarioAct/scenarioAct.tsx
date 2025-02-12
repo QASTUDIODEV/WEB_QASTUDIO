@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useFetchPageSource from '@/hooks/scenarioAct/useFetchPageSource';
 import useProjectInfo from '@/hooks/scenarioAct/useProjectInfo';
 import useScenarioList from '@/hooks/scenarioAct/useScenarioList';
 
@@ -11,9 +12,10 @@ import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
 
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
-import { setScenarioList } from '@/slices/scenarioActSlice';
+import { setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
 
 export default function ScenarioActPage() {
+  const dispatch = useDispatch();
   const { projectId: stringProjectId } = useParams<{ projectId: string }>();
   const projectId = stringProjectId ? Number(stringProjectId) : undefined;
   const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
@@ -24,16 +26,28 @@ export default function ScenarioActPage() {
 
   const { useGetScenarioList } = useScenarioList(selectedCharacterId);
   const { isLoading: scenarioListLoading } = useGetScenarioList;
-
-  // 시나리오 리스트는 refetch할 때 선언되서 useEffect빼놈
-  const dispatch = useDispatch();
+  // 시나리오 리스트는 refetch할 때 선언되서 useEffect 분리
   useEffect(() => {
     if (useGetScenarioList.data?.result?.scenarios) {
       dispatch(setScenarioList(useGetScenarioList.data.result));
     }
   }, [useGetScenarioList.data, dispatch]);
 
-  if (projectInfoLoading || characterListLoading || scenarioListLoading) {
+  const { useFetchInitialPage } = useFetchPageSource();
+  const { mutate: fetchPageSource, isPending } = useFetchInitialPage;
+  useEffect(() => {
+    fetchPageSource(
+      { targetUrl: 'https://example.com' },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          dispatch(updateIframeContent({ html: data.result.html, css: data.result.css }));
+        },
+      },
+    );
+  }, [fetchPageSource, dispatch]);
+
+  if (projectInfoLoading || characterListLoading || scenarioListLoading || isPending) {
     return (
       <S.LoadingContainer>
         <Loading />

@@ -46,20 +46,21 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  // 액션 가져오기
+  // 액션
   const action = useSelector((state) =>
     state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId),
   );
+  // 액션 상태
   const actionState =
     useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId)?.actions.find((act) => act.actionId === actionId)?.state) ||
     null;
 
-  // Redux에서 현재 선택된 요소 정보 가져오기
+  // iframe element 선택
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
-  // refetch할때 필요
   const characterId = useSelector((state) => state.scenarioAct.characterId);
   const isInputFocused = currentLocator.isInputFocused && currentLocator.actionId === actionId;
   const isClicked = currentLocator.isClicked;
+
   // 상태 관리
   const [locatorStrategy, setLocatorStrategy] = useState(action?.locator.strategy || '');
   const [actionType, setActionType] = useState(action?.action.type || '');
@@ -69,7 +70,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const { useEditAction } = useAction(characterId);
   const { mutate: editMutate, isPending } = useEditAction;
 
-  // 변경 감지하여 Apply 버튼 활성화
+  //Apply 버튼 활성화
   const isLocatorApplyDisabled = locatorStrategy === action?.locator.strategy && locatorInputValue === action?.locator.value;
   const isActionApplyDisabled = actionType === action?.action.type && actionInputValue === action?.action.value;
 
@@ -82,7 +83,11 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
     }
   }, [currentLocator, isInputFocused, locatorStrategy, isClicked]);
 
-  // Locator 적용
+  // 가장 최근 액션인지
+  const lastActionId = useSelector((state) => state.scenarioAct.webSocket.lastActionId);
+  const isLastAction = lastActionId === actionId;
+
+  // Locator 수정
   const onSubmitLocator = () => {
     editMutate({
       actionId: action?.actionId,
@@ -99,7 +104,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
     });
   };
 
-  // Action 적용
+  // Action 수정
   const onSubmitAction = () => {
     editMutate({
       actionId: action?.actionId,
@@ -128,17 +133,16 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const handleIsOpen = (): void => {
     setIsOpen((prev) => !prev);
   };
+  // 인풋 포커스
   const handleFocus = () => {
     dispatch(focusLocatorInput(actionId));
   };
+  // 인풋 포커스 해제
   const handleBlur = () => {
     setTimeout(() => {
       dispatch(blurLocatorInput());
     }, 100);
   };
-  // 마지막 액션인지 확인
-  const lastActionId = useSelector((state) => state.scenarioAct.webSocket.lastActionId);
-  const isLastAction = lastActionId === actionId;
 
   return (
     <S.Container $isError={false}>
@@ -181,7 +185,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
               </S.DropdownContainer>
             </S.DescriptionRow>
             <S.DescriptionRow>
-              {/* 특정 Action Type일 때만 Input 표시 */}
+              {/* send_keys일 때만 Input 표시 */}
               {['send_keys'].includes(actionType) && (
                 <S.DescriptionRow>
                   <S.Input value={actionInputValue} onChange={(e) => setActionInputValue(e.target.value)} />

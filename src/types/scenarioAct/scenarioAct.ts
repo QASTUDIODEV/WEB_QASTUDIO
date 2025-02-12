@@ -70,6 +70,13 @@ export type TCreateScenarioResponse = TCommonResponse<{
   scenarioDescription: string;
 }>;
 
+export type TFetchPageSourceResponse = TCommonResponse<{
+  status: string;
+  logs: string[];
+  html: string;
+  css: string;
+}>;
+
 // --value--
 export type TGetProjectInfoValues = {
   projectId?: number;
@@ -118,4 +125,8 @@ export type TExecuteScenarioValues = {
   sessionId: string | null;
   scenarioId: number | null;
   baseUrl: string | null;
+};
+
+export type TFetchPageSourceValues = {
+  targetUrl: string | null;
 };

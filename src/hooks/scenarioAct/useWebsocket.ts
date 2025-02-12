@@ -1,19 +1,20 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import { addWebSocketMessage, setActionState, setLastActionId, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
 
-const useWebSocket = (url: string, isActive: boolean) => {
+const useWebSocket = (url: string) => {
   const dispatch = useDispatch();
   const socketRef = useRef<WebSocket | null>(null);
-
+  const isConnected = useSelector((state) => state.scenarioAct.webSocket.isConnected);
   // 이스케이프 문자 처리
   const decodeHtml = (escapedStr: string) => {
     return escapedStr.replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\"/g, '"').replace(/\\\//g, '/');
   };
 
   useEffect(() => {
-    if (!isActive || socketRef.current) return;
+    if (socketRef.current || !isConnected) return;
 
     const socket = new WebSocket(url);
     socketRef.current = socket;
@@ -23,19 +24,16 @@ const useWebSocket = (url: string, isActive: boolean) => {
     };
 
     socket.onmessage = async (event) => {
-      console.log('수신된 메시지 (Raw):', event.data);
+      console.log('수신 메시지:', event.data);
 
       try {
         let parsedMessage;
         if (event.data instanceof Blob) {
-          console.log('Blob 데이터 감지');
           const text = await event.data.text();
           parsedMessage = JSON.parse(text);
         } else if (typeof event.data === 'string') {
-          console.log('문자열 데이터 감지');
           parsedMessage = JSON.parse(event.data);
         } else {
-          console.log('JSON 객체 감지');
           parsedMessage = event.data;
         }
 
@@ -45,7 +43,6 @@ const useWebSocket = (url: string, isActive: boolean) => {
           dispatch(setSessionId(parsedMessage.sessionId));
         } else if (parsedMessage.html && parsedMessage.css) {
           if (parsedMessage.phase === 'AFTER_ACTION') {
-            console.log('액션 원활');
             dispatch(setLastActionId(parsedMessage.actionId));
             dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
           }
@@ -78,7 +75,7 @@ const useWebSocket = (url: string, isActive: boolean) => {
         socketRef.current.close();
       }
     };
-  }, [url, dispatch, isActive]);
+  }, [url, dispatch, isConnected]);
 
   const sendMessage = (message: string) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

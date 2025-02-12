@@ -19,12 +19,11 @@ export default function CharacterSelectDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Redux 상태와 동기화
   useEffect(() => {
     if (selectedCharacter) {
       dispatch(setCharacterId(selectedCharacter.characterId));
     }
-  }, [selectedCharacter, dispatch]);
+  }, []);
 
   // 드롭다운 토글 함수
   const toggleDropdown = () => {
@@ -33,8 +32,8 @@ export default function CharacterSelectDropdown() {
 
   // 캐릭터 선택 함수
   const handleOptionClick = (characterId: number) => {
-    dispatch(setCharacterId(characterId));
     setIsOpen(false);
+    dispatch(setCharacterId(characterId));
   };
 
   // 외부 클릭 시 드롭다운 닫기

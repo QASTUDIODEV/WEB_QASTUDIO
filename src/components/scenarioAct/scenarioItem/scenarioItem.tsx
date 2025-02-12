@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useExecuteScenario from '@/hooks/scenarioAct/useExecuteScenario';
-import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
 
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
 import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
@@ -12,42 +11,41 @@ import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Play from '@/assets/icons/play.svg?react';
 import { openScenario, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
-interface IScenarioDropdownProp {
+interface IScenarioItemProp {
   scenarioId: number;
 }
 
-export default function ScenarioDropdown({ scenarioId }: IScenarioDropdownProp) {
+export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
   const project = useSelector((state) => state.scenarioAct);
 
-  // 현재 실행 중인 시나리오 ID 가져오기
   const runningScenarioId = useSelector((state) => state.scenarioAct.webSocket.runningScenarioId);
 
   // API 실행
   const { usePlayScenario } = useExecuteScenario();
   const { mutate: executeScenario } = usePlayScenario;
 
-  // WebSocket 관리
-  const { sendMessage } = useWebSocket(import.meta.env.VITE_WEBSOCKET_URL, project.webSocket.isConnected);
-
-  // WebSocket 메시지 수신 시, 현재 실행 중인 시나리오와 비교
+  // 웹소켓 실행
   useEffect(() => {
-    if (!project.webSocket.sessionId || !project.webSocket.isConnected || runningScenarioId !== scenarioId) return;
-    console.log(`🔹 WebSocket에서 받은 sessionId: ${project.webSocket.sessionId}, 실행할 시나리오: ${scenarioId}`);
+    if (!project.webSocket.sessionId || !project.webSocket.isConnected) return;
+    if (runningScenarioId === scenarioId) {
+      console.log(`🔹 WebSocket에서 받은 sessionId: ${project.webSocket.sessionId}, 실행할 시나리오: ${scenarioId}`);
 
-    executeScenario({
-      sessionId: project.webSocket.sessionId,
-      scenarioId,
-      baseUrl: 'https://example.com',
-    });
-  }, [project.webSocket.sessionId, runningScenarioId, executeScenario, scenarioId, dispatch]);
+      executeScenario({
+        sessionId: project.webSocket.sessionId,
+        scenarioId,
+        baseUrl: 'https://example.com',
+      });
+    }
+  }, [project.webSocket.sessionId, runningScenarioId, executeScenario, scenarioId]);
 
-  // Play 버튼 클릭 시 실행 중인 시나리오 ID 설정
+  // Play 버튼
   const handlePlay = () => {
-    // 실행 중인 시나리오 설정
     dispatch(setWebSocketConnected(true));
-    dispatch(setRunningScenario(scenarioId));
+    setTimeout(() => {
+      dispatch(setRunningScenario(scenarioId));
+    }, 100); // 상태 반영 후 실행되도록
   };
 
   const handleOpen = () => {

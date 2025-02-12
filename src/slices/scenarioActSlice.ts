@@ -78,6 +78,20 @@ interface IScenarioActSlice {
 interface ICharacterPayload {
   detailCharacters: { characterId: number; characterName: string }[];
 }
+interface IActionsPayload {
+  actionId: number;
+  actionDescription: string;
+  step: number;
+  actionType: string;
+  locator: {
+    strategy: string;
+    value: string;
+  };
+  action: {
+    type: string;
+    value: string;
+  };
+}
 
 interface IScenarioPayload {
   scenarios: [
@@ -85,7 +99,7 @@ interface IScenarioPayload {
       scenarioId: number;
       scenarioName: string;
       scenarioDescription: string;
-      actions: IAction[];
+      actions: IActionsPayload[];
     },
   ];
 }
@@ -250,7 +264,7 @@ const scenarioActSlice = createSlice({
           background-color: rgba(255, 235, 59, 0.2);
         }`;
     },
-    // 실행중인 시나리오
+    // 실행중인 시나리오 설정
     setRunningScenario: (state, action: PayloadAction<number | null>) => {
       state.webSocket.runningScenarioId = action.payload;
     },

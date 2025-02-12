@@ -16,8 +16,8 @@ import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
 import { addAction } from '@/slices/scenarioActSlice';
 
-const locatorList = ['id', 'name', 'class_name', 'tag_name', 'link_text', 'partial_link_text', 'css_selector', 'xpath'];
-const actionList = ['click', 'send_keys', 'clear', 'get_attribute', 'text', 'is_displayed', 'is_enabled', 'is_selected', 'get_screenshot_as_file'];
+const locatorList = ['id', 'css_selector', 'xpath'];
+const actionList = ['click', 'send_keys'];
 export default function AddInputForm() {
   const dispatch = useDispatch();
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
