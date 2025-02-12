@@ -1,29 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 
 import type { TTestListDTO } from '@/types/test/test';
-import { TEST_STATE } from '@/enums/enums.ts';
+import { TEST_STATE } from '@/enums/enums';
+
+import { getSelectName } from '@/utils/getSelectName';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
-import useDebounce from '@/hooks/common/useDebounce';
+import useTableFilter from '@/hooks/dashborad/useTableFilter';
 import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
-import SearchBar from '@/components/common/searchBar/searchBar';
-import Calendar from '@/components/dashboard/calendar/calendar';
 import ProgressBar from '@/components/dashboard/progressBar/progressBar';
+import SearchBar from '@/components/dashboard/searchBar/searchBar';
+import DateHeader from '@/components/dashboard/table/dateHeader';
 import PageNameHeader from '@/components/dashboard/table/pageNameHeader';
 import StateHeader from '@/components/dashboard/table/stateHeader';
 import * as S from '@/components/dashboard/table/table.style';
 
-import DownArrow from '@/assets/icons/arrow_down.svg?react';
-import PreArrow from '@/assets/icons/arrow_left.svg?react';
-import NextArrow from '@/assets/icons/arrow_right.svg?react';
-import GreenArrow from '@/assets/icons/arrow_right_green.svg?react';
-import RedArrow from '@/assets/icons/arrow_right_red.svg?react';
-import UpArrow from '@/assets/icons/arrow_up.svg?react';
+import { GreenArrow, NextArrow, PreArrow, RedArrow } from '@/assets/icons';
 import { openModal } from '@/slices/modalSlice';
 
 const columnHelper = createColumnHelper<TTestListDTO>();
@@ -33,38 +30,24 @@ export default function Table() {
   const dispatch = useDispatch();
   const { projectId } = useParams();
   const { date } = useSelector((state) => state.calendar);
-
-  const [search, setSearch] = useState<string>('');
-  const debouncedSearch = useDebounce(search, 500);
-
-  const [isClicked, setIsClicked] = useState({
-    state: false,
-    date: false,
-  });
-
-  const [selectedPageName, setSelectedPageName] = useState<string | null>(null);
-  const [selectState, setSelectState] = useState<TEST_STATE | null>(null);
+  const { state, testName, pageName, setFilters } = useTableFilter();
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 6,
   });
 
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [selectState, selectedPageName, date, debouncedSearch]);
-
   const { data: listData } = usePaginateTestList({
     projectId: Number(projectId),
     page: pagination.pageIndex,
-    state: selectState ?? null,
-    testName: debouncedSearch,
-    date: date,
-    pageName: selectedPageName ?? null,
+    state,
+    testName,
+    date,
+    pageName,
   });
 
-  const handleModal = ({ state, testId }: { state: boolean; testId: number }) => {
-    if (state) {
+  const handleModal = ({ success, testId }: { success: boolean; testId: number }) => {
+    if (success) {
       navigate(`/scenarioAct/${projectId}`);
     } else {
       dispatch(openModal({ modalType: MODAL_TYPES.ErrorModal, modalProps: { testId: testId } }));
@@ -73,23 +56,7 @@ export default function Table() {
 
   const columns = [
     columnHelper.accessor('testDate', {
-      header: ({ column }) => (
-        <S.HeaderWrapper>
-          <S.ButtonHeader
-            onClick={() =>
-              setIsClicked((prev) => ({
-                ...prev,
-                date: !prev.date,
-              }))
-            }
-          >
-            <p>Date</p>
-            {column.getIsSorted() ? <UpArrow /> : <DownArrow />}
-          </S.ButtonHeader>
-
-          {isClicked.date && <Calendar />}
-        </S.HeaderWrapper>
-      ),
+      header: ({ column }) => <DateHeader column={column} />,
       cell: (info) => info.getValue(),
       size: 400,
     }),
@@ -99,7 +66,7 @@ export default function Table() {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('pageName', {
-      header: () => <PageNameHeader onSelect={setSelectedPageName} />,
+      header: () => <PageNameHeader />,
       size: 200,
       cell: (info) => info.getValue(),
     }),
@@ -109,9 +76,9 @@ export default function Table() {
       cell: (info) => <ProgressBar percent={info.getValue()} />,
     }),
     columnHelper.accessor('state', {
-      header: () => <StateHeader onSelect={setSelectState} />,
+      header: () => <StateHeader />,
       size: 200,
-      cell: (info) => <S.State $isSuccess={info.getValue() === TEST_STATE.SUCCESS}>{info.getValue() === TEST_STATE.SUCCESS ? 'Success' : 'Fail'}</S.State>,
+      cell: (info) => <S.State $isSuccess={info.getValue() === TEST_STATE.SUCCESS}>{getSelectName(info.getValue())}</S.State>,
     }),
     columnHelper.accessor('time', {
       header: 'Time',
@@ -129,7 +96,7 @@ export default function Table() {
       cell: (info) => (
         <S.Action
           $isSuccess={info.row.original.state === TEST_STATE.SUCCESS}
-          onClick={() => handleModal({ state: info.row.original.state === TEST_STATE.SUCCESS, testId: info.row.original.testId })}
+          onClick={() => handleModal({ success: info.row.original.state === TEST_STATE.SUCCESS, testId: info.row.original.testId })}
         >
           <p>{info.row.original.state === TEST_STATE.SUCCESS ? 'Run Scenario' : 'Check the error'}</p>
           {info.row.original.state === TEST_STATE.SUCCESS ? <GreenArrow /> : <RedArrow />}
@@ -173,7 +140,7 @@ export default function Table() {
   return (
     <>
       <S.SearchBox>
-        <SearchBar placeholder={'Search by name'} value={search} onChange={(e) => setSearch(e.target.value)} />
+        <SearchBar setFilters={setFilters} />
       </S.SearchBox>
       <S.TableContainer>
         <S.TableWrapper>

@@ -6,20 +6,15 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import SelectBox from '@/components/dashboard/selectBox/selectBox';
 import * as S from '@/components/dashboard/table/table.style';
 
-import DownArrow from '@/assets/icons/arrow_down.svg?react';
-import UpArrow from '@/assets/icons/arrow_up.svg?react';
+import { DownArrow, UpArrow } from '@/assets/icons';
 
-interface IProps {
-  onSelect: (value: string) => void;
-}
-
-export default function PageNameHeader({ onSelect }: IProps) {
+export default function PageNameHeader() {
   const [isClicked, setIsClicked] = useState(false);
-
   const { projectId } = useParams();
   const { useGetPageSummary } = useProjectInfo({ projectId: Number(projectId) });
   const { data } = useGetPageSummary;
-  const PAGE_NAMES = data?.result.pageSummaryList.map((page) => page.pageName) ?? [];
+
+  const PAGE_NAMES = ['All', ...(data?.result.pageSummaryList.map((page) => page.pageName) ?? [])];
 
   return (
     <S.HeaderWrapper>
@@ -27,7 +22,7 @@ export default function PageNameHeader({ onSelect }: IProps) {
         <p>Page</p>
         {isClicked ? <UpArrow /> : <DownArrow />}
       </S.ButtonHeader>
-      {isClicked && <SelectBox<string> selectList={PAGE_NAMES} onSelect={onSelect} />}
+      {isClicked && <SelectBox<string> selectList={PAGE_NAMES} filterKey={'pageName'} />}
     </S.HeaderWrapper>
   );
 }
