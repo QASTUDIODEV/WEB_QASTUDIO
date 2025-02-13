@@ -38,7 +38,7 @@ export default function Table() {
     pageSize: 6,
   });
 
-  const { data: listData } = usePaginateTestList({
+  const { data: listData, isPending } = usePaginateTestList({
     projectId,
     page: pagination.pageIndex,
     state,
@@ -134,6 +134,17 @@ export default function Table() {
             ))}
           </S.Tr>
         ))}
+      </>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <>
+        <S.SearchBox>
+          <SearchBar setFilters={setFilters} />
+        </S.SearchBox>
+        <S.Skeleton />
       </>
     );
   }
