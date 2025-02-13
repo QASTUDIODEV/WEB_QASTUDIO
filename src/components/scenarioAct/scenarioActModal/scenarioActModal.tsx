@@ -11,7 +11,6 @@ type TErrorProps = {
 
 export default function scenarioActModal({ onClose, testId = 0 }: TErrorProps) {
   const { data } = useGetError({ testId });
-
   return (
     <Modal title={data?.result.testName} onClose={onClose}>
       <S.Container>

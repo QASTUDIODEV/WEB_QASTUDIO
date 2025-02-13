@@ -7,7 +7,6 @@ import Button from '@/components/common/button/button';
 import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
 import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 import * as S from '@/components/scenarioAct/controller/controller.style';
-import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
 import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
 
 import Add from '@/assets/icons/add.svg?react';
@@ -17,7 +16,6 @@ import Exit from '@/assets/icons/exit.svg?react';
 export default function Controller() {
   const scenario = useSelector((state) => state.scenarioAct);
 
-  const { isOpen } = useSelector((state) => state.modal);
   const [step, setStep] = useState<number>(1);
 
   // 스텝 함수
@@ -34,7 +32,6 @@ export default function Controller() {
       {step === 1 ? (
         /* 시나리오 실행 */
         <S.ActContainer>
-          {isOpen && <ScenarioActModal />}
           {/* 헤더 */}
           <S.Header>
             <p>{scenario.projectName}</p>
