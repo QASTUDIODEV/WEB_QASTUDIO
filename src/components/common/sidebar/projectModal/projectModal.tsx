@@ -30,6 +30,7 @@ type TEmailList = {
 }[];
 export default function ProjectModal({ onClose }: TProjectModalProps) {
   const [emails, setEmails] = useState<string[]>([]);
+  const [emailErrorMsg, setEmailErrorMsg] = useState<string | null | undefined>('');
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
   const { mutate: addProject, isPending } = useAddProject;
@@ -59,8 +60,9 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
   let isImg: boolean = true;
   const [error, setError] = useState(false);
   useEffect(() => {
-    if (emailValue && error) {
+    if (emailValue && (error || emailErrorMsg)) {
       setError(false);
+      setEmailErrorMsg(null);
     }
   }, [emailValue]);
 
@@ -96,6 +98,10 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
           setEmails([]);
           onClose();
+        },
+        onError: (err) => {
+          setEmailErrorMsg(err.response?.data.message);
+          setEmails([]);
         },
       },
     );
@@ -224,7 +230,10 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               Share
             </Button>
           </S.BtnWrapper>
-          {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {(emailErrorMsg || errors.email?.message) && (
+            <ValidataionMessage message={emailErrorMsg ?? errors.email?.message ?? ''} isError={!!(emailErrorMsg || errors.email)} />
+          )}
+
           {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
           <S.tagWrapper>
             {emails.map((em) => (
