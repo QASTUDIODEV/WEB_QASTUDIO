@@ -15,7 +15,6 @@ export const ScenarioHeader = styled.div<{ $isOpen: boolean | undefined }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
   ${({ $isOpen }) =>
     $isOpen &&
     `
@@ -45,6 +44,8 @@ export const IconContainer = styled.div`
   align-items: center;
   width: 19.2px;
   height: 19.2px;
+  cursor: pointer;
+  pointer-events: all;
   svg {
     width: 100%;
     height: 100%;

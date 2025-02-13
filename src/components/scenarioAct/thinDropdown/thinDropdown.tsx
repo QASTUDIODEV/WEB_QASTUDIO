@@ -21,7 +21,7 @@ export default function ThinDropdown({ options, onSelect, placeholder, value, on
   const handleSelect = (option: string) => {
     setSelected(option);
     onChange?.(option);
-    onSelect?.(option); // 기존 onSelect 호출 (옵션)
+    onSelect?.(option);
     setIsOpen(false);
   };
 
