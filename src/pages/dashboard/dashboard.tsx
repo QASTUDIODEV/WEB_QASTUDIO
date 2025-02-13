@@ -12,7 +12,7 @@ import * as S from '@/pages/dashboard/dashboard.style';
 export default function DashboardPage() {
   const { projectId: id } = useParams();
   const projectId = useMemo(() => Number(id), [id]);
-  const { data: statisticsData, isPending } = useGetStatistics({ projectId: Number(projectId) });
+  const { data: statisticsData, isPending } = useGetStatistics({ projectId });
 
   if (isPending) {
     return (
