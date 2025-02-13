@@ -70,12 +70,12 @@ export type TCreateScenarioResponse = TCommonResponse<{
   scenarioDescription: string;
 }>;
 
-export type TFetchPageSourceResponse = TCommonResponse<{
+export type TFetchPageSourceResponse = {
   status: string;
   logs: string[];
   html: string;
   css: string;
-}>;
+};
 
 // --value--
 export type TGetProjectInfoValues = {

@@ -21,7 +21,7 @@ export default function ScenarioActPage() {
   const selectedCharacterId = useSelector((state) => state.scenarioAct.characterId);
 
   const { useGetProjectInfo, useGetCharacterList } = useProjectInfo(projectId);
-  const { isLoading: projectInfoLoading } = useGetProjectInfo;
+  const { data: projectInfo, isLoading: projectInfoLoading } = useGetProjectInfo;
   const { isLoading: characterListLoading } = useGetCharacterList;
 
   // 케릭터 id선택시 에러나는 이유
@@ -36,17 +36,19 @@ export default function ScenarioActPage() {
 
   const { useFetchInitialPage } = useFetchPageSource();
   const { mutate: fetchPageSource, isPending } = useFetchInitialPage;
+
   useEffect(() => {
-    fetchPageSource(
-      { targetUrl: 'https://example.com' },
-      {
-        onSuccess: (data) => {
-          console.log(data);
-          dispatch(updateIframeContent({ html: data.result.html, css: data.result.css }));
+    if (projectInfo?.result?.projectUrl) {
+      fetchPageSource(
+        { targetUrl: 'https://example.com' }, //projectInfo.result.projectUrl
+        {
+          onSuccess: (data) => {
+            dispatch(updateIframeContent({ html: data.html, css: data.css }));
+          },
         },
-      },
-    );
-  }, [fetchPageSource, dispatch]);
+      );
+    }
+  }, [fetchPageSource, dispatch, projectInfo?.result?.projectUrl]);
 
   if (projectInfoLoading || characterListLoading || scenarioListLoading || isPending) {
     return (
