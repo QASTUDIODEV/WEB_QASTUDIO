@@ -1,6 +1,4 @@
-import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-
+import { useProjectId } from '@/hooks/common/useProjectId.ts';
 import useGetStatistics from '@/hooks/test/useGetStatistics';
 
 import Loading from '@/components/common/loading/loading';
@@ -10,8 +8,7 @@ import Table from '@/components/dashboard/table/table';
 import * as S from '@/pages/dashboard/dashboard.style';
 
 export default function DashboardPage() {
-  const { projectId: id } = useParams();
-  const projectId = useMemo(() => Number(id), [id]);
+  const projectId = useProjectId();
   const { data: statisticsData, isPending } = useGetStatistics({ projectId });
 
   if (isPending) {
