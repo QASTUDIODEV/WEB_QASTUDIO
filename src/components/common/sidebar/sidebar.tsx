@@ -9,7 +9,7 @@ import SideBarProfile from './profile/sideBarProfile';
 import ProjectList from './projectList/projectList';
 
 import Out from '@/assets/icons/logout.svg?react';
-import { openModal } from '@/slices/modalSlice.ts';
+import { openModal } from '@/slices/modalSlice';
 
 export default function Sidebar() {
   const modalDispatch = useDispatch();

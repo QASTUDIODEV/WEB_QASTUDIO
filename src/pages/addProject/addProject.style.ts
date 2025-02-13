@@ -11,6 +11,13 @@ export const Container = styled.div`
   position: relative;
 `;
 
+export const Error = styled.div`
+  width: 100%;
+  height: 100vh;
+  ${({ theme }) => theme.align.column_center};
+  ${({ theme }) => theme.text.bold_32};
+`;
+
 export const Title = styled.div`
   text-align: center;
   font-family: Pretendard;

@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import ModalProvider from '@/components/common/modalProvider/modalProvider';
 
+import InviteRedirect from '../pages/inviteRedirect/inviteRedirect';
+
 import AuthLayout from '@/layouts/auth/auth.tsx';
 import MainLayout from '@/layouts/main/mainLayout';
 import AddProjectPage from '@/pages/addProject/addProject';
@@ -45,6 +47,10 @@ export const router = createBrowserRouter([
   {
     path: '/login/success',
     element: <LoginRedirect />,
+  },
+  {
+    path: '/invite',
+    element: <InviteRedirect />,
   },
   {
     path: `/`,

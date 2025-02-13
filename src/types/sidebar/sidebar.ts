@@ -1,12 +1,15 @@
 import type { TCommonResponse } from '../common/common';
 
+export type TProjectDTO = {
+  projectId: Number;
+  projectImage: string;
+  projectName: string;
+};
+
 export type TGetProjectList = TCommonResponse<{
-  projectList: {
-    projectId: Number;
-    projectImage: string;
-    projectName: string;
-  }[];
+  projectList: TProjectDTO[];
 }>;
+
 export type TAddProject = TCommonResponse<{
   userId: number;
   projectId: number;
