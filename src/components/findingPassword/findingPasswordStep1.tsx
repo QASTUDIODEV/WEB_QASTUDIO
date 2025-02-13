@@ -34,6 +34,7 @@ export default function FindingPasswordStep1({ setStep, step, watchedEmail, setS
 
   const handleSendCode = async () => {
     setValue('code', '');
+    setSendCodeSuccess(false);
     if (!errors.email?.message && watchedEmail) {
       sendCodeMutate(watchedEmail, {
         onSuccess: (data) => {
