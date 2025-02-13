@@ -9,6 +9,19 @@ export const LoadingContainer = styled.div`
   align-items: center;
   width: 100vw;
 `;
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+`;
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};

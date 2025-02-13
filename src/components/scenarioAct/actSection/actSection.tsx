@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Frame from 'react-frame-component';
 
 import { useSelector } from '@/hooks/common/useCustomRedux';
@@ -6,7 +7,7 @@ import * as S from '@/components/scenarioAct/actSection/actSection.style';
 
 import InnerComponent from './InnerComponent';
 
-export default function ActSection() {
+export default memo(function ActSection() {
   const currentHtml = useSelector((state) => state.scenarioAct.currentHtml);
   const currentCss = useSelector((state) => state.scenarioAct.currentCss);
 
@@ -25,4 +26,4 @@ export default function ActSection() {
       </Frame>
     </S.Container>
   );
-}
+});
