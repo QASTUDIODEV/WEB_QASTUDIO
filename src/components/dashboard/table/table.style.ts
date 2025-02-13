@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const TableContainer = styled.div`
   ${({ theme }) => theme.align.column_center};
@@ -184,6 +184,26 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const pulse = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const Skeleton = styled.div`
+  width: 100%;
+  height: 440px;
+  background-color: #141b2e;
+  border-radius: 8px;
+  animation: ${pulse} 1.5s infinite ease-in-out;
+`;
+
 export {
   Action,
   ArrowBox,
@@ -192,6 +212,7 @@ export {
   PageBtnBox,
   PageNumberWrapper,
   SearchBox,
+  Skeleton,
   State,
   Table,
   TableContainer,
