@@ -47,7 +47,7 @@ export default function ProjectInput({ result }: TInfoDTO) {
         </>
       ) : (
         <>
-          <S.Input onChange={(e) => (preContent.current = e.target.value)} rows={3} />
+          <S.Input maxLength={104} onChange={(e) => (preContent.current = e.target.value)} />
           <S.Wrapper>
             <Button type="normal" color="default" icon={<Edit />} iconPosition="left" onClick={handleEdit}>
               Done
