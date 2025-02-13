@@ -54,7 +54,6 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
 
   useEffect(() => {
     if (!document) return;
-
     mountHereRef.current = document.getElementById('mountHere') as HTMLDivElement;
     if (mountHereRef.current) {
       while (mountHereRef.current.firstChild) {

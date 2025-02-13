@@ -12,6 +12,7 @@ import ErrorModal from '@/components/dashboard/errorModal/errorModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
 import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
+import ScenarioActModal from '@/components/scenarioAct/scenarioActModal/scenarioActModal';
 
 import { closeModal, selectModal } from '@/slices/modalSlice';
 
@@ -26,6 +27,7 @@ export const MODAL_TYPES = {
   InviteErrorModal: 'InviteErrorModal',
   InviteSuccessModal: 'InviteSuccessModal',
   InviteTokenExpiredModal: 'InviteTokenExpiredModal',
+  ScenarioActErrorModal: 'ScenarioActErrorModal',
 };
 
 export const MODAL_COMPONENTS = {
@@ -39,6 +41,7 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.CreateProjectModal]: ProjectModal,
   [MODAL_TYPES.LogoutModal]: LogoutModal,
   [MODAL_TYPES.ScenarioModal]: ScenarioModal,
+  [MODAL_TYPES.ScenarioActErrorModal]: ScenarioActModal,
 };
 
 export default function ModalProvider() {

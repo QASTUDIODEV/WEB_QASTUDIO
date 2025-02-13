@@ -4,7 +4,7 @@ import { ACTION_STATE } from '@/enums/enums';
 
 export const Container = styled.div<{ $isError: boolean }>`
   position: relative;
-  ${({ $isError }) => $isError && 'margin-bottom: 30px;'};
+  ${({ $isError }) => $isError && 'margin-bottom: 25px;'};
 `;
 export const Header = styled.div<{ state: ACTION_STATE; $isLastAction: boolean; $isOpen: boolean }>`
   display: flex;

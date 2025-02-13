@@ -9,7 +9,7 @@ import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Play from '@/assets/icons/play.svg?react';
-import { openScenario, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
+import { openScenario, setCurrentTestId, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
 interface IScenarioItemProp {
   scenarioId: number;
@@ -32,11 +32,19 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
     if (runningScenarioId === scenarioId) {
       console.log(`🔹 WebSocket에서 받은 sessionId: ${project.webSocket.sessionId}, 실행할 시나리오: ${scenarioId}`);
 
-      executeScenario({
-        sessionId: project.webSocket.sessionId,
-        scenarioId,
-        baseUrl: 'https://example.com',
-      });
+      executeScenario(
+        {
+          sessionId: project.webSocket.sessionId,
+          scenarioId,
+          baseUrl: 'https://example.com', //'https://example.com',project.projectUrl
+        },
+        {
+          onSuccess: (data) => {
+            console.log(data);
+            dispatch(setCurrentTestId(data.result.testId));
+          },
+        },
+      );
     }
   }, [project.webSocket.sessionId, runningScenarioId, executeScenario, scenarioId]);
 

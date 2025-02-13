@@ -1,36 +1,33 @@
-import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import useGetError from '@/hooks/error/useGetError';
 
 import Modal from '@/components/common/modal/modal';
-import * as S from '@/components/scenarioAct/scenarioActModal/scenarioActModal.style';
 
-import { closeModal } from '@/slices/modalSlice.ts';
+import * as S from './scenarioActModal.style';
 
-export default function ScenarioActModal() {
-  const dispatch = useDispatch();
+type TErrorProps = {
+  onClose: () => void;
+  testId?: number;
+};
 
-  const res = {
-    title: 'UMC_PM_DAY',
-    code: 404,
-    message: '404',
-  };
+export default function scenarioActModal({ onClose, testId = 0 }: TErrorProps) {
+  const { data } = useGetError({ testId });
 
   return (
-    <Modal title={res.title} onClose={() => dispatch(closeModal())}>
+    <Modal title={data?.result.testName} onClose={onClose}>
       <S.Container>
         <p>Screen Shot</p>
         <S.ResultContainer>
-          <S.ScreenShotWrapper>
-            <S.ScreenShotBox />
-          </S.ScreenShotWrapper>
+          <S.ScreenShotWrapper>{data?.result.errorImage ? <img src={data?.result.errorImage} alt={'error image'} /> : <S.ScreenShotBox />}</S.ScreenShotWrapper>
           <S.ResultWrapper>
             <S.ErrorWrapper>
               <p>Error Code</p>
-              <S.ResultBox>{res.code}</S.ResultBox>
+              <S.ResultBox>{data?.result.errorCode}</S.ResultBox>
             </S.ErrorWrapper>
             <S.ErrorWrapper>
               <p>Error Message</p>
-              <S.MessageBox>{res.message}</S.MessageBox>
+              <S.MessageBox>{data?.result.errorMessage}</S.MessageBox>
             </S.ErrorWrapper>
+            <S.ButtonBox />
           </S.ResultWrapper>
         </S.ResultContainer>
       </S.Container>

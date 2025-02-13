@@ -40,8 +40,10 @@ const useWebSocket = (url: string) => {
         console.log('파싱된 메시지:', parsedMessage);
 
         if (parsedMessage.sessionId) {
+          // 세션id
           dispatch(setSessionId(parsedMessage.sessionId));
         } else if (parsedMessage.html && parsedMessage.css) {
+          // 실행 성공
           if (parsedMessage.phase === 'AFTER_ACTION') {
             dispatch(setLastActionId(parsedMessage.actionId));
             dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
@@ -52,6 +54,12 @@ const useWebSocket = (url: string) => {
               css: decodeHtml(parsedMessage.css),
             }),
           );
+        } else if (parsedMessage.error) {
+          // 실행 실패
+          if (parsedMessage.phase === 'AFTER_ACTION') {
+            dispatch(setLastActionId(parsedMessage.actionId));
+            dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
+          }
         } else {
           dispatch(addWebSocketMessage(parsedMessage));
         }

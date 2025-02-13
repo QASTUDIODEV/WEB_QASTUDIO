@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useAction from '@/hooks/scenarioAct/useAction';
 
 import Button from '@/components/common/button/button';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
 import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
 
@@ -61,6 +62,8 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const isInputFocused = currentLocator.isInputFocused && currentLocator.actionId === actionId;
   const isClicked = currentLocator.isClicked;
 
+  //testId
+  const currentTestId = useSelector((state) => state.scenarioAct.currentTestId);
   // 상태 관리
   const [locatorStrategy, setLocatorStrategy] = useState(action?.locator.strategy || '');
   const [actionType, setActionType] = useState(action?.action.type || '');
@@ -125,8 +128,8 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   };
 
   // 모달 함수
-  const handleModal = (): void => {
-    dispatch(openModal('scenarioActModal'));
+  const handleModal = (testId: number) => {
+    dispatch(openModal({ modalType: MODAL_TYPES.ScenarioActErrorModal, modalProps: { testId: testId } }));
   };
 
   // 액션 오픈 함수
@@ -145,7 +148,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   };
 
   return (
-    <S.Container $isError={false}>
+    <S.Container $isError={actionState == ACTION_STATE.FAIL}>
       {/* 헤더 */}
       <S.Header state={actionState || ACTION_STATE.UNVERIFIED} $isLastAction={isLastAction} $isOpen={isOpen} onClick={handleIsOpen}>
         <S.Content>
@@ -210,7 +213,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             <S.UnderIcon>
               <UnderError />
             </S.UnderIcon>
-            <S.CheckError onClick={handleModal}>
+            <S.CheckError onClick={() => handleModal(currentTestId)}>
               Check the error
               <ArrowRight />
             </S.CheckError>

@@ -34,16 +34,17 @@ export default function ScenarioActPage() {
     }
   }, [useGetScenarioList.data, dispatch]);
 
+  // 초기 iframe 설정
   const { useFetchInitialPage } = useFetchPageSource();
   const { mutate: fetchPageSource, isPending } = useFetchInitialPage;
-
   useEffect(() => {
     if (projectInfo?.result?.projectUrl) {
       fetchPageSource(
-        { targetUrl: 'https://example.com' }, //projectInfo.result.projectUrl
+        { targetUrl: 'https://example.com' }, //projectInfo.result.projectUrl / https://example.com
+
         {
           onSuccess: (data) => {
-            dispatch(updateIframeContent({ html: data.html, css: data.css }));
+            dispatch(updateIframeContent({ html: data.result.html, css: data.result.css }));
           },
         },
       );

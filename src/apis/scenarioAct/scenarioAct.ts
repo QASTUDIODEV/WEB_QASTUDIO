@@ -3,6 +3,7 @@ import type {
   TCreateScenarioResponse,
   TEditActionResponse,
   TEditActionValues,
+  TExecuteScenarioResponse,
   TExecuteScenarioValues,
   TFetchPageSourceResponse,
   TFetchPageSourceValues,
@@ -40,16 +41,15 @@ const createScenario = async (scenario: TCreateScenaioValues): Promise<TCreateSc
   return data;
 };
 
-const executeScenario = async (values: TExecuteScenarioValues): Promise<TCreateScenarioResponse> => {
-  console.log(values);
+const executeScenario = async (values: TExecuteScenarioValues): Promise<TExecuteScenarioResponse> => {
   const { data } = await axiosInstance.post(`/api/v0/scenarios/${values.scenarioId}/sessions/${values.sessionId}/execute`, { baseUrl: values.baseUrl });
-  console.log(data);
   return data;
 };
 
 const fetchPageSource = async ({ targetUrl }: TFetchPageSourceValues): Promise<TFetchPageSourceResponse> => {
   console.log(targetUrl);
   const { data } = await axiosInstance.post(`/api/v0/selenium/fetchPageSource`, { targetUrl });
+  console.log(data);
   return data;
 };
 

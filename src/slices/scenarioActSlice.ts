@@ -69,12 +69,14 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
   characters: ICharacter[];
   recordActions: IRecordAction[];
+  currentTestId: number;
   webSocket: IWebSocketState;
   currentHtml: string;
   currentCss: string;
   currentLocator: ICurrentLocator;
 }
 
+/*---  payload --- */
 interface ICharacterPayload {
   detailCharacters: { characterId: number; characterName: string }[];
 }
@@ -116,6 +118,7 @@ const initialState: IScenarioActSlice = {
   characters: [],
   scenarios: [],
   recordActions: [],
+  currentTestId: 0,
   webSocket: {
     runningScenarioId: null,
     isConnected: false,
@@ -274,17 +277,18 @@ const scenarioActSlice = createSlice({
     },
     // 액션상태
     setActionState: (state, action: PayloadAction<IActionPayload>) => {
-      // 실행 중인 시나리오 찾기
       const scenarioIndex = state.scenarios.findIndex((scn) => scn.scenarioId === state.webSocket.runningScenarioId);
       if (scenarioIndex === -1) return;
-      // 시나리오 내부의 액션 찾기
       const actionIndex = state.scenarios[scenarioIndex].actions.findIndex((act) => act.actionId === action.payload.actionId);
       if (actionIndex === -1) return;
-      // 새로운 배열로 업데이트 (불변성 유지)
       state.scenarios[scenarioIndex].actions[actionIndex] = {
         ...state.scenarios[scenarioIndex].actions[actionIndex],
         state: action.payload.state,
       };
+    },
+    setCurrentTestId: (state, action: PayloadAction<number>) => {
+      console.log(action.payload);
+      state.currentTestId = action.payload;
     },
   },
 });
@@ -308,5 +312,6 @@ export const {
   clickLocatorInput,
   setLastActionId,
   setActionState,
+  setCurrentTestId,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;
