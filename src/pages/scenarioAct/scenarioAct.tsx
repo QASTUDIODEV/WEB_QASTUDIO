@@ -66,7 +66,7 @@ export default function ScenarioActPage() {
         <Header />
       </S.Header>
 
-      <S.Controller>{isLoading ? <Controller /> : <Controller />}</S.Controller>
+      <S.Controller>{!isLoading && <Controller />}</S.Controller>
 
       <S.ActSection>
         <ActSection />

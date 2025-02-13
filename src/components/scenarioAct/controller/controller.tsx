@@ -18,11 +18,13 @@ export default function Controller() {
 
   const [step, setStep] = useState<number>(1);
 
+  useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
+
   // 스텝 함수
   const handleStep = (selectedStep: number) => {
     setStep(selectedStep);
   };
-  useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
+
   const handleGoBack = () => {
     window.history.back();
   };
