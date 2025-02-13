@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { PaginationState } from '@tanstack/react-table';
 import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 
@@ -9,6 +9,7 @@ import { TEST_STATE } from '@/enums/enums';
 import { getSelectName } from '@/utils/getSelectName';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import { useProjectId } from '@/hooks/common/useProjectId.ts';
 import useTableFilter from '@/hooks/dashborad/useTableFilter';
 import usePaginateTestList from '@/hooks/test/usePaginateTestList';
 
@@ -28,7 +29,7 @@ const columnHelper = createColumnHelper<TTestListDTO>();
 export default function Table() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { projectId } = useParams();
+  const projectId = useProjectId();
   const { date } = useSelector((state) => state.calendar);
   const { state, testName, pageName, setFilters } = useTableFilter();
 
@@ -38,7 +39,7 @@ export default function Table() {
   });
 
   const { data: listData } = usePaginateTestList({
-    projectId: Number(projectId),
+    projectId,
     page: pagination.pageIndex,
     state,
     testName,
