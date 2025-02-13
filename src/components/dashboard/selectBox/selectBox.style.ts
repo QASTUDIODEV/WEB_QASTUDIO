@@ -12,6 +12,9 @@ const Container = styled.ul`
   border: 0.8px solid #082659;
   background: #16181c;
 
+  max-height: 300px;
+  overflow-y: auto;
+
   li {
     ${({ theme }) => theme.text.medium_14};
     width: 100%;
