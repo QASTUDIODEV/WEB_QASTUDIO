@@ -59,7 +59,6 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   // iframe element 선택
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   const characterId = useSelector((state) => state.scenarioAct.characterId);
-  const isInputFocused = currentLocator.isInputFocused && currentLocator.actionId === actionId;
   const isClicked = currentLocator.isClicked;
 
   //testId
@@ -78,13 +77,13 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const isActionApplyDisabled = actionType === action?.action.type && actionInputValue === action?.action.value;
 
   useEffect(() => {
-    if (isInputFocused && isClicked) {
+    if (isClicked && currentLocator.actionId === actionId) {
       setLocatorInputValue(
         locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '',
       );
       dispatch(clickLocatorInput(false));
     }
-  }, [currentLocator, isInputFocused, locatorStrategy, isClicked]);
+  }, [currentLocator, locatorStrategy, isClicked]);
 
   // 가장 최근 액션인지
   const lastActionId = useSelector((state) => state.scenarioAct.webSocket.lastActionId);
@@ -144,7 +143,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const handleBlur = () => {
     setTimeout(() => {
       dispatch(blurLocatorInput());
-    }, 100);
+    }, 500);
   };
 
   return (

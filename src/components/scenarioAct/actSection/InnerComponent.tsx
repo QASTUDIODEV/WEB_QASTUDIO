@@ -37,7 +37,6 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     const xPath = getXPath(target);
 
     console.log('=== Element Details ===', { id, cssSelector, xPath, latestLocator });
-
     if (!latestLocator.current.isInputFocused || latestLocator.current.actionId === null) return;
 
     dispatch(setCurrentLocator({ actionId: latestLocator.current.actionId, id, cssSelector, xPath }));

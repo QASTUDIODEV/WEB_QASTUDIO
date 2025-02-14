@@ -199,7 +199,6 @@ const scenarioActSlice = createSlice({
     },
     // 시나리오 리스트 설정
     setScenarioList: (state, action: PayloadAction<IScenarioPayload>) => {
-      console.log(action.payload.scenarios);
       state.scenarios = action.payload.scenarios.map((scn) => ({
         ...scn,
         isOpen: false,
@@ -235,7 +234,7 @@ const scenarioActSlice = createSlice({
     clickLocatorInput: (state, action: PayloadAction<boolean>) => {
       state.currentLocator.isClicked = action.payload;
     },
-    setCurrentLocator: (state, action: PayloadAction<{ actionId: number; id: string; cssSelector: string; xPath: string }>) => {
+    setCurrentLocator: (state, action: PayloadAction<{ actionId: number | null; id: string; cssSelector: string; xPath: string }>) => {
       if (state.currentLocator.isInputFocused && state.currentLocator.actionId === action.payload.actionId) {
         state.currentLocator.id = action.payload.id;
         state.currentLocator.cssSelector = action.payload.cssSelector;
