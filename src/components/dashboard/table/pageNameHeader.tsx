@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
+import { useProjectId } from '@/hooks/common/useProjectId.ts';
 import type { TFilter } from '@/hooks/dashborad/useTableFilter.ts';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
@@ -15,8 +15,8 @@ interface IProps {
 
 export default function PageNameHeader({ setFilters }: IProps) {
   const [isClicked, setIsClicked] = useState(false);
-  const { projectId } = useParams();
-  const { useGetPageSummary } = useProjectInfo({ projectId: Number(projectId) });
+  const projectId = useProjectId();
+  const { useGetPageSummary } = useProjectInfo({ projectId });
   const { data } = useGetPageSummary;
 
   const PAGE_NAMES = ['All', ...(data?.result.pageSummaryList.map((page) => page.pageName) ?? [])];
