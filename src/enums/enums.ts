@@ -10,17 +10,15 @@ export enum STACK {
 }
 // 액션 상태
 export enum ACTION_STATE {
-  SUCCESS = 'success',
-  ERROR = 'error',
-  UNVERIFIED = 'null',
+  SUCCESS = 'SUCCESS',
+  FAIL = 'FAIL',
+  UNVERIFIED = 'UNVERIFIED',
 }
 // 액션 상태
 export enum ACTION_TYPE {
   NAVIGATE = 'navigate',
   CLICK = 'click',
-  HOVER = 'hover',
-  FILL_TEXT = 'fill_text',
-  WAITING = 'waiting',
+  SEND_KEYS = 'send_keys',
 }
 
 //소셜 로그인
