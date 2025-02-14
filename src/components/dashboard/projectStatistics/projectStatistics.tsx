@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import type { TGetStatisticsResponse } from '@/types/test/test.ts';
 
 import Profile from '@/components/common/profile/profile';
@@ -15,7 +17,7 @@ interface IProps {
   data: TGetStatisticsResponse;
 }
 
-export default function ProjectStatistics({ data }: IProps) {
+function ProjectStatistics({ data }: IProps) {
   const { projectName, projectImage, failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
 
   return (
@@ -45,3 +47,4 @@ export default function ProjectStatistics({ data }: IProps) {
     </S.Container>
   );
 }
+export default memo(ProjectStatistics);
