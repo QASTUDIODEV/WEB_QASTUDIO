@@ -1,4 +1,4 @@
-import type { FocusEventHandler } from 'react';
+import type { ChangeEventHandler, FocusEventHandler } from 'react';
 import React, { useState } from 'react';
 
 import * as S from './input.style';
@@ -18,18 +18,22 @@ export type TInput = {
   top?: boolean;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   ref?: any;
 };
 
 const Input = React.forwardRef<HTMLInputElement, TInput>(
-  ({ placeholder, type, isValid, autoComplete, errorMessage, touched, valid, top, onFocus = () => {}, onBlur = () => {}, ...rest }, ref) => {
+  (
+    { placeholder, type, isValid, autoComplete, errorMessage, touched, valid, top, onFocus = () => {}, onBlur = () => {}, onChange = () => {}, ...rest },
+    ref,
+  ) => {
     const [passwordType, setPasswordType] = useState('password');
 
     if (type === 'normal') {
       return <S.NormalInputWrapper placeholder={placeholder} ref={ref} {...rest} />;
     }
     if (type === 'thin') {
-      return <S.ThinInputWrapper placeholder={placeholder} ref={ref} onFocus={onFocus} onBlur={onBlur} {...rest} />;
+      return <S.ThinInputWrapper placeholder={placeholder} ref={ref} onFocus={onFocus} onBlur={onBlur} onChange={onChange} {...rest} />;
     }
     return (
       <S.Container>

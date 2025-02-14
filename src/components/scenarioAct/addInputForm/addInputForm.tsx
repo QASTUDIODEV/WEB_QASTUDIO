@@ -16,6 +16,7 @@ import { addAction, blurLocatorInput, clickLocatorInput, focusLocatorInput } fro
 
 const locatorList = ['id', 'css_selector', 'xpath'];
 const actionList = ['click', 'send_keys'];
+
 export default function AddInputForm() {
   const dispatch = useDispatch();
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
@@ -25,31 +26,13 @@ export default function AddInputForm() {
   const { mutate: createMutate } = useCreateScenario; //isPendding
   const [step, setStep] = useState(1);
 
-  // 자동입력(locator)
+  // ✅ Redux에서 로케이터 정보 가져오기
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
   const isClicked = currentLocator.isClicked;
-  const [locatorInputValue, setLocatorInputValue] = useState('');
-  const [locatorStrategy, setLocatorStrategy] = useState('');
-  useEffect(() => {
-    if (isClicked && currentLocator.actionId === 'WRITE_DIRECTLY') {
-      setLocatorInputValue(
-        locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '',
-      );
-      dispatch(clickLocatorInput(false));
-    }
-  }, [currentLocator, locatorStrategy, isClicked]);
 
-  // 인풋 포커스
-  const handleFocus = () => {
-    console.log('포커스');
-    dispatch(focusLocatorInput('WRITE_DIRECTLY'));
-  };
-  const handleBlur = () => {
-    setTimeout(() => {
-      console.log('해제');
-      dispatch(blurLocatorInput());
-    }, 500);
-  };
+  // ✅ locatorState를 관리하는 useState
+  const [locatorStrategy, setLocatorStrategy] = useState('');
+  const [locatorInputValue, setLocatorInputValue] = useState('');
 
   const {
     register: registerScenario,
@@ -62,9 +45,33 @@ export default function AddInputForm() {
     register: registerAction,
     handleSubmit: handleActionSubmit,
     control: actionControl,
+    setValue,
     formState: { isValid: isActionValid },
     reset: resetActionForm,
   } = useForm({ mode: 'onChange' });
+
+  // ✅ Redux 상태와 react-hook-form 값을 동기화
+  useEffect(() => {
+    if (isClicked && currentLocator.actionId === 'WRITE_DIRECTLY') {
+      const newValue =
+        locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '';
+
+      setLocatorInputValue(newValue);
+      setValue('locatorValue', newValue); // react-hook-form과 동기화
+      dispatch(clickLocatorInput(false));
+    }
+  }, [isClicked, currentLocator, locatorStrategy, dispatch, setValue]);
+
+  // 인풋 포커스 핸들러
+  const handleFocus = () => {
+    dispatch(focusLocatorInput('WRITE_DIRECTLY'));
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      dispatch(blurLocatorInput());
+    }, 500);
+  };
 
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
@@ -94,7 +101,10 @@ export default function AddInputForm() {
       actionValue: '',
     });
   };
+
+  // 액션 타입 감지
   const actionType = useWatch({ control: actionControl, name: 'actionType' });
+
   return (
     <S.Container>
       {/* 시나리오 입력 폼 */}
@@ -134,53 +144,64 @@ export default function AddInputForm() {
       </S.SelectToggle>
 
       {step === 1 ? (
-        <>
-          <S.DetailContainer>
-            {recordActions.map((action) => (
-              <RecordItem key={action.step} step={action.step} />
-            ))}
-            <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
-            <S.DivideInputContainer>
-              <Controller
-                name="strategy"
-                control={actionControl}
-                rules={{ required: true }}
-                render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
-              />
-              {/* 로케이터 */}
-              <Input placeholder="Enter key." type="thin" onFocus={handleFocus} {...registerAction('locatorValue', { required: true, onBlur: handleBlur })} />
-            </S.DivideInputContainer>
-            <S.DivideInputContainer>
-              <Controller
-                name="actionType"
-                control={actionControl}
-                rules={{ required: true }}
-                render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select key action." />}
-              />
-              {['send_keys', 'get_attribute'].includes(actionType) && (
-                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+        <S.DetailContainer>
+          {recordActions.map((action) => (
+            <RecordItem key={action.step} step={action.step} />
+          ))}
+          <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
+
+          {/* 로케이터 선택 */}
+          <S.DivideInputContainer>
+            <Controller
+              name="strategy"
+              control={actionControl}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <ThinDropdown
+                  options={locatorList}
+                  value={locatorStrategy}
+                  onChange={(value) => {
+                    setLocatorStrategy(value);
+                    field.onChange(value);
+                  }}
+                  placeholder="Select locator."
+                />
               )}
-            </S.DivideInputContainer>
-            <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
-              {isActionValid ? <Add /> : <AddDark />}
-            </S.AddButton>
-            <S.ButtonContainer>
-              <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
-                Save
-              </Button>
-            </S.ButtonContainer>
-          </S.DetailContainer>
-        </>
-      ) : (
-        <div>
-          {/* <RecordItem  /> */}
+            />
+            <Input
+              placeholder="Enter key."
+              type="thin"
+              value={locatorInputValue}
+              onChange={(e) => {
+                setLocatorInputValue(e.target.value);
+                setValue('locatorValue', e.target.value);
+              }}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </S.DivideInputContainer>
+
+          {/* 액션 선택 */}
+          <S.DivideInputContainer>
+            <Controller
+              name="actionType"
+              control={actionControl}
+              rules={{ required: true }}
+              render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select key action." />}
+            />
+          </S.DivideInputContainer>
+
+          <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
+            {isActionValid ? <Add /> : <AddDark />}
+          </S.AddButton>
+
           <S.ButtonContainer>
-            <Button type="normal" color="default">
-              Record
+            <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
+              Save
             </Button>
           </S.ButtonContainer>
-        </div>
-      )}
+        </S.DetailContainer>
+      ) : null}
     </S.Container>
   );
 }
