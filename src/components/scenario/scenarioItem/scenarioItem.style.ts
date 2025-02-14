@@ -6,10 +6,12 @@ export const ScenarioItem = styled.div<{ $isChecked: boolean; $isSelected?: bool
   align-items: center;
   padding: 24px 40px;
   border-radius: 4px;
-  background: ${({ $isSelected, $isChecked }) =>
-    $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
   cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
+  border-top: ${({ $isEdit }) => ($isEdit ? '0.8px solid rgba(217, 230, 255, 0.2)' : 'none')};
+  background: ${({ $isSelected, $isChecked, $isEdit }) =>
+    $isEdit ? 'inherit' : $isSelected ? 'linear-gradient(76deg, #001945 0%, #000714 100.13%)' : $isChecked ? 'rgba(217, 230, 255, 0.05)' : 'inherit'};
 `;
+
 export const IconContainer = styled.div`
   svg {
     width: 19.2px;

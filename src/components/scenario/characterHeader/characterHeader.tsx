@@ -21,9 +21,10 @@ interface ICharacterHeaderProps {
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   isExpanded: boolean;
   isSelected: boolean;
+  setSelectedIdx: React.Dispatch<React.SetStateAction<{ isCharacter: boolean; idx: number }>>;
 }
 
-export default function CharacterHeader({ characterData, setIsExpanded, isExpanded, isSelected }: ICharacterHeaderProps) {
+export default function CharacterHeader({ characterData, setSelectedIdx, setIsExpanded, isExpanded, isSelected }: ICharacterHeaderProps) {
   const characterId = characterData.characterId;
   //시나리오 가져오기
   const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterData.characterId));
@@ -35,7 +36,12 @@ export default function CharacterHeader({ characterData, setIsExpanded, isExpand
   }
 
   return (
-    <S.CharacterHeader $isChecked={character.isChecked && true} $isSelected={isSelected} $isEdit={isEdit}>
+    <S.CharacterHeader
+      $isChecked={character.isChecked && true}
+      $isSelected={isSelected}
+      $isEdit={isEdit}
+      onClick={() => setSelectedIdx({ isCharacter: true, idx: characterId })}
+    >
       {isEdit && (
         <S.CheckboxContainer>
           <S.IconContainer>

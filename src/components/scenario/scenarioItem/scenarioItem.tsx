@@ -1,3 +1,5 @@
+import React from 'react';
+
 import type { TScenarioList } from '@/types/scenario/scenario';
 
 import { formatRelativeTime } from '@/utils/transformDate';
@@ -14,9 +16,11 @@ import UserCircle from '@/assets/icons/user_circle.svg?react';
 interface IScenarioItemProps {
   characterId: number;
   scenarioData: TScenarioList;
+  isSelected: boolean;
+  setSelectedIdx: React.Dispatch<React.SetStateAction<{ isCharacter: boolean; idx: number }>>;
 }
 
-export default function ScenarioItem({ characterId, scenarioData }: IScenarioItemProps) {
+export default function ScenarioItem({ characterId, scenarioData, isSelected, setSelectedIdx }: IScenarioItemProps) {
   const scenarioId = scenarioData.scenarioId;
   //시나리오 가져오기
   const character = useSelector((state) => state.scenario.characters.find((char) => char.id === characterId));
@@ -30,7 +34,14 @@ export default function ScenarioItem({ characterId, scenarioData }: IScenarioIte
   }
 
   return (
-    <S.ScenarioItem $isChecked={scenario.isChecked} $isEdit={isEdit}>
+    <S.ScenarioItem
+      $isChecked={scenario.isChecked}
+      $isEdit={isEdit}
+      $isSelected={isSelected}
+      onClick={() => {
+        setSelectedIdx({ isCharacter: false, idx: scenario.scenarioId });
+      }}
+    >
       <S.ScenarioItemLeftSide>
         {isEdit && (
           <S.IconContainer>
