@@ -25,7 +25,10 @@ export default function ScenarioPage() {
   const { isEdit } = useSelector((state) => state.scenario);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [selectedIdx, setSelectedIdx] = useState<number>(-1);
+  const [selectedIdx, setSelectedIdx] = useState({
+    isCharacter: true,
+    idx: -1,
+  });
 
   const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: ProjectSummaryData } = useGetProjectSummary;
