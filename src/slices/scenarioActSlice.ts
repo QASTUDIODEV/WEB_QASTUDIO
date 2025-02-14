@@ -6,7 +6,6 @@ import { ACTION_STATE } from '@/enums/enums';
 interface IWebSocketState {
   runningScenarioId: number | null;
   isConnected: boolean;
-  messages: string[];
   sessionId: string | null;
   lastActionId: number | null;
 }
@@ -122,7 +121,6 @@ const initialState: IScenarioActSlice = {
   webSocket: {
     runningScenarioId: null,
     isConnected: false,
-    messages: [],
     sessionId: null,
     lastActionId: null,
   },
@@ -250,9 +248,7 @@ const scenarioActSlice = createSlice({
     setWebSocketConnected: (state, action: PayloadAction<boolean>) => {
       state.webSocket.isConnected = action.payload;
     },
-    addWebSocketMessage: (state, action: PayloadAction<string>) => {
-      state.webSocket.messages.push(action.payload);
-    },
+
     setSessionId: (state, action: PayloadAction<string | null>) => {
       state.webSocket.sessionId = action.payload;
     },
@@ -302,7 +298,6 @@ export const {
   addAction,
   removeAction,
   setWebSocketConnected,
-  addWebSocketMessage,
   setSessionId,
   updateIframeContent,
   focusLocatorInput,

@@ -8,6 +8,7 @@ import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
+import Pause from '@/assets/icons/pause.svg?react';
 import Play from '@/assets/icons/play.svg?react';
 import { openScenario, setCurrentTestId, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
@@ -19,7 +20,6 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct.scenarios.find((scn) => scn.scenarioId === scenarioId));
   const project = useSelector((state) => state.scenarioAct);
-
   const runningScenarioId = useSelector((state) => state.scenarioAct.webSocket.runningScenarioId);
 
   // API 실행
@@ -36,7 +36,7 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         {
           sessionId: project.webSocket.sessionId,
           scenarioId,
-          baseUrl: 'https://example.com', //'https://example.com',project.projectUrl
+          baseUrl: 'https://example.com', //'https://example.com' / project.projectUrl
         },
         {
           onSuccess: (data) => {
@@ -65,9 +65,7 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
       <S.ScenarioHeader $isOpen={scenario?.isOpen}>
         <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
         <S.Title>{scenario?.scenarioName}</S.Title>
-        <S.IconContainer>
-          <Play onClick={handlePlay} />
-        </S.IconContainer>
+        <S.IconContainer>{scenarioId == runningScenarioId ? <Pause /> : <Play onClick={handlePlay} />}</S.IconContainer>
       </S.ScenarioHeader>
 
       {scenario?.isOpen && (
