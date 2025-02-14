@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
@@ -12,7 +12,7 @@ import ThinDropdown from '@/components/scenarioAct/thinDropdown/thinDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
-import { addAction } from '@/slices/scenarioActSlice';
+import { addAction, blurLocatorInput, clickLocatorInput, focusLocatorInput } from '@/slices/scenarioActSlice';
 
 const locatorList = ['id', 'css_selector', 'xpath'];
 const actionList = ['click', 'send_keys'];
@@ -24,6 +24,32 @@ export default function AddInputForm() {
   const { useCreateScenario } = useScenario();
   const { mutate: createMutate } = useCreateScenario; //isPendding
   const [step, setStep] = useState(1);
+
+  // 자동입력(locator)
+  const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
+  const isClicked = currentLocator.isClicked;
+  const [locatorInputValue, setLocatorInputValue] = useState('');
+  const [locatorStrategy, setLocatorStrategy] = useState('');
+  useEffect(() => {
+    if (isClicked && currentLocator.actionId === 'WRITE_DIRECTLY') {
+      setLocatorInputValue(
+        locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '',
+      );
+      dispatch(clickLocatorInput(false));
+    }
+  }, [currentLocator, locatorStrategy, isClicked]);
+
+  // 인풋 포커스
+  const handleFocus = () => {
+    console.log('포커스');
+    dispatch(focusLocatorInput('WRITE_DIRECTLY'));
+  };
+  const handleBlur = () => {
+    setTimeout(() => {
+      console.log('해제');
+      dispatch(blurLocatorInput());
+    }, 500);
+  };
 
   const {
     register: registerScenario,
@@ -42,7 +68,6 @@ export default function AddInputForm() {
 
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
-    console.log(data);
     createMutate({
       characterId: characterId || 0,
       pageId: 18, //페이지 아이디 수정
@@ -122,7 +147,8 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
               />
-              <Input placeholder="Enter key." type="thin" {...registerAction('locatorValue', { required: true })} />
+              {/* 로케이터 */}
+              <Input placeholder="Enter key." type="thin" onFocus={handleFocus} {...registerAction('locatorValue', { required: true, onBlur: handleBlur })} />
             </S.DivideInputContainer>
             <S.DivideInputContainer>
               <Controller

@@ -53,7 +53,7 @@ interface IRecordAction {
   };
 }
 interface ICurrentLocator {
-  actionId: number | null;
+  actionId: number | string | null;
   id: string | null;
   xPath: string | null;
   cssSelector: string | null;
@@ -224,7 +224,7 @@ const scenarioActSlice = createSlice({
     },
 
     // 클릭 시 로케이터 설정
-    focusLocatorInput: (state, action: PayloadAction<number>) => {
+    focusLocatorInput: (state, action: PayloadAction<number | string>) => {
       state.currentLocator.actionId = action.payload;
       state.currentLocator.isInputFocused = true;
     },
@@ -234,7 +234,7 @@ const scenarioActSlice = createSlice({
     clickLocatorInput: (state, action: PayloadAction<boolean>) => {
       state.currentLocator.isClicked = action.payload;
     },
-    setCurrentLocator: (state, action: PayloadAction<{ actionId: number | null; id: string; cssSelector: string; xPath: string }>) => {
+    setCurrentLocator: (state, action: PayloadAction<{ actionId: number | string | null; id: string; cssSelector: string; xPath: string }>) => {
       if (state.currentLocator.isInputFocused && state.currentLocator.actionId === action.payload.actionId) {
         state.currentLocator.id = action.payload.id;
         state.currentLocator.cssSelector = action.payload.cssSelector;

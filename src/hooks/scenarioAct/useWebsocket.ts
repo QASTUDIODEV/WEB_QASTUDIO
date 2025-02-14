@@ -2,15 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
-import {
-  addWebSocketMessage,
-  setActionState,
-  setLastActionId,
-  setRunningScenario,
-  setSessionId,
-  setWebSocketConnected,
-  updateIframeContent,
-} from '@/slices/scenarioActSlice';
+import { setActionState, setLastActionId, setRunningScenario, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
 
 const useWebSocket = (url: string) => {
   const dispatch = useDispatch();
