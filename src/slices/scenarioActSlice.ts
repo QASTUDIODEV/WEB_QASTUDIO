@@ -6,7 +6,6 @@ import { ACTION_STATE } from '@/enums/enums';
 interface IWebSocketState {
   runningScenarioId: number | null;
   isConnected: boolean;
-  messages: string[];
   sessionId: string | null;
   lastActionId: number | null;
 }
@@ -54,7 +53,7 @@ interface IRecordAction {
   };
 }
 interface ICurrentLocator {
-  actionId: number | null;
+  actionId: number | string | null;
   id: string | null;
   xPath: string | null;
   cssSelector: string | null;
@@ -122,48 +121,17 @@ const initialState: IScenarioActSlice = {
   webSocket: {
     runningScenarioId: null,
     isConnected: false,
-    messages: [],
     sessionId: null,
     lastActionId: null,
   },
   currentHtml: `<div >
-  <h1 >Example Domain</h1>
-  <p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p>
-  <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+
 </div>`,
   currentCss: `<!DOCTYPE html>
 <html>
 <head>
       <style >
-        body {
-          background-color: #f0f0f2;
-          margin: 0;
-          padding: 0;
-          font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-        div {
-          width: 600px;
-          margin: 5em auto;
-          padding: 2em;
-          background-color: #fdfdff;
-          border-radius: 0.5em;
-          box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
-        }
-        a:link, a:visited {
-          color: #38488f;
-          text-decoration: none;
-        }
-        .qa-highlighted-element {
-          outline: 3px solid #ffeb3b;
-          background-color: rgba(255, 235, 59, 0.2);
-        }
-        @media (max-width: 700px) {
-          div {
-            margin: 0 auto;
-            width: auto;
-          }
-        }
-          
+
       </style>
     </head>
 <body>
@@ -201,7 +169,6 @@ const scenarioActSlice = createSlice({
     },
     // 시나리오 리스트 설정
     setScenarioList: (state, action: PayloadAction<IScenarioPayload>) => {
-      console.log(action.payload.scenarios);
       state.scenarios = action.payload.scenarios.map((scn) => ({
         ...scn,
         isOpen: false,
@@ -227,7 +194,7 @@ const scenarioActSlice = createSlice({
     },
 
     // 클릭 시 로케이터 설정
-    focusLocatorInput: (state, action: PayloadAction<number>) => {
+    focusLocatorInput: (state, action: PayloadAction<number | string>) => {
       state.currentLocator.actionId = action.payload;
       state.currentLocator.isInputFocused = true;
     },
@@ -237,7 +204,7 @@ const scenarioActSlice = createSlice({
     clickLocatorInput: (state, action: PayloadAction<boolean>) => {
       state.currentLocator.isClicked = action.payload;
     },
-    setCurrentLocator: (state, action: PayloadAction<{ actionId: number; id: string; cssSelector: string; xPath: string }>) => {
+    setCurrentLocator: (state, action: PayloadAction<{ actionId: number | string | null; id: string; cssSelector: string; xPath: string }>) => {
       if (state.currentLocator.isInputFocused && state.currentLocator.actionId === action.payload.actionId) {
         state.currentLocator.id = action.payload.id;
         state.currentLocator.cssSelector = action.payload.cssSelector;
@@ -250,9 +217,7 @@ const scenarioActSlice = createSlice({
     setWebSocketConnected: (state, action: PayloadAction<boolean>) => {
       state.webSocket.isConnected = action.payload;
     },
-    addWebSocketMessage: (state, action: PayloadAction<string>) => {
-      state.webSocket.messages.push(action.payload);
-    },
+
     setSessionId: (state, action: PayloadAction<string | null>) => {
       state.webSocket.sessionId = action.payload;
     },
@@ -302,7 +267,6 @@ export const {
   addAction,
   removeAction,
   setWebSocketConnected,
-  addWebSocketMessage,
   setSessionId,
   updateIframeContent,
   focusLocatorInput,

@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useScenario from '@/hooks/scenarioAct/useScenario';
 
 import Button from '@/components/common/button/button';
-import Input from '@/components/common/input/input';
 import * as S from '@/components/scenarioAct/addInputForm/addInputForm.style';
+import Input from '@/components/scenarioAct/input/input';
 import RecordItem from '@/components/scenarioAct/recordItem/recordItem';
 import ThinDropdown from '@/components/scenarioAct/thinDropdown/thinDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
-import { addAction } from '@/slices/scenarioActSlice';
+import { addAction, blurLocatorInput, clickLocatorInput, focusLocatorInput } from '@/slices/scenarioActSlice';
 
 const locatorList = ['id', 'css_selector', 'xpath'];
 const actionList = ['click', 'send_keys'];
@@ -25,6 +25,22 @@ export default function AddInputForm() {
   const { mutate: createMutate } = useCreateScenario; //isPendding
   const [step, setStep] = useState(1);
 
+  // 자동입력(locator)
+  const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
+  const isClicked = currentLocator.isClicked;
+
+  // 인풋 포커스
+  const handleFocus = () => {
+    console.log('포커스');
+    dispatch(focusLocatorInput('WRITE_DIRECTLY'));
+  };
+  const handleBlur = () => {
+    setTimeout(() => {
+      console.log('해제');
+      dispatch(blurLocatorInput());
+    }, 500);
+  };
+
   const {
     register: registerScenario,
     handleSubmit: handleScenarioSubmit,
@@ -36,13 +52,28 @@ export default function AddInputForm() {
     register: registerAction,
     handleSubmit: handleActionSubmit,
     control: actionControl,
+    setValue,
     formState: { isValid: isActionValid },
     reset: resetActionForm,
   } = useForm({ mode: 'onChange' });
 
+  const locatorStrategy = useWatch({ control: actionControl, name: 'strategy' });
+  const locatorInputValue = useWatch({ control: actionControl, name: 'locatorValue' });
+
+  // 현재 클릭된 요소를 locator 값으로 설정
+  useEffect(() => {
+    if (isClicked && currentLocator.actionId === 'WRITE_DIRECTLY') {
+      const newValue =
+        locatorStrategy === 'id' ? currentLocator.id || '' : locatorStrategy === 'css_selector' ? currentLocator.cssSelector || '' : currentLocator.xPath || '';
+
+      setValue('locatorValue', newValue);
+      dispatch(clickLocatorInput(false));
+    }
+  }, [isClicked, currentLocator, locatorStrategy, dispatch, setValue]);
+
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
-    console.log(data);
+    console.log('시나생성');
     createMutate({
       characterId: characterId || 0,
       pageId: 18, //페이지 아이디 수정
@@ -50,6 +81,7 @@ export default function AddInputForm() {
       scenarioDescription: data.scenarioDescription,
       actions: recordActions,
     });
+    console.log('시나생성');
   };
 
   // 액션record 생성
@@ -61,7 +93,6 @@ export default function AddInputForm() {
       locator: { strategy: data.strategy, value: data.locatorValue },
       action: { type: data.actionType, value: data.actionValue || '' },
     };
-
     dispatch(addAction(newAction));
     resetActionForm({
       actionTitle: '',
@@ -122,7 +153,15 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
               />
-              <Input placeholder="Enter key." type="thin" {...registerAction('locatorValue', { required: true })} />
+              {/* 로케이터 */}
+              <Input
+                placeholder="Enter key."
+                type="thin"
+                value={locatorInputValue}
+                onChange={(e) => setValue('locatorValue', e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
             </S.DivideInputContainer>
             <S.DivideInputContainer>
               <Controller

@@ -42,7 +42,7 @@ export default function ScenarioActPage() {
   useEffect(() => {
     if (projectInfo?.result?.projectUrl) {
       fetchPageSource(
-        { targetUrl: 'https://example.com' }, //projectInfo.result.projectUrl / https://example.com
+        { targetUrl: projectInfo.result.projectUrl }, //projectInfo.result.projectUrl / https://example.com
 
         {
           onSuccess: (data) => {

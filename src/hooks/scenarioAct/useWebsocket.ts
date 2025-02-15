@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
-import { addWebSocketMessage, setActionState, setLastActionId, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
+import { setActionState, setLastActionId, setRunningScenario, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
 
 const useWebSocket = (url: string) => {
   const dispatch = useDispatch();
@@ -60,8 +60,6 @@ const useWebSocket = (url: string) => {
             dispatch(setLastActionId(parsedMessage.actionId));
             dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
           }
-        } else {
-          dispatch(addWebSocketMessage(parsedMessage));
         }
       } catch (error) {
         console.error('WebSocket 메시지 파싱 오류:', error, '원본 메시지:', event.data);
@@ -71,6 +69,8 @@ const useWebSocket = (url: string) => {
     socket.onclose = () => {
       console.log('WebSocket 연결 종료');
       dispatch(setWebSocketConnected(false));
+      dispatch(setRunningScenario(null));
+
       socketRef.current = null;
     };
 
