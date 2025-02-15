@@ -6,6 +6,7 @@ import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel,
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums';
 
+import { getPageNumbers } from '@/utils/getPageNumbers';
 import { getSelectName } from '@/utils/getSelectName';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
@@ -174,14 +175,8 @@ export default function Table() {
           <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
             <PreArrow />
           </S.ArrowBox>
-          {(table.getPageOptions().length ? table.getPageOptions() : [0]).map((page) => (
-            <S.PageBtnBox
-              key={page}
-              onClick={() => {
-                table.setPageIndex(page);
-              }}
-              $cur={page === pagination.pageIndex}
-            >
+          {getPageNumbers({ totalPages: listData?.result.totalPage ?? 1, currentPage: pagination.pageIndex }).map((page) => (
+            <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)} $cur={page === pagination.pageIndex}>
               {page + 1}
             </S.PageBtnBox>
           ))}
