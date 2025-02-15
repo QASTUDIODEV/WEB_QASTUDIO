@@ -1,11 +1,10 @@
-import DownArrow from './arrow_down.svg?react';
-import PreArrow from './arrow_left.svg?react';
-import NextArrow from './arrow_right.svg?react';
-import GreenArrow from './arrow_right_green.svg?react';
-import RedArrow from './arrow_right_red.svg?react';
-import UpArrow from './arrow_up.svg?react';
-import ScenarioLogo from './file_branch.svg?react';
-import DashboardLogo from './grid.svg?react';
-import InformationLogo from './info.svg?react';
-
-export { DashboardLogo, DownArrow, GreenArrow, InformationLogo, NextArrow, PreArrow, RedArrow, ScenarioLogo, UpArrow };
+export { default as DownArrow } from './arrow_down.svg?react';
+export { default as PreArrow } from './arrow_left.svg?react';
+export { default as NextArrow } from './arrow_right.svg?react';
+export { default as GreenArrow } from './arrow_right_green.svg?react';
+export { default as RedArrow } from './arrow_right_red.svg?react';
+export { default as UpArrow } from './arrow_up.svg?react';
+export { default as BackIcon } from './back.svg?react';
+export { default as ScenarioLogo } from './file_branch.svg?react';
+export { default as DashboardLogo } from './grid.svg?react';
+export { default as InformationLogo } from './info.svg?react';
