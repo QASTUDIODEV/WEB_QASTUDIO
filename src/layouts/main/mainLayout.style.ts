@@ -10,6 +10,8 @@ const Container = styled.div`
 `;
 
 const OutletWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   max-width: 100vw;
   overflow-x: hidden;
