@@ -175,6 +175,7 @@ export const ProfileUserInfo = styled.div`
   gap: 15px;
   width: 100%;
   height: 133px;
+  align-items: center;
 `;
 
 export const SocialLogoWrapper = styled.div`
