@@ -6,6 +6,7 @@ import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel,
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums';
 
+import { formatDate } from '@/utils/formatDate.ts';
 import { getPageNumbers } from '@/utils/getPageNumbers';
 import { getSelectName } from '@/utils/getSelectName';
 
@@ -59,7 +60,7 @@ export default function Table() {
   const columns = [
     columnHelper.accessor('testDate', {
       header: ({ column }) => <DateHeader column={column} />,
-      cell: (info) => info.getValue(),
+      cell: (info) => formatDate(info.getValue()),
       size: 400,
     }),
     columnHelper.accessor('testName', {
