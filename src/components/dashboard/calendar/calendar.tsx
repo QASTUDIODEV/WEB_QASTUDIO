@@ -21,7 +21,7 @@ export default function Calendar() {
   const { selectedYearAndMonth, selectedTimestamp } = useSelector((state) => state.calendar);
 
   useEffect(() => {
-    clear();
+    if (!pathname.includes('dashboard')) clear();
   }, [pathname]);
 
   return (

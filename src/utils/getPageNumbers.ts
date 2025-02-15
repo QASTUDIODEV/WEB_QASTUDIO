@@ -4,7 +4,6 @@ type TGetPageNumbersProps = {
 };
 
 export const getPageNumbers = ({ totalPages, currentPage }: TGetPageNumbersProps) => {
-  console.log(totalPages, currentPage);
   if (totalPages === 0) {
     return [0];
   }
