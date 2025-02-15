@@ -3,11 +3,9 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 5%;
+  gap: 25px;
   width: 100%;
-  height: 100%;
-  padding: 60px 60px;
+  padding: 20px 60px 0;
 
   //@media (max-width: 1260px) {
   //  padding: 60px 60px;

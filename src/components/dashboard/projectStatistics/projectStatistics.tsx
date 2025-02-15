@@ -2,7 +2,6 @@ import { memo } from 'react';
 
 import type { TGetStatisticsResponse } from '@/types/test/test.ts';
 
-import Profile from '@/components/common/profile/profile';
 import PercentLabel from '@/components/dashboard/percentLabel/percentLabel';
 import ProjectInfoBox from '@/components/dashboard/projectInfoBox/projectInfoBox';
 
@@ -18,16 +17,10 @@ interface IProps {
 }
 
 function ProjectStatistics({ data }: IProps) {
-  const { projectName, projectImage, failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
+  const { failRate, successRate, totalFailCnt, totalTestCnt, totalSuccessCnt, participant } = data?.result ?? {};
 
   return (
     <S.Container>
-      <S.ProjectTitleBox>
-        <S.ProfileBox>
-          <Profile profileImg={projectImage as string} />
-        </S.ProfileBox>
-        <p>{projectName}</p>
-      </S.ProjectTitleBox>
       <S.InfoWrapper>
         <ProjectInfoBox
           label={'Successes'}
