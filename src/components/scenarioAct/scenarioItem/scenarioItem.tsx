@@ -36,7 +36,7 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         {
           sessionId: project.webSocket.sessionId,
           scenarioId,
-          baseUrl: 'https://example.com', //'https://example.com' / project.projectUrl
+          baseUrl: project.projectUrl, //'https://example.com' / project.projectUrl
         },
         {
           onSuccess: (data) => {
