@@ -32,12 +32,12 @@ const getScenarioList = async ({ characterId }: TGetProjectInfoValues): Promise<
 
 const editAction = async (editData: TEditActionValues): Promise<TEditActionResponse> => {
   const { data } = await axiosInstance.patch(`/api/v0/actions/${editData.actionId}`, editData.data);
-  console.log(data);
   return data;
 };
 
 const createScenario = async (scenario: TCreateScenaioValues): Promise<TCreateScenarioResponse> => {
   const { data } = await axiosInstance.post(`/api/v0/scenarios`, scenario);
+  console.log(data);
   return data;
 };
 
