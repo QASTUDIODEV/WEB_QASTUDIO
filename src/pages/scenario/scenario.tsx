@@ -8,7 +8,6 @@ import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
 
 import Loading from '@/components/common/loading/loading';
-import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
 
