@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useSelector } from '@/hooks/common/useCustomRedux';
 import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
@@ -14,6 +15,7 @@ import Delete from '@/assets/icons/delete.svg?react';
 import Exit from '@/assets/icons/exit.svg?react';
 
 export default function Controller() {
+  const navigate = useNavigate();
   const scenario = useSelector((state) => state.scenarioAct);
 
   const [step, setStep] = useState<number>(1);
@@ -26,7 +28,10 @@ export default function Controller() {
   };
 
   const handleGoBack = () => {
-    window.history.back();
+    navigate(-1);
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   return (

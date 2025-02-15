@@ -146,6 +146,19 @@ export default function AddInputForm() {
               <RecordItem key={action.step} step={action.step} />
             ))}
             <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
+            {/* 액션 타입 */}
+            <S.DivideInputContainer>
+              <Controller
+                name="actionType"
+                control={actionControl}
+                rules={{ required: true }}
+                render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
+              />
+              {['send_keys', 'get_attribute'].includes(actionType) && (
+                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+              )}
+            </S.DivideInputContainer>
+            {/* 로케이터 */}
             <S.DivideInputContainer>
               <Controller
                 name="strategy"
@@ -153,7 +166,6 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
               />
-              {/* 로케이터 */}
               <Input
                 placeholder="Enter key."
                 type="thin"
@@ -163,17 +175,7 @@ export default function AddInputForm() {
                 onBlur={handleBlur}
               />
             </S.DivideInputContainer>
-            <S.DivideInputContainer>
-              <Controller
-                name="actionType"
-                control={actionControl}
-                rules={{ required: true }}
-                render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select key action." />}
-              />
-              {['send_keys', 'get_attribute'].includes(actionType) && (
-                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
-              )}
-            </S.DivideInputContainer>
+
             <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
               {isActionValid ? <Add /> : <AddDark />}
             </S.AddButton>

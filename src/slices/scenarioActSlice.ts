@@ -124,14 +124,11 @@ const initialState: IScenarioActSlice = {
     sessionId: null,
     lastActionId: null,
   },
-  currentHtml: `<div >
-
-</div>`,
+  currentHtml: `<div> </div>`,
   currentCss: `<!DOCTYPE html>
 <html>
 <head>
       <style >
-
       </style>
     </head>
 <body>
@@ -227,11 +224,19 @@ const scenarioActSlice = createSlice({
       state.currentHtml = action.payload.html;
       state.currentCss =
         action.payload.css +
-        `.qa-highlighted-element {
-          outline: 3px solid #ffeb3b;
-          background-color: rgba(255, 235, 59, 0.2);
+        `.qa-highlighted-element::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 64, 157, 0.2);
+      mix-blend-mode: multiply; 
+      border: 1px dashed #0D409D;
         }`;
     },
+
     // 실행중인 시나리오 설정
     setRunningScenario: (state, action: PayloadAction<number | null>) => {
       state.webSocket.runningScenarioId = action.payload;

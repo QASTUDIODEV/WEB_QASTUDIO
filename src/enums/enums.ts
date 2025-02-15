@@ -2,19 +2,19 @@ export enum DEVICE {
   PC = 'PC',
   MOBILE = 'MOBILE',
 }
-// 프로젝트 스택
+
 export enum STACK {
   NEXT = 'NEXT',
   REACT = 'REACT',
   JS = 'JS',
 }
-// 액션 상태
+
+// 시나리오 실행
 export enum ACTION_STATE {
   SUCCESS = 'SUCCESS',
   FAIL = 'FAIL',
   UNVERIFIED = 'UNVERIFIED',
 }
-// 액션 상태
 export enum ACTION_TYPE {
   NAVIGATE = 'navigate',
   CLICK = 'click',
