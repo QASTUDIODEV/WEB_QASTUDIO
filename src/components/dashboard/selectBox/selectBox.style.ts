@@ -14,6 +14,7 @@ const Container = styled.ul`
 
   max-height: 300px;
   overflow-y: auto;
+  z-index: 10;
 
   li {
     ${({ theme }) => theme.text.medium_14};
