@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Background = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  padding: 60px;
+  padding: 0px 60px 60px 60px;
   display: flex;
   flex-direction: column;
   height: 100vh;
