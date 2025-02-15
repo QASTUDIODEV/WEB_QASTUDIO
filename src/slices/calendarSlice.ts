@@ -11,11 +11,13 @@ interface ICalendarState {
   selectedYearAndMonth: IYearAndMonth;
   selectedTimestamp: number;
   date: string;
+  isCalendarOpen: boolean;
 }
 
 const nowDate = toDate(Date.now(), { timeZone: 'Asia/Seoul' });
 
 const initialState: ICalendarState = {
+  isCalendarOpen: false,
   selectedYearAndMonth: {
     year: nowDate.getFullYear(),
     month: nowDate.getMonth(),
@@ -29,6 +31,10 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     clear: () => initialState,
+
+    toggleCalendar: (state) => {
+      state.isCalendarOpen = !state.isCalendarOpen;
+    },
 
     handleLeftClick: (state: ICalendarState) => {
       if (state.selectedYearAndMonth.month === 0) {
@@ -56,11 +62,13 @@ const calendarSlice = createSlice({
       state.selectedYearAndMonth.month = selectedDate.getMonth();
 
       state.date = format(selectedDate, 'yyyy-MM-dd', { timeZone: 'Asia/Seoul' });
+
+      state.isCalendarOpen = !state.isCalendarOpen;
     },
   },
 });
 
-export const { clear, handleLeftClick, handleRightClick, handleDayClick } = calendarSlice.actions;
+export const { clear, handleLeftClick, handleRightClick, handleDayClick, toggleCalendar } = calendarSlice.actions;
 
 const calendarReducer = calendarSlice.reducer;
 export default calendarReducer;

@@ -6,6 +6,8 @@ import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel,
 import type { TTestListDTO } from '@/types/test/test';
 import { TEST_STATE } from '@/enums/enums';
 
+import { formatDate } from '@/utils/formatDate.ts';
+import { getPageNumbers } from '@/utils/getPageNumbers';
 import { getSelectName } from '@/utils/getSelectName';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
@@ -58,13 +60,13 @@ export default function Table() {
   const columns = [
     columnHelper.accessor('testDate', {
       header: ({ column }) => <DateHeader column={column} />,
-      cell: (info) => info.getValue(),
-      size: 400,
+      cell: (info) => formatDate(info.getValue()),
+      size: 300,
     }),
     columnHelper.accessor('testName', {
       header: 'Name',
       size: 200,
-      cell: (info) => info.getValue(),
+      cell: (info) => <S.TestName>{info.getValue()}</S.TestName>,
     }),
     columnHelper.accessor('pageName', {
       header: () => <PageNameHeader setFilters={setFilters} />,
@@ -103,7 +105,7 @@ export default function Table() {
           {info.row.original.state === TEST_STATE.SUCCESS ? <GreenArrow /> : <RedArrow />}
         </S.Action>
       ),
-      size: 400,
+      size: 300,
     }),
   ];
 
@@ -174,14 +176,8 @@ export default function Table() {
           <S.ArrowBox disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>
             <PreArrow />
           </S.ArrowBox>
-          {(table.getPageOptions().length ? table.getPageOptions() : [0]).map((page) => (
-            <S.PageBtnBox
-              key={page}
-              onClick={() => {
-                table.setPageIndex(page);
-              }}
-              $cur={page === pagination.pageIndex}
-            >
+          {getPageNumbers({ totalPages: listData?.result.totalPage ?? 1, currentPage: pagination.pageIndex }).map((page) => (
+            <S.PageBtnBox key={page} onClick={() => table.setPageIndex(page)} $cur={page === pagination.pageIndex}>
               {page + 1}
             </S.PageBtnBox>
           ))}
