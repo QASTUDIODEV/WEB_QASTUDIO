@@ -224,13 +224,7 @@ const scenarioActSlice = createSlice({
       state.currentHtml = action.payload.html;
       state.currentCss =
         action.payload.css +
-        `.qa-highlighted-element::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+        `.qa-highlighted-element {
       background: rgba(13, 64, 157, 0.2);
       mix-blend-mode: multiply; 
       border: 1px dashed #0D409D;
