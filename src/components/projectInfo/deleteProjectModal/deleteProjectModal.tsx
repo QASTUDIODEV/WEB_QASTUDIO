@@ -31,10 +31,13 @@ export default function DeleteProjectModal({ onClose }: TAuthModalProps) {
     );
   };
   return (
-    <Modal title={'Are you sure you want to remove the page?'} onClose={onClose} isExitButtonVisible={true}>
+    <Modal title={'Are you sure you want to remove the page?'} onClose={onClose} isExitButtonVisible={false}>
       <S.Container>If you press the Remove button, it will never recover again and all data will be deleted.</S.Container>
       <S.ButtonBox>
         {errorMessage && <ValidataionMessage message={errorMessage} isError={true} />}
+        <Button color={'white_square'} onClick={onClose}>
+          Cancel
+        </Button>
         <Button color={'blue'} onClick={handleDelete}>
           Delete
         </Button>
