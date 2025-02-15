@@ -61,12 +61,12 @@ export default function Table() {
     columnHelper.accessor('testDate', {
       header: ({ column }) => <DateHeader column={column} />,
       cell: (info) => formatDate(info.getValue()),
-      size: 400,
+      size: 300,
     }),
     columnHelper.accessor('testName', {
       header: 'Name',
       size: 200,
-      cell: (info) => info.getValue(),
+      cell: (info) => <S.TestName>{info.getValue()}</S.TestName>,
     }),
     columnHelper.accessor('pageName', {
       header: () => <PageNameHeader setFilters={setFilters} />,
@@ -105,7 +105,7 @@ export default function Table() {
           {info.row.original.state === TEST_STATE.SUCCESS ? <GreenArrow /> : <RedArrow />}
         </S.Action>
       ),
-      size: 400,
+      size: 300,
     }),
   ];
 

@@ -42,7 +42,7 @@ const TableHeader = styled.thead`
 `;
 
 const Th = styled.th`
-  padding: 15px 30px;
+  padding: 15px 20px;
   text-align: left;
 
   border-top: 1px solid rgba(32, 75, 153, 0.2);
@@ -79,7 +79,7 @@ const Tr = styled.tr`
 
 const Td = styled.td`
   ${({ theme }) => theme.text.medium_14};
-  padding: 15px 30px;
+  padding: 15px 20px;
 
   &:first-child {
     border-top-left-radius: 6px;
@@ -204,6 +204,11 @@ const Skeleton = styled.div`
   animation: ${pulse} 1.5s infinite ease-in-out;
 `;
 
+const TestName = styled.span`
+  word-break: keep-all;
+  max-width: 277px;
+`;
+
 export {
   Action,
   ArrowBox,
@@ -219,6 +224,7 @@ export {
   TableHeader,
   TableWrapper,
   Td,
+  TestName,
   Th,
   Tr,
   Wrapper,
