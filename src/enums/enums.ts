@@ -1,12 +1,12 @@
 export enum DEVICE {
-  PC = 'pc',
-  MOBILE = 'mobile',
+  PC = 'PC',
+  MOBILE = 'MOBILE',
 }
 // 프로젝트 스택
 export enum STACK {
-  NEXT = 'next',
-  REACT = 'react',
-  JS = 'js',
+  NEXT = 'NEXT',
+  REACT = 'REACT',
+  JS = 'JS',
 }
 // 액션 상태
 export enum ACTION_STATE {
