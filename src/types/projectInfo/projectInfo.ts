@@ -125,3 +125,8 @@ export type TPath = TCommonResponse<{
     path: string;
   }[];
 }>;
+export type TDeleteProject = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+};

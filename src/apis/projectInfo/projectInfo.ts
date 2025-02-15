@@ -2,6 +2,7 @@ import type {
   TAddPage,
   TAddPageRequest,
   TCharacterId,
+  TDeleteProject,
   TEditRequest,
   TGetCharacter,
   TGetProjectInfo,
@@ -54,5 +55,9 @@ export const getScenario = async ({ characterId }: TCharacterId): Promise<TGetSc
 };
 export const getPath = async ({ projectId }: TProjectInfo): Promise<TPath> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/characters/paths`);
+  return data;
+};
+export const deleteProject = async ({ projectId }: TProjectInfo): Promise<TDeleteProject> => {
+  const { data } = await axiosInstance.delete(`/api/v0/projects/${projectId}`);
   return data;
 };
