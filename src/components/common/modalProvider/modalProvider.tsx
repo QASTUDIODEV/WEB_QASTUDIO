@@ -9,6 +9,8 @@ import InviteTokenExpiredModal from '@/components/auth/inviteModal/inviteTokenEx
 import LogoutModal from '@/components/common/sidebar/logtoutModal/logoutModal';
 import ProjectModal from '@/components/common/sidebar/projectModal/projectModal';
 import ErrorModal from '@/components/dashboard/errorModal/errorModal';
+import DeleteProjectModal from '@/components/projectInfo/deleteProjectModal/deleteProjectModal';
+import EditProjectModal from '@/components/projectInfo/editProjectModal/editProjectModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
 import ScenarioModal from '@/components/scenario/scenarioModal/scenarioModal';
@@ -28,6 +30,8 @@ export const MODAL_TYPES = {
   InviteSuccessModal: 'InviteSuccessModal',
   InviteTokenExpiredModal: 'InviteTokenExpiredModal',
   ScenarioActErrorModal: 'ScenarioActErrorModal',
+  EditProjectModal: 'EditProjectModal',
+  DeleteProjectModal: 'DeleteProjectModal',
 };
 
 export const MODAL_COMPONENTS = {
@@ -42,6 +46,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.LogoutModal]: LogoutModal,
   [MODAL_TYPES.ScenarioModal]: ScenarioModal,
   [MODAL_TYPES.ScenarioActErrorModal]: ScenarioActModal,
+  [MODAL_TYPES.EditProjectModal]: EditProjectModal,
+  [MODAL_TYPES.DeleteProjectModal]: DeleteProjectModal,
 };
 
 export default function ModalProvider() {

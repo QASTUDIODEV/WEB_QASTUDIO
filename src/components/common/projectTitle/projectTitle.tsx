@@ -16,8 +16,8 @@ import Web from '@/assets/icons/web.svg?react';
 type TProjectTitleProps = {
   title?: string;
   profileImg?: string | null;
-  device: DEVICE | undefined;
-  stack: STACK | undefined;
+  device?: DEVICE | null;
+  stack?: STACK | null;
 };
 // 아이콘 맵핑
 export const stackIconMap: Record<STACK, React.FunctionComponent> = {

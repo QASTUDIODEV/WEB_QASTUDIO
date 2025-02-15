@@ -34,6 +34,7 @@ const Wrapper = styled(motion.div)`
 `;
 
 const TitleWrapper = styled.div`
+  gap: 10px;
   ${({ theme }) => theme.align.row_space_between};
 `;
 

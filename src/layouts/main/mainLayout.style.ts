@@ -10,12 +10,21 @@ const Container = styled.div`
 `;
 
 const OutletWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   max-width: 100vw;
   overflow-x: hidden;
   @media (max-width: 1024px) {
-    margin-left: 96px;
+    padding-left: 96px;
   }
 `;
 
-export { Container, OutletWrapper };
+const Header = styled.div`
+  display: flex;
+  width: 100vw;
+  margin-top: 50px;
+  margin-left: 60px;
+`;
+
+export { Container, Header, OutletWrapper };

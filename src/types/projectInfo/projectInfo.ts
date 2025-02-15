@@ -1,3 +1,5 @@
+import type { DEVICE, STACK } from '@/enums/enums';
+
 import type { TCommonResponse } from '../common/common';
 
 export type TInfoDTO = {
@@ -31,8 +33,8 @@ export type TGetProjectInfo = TCommonResponse<{
   projectName: string;
   projectUrl: string;
   introduction: string;
-  viewType: string;
-  developmentSkill: string;
+  viewType: DEVICE;
+  developmentSkill: STACK;
   assistantId: string;
 }>;
 
@@ -123,3 +125,8 @@ export type TPath = TCommonResponse<{
     path: string;
   }[];
 }>;
+export type TDeleteProject = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+};
