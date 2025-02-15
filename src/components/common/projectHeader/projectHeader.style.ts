@@ -10,6 +10,7 @@ export const Header = styled.div`
 export const ButtonWrapper = styled.div`
   display: flex;
   gap: 10px;
+  margin-left: 10px;
   @media (max-width: 610px) {
     display: none;
   }
@@ -17,6 +18,9 @@ export const ButtonWrapper = styled.div`
 
 export const RightSideButton = styled.div`
   display: flex;
+  @media (max-width: 820px) {
+    display: none;
+  }
 `;
 
 export const LeftSideComponents = styled.div`

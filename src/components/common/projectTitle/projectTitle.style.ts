@@ -7,7 +7,6 @@ export const Container = styled.div`
   height: 36px;
   gap: 10px;
   background-color: inherit;
-  max-width: 80%;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   p {
     ${({ theme }) => theme.text.medium_24};
