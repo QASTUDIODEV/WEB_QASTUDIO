@@ -4,10 +4,14 @@ import { getOtherUserInfo, getOtherUserProjectList } from '@/apis/userInfo/userI
 
 import { useCoreQuery } from '../common/customQuery';
 
-export default function useOtherUserInfo({ userId, currentPage }: { userId: string; currentPage: number }) {
+export default function useOtherUserInfo({ userId, currentPage }: { userId: string; currentPage?: number }) {
   const useGetOtherUserInfo = useCoreQuery(QUERY_KEYS.GET_OTHER_USER_INFO(userId), () => getOtherUserInfo(userId));
-  const useGetOtherUserProjects = useCoreQuery(QUERY_KEYS.GET_OTHER_USER_PROJECT_LIST({ userId, page: currentPage }), () =>
-    getOtherUserProjectList({ page: currentPage, userId }),
+  const useGetOtherUserProjects = useCoreQuery(
+    QUERY_KEYS.GET_OTHER_USER_PROJECT_LIST({ userId, page: currentPage! }),
+    () => getOtherUserProjectList({ page: currentPage, userId }),
+    {
+      enabled: !!userId,
+    },
   );
   return { useGetOtherUserInfo, useGetOtherUserProjects };
 }

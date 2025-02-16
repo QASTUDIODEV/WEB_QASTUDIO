@@ -15,22 +15,6 @@ const Container = styled.div`
   gap: 20px;
   overflow-y: scroll;
 `;
-const Title = styled.div`
-  width: 79px;
-  height: 29px;
-  top: 80px;
-  left: 352px;
-  gap: 0px;
-  opacity: 0px;
-  font-family: Pretendard;
-  font-size: 19.2px;
-  font-weight: 500;
-  line-height: 28.8px;
-  letter-spacing: 0.02em;
-  text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-`;
 
 const LoadingOverlay = styled.div`
   position: fixed;
@@ -355,7 +339,6 @@ export {
   TBody,
   TD,
   TH,
-  Title,
   TR,
   UserInfo,
 };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
 
@@ -12,10 +12,11 @@ import * as S from './otherUserProjectList.style.ts';
 import ArrowLeft from '@/assets/icons/arrow_left_noColor.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right_noColor.svg?react';
 
-export default function OtherUserProjectList({ userId }: { userId: string }) {
+export default function OtherUserProjectList() {
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const { useGetOtherUserProjects } = useOtherUserInfo({ userId, currentPage });
+  const { useGetOtherUserProjects } = useOtherUserInfo({ userId: userId || '', currentPage });
   const { data } = useGetOtherUserProjects;
 
   const projectsData = data?.result.userProjectList;

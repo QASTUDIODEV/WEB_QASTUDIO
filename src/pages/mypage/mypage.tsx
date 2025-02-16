@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
 import useUserInfo from '@/hooks/mypage/useUserInfo';
-import useProjects from '@/hooks/project/useProject';
 
 import Loading from '@/components/common/loading/loading';
 import MyProfile from '@/components/mypage/myProfile/myProfile';
@@ -11,13 +8,11 @@ import ProjectNum from '@/components/mypage/projectNum/projectNum';
 import * as S from './mypage.style';
 
 export default function MyPage() {
-  const [currentPage, setCurrentPage] = useState(0);
   const { useGetUserInfo } = useUserInfo();
   const { data: userData, isLoading: getUserInfoLoaidng } = useGetUserInfo;
-  const { useGetMypageProjects } = useProjects(currentPage);
-  const { data: projectData, isLoading: getProjectDataLoading } = useGetMypageProjects;
-  const projectNum = projectData?.result.totalElements;
-  if (getUserInfoLoaidng || getProjectDataLoading) {
+
+  const projectNum = userData?.result.projectCnt;
+  if (getUserInfoLoaidng) {
     return (
       <S.LoadingContainer>
         <Loading />
@@ -30,7 +25,7 @@ export default function MyPage() {
       <MyProfile userData={userData} isLoading={getUserInfoLoaidng} />
       <S.Projects>
         <ProjectNum projectNum={projectNum} />
-        <ProjectList projectData={projectData} setCurrentPage={setCurrentPage} />
+        <ProjectList />
       </S.Projects>
     </S.Container>
   );
