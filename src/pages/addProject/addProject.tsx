@@ -11,7 +11,6 @@ import Button from '@/components/common/button/button';
 import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
-import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import ProjectInfoPage from '../projectInfo/projectInfo';
 
@@ -24,7 +23,7 @@ export default function AddProjectPage() {
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
   const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isSuccess, isError: projectInfoError } = useProjectExtractInfo;
+  const { data, isError: projectInfoError } = useProjectExtractInfo;
   const { useGetProjectList } = useProjectList();
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
@@ -119,16 +118,6 @@ export default function AddProjectPage() {
     <S.Container>
       {projectList?.result.projectList[0] && (
         <>
-          {projectId && isSuccess && (
-            <S.ProfileWrapper>
-              <S.Profile>
-                <S.Wrapper>
-                  <ProjectProfile profileImg={data.result.projectImage} />
-                </S.Wrapper>
-                <S.ProfileName>{data.result.projectName}</S.ProfileName>
-              </S.Profile>
-            </S.ProfileWrapper>
-          )}
           <S.Title>Add Project File</S.Title>
           <S.Text>
             Please enter the project folder for AI to understand the project. <br />

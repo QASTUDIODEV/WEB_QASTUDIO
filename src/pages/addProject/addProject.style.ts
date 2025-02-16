@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 export const Container = styled.div`
-  height: 100vh;
+  height: calc(100% - 66px);
   width: 100%;
   min-width: 500px;
   ${({ theme }) => theme.align.column_center};
