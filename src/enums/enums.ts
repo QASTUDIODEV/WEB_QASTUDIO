@@ -17,9 +17,14 @@ export enum ACTION_STATE {
   UNVERIFIED = 'UNVERIFIED',
 }
 export enum ACTION_TYPE {
-  NAVIGATE = 'navigate',
-  CLICK = 'click',
-  SEND_KEYS = 'send_keys',
+  CLICK = 'Click',
+  NAVIGATE = 'Navigate',
+  Fill_Text = 'Fill_Text',
+}
+export enum LOCATOR_TYPE {
+  ID = 'id',
+  CSSSELECTOR = 'css_selector',
+  XPATH = 'xpath',
 }
 
 //소셜 로그인

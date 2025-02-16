@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useScenario from '@/hooks/scenarioAct/useScenario';
 
 import Button from '@/components/common/button/button';
-import * as S from '@/components/scenarioAct/addInputForm/addInputForm.style';
 import Input from '@/components/scenarioAct/input/input';
+import * as S from '@/components/scenarioAct/modifyInputForm/modifyInputForm.style';
 import RecordItem from '@/components/scenarioAct/recordItem/recordItem';
 import ThinDropdown from '@/components/scenarioAct/thinDropdown/thinDropdown';
 
@@ -120,7 +120,7 @@ export default function AddInputForm() {
               options={characters.map((char) => char.characterName)}
               value={characters.find((char) => char.characterId === field.value)?.characterName || ''}
               onChange={(selected) => field.onChange(characters.find((char) => char.characterName === selected)?.characterId)}
-              placeholder="Select character."
+              placeholder="Select a role for the scenario."
             />
           )}
         />
@@ -131,14 +131,7 @@ export default function AddInputForm() {
       </S.InputContainer>
 
       {/* 선택 토글 */}
-      <S.SelectToggle>
-        <S.Select $active={step === 1} onClick={() => setStep(1)}>
-          write directly
-        </S.Select>
-        <S.Select $active={step === 2} onClick={() => setStep(2)}>
-          record
-        </S.Select>
-      </S.SelectToggle>
+      <S.SelectHeader>Actions</S.SelectHeader>
 
       {step === 1 ? (
         <>

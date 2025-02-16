@@ -8,6 +8,7 @@ import Button from '@/components/common/button/button';
 import AddInputForm from '@/components/scenarioAct/addInputForm/addInputForm';
 import CharacterSelectDropdown from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown';
 import * as S from '@/components/scenarioAct/controller/controller.style';
+import ModifyInputForm from '@/components/scenarioAct/modifyInputForm/modifyInputForm';
 import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
 
 import Add from '@/assets/icons/add.svg?react';
@@ -67,19 +68,33 @@ export default function Controller() {
             </Button>
           </S.ButtonContainer>
         </S.ActContainer>
-      ) : (
+      ) : step == 2 ? (
         /* 시나리오 추가 */
         <S.AddContainer>
           {/* 헤더 */}
           <S.Header>
             <S.IconContainer>
-              <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
+              <Delete onClick={() => handleStep(3)} style={{ cursor: 'pointer' }} />
             </S.IconContainer>
             <p>Add Scenario</p>
           </S.Header>
 
           {/*인풋들 */}
           <AddInputForm />
+        </S.AddContainer>
+      ) : (
+        /* 시나리오 편집 */
+        <S.AddContainer>
+          {/* 헤더 */}
+          <S.Header>
+            <S.IconContainer>
+              <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
+            </S.IconContainer>
+            <p>Modify Senario</p>
+          </S.Header>
+
+          {/*인풋들 */}
+          <ModifyInputForm />
         </S.AddContainer>
       )}
     </S.Container>
