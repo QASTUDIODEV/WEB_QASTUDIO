@@ -62,10 +62,6 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
     }
   }, [memberEmails]);
 
-  useEffect(() => {
-    console.log(memberEmailList);
-  }, [memberEmailList]);
-
   const {
     control,
     setValue,
@@ -116,13 +112,12 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
   };
 
   const onSubmit: SubmitHandler<TFormData> = async (data) => {
-    console.log(data, memberEmailList);
     editProject(
       {
         projectId: Number(projectId),
         projectImage: keyName ? keyName : projectDefaultData?.result.projectImage?.split('aws.com/')[1] || '',
-        projectName: projectNameValue,
-        projectUrl: projectUrlValue,
+        projectName: data.projectName,
+        projectUrl: data.projectUrl,
         memberEmailList: memberEmailList,
       },
       {
@@ -153,8 +148,7 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
               file: file,
             },
             {
-              onSuccess: (res) => {
-                console.log(res);
+              onSuccess: () => {
                 setKeyName(img.result.keyName);
               },
               onError: (err) => {
