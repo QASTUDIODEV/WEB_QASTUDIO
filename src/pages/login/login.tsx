@@ -26,6 +26,15 @@ type TFormValues = {
 };
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
+  const { useGetUserEmail } = useInvite();
+  const { data: emailData } = useGetUserEmail;
+
+  if (emailData) {
+    navigate('/project');
+  }
+
   sessionStorage.removeItem('loginHandled');
   localStorage.setItem('route', 'login');
   const token = localStorage.getItem('inviteToken');
@@ -49,7 +58,6 @@ export default function LoginPage() {
     control,
     name: 'password',
   });
-  const navigate = useNavigate();
 
   const { useDefaultLogin } = useUserAuth();
   const { useInviteAccept } = useInvite();

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, userSetting } from '@/apis/auth/auth';
+import { authSendEmailCode, changePassword, defaultLogin, defaultSignup, findingSendEmailCode, logout, userSetting } from '@/apis/auth/auth';
 
 import { useCoreMutation } from '../common/customQuery';
 
@@ -16,5 +16,6 @@ export default function useUserAuth() {
   });
   const useSendFindingCode = useCoreMutation(findingSendEmailCode);
   const useSettingUserInfo = useCoreMutation(userSetting);
-  return { useSendSignupCode, useSettingUserInfo, useDefaultLogin, useDefaultSignup, useChangePassword, useSendFindingCode };
+  const useLogout = useCoreMutation(logout);
+  return { useSendSignupCode, useLogout, useSettingUserInfo, useDefaultLogin, useDefaultSignup, useChangePassword, useSendFindingCode };
 }

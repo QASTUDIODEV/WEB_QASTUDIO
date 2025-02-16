@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { logout } from '@/apis/auth/auth';
+import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
@@ -12,11 +12,18 @@ type TLogoutModalProps = {
 
 export default function LogoutModal({ onClose }: TLogoutModalProps) {
   const navigate = useNavigate();
-
+  const { useLogout } = useUserAuth();
+  const { mutate: logoutMutate } = useLogout;
   const handleLogout = () => {
-    navigate('/', { replace: true });
-    logout();
-    onClose();
+    logoutMutate(
+      {},
+      {
+        onSuccess: () => {
+          navigate('/', { replace: true });
+          onClose();
+        },
+      },
+    );
   };
   return (
     <Modal title="Are you sure you want to log out?" onClose={onClose}>
