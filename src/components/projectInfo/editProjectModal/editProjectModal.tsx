@@ -83,8 +83,6 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
   const projectNameValue = useWatch({ control, name: 'projectName' }) || '';
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
 
-  let isImg: boolean = true;
-
   useEffect(() => {
     if (emailValue && error) {
       setError(false);
@@ -134,14 +132,12 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
   const isCreateDisabled = !projectNameValue.trim() || !projectUrlValue.trim() || !!errors.projectName || !!errors.projectUrl || isPending;
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
-      isImg = false;
       return;
     }
     getPresignedUrlMutate(
       { fileName: file.name },
       {
         onSuccess(img) {
-          isImg = true;
           uploadImageToPresignedUrlMutate(
             {
               url: img.result.url,
@@ -185,7 +181,6 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
             {keyName ? <Profile profileImg={imgFile} isProject={true} /> : <Profile profileImg={projectDefaultData?.result.projectImage} isProject={true} />}
           </S.Preview>
-          {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>
