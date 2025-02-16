@@ -13,6 +13,15 @@ const Container = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
 `;
+const Projects = styled.div`
+  display: flex;
+  flex: 1;
+  gap: 20px;
+  @media (max-width: 847px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
 const Title = styled.div`
   height: 29px;
   top: 80px;
@@ -27,16 +36,6 @@ const Title = styled.div`
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
-`;
-
-const Projects = styled.div`
-  display: flex;
-  flex: 1;
-  gap: 20px;
-  @media (max-width: 847px) {
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
 export { Container, Projects, Title };
