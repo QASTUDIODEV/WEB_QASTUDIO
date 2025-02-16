@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useAction from '@/hooks/scenarioAct/useAction';
 
 import Button from '@/components/common/button/button';
+import LoadingSpinner from '@/components/common/loading/loadingSpinner';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
 import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
@@ -31,6 +32,7 @@ interface IActionItem {
 const stateIconMap = {
   [ACTION_STATE.SUCCESS]: CheckCircle,
   [ACTION_STATE.FAIL]: FailCircle,
+  [ACTION_STATE.IN_PROGRESS]: LoadingSpinner,
   [ACTION_STATE.UNVERIFIED]: null,
 };
 

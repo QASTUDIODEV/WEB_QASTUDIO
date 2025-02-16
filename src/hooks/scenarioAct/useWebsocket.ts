@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import { ACTION_STATE } from '@/enums/enums';
+
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import { setActionState, setLastActionId, setRunningScenario, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
@@ -47,6 +49,9 @@ const useWebSocket = (url: string) => {
           if (parsedMessage.phase === 'AFTER_ACTION') {
             dispatch(setLastActionId(parsedMessage.actionId));
             dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
+          }
+          if (parsedMessage.phase === 'BEFORE_ACTION') {
+            dispatch(setActionState({ actionId: parsedMessage.actionId, state: ACTION_STATE.IN_PROGRESS }));
           }
           dispatch(
             updateIframeContent({

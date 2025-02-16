@@ -228,6 +228,7 @@ const scenarioActSlice = createSlice({
       background: rgba(13, 64, 157, 0.2);
       mix-blend-mode: multiply; 
       border: 1px dashed #0D409D;
+      border-radius:4px;
         }`;
     },
 

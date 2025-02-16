@@ -13,6 +13,7 @@ export enum STACK {
 export enum ACTION_STATE {
   SUCCESS = 'SUCCESS',
   FAIL = 'FAIL',
+  IN_PROGRESS = 'IN_PROGRESS',
   UNVERIFIED = 'UNVERIFIED',
 }
 export enum ACTION_TYPE {

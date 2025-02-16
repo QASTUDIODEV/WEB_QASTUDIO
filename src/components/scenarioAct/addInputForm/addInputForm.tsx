@@ -16,6 +16,7 @@ import { addAction, blurLocatorInput, clickLocatorInput, focusLocatorInput } fro
 
 const locatorList = ['id', 'css_selector', 'xpath'];
 const actionList = ['click', 'send_keys'];
+
 export default function AddInputForm() {
   const dispatch = useDispatch();
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
