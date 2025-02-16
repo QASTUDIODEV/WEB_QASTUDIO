@@ -19,7 +19,6 @@ import * as S from './scenarioModalStep.style';
 import Button from '../../../common/button/button';
 import Input from '../../../common/input/input';
 import ValidataionMessage from '../../../common/input/validationMessage';
-import Loading from '../../../common/loading/loading';
 import Dropdown from '../../../projectInfo/dropDown/dropDown';
 
 import DelCircle from '@/assets/icons/del_circle.svg?react';
@@ -175,11 +174,6 @@ export default function ScenarioModalStep1({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <S.ModalContainer>
-        {(postCharacterPending || patchCharacterPending) && (
-          <S.LoadingContainer2>
-            <Loading />
-          </S.LoadingContainer2>
-        )}
         <div className="descriptionWrapper">
           <S.description>Define users for the registered project.</S.description>
           <S.description>QASTUDIO will create a suitable scenario for you.</S.description>

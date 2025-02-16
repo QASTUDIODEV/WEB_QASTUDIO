@@ -11,9 +11,8 @@ import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
-import { LoadingContainer } from '@/components/projectInfo/inviteModal/inviteModal.style';
 
-import Loading from '../../loading/loading';
+import ModalLoading from '../../loading/modalLoading';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
@@ -142,13 +141,10 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
       };
     }
   };
+
   return (
     <Modal title="Create Project" onClose={onClose}>
-      {isPending && (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      )}
+      {isPending && <ModalLoading />}
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
@@ -176,7 +172,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="Enter project title." type="thin" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
+                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
               </>
             )}
           />
@@ -197,7 +193,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
             render={({ field }) => (
               <>
                 <Input
-                  type="thin"
+                  type="normal"
                   placeholder="Enter the deployed project URL"
                   {...field}
                   errorMessage={errors.projectUrl?.message}
@@ -221,7 +217,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
                 },
               }}
               render={({ field }) => (
-                <Input type="thin" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
             <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>

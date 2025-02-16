@@ -10,6 +10,7 @@ import { createCharacterModalScehma } from '@/utils/validate';
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
 import useChangeScenarioInfo from '@/hooks/scenario/useChangeScenarioInfo.ts';
 
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
 import ScenarioModalStep1 from '@/components/scenario/scenarioModal/scenarioModal/scenarioModalStep1';
 import ScenarioModalStep2 from '@/components/scenario/scenarioModal/scenarioModal/scenarioModalStep2';
@@ -50,6 +51,7 @@ export default function ScenarioModal({ projectId = '0', currentPage = 0 }: TSce
         }
       }}
     >
+      {(postCharacterPending || patchCharacterPending) && <ModalLoading />}
       <FormProvider {...methods}>
         {modalStep === 1 && (
           <ScenarioModalStep1

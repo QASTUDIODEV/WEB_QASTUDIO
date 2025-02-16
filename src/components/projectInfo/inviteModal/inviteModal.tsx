@@ -9,7 +9,7 @@ import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
-import Loading from '@/components/common/loading/loading';
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/projectInfo/inviteModal/inviteModal.style';
 
@@ -94,47 +94,45 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     );
   };
   return (
-    <Modal title="Invite Member" onClose={onClose}>
-      {isPending && (
-        <S.LoadingContainer>
-          <Loading />
-        </S.LoadingContainer>
-      )}
-      <S.ModalBox>
-        <S.ModalText>Enter the new member's email.</S.ModalText>
-        <S.ModalText>Share this project</S.ModalText>
-        <S.BtnWrapper>
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              required: 'Email is required',
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'Invalid email address',
-              },
-            }}
-            render={({ field }) => <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} />}
-          />
-          <Button type="act" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
-            Share
-          </Button>
-        </S.BtnWrapper>
-        {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
-        {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
-        <S.tagWrapper>
-          {emails.map((e) => (
-            <Button key={e} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(e)}>
-              {e}
+    <>
+      {isPending && <ModalLoading />}
+      <Modal title="Invite Member" onClose={onClose}>
+        <S.ModalBox>
+          <S.ModalText>Enter the new member's email.</S.ModalText>
+          <S.ModalText>Share this project</S.ModalText>
+          <S.BtnWrapper>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: 'Email is required',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Invalid email address',
+                },
+              }}
+              render={({ field }) => <Input placeholder="invite others by email" type="normal" {...field} errorMessage={errors.email?.message} />}
+            />
+            <Button type="act" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
+              Share
             </Button>
-          ))}
-        </S.tagWrapper>
-        <S.Position>
-          <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0 || isPending}>
-            Create
-          </Button>
-        </S.Position>
-      </S.ModalBox>
-    </Modal>
+          </S.BtnWrapper>
+          {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
+          <S.tagWrapper>
+            {emails.map((e) => (
+              <Button key={e} type="tag" color="mint" icon={<Delcircle />} iconPosition="right" onClick={() => handleRemoveEmail(e)}>
+                {e}
+              </Button>
+            ))}
+          </S.tagWrapper>
+          <S.Position>
+            <Button type="act" color="blue" onClick={handleCreate} disabled={emails.length === 0 || isPending}>
+              Create
+            </Button>
+          </S.Position>
+        </S.ModalBox>
+      </Modal>
+    </>
   );
 }
