@@ -60,7 +60,6 @@ const ButtonWrapper = styled.div`
   margin-right: 24px;
   overflow-x: scroll;
   gap: 8px;
-  scrollbar-width: none;
 `;
 
 const Wrapper = styled.div<TWrapperProps>`

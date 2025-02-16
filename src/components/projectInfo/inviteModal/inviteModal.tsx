@@ -28,6 +28,7 @@ type TEmailList = {
 }[];
 export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProps) {
   const [emails, setEmails] = useState<string[]>([]);
+  const [emailErrorMsg, setEmailErrorMsg] = useState<string | null | undefined>('');
   const {
     control,
     setValue,
@@ -56,8 +57,9 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
     }
   }, [memberEmail]);
   useEffect(() => {
-    if (emailValue && error) {
+    if (emailValue && (error || emailErrorMsg)) {
       setError(false);
+      setEmailErrorMsg(null);
     }
   }, [emailValue]);
   const handleAddEmail = () => {
@@ -90,6 +92,10 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
           setEmails([]);
           onClose();
         },
+        onError: (err) => {
+          setEmailErrorMsg(err.response?.data.message);
+          setEmails([]);
+        },
       },
     );
   };
@@ -117,7 +123,9 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
               Share
             </Button>
           </S.BtnWrapper>
-          {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
+          {(emailErrorMsg || errors.email?.message) && (
+            <ValidataionMessage message={emailErrorMsg ?? errors.email?.message ?? ''} isError={!!(emailErrorMsg || errors.email)} />
+          )}
           {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
           <S.tagWrapper>
             {emails.map((e) => (

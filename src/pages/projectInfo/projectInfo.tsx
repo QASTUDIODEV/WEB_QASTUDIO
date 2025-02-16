@@ -2,7 +2,6 @@ import type { TGetProjectInfo } from '@/types/projectInfo/projectInfo';
 
 import CharacterBox from '@/components/projectInfo/characterBox/characterBox';
 import ProjectInput from '@/components/projectInfo/projectInput/projectInput';
-import ProjectIntro from '@/components/projectInfo/projectIntroduction/projectIntro';
 import ProjectSummary from '@/components/projectInfo/projectSummary/projectSummary';
 import TeamMember from '@/components/projectInfo/teamMember/teamMember';
 
@@ -12,7 +11,6 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
   const result = projectInfo?.result;
   return (
     <S.Container>
-      <ProjectIntro result={result} />
       <S.Box height="6%">
         <ProjectInput result={result} />
       </S.Box>
