@@ -172,7 +172,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
             }}
             render={({ field }) => (
               <>
-                <Input placeholder="Enter project title." type="thin" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
+                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
               </>
             )}
           />
@@ -193,7 +193,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
             render={({ field }) => (
               <>
                 <Input
-                  type="thin"
+                  type="normal"
                   placeholder="Enter the deployed project URL"
                   {...field}
                   errorMessage={errors.projectUrl?.message}
@@ -217,7 +217,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
                 },
               }}
               render={({ field }) => (
-                <Input type="thin" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
+                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
               )}
             />
             <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
