@@ -59,7 +59,7 @@ export default function ProjectHeader() {
         )}
       </S.LeftSideComponents>
       <S.RightSideButton>
-        {isInformationPage && (
+        {isInformationPage && data?.result.isLeader && (
           <S.ButtonWrapper>
             <Button
               type="normal"
