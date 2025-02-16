@@ -35,7 +35,7 @@ export default function ProjectTitle({ title = 'UNTITLED', profileImg, device = 
   return (
     <S.Container>
       <S.IconContainer>
-        <Profile profileImg={profileImg || undefined} />
+        <Profile profileImg={profileImg || undefined} isProject={true} />
       </S.IconContainer>
       <S.Title>{title}</S.Title>
       {device && <S.IconContainer>{getIcon(deviceIconMap, device)}</S.IconContainer>}
