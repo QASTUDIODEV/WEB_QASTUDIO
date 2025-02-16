@@ -11,9 +11,8 @@ import ValidataionMessage from '@/components/common/input/validationMessage';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
-import { LoadingContainer } from '@/components/projectInfo/inviteModal/inviteModal.style';
 
-import Loading from '../../loading/loading';
+import ModalLoading from '../../loading/modalLoading';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
@@ -142,13 +141,10 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
       };
     }
   };
+
   return (
     <Modal title="Create Project" onClose={onClose}>
-      {isPending && (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      )}
+      {isPending && <ModalLoading />}
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>

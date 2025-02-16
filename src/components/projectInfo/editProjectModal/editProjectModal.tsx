@@ -8,11 +8,10 @@ import useProjectList from '@/hooks/sidebar/sidebar';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
-import Loading from '@/components/common/loading/loading';
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 import * as S from '@/components/projectInfo/editProjectModal/editProjectModal.style';
-import { LoadingContainer } from '@/components/projectInfo/inviteModal/inviteModal.style';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
@@ -143,11 +142,7 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
   };
   return (
     <Modal title="Edit Project" onClose={onClose}>
-      {isPending && (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      )}
+      {isPending && <ModalLoading />}
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
         <S.PostBox>
