@@ -3,17 +3,20 @@ import type {
   TAddPageRequest,
   TCharacterId,
   TDeleteProject,
+  TEditProjectInfo,
   TEditRequest,
   TGetCharacter,
   TGetProjectInfo,
   TGetProjectMember,
   TGetScenario,
+  TGetTeamMemberAllEmail,
   TPageSummary,
   TPath,
   TProjectInfo,
   TProjectMember,
   TRequestInvite,
 } from '@/types/projectInfo/projectInfo';
+import type { TAddProject } from '@/types/sidebar/sidebar';
 
 import { axiosInstance } from '../axiosInstance';
 
@@ -59,5 +62,18 @@ export const getPath = async ({ projectId }: TProjectInfo): Promise<TPath> => {
 };
 export const deleteProject = async ({ projectId }: TProjectInfo): Promise<TDeleteProject> => {
   const { data } = await axiosInstance.delete(`/api/v0/projects/${projectId}`);
+  return data;
+};
+export const getTeamMemberAllEmail = async ({ projectId }: TProjectInfo): Promise<TGetTeamMemberAllEmail> => {
+  const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/team-members/all-emails`);
+  return data;
+};
+export const editProject = async ({ projectId, projectImage, projectName, projectUrl, memberEmailList }: TEditProjectInfo): Promise<TAddProject> => {
+  const { data } = await axiosInstance.put(`api/v0/projects/${projectId}`, {
+    projectImage,
+    projectName,
+    projectUrl,
+    memberEmailList,
+  });
   return data;
 };

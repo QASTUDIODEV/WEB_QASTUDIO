@@ -1,16 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+
+import { projectModalSchema } from '@/utils/validate';
+
 import { useImage } from '@/hooks/images/useImage';
-import useProjectList from '@/hooks/sidebar/sidebar';
+import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
 import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
-import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
+import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/projectInfo/editProjectModal/editProjectModal.style';
 
 import Cam from '@/assets/icons/camera.svg?react';
@@ -23,40 +30,65 @@ type TFormData = {
   email: string;
   projectName: string;
   projectUrl: string;
+  projectImage: string;
 };
 type TEmailList = {
   email: string;
 }[];
 export default function EditProjectModal({ onClose }: TProjectModalProps) {
-  const [emails, setEmails] = useState<string[]>([]);
+  const { projectId } = useParams();
+
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
-  const { useAddProject } = useProjectList();
-  const { mutate: addProject, isPending } = useAddProject;
+  const { useEditProject } = useProjectInfo({ projectId: Number(projectId) });
+  const { useProjectExtractInfo, useGetTeamMemberAllEmail } = useProjectInfo({ projectId: Number(projectId) });
+  const { data: memberEmails } = useGetTeamMemberAllEmail;
+  const { data: projectDefaultData } = useProjectExtractInfo;
+  const { mutate: editProject, isPending } = useEditProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
+  const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
+
   const ImgRef = useRef<HTMLInputElement | null>(null);
+
   const [keyName, setKeyName] = useState<string>();
   const [memberEmailList, setMemberEmailList] = useState<TEmailList>([]);
   const [imgFile, setImgFile] = useState('');
+  const [emails, setEmails] = useState<string[]>(memberEmails?.result.members ?? []);
+  const [error, setError] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (memberEmails?.result.members) {
+      setMemberEmailList(memberEmails.result.members.map((email) => ({ email })));
+    }
+  }, [memberEmails]);
+
+  useEffect(() => {
+    console.log(memberEmailList);
+  }, [memberEmailList]);
+
   const {
     control,
     setValue,
+    register,
+    handleSubmit,
     formState: { errors },
   } = useForm<TFormData>({
     mode: 'onChange',
+    resolver: zodResolver(projectModalSchema),
     defaultValues: {
-      email: '',
-      projectName: '',
-      projectUrl: '',
+      projectImage: projectDefaultData?.result.projectImage,
+      projectName: projectDefaultData?.result.projectName,
+      projectUrl: projectDefaultData?.result.projectUrl,
     },
   });
   const email = useRef('');
+
   const emailValue = useWatch({ control, name: 'email' })?.trim() || '';
   const projectNameValue = useWatch({ control, name: 'projectName' }) || '';
   const projectUrlValue = useWatch({ control, name: 'projectUrl' }) || '';
-  const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
+
   let isImg: boolean = true;
-  const [error, setError] = useState(false);
+
   useEffect(() => {
     if (emailValue && error) {
       setError(false);
@@ -82,17 +114,22 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
     setEmails((prev) => prev.filter((e) => e !== emailToRemove));
     setMemberEmailList((prev) => prev.filter((e) => e.email !== emailToRemove));
   };
-  const handleCreate = async () => {
-    addProject(
+
+  const onSubmit: SubmitHandler<TFormData> = async (data) => {
+    console.log(data, memberEmailList);
+    editProject(
       {
-        projectImage: keyName,
+        projectId: Number(projectId),
+        projectImage: keyName ? keyName : projectDefaultData?.result.projectImage?.split('aws.com/')[1] || '',
         projectName: projectNameValue,
         projectUrl: projectUrlValue,
         memberEmailList: memberEmailList,
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROJECT_MEMBER({ projectId: Number(projectId) }) });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROJECT_LIST });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROJECT_INFO({ projectId: Number(projectId) }) });
           setEmails([]);
           onClose();
         },
@@ -152,72 +189,36 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
               <Cam style={{ cursor: 'pointer' }} />
             </label>
             <input type="file" id="photo" name="photo" accept="image/*" style={{ display: 'none' }} ref={ImgRef} onChange={(e) => handleInputChange(e)} />
-            <ProjectProfile profileImg={imgFile} />
+            {keyName ? <Profile profileImg={imgFile} isProject={true} /> : <Profile profileImg={projectDefaultData?.result.projectImage} isProject={true} />}
           </S.Preview>
           {!isImg && <ValidataionMessage message={'Only image is allowed'} isError={isImg} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project Name</S.ModalText>
-          <Controller
-            name="projectName"
-            control={control}
-            rules={{
-              required: 'Project name is required',
-              minLength: {
-                value: 3,
-                message: 'Project name must be at least 3 characters',
-              },
-            }}
-            render={({ field }) => (
-              <>
-                <Input placeholder="Enter project title." type="normal" {...field} errorMessage={errors.projectName?.message} touched={!!errors.projectName} />
-              </>
-            )}
+          <Input
+            placeholder="Enter project title."
+            type="normal"
+            errorMessage={errors.projectName?.message}
+            touched={!!errors.projectName}
+            {...register('projectName')}
           />
           {errors.projectName?.message && <ValidataionMessage message={errors.projectName?.message || ''} isError={!!errors.projectName} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Project URL</S.ModalText>
-          <Controller
-            name="projectUrl"
-            control={control}
-            rules={{
-              required: 'Project URL is required',
-              pattern: {
-                value: /^(http|https):\/\/[^ "]+$/,
-                message: 'Enter a valid URL',
-              },
-            }}
-            render={({ field }) => (
-              <>
-                <Input
-                  type="normal"
-                  placeholder="Enter the deployed project URL"
-                  {...field}
-                  errorMessage={errors.projectUrl?.message}
-                  touched={!!errors.projectUrl}
-                />
-              </>
-            )}
+          <Input
+            type="normal"
+            placeholder="Enter the deployed project URL"
+            errorMessage={errors.projectUrl?.message}
+            touched={!!errors.projectUrl}
+            {...register('projectUrl')}
           />
           {errors.projectUrl?.message && <ValidataionMessage message={errors.projectUrl?.message || ''} isError={!!errors.projectUrl} />}
         </S.PostBox>
         <S.PostBox>
           <S.ModalText>Share this project (Optional)</S.ModalText>
           <S.BtnWrapper>
-            <Controller
-              name="email"
-              control={control}
-              rules={{
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: 'Invalid email address',
-                },
-              }}
-              render={({ field }) => (
-                <Input type="normal" placeholder="Invite others by email" {...field} errorMessage={errors.email?.message} touched={!!errors.email} />
-              )}
-            />
+            <Input type="normal" placeholder="Invite others by email" errorMessage={errors.email?.message} touched={!!errors.email} {...register('email')} />
             <Button type="normal" color="blue" onClick={handleAddEmail} disabled={!emailValue.trim() || !!errors.email}>
               Share
             </Button>
@@ -233,8 +234,8 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
           </S.tagWrapper>
         </S.PostBox>
         <S.Position>
-          <Button type="normal" color="blue" onClick={handleCreate} disabled={isCreateDisabled}>
-            Create
+          <Button type="normal" color="blue" onClick={handleSubmit(onSubmit)} disabled={isCreateDisabled}>
+            Done
           </Button>
         </S.Position>
       </S.ModalBox>
