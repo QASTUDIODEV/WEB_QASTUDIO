@@ -2,10 +2,14 @@ import styled from 'styled-components';
 
 const TextWrapper = styled.div`
   ${({ theme }) => theme.align.column_center};
-  gap: 10px;
   padding: 0 15px;
+  gap: 40px;
   text-align: center;
   word-break: break-keep;
+
+  div {
+    gap: 10px;
+  }
 
   h1 {
     margin: 0;
@@ -20,4 +24,17 @@ const TextWrapper = styled.div`
   }
 `;
 
-export { TextWrapper };
+const Button = styled.button`
+  ${({ theme }) => theme.align.row_center};
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.point.point_2};
+
+  p {
+    color: ${({ theme }) => theme.colors.primary.pri_50};
+    ${({ theme }) => theme.text.medium_18};
+  }
+`;
+
+export { Button, TextWrapper };

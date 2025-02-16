@@ -8,11 +8,10 @@ import useProjectList from '@/hooks/sidebar/sidebar';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
-import * as S from '@/components/common/sidebar/projectModal/projectModal.style';
 import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
-
-import ModalLoading from '../../loading/modalLoading';
+import * as S from '@/components/projectInfo/editProjectModal/editProjectModal.style';
 
 import Cam from '@/assets/icons/camera.svg?react';
 import Delcircle from '@/assets/icons/del_circle.svg?react';
@@ -28,9 +27,8 @@ type TFormData = {
 type TEmailList = {
   email: string;
 }[];
-export default function ProjectModal({ onClose }: TProjectModalProps) {
+export default function EditProjectModal({ onClose }: TProjectModalProps) {
   const [emails, setEmails] = useState<string[]>([]);
-  const [emailErrorMsg, setEmailErrorMsg] = useState<string | null | undefined>('');
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
   const { useAddProject } = useProjectList();
   const { mutate: addProject, isPending } = useAddProject;
@@ -60,9 +58,8 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
   let isImg: boolean = true;
   const [error, setError] = useState(false);
   useEffect(() => {
-    if (emailValue && (error || emailErrorMsg)) {
+    if (emailValue && error) {
       setError(false);
-      setEmailErrorMsg(null);
     }
   }, [emailValue]);
 
@@ -98,10 +95,6 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
           queryClient.invalidateQueries({ queryKey: ['getProjectList'] });
           setEmails([]);
           onClose();
-        },
-        onError: (err) => {
-          setEmailErrorMsg(err.response?.data.message);
-          setEmails([]);
         },
       },
     );
@@ -147,9 +140,8 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
       };
     }
   };
-
   return (
-    <Modal title="Create Project" onClose={onClose}>
+    <Modal title="Edit Project" onClose={onClose}>
       {isPending && <ModalLoading />}
       <S.ModalBox>
         <S.ProjectText>Register ongoing project info (Web only).</S.ProjectText>
@@ -230,10 +222,7 @@ export default function ProjectModal({ onClose }: TProjectModalProps) {
               Share
             </Button>
           </S.BtnWrapper>
-          {(emailErrorMsg || errors.email?.message) && (
-            <ValidataionMessage message={emailErrorMsg ?? errors.email?.message ?? ''} isError={!!(emailErrorMsg || errors.email)} />
-          )}
-
+          {errors.email?.message && <ValidataionMessage message={errors.email?.message || ''} isError={!!errors.email} />}
           {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
           <S.tagWrapper>
             {emails.map((em) => (

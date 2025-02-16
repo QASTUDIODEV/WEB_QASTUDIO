@@ -34,7 +34,7 @@ export default function Project({ id, name, participants, date, img, onClick }: 
       <S.TD>
         <S.ProjectNameTD>
           <div className="ProfileWrapper">
-            <Profile profileImg={img} />
+            <Profile profileImg={img} isProject={true} />
           </div>
           <span ref={spanRef}>{name}</span>
           {isOverflowing && <div className="dropdown">{name}</div>}

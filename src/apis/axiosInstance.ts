@@ -39,6 +39,11 @@ axiosInstance.interceptors.response.use(
           return axiosInstance(error.config);
         }
       } catch (errors) {
+        const currentUrl = window.location.pathname;
+        if (currentUrl === '/' || currentUrl === '/signup') {
+          isRedirecting = false;
+          return;
+        }
         if (axios.isAxiosError(errors)) {
           const refreshError = error as AxiosError<IRefreshResponse>;
           if (refreshError.response?.data.message === 'The token is null.') {

@@ -8,7 +8,6 @@ import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
 
 import Loading from '@/components/common/loading/loading';
-import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
 
@@ -30,8 +29,7 @@ export default function ScenarioPage() {
     idx: -1,
   });
 
-  const { useGetProjectSummary, useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
-  const { data: ProjectSummaryData } = useGetProjectSummary;
+  const { useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
   const { data: CharacterListData, isPending } = useGetCharacterList;
 
   const CharacterData = CharacterListData?.result.characters;
@@ -83,17 +81,7 @@ export default function ScenarioPage() {
   return (
     <S.Background>
       <S.Container>
-        <S.Header>
-          <ProjectTitle
-            profileImg={ProjectSummaryData?.result.projectImage}
-            title={ProjectSummaryData?.result.projectName}
-            device={ProjectSummaryData?.result.viewType}
-            stack={ProjectSummaryData?.result.developmentSkill}
-          />
-        </S.Header>
-
         <ButtonGroup projectId={projectId || ''} currentPage={currentPage} />
-
         <S.CharactersContainer>
           {CharacterListData?.result.characters.map((character) => (
             <CharacterList key={character.characterId} character={character} setSelectedIdx={setSelectedIdx} selectedIdx={selectedIdx} />

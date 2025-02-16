@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const Background = styled.div`
   background-color: ${({ theme }) => theme.colors.primary.pri_900};
-  padding: 60px;
+  padding: 0px 60px 00px 60px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  overflow-y: hidden;
+  flex: 1;
   width: 100%;
   position: relative;
   p {

@@ -1,28 +1,14 @@
-import React, { useEffect } from 'react';
-
-import useOtherUserInfo from '@/hooks/userInfo/useOtherUserInfo';
+import type { TGetUserInfoResponse } from '@/types/userController/userController';
 
 import Profile from '@/components/common/profile/profile';
 
 import * as S from './userProfile.style';
 
 type TMyprofile = {
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setProjectNum: React.Dispatch<React.SetStateAction<number>>;
-  userId: string;
+  userData: TGetUserInfoResponse | undefined;
 };
 
-export default function UserProfile({ setUsername, setProjectNum, userId }: TMyprofile) {
-  const { useGetOtherUserInfo } = useOtherUserInfo({ userId: userId || '', currentPage: 0 });
-  const { data: userData } = useGetOtherUserInfo;
-
-  useEffect(() => {
-    if (userData) {
-      setProjectNum(userData.result.projectCnt);
-      setUsername(userData?.result.nickname);
-    }
-  }, [userData]);
-
+export default function UserProfile({ userData }: TMyprofile) {
   return (
     <>
       <S.ProfileWrapper>
