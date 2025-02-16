@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useProjectExtractInfo from '@/hooks/projectInfo/useProjectExtractInfo.ts';
 import { useUploadZipFile } from '@/hooks/projectInfo/useUploadZip';
 import useProjectList from '@/hooks/sidebar/sidebar';
 
@@ -22,8 +22,7 @@ export default function AddProjectPage() {
   const dispatch = useDispatch();
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
-  const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isError: projectInfoError } = useProjectExtractInfo;
+  const { data, isError: projectInfoError } = useProjectExtractInfo(Number(projectId));
   const { useGetProjectList } = useProjectList();
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
