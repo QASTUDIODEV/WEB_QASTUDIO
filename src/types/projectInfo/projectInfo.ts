@@ -131,3 +131,16 @@ export type TDeleteProject = {
   code: string;
   message: string;
 };
+export type TGetTeamMemberAllEmail = TCommonResponse<{
+  members: string[];
+}>;
+type TEmail = {
+  email: string;
+};
+export type TEditProjectInfo = {
+  projectId: number;
+  projectImage: string;
+  projectName: string;
+  projectUrl: string;
+  memberEmailList: TEmail[];
+};

@@ -39,6 +39,7 @@ export const tagWrapper = styled.div`
   gap: 10px;
   max-width: 100%;
   overflow: auto;
+  flex-wrap: wrap;
 `;
 export const BtnWrapper = styled.div`
   display: flex;
