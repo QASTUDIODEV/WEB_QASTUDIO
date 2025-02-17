@@ -73,6 +73,7 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
   characters: ICharacter[];
   recordActions: IRecordAction[];
+  editRecordActions: IRecordAction[];
   currentTestId: number;
   currentHtml: string;
   currentCss: string;
@@ -123,6 +124,7 @@ const initialState: IScenarioActSlice = {
   characters: [],
   scenarios: [],
   recordActions: [],
+  editRecordActions: [],
   currentTestId: 0,
   currentHtml: `<div> </div>`,
   currentCss: `<!DOCTYPE html>
@@ -142,10 +144,7 @@ const initialState: IScenarioActSlice = {
     lastActionId: null,
   },
   currentLocator: { actionId: null, id: null, xPath: null, cssSelector: null, isInputFocused: false, isClicked: false },
-  step: {
-    step: 1,
-    selectedScenarioId: null,
-  },
+  step: { step: 1, selectedScenarioId: null },
 };
 
 const scenarioActSlice = createSlice({
@@ -187,17 +186,33 @@ const scenarioActSlice = createSlice({
       }));
     },
 
-    // action 추가
+    // 시나리오 추가 record
+    fetchAction: (state, action: PayloadAction<IRecordAction[]>) => {
+      state.recordActions = action.payload;
+    },
     addAction: (state, action: PayloadAction<IRecordAction>) => {
       state.recordActions.push(action.payload);
     },
-    // action 삭제
     removeAction: (state, action: PayloadAction<number | undefined>) => {
       const deletedStep = action.payload;
       if (deletedStep === undefined) return;
       state.recordActions = state.recordActions.filter((itm) => itm.step !== deletedStep);
-      // 재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
+    },
+
+    // 시나리오 편집 record
+    fetchEditAction: (state, action: PayloadAction<IRecordAction[]>) => {
+      state.editRecordActions = action.payload;
+    },
+    addEditAction: (state, action: PayloadAction<IRecordAction>) => {
+      state.editRecordActions.push(action.payload);
+    },
+    removeEditAction: (state, action: PayloadAction<number | undefined>) => {
+      const deletedStep = action.payload;
+      if (deletedStep === undefined) return;
+      state.editRecordActions = state.editRecordActions.filter((itm) => itm.step !== deletedStep);
+      // 재정렬
+      state.editRecordActions = state.editRecordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
     },
 
     // 클릭 시 로케이터 설정
@@ -297,5 +312,9 @@ export const {
   setCurrentTestId,
   setStep,
   setScenarioId,
+  fetchEditAction,
+  addEditAction,
+  removeEditAction,
+  fetchAction,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

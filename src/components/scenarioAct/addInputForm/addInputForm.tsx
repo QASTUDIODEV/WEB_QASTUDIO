@@ -5,8 +5,10 @@ import { ACTION_TYPE, LOCATOR_TYPE } from '@/enums/enums';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useScenario from '@/hooks/scenarioAct/useScenario';
+import useScenarioList from '@/hooks/scenarioAct/useScenarioList';
 
 import Button from '@/components/common/button/button';
+import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import * as S from '@/components/scenarioAct/addInputForm/addInputForm.style';
 import Input from '@/components/scenarioAct/input/input';
 import RecordItem from '@/components/scenarioAct/recordItem/recordItem';
@@ -14,7 +16,8 @@ import ThinDropdown from '@/components/scenarioAct/thinDropdown/thinDropdown';
 
 import Add from '@/assets/icons/add.svg?react';
 import AddDark from '@/assets/icons/add_dark.svg?react';
-import { addAction, blurLocatorInput, clickLocatorInput, focusLocatorInput } from '@/slices/scenarioActSlice';
+import { openModal } from '@/slices/modalSlice';
+import { addAction, blurLocatorInput, clickLocatorInput, fetchAction, focusLocatorInput, removeAction } from '@/slices/scenarioActSlice';
 
 const locatorList = Object.values(LOCATOR_TYPE);
 const actionList = Object.values(ACTION_TYPE);
@@ -24,7 +27,7 @@ export default function AddInputForm() {
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
   const characters = useSelector((state) => state.scenarioAct.characters);
   const characterId = useSelector((state) => state.scenarioAct.characterId);
-  const { useCreateScenario } = useScenario();
+  const { useCreateScenario } = useScenarioList(characterId);
   const { mutate: createMutate } = useCreateScenario; //isPendding
   const [step, setStep] = useState(1);
 
@@ -61,6 +64,13 @@ export default function AddInputForm() {
   const locatorStrategy = useWatch({ control: actionControl, name: 'strategy' });
   const locatorInputValue = useWatch({ control: actionControl, name: 'locatorValue' });
 
+  useEffect(() => {
+    dispatch(fetchAction([]));
+    return () => {
+      dispatch(fetchAction([]));
+    };
+  }, [step, dispatch]);
+
   // 현재 클릭된 요소를 locator 값으로 설정
   useEffect(() => {
     if (isClicked && currentLocator.actionId === 'WRITE_DIRECTLY') {
@@ -74,15 +84,19 @@ export default function AddInputForm() {
 
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
-    console.log('시나생성');
     createMutate({
-      characterId: characterId || 0,
+      characterId: data.character,
       pageId: 18, //페이지 아이디 수정
       scenarioName: data.scenarioName,
       scenarioDescription: data.scenarioDescription,
       actions: recordActions,
     });
-    console.log('시나생성');
+    dispatch(
+      openModal({
+        modalType: MODAL_TYPES.ContinueModal,
+        modalProps: { title: 'The modification has been completed.', description: 'The modification has been completed.' },
+      }),
+    );
   };
 
   // 액션record 생성
@@ -119,12 +133,16 @@ export default function AddInputForm() {
             <ThinDropdown
               options={characters.map((char) => char.characterName)}
               value={characters.find((char) => char.characterId === field.value)?.characterName || ''}
-              onChange={(selected) => field.onChange(characters.find((char) => char.characterName === selected)?.characterId)}
-              placeholder="Select character."
+              onChange={(selectedCharacterName) => {
+                const selectedCharacter = characters.find((char) => char.characterName === selectedCharacterName);
+                field.onChange(selectedCharacter?.characterId);
+              }}
+              placeholder="Select a role for the scenario."
             />
           )}
         />
       </S.InputContainer>
+
       <S.InputContainer>
         <S.InputTitle>Description</S.InputTitle>
         <Input placeholder="Describe the scenario." type="thin" {...registerScenario('scenarioDescription', { required: true })} />
@@ -144,7 +162,13 @@ export default function AddInputForm() {
         <>
           <S.DetailContainer>
             {recordActions.map((action) => (
-              <RecordItem key={action.step} step={action.step} />
+              <RecordItem
+                key={action.step}
+                step={action.step}
+                actionType={action.actionType}
+                actionDescription={action.actionDescription}
+                handleDel={() => dispatch(removeAction(action.step))}
+              />
             ))}
             <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
             {/* 액션 타입 */}
@@ -155,9 +179,7 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
               />
-              {['send_keys', 'get_attribute'].includes(actionType) && (
-                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
-              )}
+              {['Fill_Text'].includes(actionType) && <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />}
             </S.DivideInputContainer>
             {/* 로케이터 */}
             <S.DivideInputContainer>

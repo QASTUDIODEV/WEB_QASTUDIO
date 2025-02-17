@@ -179,6 +179,24 @@ export type TFetchPageSourceValues = {
   targetUrl: string | null;
 };
 
-export type TGetScenarioValues = {
+export type TPatchScenarioInfo = {
   scenarioId: number | null;
+  data: {
+    characterId: number | null;
+    scenarioName: string | null;
+    scenarioDescription: string | null;
+    actions: {
+      actionDescription: string | null;
+      step: number | null;
+      actionType: string | null;
+      locator: {
+        strategy: string | null;
+        value: string | null;
+      };
+      action: {
+        type: string | null;
+        value: string | null;
+      };
+    }[];
+  };
 };

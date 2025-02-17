@@ -10,9 +10,8 @@ import type {
   TGetCharacterListResponse,
   TGetProjectInfoResponse,
   TGetProjectInfoValues,
-  TGetScenarioInfoResponse,
   TGetScenarioListResponse,
-  TGetScenarioValues,
+  TPatchScenarioInfo,
   TPatchScenarioInfoResponse,
 } from '@/types/scenarioAct/scenarioAct';
 
@@ -56,16 +55,10 @@ const fetchPageSource = async ({ targetUrl }: TFetchPageSourceValues): Promise<T
   return data;
 };
 
-//연결중
-const getScenarioInfo = async ({ scenarioId }: TGetScenarioValues): Promise<TGetScenarioInfoResponse> => {
-  const { data } = await axiosInstance.get(`/api/v0/scenarios/${scenarioId}`);
+const patchScenarioInfo = async (values: TPatchScenarioInfo): Promise<TPatchScenarioInfoResponse> => {
+  const { data } = await axiosInstance.patch(`/api/v0/scenarios/${values.scenarioId}`, values.data);
+  console.log(data);
   return data;
 };
 
-//연결중
-const patchScenarioInfo = async ({ scenarioId }: TGetScenarioValues): Promise<TPatchScenarioInfoResponse> => {
-  const { data } = await axiosInstance.patch(`/api/v0/scenarios/${scenarioId}`);
-  return data;
-};
-
-export { createScenario, editAction, executeScenario, fetchPageSource, getCharacterList, getProjectInfo, getScenarioInfo, getScenarioList, patchScenarioInfo };
+export { createScenario, editAction, executeScenario, fetchPageSource, getCharacterList, getProjectInfo, getScenarioList, patchScenarioInfo };

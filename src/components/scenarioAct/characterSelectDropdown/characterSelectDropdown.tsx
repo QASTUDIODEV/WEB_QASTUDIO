@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
+import useScenarioList from '@/hooks/scenarioAct/useScenarioList';
 
 import * as S from '@/components/scenarioAct/characterSelectDropdown/characterSelectDropdown.style';
 
@@ -19,11 +20,14 @@ export default function CharacterSelectDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const { refetchScenarioList } = useScenarioList(selectedCharacterId);
+
   useEffect(() => {
     if (selectedCharacter) {
       dispatch(setCharacterId(selectedCharacter.characterId));
+      refetchScenarioList();
     }
-  }, []);
+  }, [selectedCharacterId, dispatch, refetchScenarioList]);
 
   // 드롭다운 토글 함수
   const toggleDropdown = () => {
