@@ -35,4 +35,5 @@ export const QUERY_KEYS = {
   GET_CHARACTER_LIST: ({ currentPage, projectId }: TGetCharacterListValue) => ['getCharacterList', currentPage, projectId],
   GET_ALL_PATHS: (projectId: string) => ['getAllPaths', projectId],
   GET_USER_EMAIL: ['getUserEmail'],
+  GET_ALL_MEMBER_EMAIL: ({ projectId }: { projectId: number }) => ['getAllMemberEmail', projectId],
 };
