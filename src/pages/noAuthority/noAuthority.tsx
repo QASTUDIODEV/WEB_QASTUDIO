@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import * as S from '@/layouts/auth/auth.style.ts';
 
 import { BackIcon } from '@/assets/icons';
-import Caution from '@/assets/icons/caution.svg?react';
-import { Button, Header, TextWrapper } from '@/pages/error/error.style';
+import Ban from '@/assets/icons/ban.svg?react';
+import { Button, Header, TextWrapper } from '@/pages/noAuthority/noAuthority.style';
 
-export default function ErrorPage() {
+export default function NoAuthority() {
   const navigate = useNavigate();
 
   return (
@@ -14,10 +14,10 @@ export default function ErrorPage() {
       <TextWrapper>
         <div>
           <Header>
-            <Caution className="caution" />
-            <h1>Not found page</h1>
+            <Ban className="ban" />
+            <h1>You do not have access to this page.</h1>
           </Header>
-          <p>The page could not be found, please try again in a moment.</p>
+          <p>You do not have access to this page, please try again in a moment.</p>
         </div>
         <Button onClick={() => navigate('/', { replace: true })}>
           <BackIcon />
