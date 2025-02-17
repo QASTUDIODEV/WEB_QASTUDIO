@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useProjectId } from '@/hooks/common/useProjectId.ts';
 import type { TFilter } from '@/hooks/dashborad/useTableFilter.ts';
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useGetPageSummary from '@/hooks/projectInfo/useGetPageSummary';
 
 import SelectBox from '@/components/dashboard/selectBox/selectBox';
 import * as S from '@/components/dashboard/table/table.style';
@@ -16,8 +16,7 @@ interface IProps {
 export default function PageNameHeader({ setFilters }: IProps) {
   const [isClicked, setIsClicked] = useState(false);
   const projectId = useProjectId();
-  const { useGetPageSummary } = useProjectInfo({ projectId });
-  const { data } = useGetPageSummary;
+  const { data } = useGetPageSummary(projectId);
 
   const PAGE_NAMES = ['All', ...(data?.result.pageSummaryList.map((page) => page.pageName) ?? [])];
 
