@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import { DEVICE, STACK } from '@/enums/enums';
 
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useProjectExtractInfo from '@/hooks/projectInfo/useProjectExtractInfo';
 
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 
@@ -18,8 +18,7 @@ import { openModal } from '@/slices/modalSlice';
 
 export default function ProjectHeader() {
   const { projectId } = useParams();
-  const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isLoading } = useProjectExtractInfo;
+  const { data, isLoading } = useProjectExtractInfo(Number(projectId));
   const location = useLocation();
   const isInformationPage = location.pathname.startsWith('/project/information/');
 

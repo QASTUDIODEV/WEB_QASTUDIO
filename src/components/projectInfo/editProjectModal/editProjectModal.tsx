@@ -10,7 +10,8 @@ import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
 import { projectModalSchema } from '@/utils/validate';
 
 import { useImage } from '@/hooks/images/useImage';
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import { useEditProjects } from '@/hooks/projectInfo/useEditProject';
+import useProjectExtractInfo from '@/hooks/projectInfo/useProjectExtractInfo';
 
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
@@ -39,10 +40,9 @@ export default function EditProjectModal({ onClose }: TProjectModalProps) {
   const { projectId } = useParams();
 
   const { useGetPresignedUrl, useImageToUploadPresignedUrl } = useImage();
-  const { useEditProject } = useProjectInfo({ projectId: Number(projectId) });
-  const { useProjectExtractInfo, useGetTeamMemberAllEmail } = useProjectInfo({ projectId: Number(projectId) });
+  const { useGetTeamMemberAllEmail, useEditProject } = useEditProjects({ projectId: Number(projectId) });
   const { data: memberEmails } = useGetTeamMemberAllEmail;
-  const { data: projectDefaultData } = useProjectExtractInfo;
+  const { data: projectDefaultData } = useProjectExtractInfo(Number(projectId));
   const { mutate: editProject, isPending } = useEditProject;
   const { mutate: getPresignedUrlMutate } = useGetPresignedUrl;
   const { mutate: uploadImageToPresignedUrlMutate } = useImageToUploadPresignedUrl;
