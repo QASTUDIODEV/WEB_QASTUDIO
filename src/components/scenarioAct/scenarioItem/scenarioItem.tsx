@@ -8,9 +8,10 @@ import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
+import Edit from '@/assets/icons/edit.svg?react';
 import Pause from '@/assets/icons/pause.svg?react';
 import Play from '@/assets/icons/play.svg?react';
-import { openScenario, setCurrentTestId, setRunningScenario, setWebSocketConnected } from '@/slices/scenarioActSlice';
+import { openScenario, setCurrentTestId, setRunningScenario, setScenarioId, setStep, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
 interface IScenarioItemProp {
   scenarioId: number;
@@ -56,6 +57,13 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
     }, 100); // 상태 반영 후 실행되도록
   };
 
+  const handleEdit = (newStep: number, id?: number) => {
+    dispatch(setStep(newStep));
+    if (id !== undefined) {
+      dispatch(setScenarioId(id));
+    }
+  };
+
   const handleOpen = () => {
     dispatch(openScenario(scenarioId));
   };
@@ -65,6 +73,9 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
       <S.ScenarioHeader $isOpen={scenario?.isOpen}>
         <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
         <S.Title>{scenario?.scenarioName}</S.Title>
+        <S.IconContainer>
+          <Edit onClick={() => handleEdit(3, scenarioId)} />
+        </S.IconContainer>
         <S.IconContainer>{scenarioId == runningScenarioId ? <Pause /> : <Play onClick={handlePlay} />}</S.IconContainer>
       </S.ScenarioHeader>
 

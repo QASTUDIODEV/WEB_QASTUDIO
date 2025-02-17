@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import { ACTION_TYPE, LOCATOR_TYPE } from '@/enums/enums';
@@ -22,11 +22,11 @@ const actionList = Object.values(ACTION_TYPE);
 export default function AddInputForm() {
   const dispatch = useDispatch();
   const recordActions = useSelector((state) => state.scenarioAct.recordActions);
-  const characters = useSelector((state) => state.scenarioAct.characters);
+  //const selectedScenarioId = useSelector((state) => state.scenarioAct.step.selectedScenarioId);
   const characterId = useSelector((state) => state.scenarioAct.characterId);
+
   const { useCreateScenario } = useScenario();
   const { mutate: createMutate } = useCreateScenario; //isPendding
-  const [step, setStep] = useState(1);
 
   // 자동입력(locator)
   const currentLocator = useSelector((state) => state.scenarioAct.currentLocator);
@@ -74,7 +74,6 @@ export default function AddInputForm() {
 
   // 시나리오 생성
   const onSubmitScenario = (data: any) => {
-    console.log('시나생성');
     createMutate({
       characterId: characterId || 0,
       pageId: 18, //페이지 아이디 수정
@@ -82,7 +81,6 @@ export default function AddInputForm() {
       scenarioDescription: data.scenarioDescription,
       actions: recordActions,
     });
-    console.log('시나생성');
   };
 
   // 액션record 생성
@@ -102,6 +100,7 @@ export default function AddInputForm() {
     });
   };
   const actionType = useWatch({ control: actionControl, name: 'actionType' });
+
   return (
     <S.Container>
       {/* 시나리오 입력 폼 */}
@@ -111,7 +110,7 @@ export default function AddInputForm() {
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Character</S.InputTitle>
-        <Controller
+        {/*         <Controller
           name="character"
           control={scenarioControl}
           rules={{ required: true }}
@@ -123,7 +122,7 @@ export default function AddInputForm() {
               placeholder="Select a role for the scenario."
             />
           )}
-        />
+        /> */}
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Description</S.InputTitle>
@@ -132,64 +131,52 @@ export default function AddInputForm() {
 
       {/* 선택 토글 */}
       <S.SelectHeader>Actions</S.SelectHeader>
+      <>
+        <S.DetailContainer>
+          {recordActions.map((action) => (
+            <RecordItem key={action.step} step={action.step} />
+          ))}
+          <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
+          {/* 액션 타입 */}
+          <S.DivideInputContainer>
+            <Controller
+              name="actionType"
+              control={actionControl}
+              rules={{ required: true }}
+              render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
+            />
+            {['send_keys', 'get_attribute'].includes(actionType) && (
+              <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
+            )}
+          </S.DivideInputContainer>
+          {/* 로케이터 */}
+          <S.DivideInputContainer>
+            <Controller
+              name="strategy"
+              control={actionControl}
+              rules={{ required: true }}
+              render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
+            />
+            <Input
+              placeholder="Enter key."
+              type="thin"
+              value={locatorInputValue}
+              onChange={(e) => setValue('locatorValue', e.target.value)}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </S.DivideInputContainer>
 
-      {step === 1 ? (
-        <>
-          <S.DetailContainer>
-            {recordActions.map((action) => (
-              <RecordItem key={action.step} step={action.step} />
-            ))}
-            <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
-            {/* 액션 타입 */}
-            <S.DivideInputContainer>
-              <Controller
-                name="actionType"
-                control={actionControl}
-                rules={{ required: true }}
-                render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
-              />
-              {['send_keys', 'get_attribute'].includes(actionType) && (
-                <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />
-              )}
-            </S.DivideInputContainer>
-            {/* 로케이터 */}
-            <S.DivideInputContainer>
-              <Controller
-                name="strategy"
-                control={actionControl}
-                rules={{ required: true }}
-                render={({ field }) => <ThinDropdown options={locatorList} value={field.value} onChange={field.onChange} placeholder="Select locator." />}
-              />
-              <Input
-                placeholder="Enter key."
-                type="thin"
-                value={locatorInputValue}
-                onChange={(e) => setValue('locatorValue', e.target.value)}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </S.DivideInputContainer>
-
-            <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
-              {isActionValid ? <Add /> : <AddDark />}
-            </S.AddButton>
-            <S.ButtonContainer>
-              <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
-                Save
-              </Button>
-            </S.ButtonContainer>
-          </S.DetailContainer>
-        </>
-      ) : (
-        <div>
-          {/* <RecordItem  /> */}
+          <S.AddButton as="button" type="button" disabled={!isActionValid} onClick={handleActionSubmit(onSubmitAction)}>
+            {isActionValid ? <Add /> : <AddDark />}
+          </S.AddButton>
           <S.ButtonContainer>
-            <Button type="normal" color="default">
-              Record
+            <Button type="normal" color="default" disabled={!isScenarioValid} onClick={handleScenarioSubmit(onSubmitScenario)}>
+              Save
             </Button>
           </S.ButtonContainer>
-        </div>
-      )}
+        </S.DetailContainer>
+      </>
     </S.Container>
   );
 }

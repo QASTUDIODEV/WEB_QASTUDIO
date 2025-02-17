@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useSelector } from '@/hooks/common/useCustomRedux';
+import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
 
 import Button from '@/components/common/button/button';
@@ -14,18 +13,22 @@ import ScenarioItem from '@/components/scenarioAct/scenarioItem/scenarioItem';
 import Add from '@/assets/icons/add.svg?react';
 import Delete from '@/assets/icons/delete.svg?react';
 import Exit from '@/assets/icons/exit.svg?react';
+import { setScenarioId, setStep } from '@/slices/scenarioActSlice';
 
 export default function Controller() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct);
-
-  const [step, setStep] = useState<number>(1);
+  const step = useSelector((state) => state.scenarioAct.step);
 
   useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
 
   // 스텝 함수
-  const handleStep = (selectedStep: number) => {
-    setStep(selectedStep);
+  const handleStep = (newStep: number, scenarioId?: number) => {
+    dispatch(setStep(newStep));
+    if (scenarioId !== undefined) {
+      dispatch(setScenarioId(scenarioId));
+    }
   };
 
   const handleGoBack = () => {
@@ -37,7 +40,7 @@ export default function Controller() {
 
   return (
     <S.Container>
-      {step === 1 ? (
+      {step.step === 1 ? (
         /* 시나리오 실행 */
         <S.ActContainer>
           {/* 헤더 */}
@@ -68,13 +71,13 @@ export default function Controller() {
             </Button>
           </S.ButtonContainer>
         </S.ActContainer>
-      ) : step == 2 ? (
+      ) : step.step == 2 ? (
         /* 시나리오 추가 */
         <S.AddContainer>
           {/* 헤더 */}
           <S.Header>
             <S.IconContainer>
-              <Delete onClick={() => handleStep(3)} style={{ cursor: 'pointer' }} />
+              <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
             </S.IconContainer>
             <p>Add Scenario</p>
           </S.Header>

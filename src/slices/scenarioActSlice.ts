@@ -61,6 +61,11 @@ interface ICurrentLocator {
   isClicked: boolean;
 }
 
+interface IStep {
+  step: number;
+  selectedScenarioId: number | null;
+}
+
 interface IScenarioActSlice {
   characterId: number | null;
   projectUrl: string | null;
@@ -69,10 +74,11 @@ interface IScenarioActSlice {
   characters: ICharacter[];
   recordActions: IRecordAction[];
   currentTestId: number;
-  webSocket: IWebSocketState;
   currentHtml: string;
   currentCss: string;
+  webSocket: IWebSocketState;
   currentLocator: ICurrentLocator;
+  step: IStep;
 }
 
 /*---  payload --- */
@@ -112,18 +118,12 @@ interface IActionPayload {
 // 초기 상태
 const initialState: IScenarioActSlice = {
   characterId: null,
-  projectUrl: 'https://www.kw.ac.kr/ko/',
-  projectName: 'QASTUDIO',
+  projectUrl: null,
+  projectName: null,
   characters: [],
   scenarios: [],
   recordActions: [],
   currentTestId: 0,
-  webSocket: {
-    runningScenarioId: null,
-    isConnected: false,
-    sessionId: null,
-    lastActionId: null,
-  },
   currentHtml: `<div> </div>`,
   currentCss: `<!DOCTYPE html>
 <html>
@@ -135,7 +135,17 @@ const initialState: IScenarioActSlice = {
   <div id="mountHere"></div>
 </body>
 </html>`,
+  webSocket: {
+    runningScenarioId: null,
+    isConnected: false,
+    sessionId: null,
+    lastActionId: null,
+  },
   currentLocator: { actionId: null, id: null, xPath: null, cssSelector: null, isInputFocused: false, isClicked: false },
+  step: {
+    step: 1,
+    selectedScenarioId: null,
+  },
 };
 
 const scenarioActSlice = createSlice({
@@ -255,6 +265,14 @@ const scenarioActSlice = createSlice({
       console.log(action.payload);
       state.currentTestId = action.payload;
     },
+
+    // 컨트롤러 스탭
+    setStep: (state, action: PayloadAction<number>) => {
+      state.step.step = action.payload;
+    },
+    setScenarioId: (state, action: PayloadAction<number | null>) => {
+      state.step.selectedScenarioId = action.payload;
+    },
   },
 });
 
@@ -277,5 +295,7 @@ export const {
   setLastActionId,
   setActionState,
   setCurrentTestId,
+  setStep,
+  setScenarioId,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;
