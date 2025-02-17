@@ -9,8 +9,8 @@ import { setStep } from '@/slices/scenarioActSlice';
 
 type TContinueModal = {
   onClose: () => void;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 };
 
 export default function continueModal({ onClose, title, description }: TContinueModal) {

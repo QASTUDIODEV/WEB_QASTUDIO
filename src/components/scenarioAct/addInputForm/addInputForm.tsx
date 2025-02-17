@@ -4,7 +4,6 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { ACTION_TYPE, LOCATOR_TYPE } from '@/enums/enums';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
-import useScenario from '@/hooks/scenarioAct/useScenario';
 import useScenarioList from '@/hooks/scenarioAct/useScenarioList';
 
 import Button from '@/components/common/button/button';
