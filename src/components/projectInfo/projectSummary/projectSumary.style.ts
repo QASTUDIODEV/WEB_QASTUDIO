@@ -61,12 +61,14 @@ export const InnerBox = styled.div`
   border-radius: 6.4px;
   padding: 7px 10px;
   position: relative;
-  overflow: scroll;
-  scrollbar-width: none;
+  overflow: hidden;
   height: inherit;
   @media (max-width: 1010px) {
     width: 100%;
     height: 100%;
+  }
+  &:hover {
+    overflow: overlay;
   }
 `;
 

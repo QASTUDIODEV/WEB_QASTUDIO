@@ -36,6 +36,7 @@ export type TGetProjectInfo = TCommonResponse<{
   viewType: DEVICE;
   developmentSkill: STACK;
   assistantId: string;
+  isLeader: boolean;
 }>;
 
 export type TProjectInfoRequest = {

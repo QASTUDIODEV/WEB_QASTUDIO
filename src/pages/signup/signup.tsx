@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { signupSchema } from '@/utils/validate';
 
+import useInvite from '@/hooks/auth/useInvite';
 import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import AuthButton from '@/components/auth/authButton/authButton';
@@ -34,6 +35,14 @@ type TAPIFormValues = {
 };
 
 function SignupPage() {
+  const navigate = useNavigate();
+  const { useGetUserEmail } = useInvite();
+  const { data: emailData } = useGetUserEmail;
+
+  if (emailData) {
+    navigate('/project');
+  }
+
   const { useDefaultSignup, useSendSignupCode } = useUserAuth();
   const { mutate: signupMutate, isPending: signupPending } = useDefaultSignup;
   const { mutate: sendCodeMutate, isPending: codePending } = useSendSignupCode;
@@ -59,8 +68,6 @@ function SignupPage() {
 
   const [codeverify, setCodeVerify] = useState<TCodeVerify>(undefined);
   const [passwordMatch, setPasswordMatch] = useState(false);
-
-  const navigate = useNavigate();
 
   const watchedPassword = useWatch({
     control,

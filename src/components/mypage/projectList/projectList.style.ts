@@ -16,33 +16,28 @@ const ProjectList = styled.div`
   position: relative;
 
   @media (max-width: 1138px) {
-    height: 310px;
+    min-height: 310px;
   }
-  @media (max-width: 1129px) {
-    height: 340px;
+  @media (max-width: 1105px) {
+    min-height: 340px;
   }
   @media (max-width: 1088px) {
     flex-direction: column;
-    height: 380px;
+    min-height: 360px;
     overflow-x: hidden;
   }
-  @media (max-width: 1024px) {
-    height: 340px;
+  @media (max-width: 1049px) {
+    min-height: 380px;
   }
-  @media (max-width: 934px) {
-    width: 100%;
-    height: 320px;
-    margin: 0;
+  @media (max-width: 1024px) {
+    min-height: 320px;
   }
   @media (max-width: 914px) {
-    width: 100%;
-    height: 360px;
-    margin: 0;
+    min-height: 380px;
   }
-  @media (max-width: 870px) {
+  @media (max-width: 847px) {
     width: 100%;
-    height: 380px;
-    margin: 0;
+    min-height: 360px;
   }
 `;
 
@@ -84,7 +79,7 @@ const Buttons = styled.div`
   gap: 8px;
   margin-top: 5px;
 
-  @media (max-width: 1087px) {
+  @media (max-width: 1088px) {
     justify-content: center;
     gap: 30px;
     width: 100%;

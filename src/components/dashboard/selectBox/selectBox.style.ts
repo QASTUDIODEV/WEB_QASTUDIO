@@ -12,9 +12,15 @@ const Container = styled.ul`
   border: 0.8px solid #082659;
   background: #16181c;
 
-  max-height: 300px;
+  max-height: 280px;
   overflow-y: auto;
   z-index: 10;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
 
   li {
     ${({ theme }) => theme.text.medium_14};
