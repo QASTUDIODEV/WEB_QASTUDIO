@@ -17,11 +17,11 @@ import Goto from '@/assets/icons/arrow_goto.svg?react';
 import Delete from '@/assets/icons/del.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
 import { Circle1, Circle2, Circle3, Circle4 } from '@/layouts/auth/auth.style';
-import { Error } from '@/pages/addProject/addProject.style';
+import ErrorPage from '@/pages/error/error';
 import NoAuthority from '@/pages/noAuthority/noAuthority';
 import { openModal } from '@/slices/modalSlice';
 
-type TAxiosResponseError = AxiosError<{
+export type TAxiosResponseError = AxiosError<{
   code: string;
   message: string;
   error: string;
@@ -39,7 +39,7 @@ export default function ProjectHeader() {
     if (errorCode === 'PROJECT403') {
       return <NoAuthority />;
     } else {
-      return <Error />;
+      return <ErrorPage />;
     }
   }
   if (isLoading) {

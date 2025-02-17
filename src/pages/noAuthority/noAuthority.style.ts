@@ -30,7 +30,7 @@ const Button = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.point.point_2};
-
+  z-index: 701;
   p {
     color: ${({ theme }) => theme.colors.primary.pri_50};
     ${({ theme }) => theme.text.medium_18};
@@ -47,4 +47,18 @@ const Header = styled.div`
   }
 `;
 
-export { Button, Header, TextWrapper };
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary.pri_900};
+  color: ${({ theme }) => theme.colors.white};
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 700;
+`;
+
+export { Button, Container, Header, TextWrapper };
