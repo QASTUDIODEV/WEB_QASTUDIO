@@ -39,6 +39,9 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.h1`
+  width: 95%;
+  max-width: 950px;
+  word-break: break-all;
   margin: 0;
   ${({ theme }) => theme.text.bold_28};
   color: ${({ theme }) => theme.colors.primary.pri_50};
