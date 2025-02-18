@@ -22,9 +22,16 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     latestLocator.current = currentLocator;
   }, [currentLocator]);
 
-  //클릭
-  const handleClick = (event: MouseEvent) => {
+  // 클릭 이벤트 핸들러
+  const handleEvent = (event: Event) => {
     const target = event.target as HTMLElement;
+
+    if (target.tagName.toLowerCase() === 'a') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.type !== 'click') return;
 
     if (lastHighlightedElement.current) {
       lastHighlightedElement.current.classList.remove('qa-highlighted-element');
@@ -43,50 +50,42 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     target.classList.add('qa-highlighted-element');
     lastHighlightedElement.current = target;
   };
-  // 링크 차단
-  const disableLinks = (event: MouseEvent) => {
-    const target = event.target as HTMLAnchorElement;
-    if (target.tagName.toLowerCase() === 'a') {
-      event.preventDefault();
-      handleClick(event);
-    }
-  };
 
   useEffect(() => {
     if (!document) return;
+
+    // HTML 적용
     mountHereRef.current = document.getElementById('mountHere') as HTMLDivElement;
     if (mountHereRef.current) {
-      while (mountHereRef.current.firstChild) {
-        mountHereRef.current.removeChild(mountHereRef.current.firstChild);
-      }
+      mountHereRef.current.replaceChildren();
       mountHereRef.current.innerHTML = htmlContent;
     }
 
-    if (styleTagRef.current?.parentNode) {
-      styleTagRef.current.parentNode.removeChild(styleTagRef.current);
-      styleTagRef.current = null;
+    // CSS 적용
+    if (!styleTagRef.current) {
+      const styleTag = document.createElement('style');
+      document.head.appendChild(styleTag);
+      styleTagRef.current = styleTag;
     }
-    const styleTag = document.createElement('style');
-    styleTag.innerHTML = cssContent;
-    document.head.appendChild(styleTag);
-    styleTagRef.current = styleTag;
+    styleTagRef.current.innerHTML = cssContent;
 
-    document.body.addEventListener('click', handleClick);
-    document.querySelectorAll('a').forEach((link) => link.addEventListener('click', disableLinks));
+    // 이벤트 리스너 등록
+    const eventTypes: (keyof DocumentEventMap)[] = ['click', 'mousedown', 'mouseup', 'keydown'];
+    eventTypes.forEach((event) => document.addEventListener(event, handleEvent, true));
 
     return () => {
-      document.body.removeEventListener('click', handleClick);
-      document.querySelectorAll('a').forEach((link) => link.removeEventListener('click', disableLinks));
+      // 이벤트 리스너 제거
+      eventTypes.forEach((event) => document.removeEventListener(event, handleEvent, true));
 
+      // 스타일 태그 제거
       if (styleTagRef.current?.parentNode) {
         styleTagRef.current.parentNode.removeChild(styleTagRef.current);
         styleTagRef.current = null;
       }
 
+      // HTML 클리어
       if (mountHereRef.current) {
-        while (mountHereRef.current.firstChild) {
-          mountHereRef.current.removeChild(mountHereRef.current.firstChild);
-        }
+        mountHereRef.current.replaceChildren();
       }
     };
   }, [htmlContent, cssContent]);
