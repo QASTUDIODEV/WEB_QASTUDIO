@@ -35,7 +35,7 @@ export default function TeamMember({ result }: TInfoDTO) {
               <S.MemberName>{a.nickname}</S.MemberName>
               {a.projectRole === 'LEADER' && <Crown />}
             </S.MemberBox>
-            <Menu userId={a.userId} isLeader={result?.isLeader}>
+            <Menu userId={a.userId} isLeader={result?.isLeader} email={a.email}>
               <ArrowRight style={{ cursor: 'pointer' }} />
             </Menu>
           </S.Member>
@@ -49,7 +49,7 @@ export default function TeamMember({ result }: TInfoDTO) {
                 </S.UnacceptedWrapper>
                 <S.UnacceptedName>{a}</S.UnacceptedName>
               </S.MemberBox>
-              <Menu isLeader={result?.isLeader}>
+              <Menu isLeader={result?.isLeader} projectId={Number(result?.projectId)}>
                 <MenuDark />
               </Menu>
             </S.Member>
