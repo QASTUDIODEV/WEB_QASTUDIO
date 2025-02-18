@@ -57,12 +57,12 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
   const blockNavigation = () => {
     if (typeof window === 'undefined') return;
 
-    // `window.open` 차단
+    // window.open 차단
     window.open = () => {
       return null;
     };
 
-    // `window.onbeforeunload`을 사용해 페이지 새로고침 차단
+    // window.onbeforeunload을 사용해 페이지 새로고침 차단
     window.onbeforeunload = (event) => {
       event.preventDefault();
       return '';
@@ -103,7 +103,7 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     }
     styleTagRef.current.innerHTML = cssContent;
 
-    // 내부 요소에 대한 이벤트 리스너 등록
+    //이벤트 리스너 등록
     document.body.addEventListener('click', handleClick, true);
     document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => event.preventDefault()));
 
@@ -111,25 +111,18 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
 
     return () => {
       if (!document) return;
-
-      // 내부 요소 이벤트 리스너 안전하게 제거
       if (handleClick) {
         document.body.removeEventListener('click', handleClick, true);
       }
-
       document.querySelectorAll('form').forEach((form) => {
         if (form.parentNode) {
-          form.replaceWith(form.cloneNode(true)); // 기존 이벤트 리스너 제거
+          form.replaceWith(form.cloneNode(true));
         }
       });
-
-      // 스타일 태그 제거 (존재할 때만)
       if (styleTagRef.current && styleTagRef.current.parentNode) {
         styleTagRef.current.parentNode.removeChild(styleTagRef.current);
         styleTagRef.current = null;
       }
-
-      // HTML 정리 (부모가 존재하는 경우에만 실행)
       if (mountHereRef.current && mountHereRef.current.parentNode) {
         while (mountHereRef.current.firstChild) {
           if (mountHereRef.current.contains(mountHereRef.current.firstChild)) {
