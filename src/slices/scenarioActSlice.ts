@@ -244,8 +244,6 @@ const scenarioActSlice = createSlice({
       state.webSocket.sessionId = action.payload;
     },
     updateIframeContent: (state, action: PayloadAction<{ html: string; css: string }>) => {
-      console.log(action.payload.html);
-      console.log(action.payload.css);
       state.currentHtml = action.payload.html;
       state.currentCss =
         action.payload.css +
@@ -277,7 +275,6 @@ const scenarioActSlice = createSlice({
       };
     },
     setCurrentTestId: (state, action: PayloadAction<number>) => {
-      console.log(action.payload);
       state.currentTestId = action.payload;
     },
 

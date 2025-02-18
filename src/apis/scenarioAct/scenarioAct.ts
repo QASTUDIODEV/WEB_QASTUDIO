@@ -39,7 +39,6 @@ const editAction = async (editData: TEditActionValues): Promise<TEditActionRespo
 
 const createScenario = async (scenario: TCreateScenaioValues): Promise<TCreateScenarioResponse> => {
   const { data } = await axiosInstance.post(`/api/v0/scenarios`, scenario);
-  console.log(data);
   return data;
 };
 
@@ -49,15 +48,12 @@ const executeScenario = async (values: TExecuteScenarioValues): Promise<TExecute
 };
 
 const fetchPageSource = async ({ targetUrl }: TFetchPageSourceValues): Promise<TFetchPageSourceResponse> => {
-  console.log(targetUrl);
   const { data } = await axiosInstance.post(`/api/v0/selenium/fetchPageSource`, { targetUrl });
-  console.log(data);
   return data;
 };
 
 const patchScenarioInfo = async (values: TPatchScenarioInfo): Promise<TPatchScenarioInfoResponse> => {
   const { data } = await axiosInstance.patch(`/api/v0/scenarios/${values.scenarioId}`, values.data);
-  console.log(data);
   return data;
 };
 

@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useExecuteScenario from '@/hooks/scenarioAct/useExecuteScenario';
 
+import LoadingSpinner from '@/components/common/loading/loadingSpinner';
 import ActionItem from '@/components/scenarioAct/actionItem/actionItem';
 import * as S from '@/components/scenarioAct/scenarioItem/scenarioItem.style';
 
 import ArrowDown from '@/assets/icons/arrow_down.svg?react';
 import ArrowUp from '@/assets/icons/arrow_up.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
-import Pause from '@/assets/icons/pause.svg?react';
 import Play from '@/assets/icons/play.svg?react';
 import { openScenario, setCurrentTestId, setRunningScenario, setScenarioId, setStep, setWebSocketConnected } from '@/slices/scenarioActSlice';
 
@@ -37,7 +37,7 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         {
           sessionId: project.webSocket.sessionId,
           scenarioId,
-          baseUrl: project.projectUrl, //'https://example.com' / project.projectUrl
+          baseUrl: project.projectUrl,
         },
         {
           onSuccess: (data) => {
@@ -76,7 +76,7 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         <S.IconContainer>
           <Edit onClick={() => handleEdit(3, scenarioId)} />
         </S.IconContainer>
-        <S.IconContainer>{scenarioId == runningScenarioId ? <Pause /> : <Play onClick={handlePlay} />}</S.IconContainer>
+        <S.IconContainer>{scenarioId == runningScenarioId ? <LoadingSpinner /> : <Play onClick={handlePlay} />}</S.IconContainer>
       </S.ScenarioHeader>
 
       {scenario?.isOpen && (
