@@ -29,8 +29,6 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     if (lastHighlightedElement.current) {
       lastHighlightedElement.current.classList.remove('qa-highlighted-element');
     }
-    target.classList.add('qa-highlighted-element');
-    lastHighlightedElement.current = target;
 
     const id = target.id || '';
     const cssSelector = getCssSelector(target);
@@ -41,6 +39,9 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
 
     dispatch(setCurrentLocator({ actionId: latestLocator.current.actionId, id, cssSelector, xPath }));
     dispatch(clickLocatorInput(true));
+
+    target.classList.add('qa-highlighted-element');
+    lastHighlightedElement.current = target;
   };
   // 링크 차단
   const disableLinks = (event: MouseEvent) => {
