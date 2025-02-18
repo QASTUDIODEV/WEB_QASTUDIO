@@ -22,7 +22,7 @@ export default function AddProjectPage() {
   const dispatch = useDispatch();
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
-  const { data, isError: projectInfoError } = useProjectExtractInfo(Number(projectId));
+  const { data } = useProjectExtractInfo(Number(projectId));
   const { useGetProjectList } = useProjectList();
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
@@ -104,13 +104,7 @@ export default function AddProjectPage() {
       </S.Container>
     );
   }
-  if (projectInfoError) {
-    return (
-      <S.Container>
-        <S.Error>권한이 없습니다</S.Error>
-      </S.Container>
-    );
-  }
+
   return success || data?.result.viewType ? (
     <ProjectInfoPage projectInfo={data} />
   ) : (

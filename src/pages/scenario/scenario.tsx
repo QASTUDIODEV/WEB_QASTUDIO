@@ -7,7 +7,6 @@ import { getPageNumbers } from '@/utils/getPageNumbers';
 import { useSelector } from '@/hooks/common/useCustomRedux.ts';
 import useGetScenarioInfo from '@/hooks/scenario/useGetScenarioInfo';
 
-import Loading from '@/components/common/loading/loading';
 import ButtonGroup from '@/components/scenario/buttonGroup/buttonGroup';
 import CharacterList from '@/components/scenario/characterList/characterList';
 
@@ -30,7 +29,7 @@ export default function ScenarioPage() {
   });
 
   const { useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
-  const { data: CharacterListData, isPending } = useGetCharacterList;
+  const { data: CharacterListData, isPending, error } = useGetCharacterList;
 
   const CharacterData = CharacterListData?.result.characters;
 
@@ -71,11 +70,11 @@ export default function ScenarioPage() {
   };
 
   if (isPending) {
-    return (
-      <S.LoadingContainer>
-        <Loading />
-      </S.LoadingContainer>
-    );
+    return <></>;
+  }
+
+  if (error) {
+    return <></>;
   }
 
   return (

@@ -26,3 +26,16 @@ export const RightSideButton = styled.div`
 export const LeftSideComponents = styled.div`
   display: flex;
 `;
+
+export const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary.pri_900};
+  color: ${({ theme }) => theme.colors.white};
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 700;
+`;
