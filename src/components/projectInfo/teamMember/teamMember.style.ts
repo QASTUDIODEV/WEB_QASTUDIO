@@ -32,6 +32,8 @@ export const MemberContainer = styled.div`
   &:hover {
     overflow-y: overlay;
   }
+  scrollbar-width: none;
+  z-index: 200;
 `;
 export const Member = styled.div`
   ${({ theme }) => theme.align.row_space_between};
@@ -39,11 +41,15 @@ export const Member = styled.div`
   gap: 2.5%;
   cursor: pointer;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  isolation: isolate;
+  z-index: 210;
 `;
 export const MemberBox = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 70%;
   gap: 4.05%;
   max-width: 100%;
 `;
@@ -52,6 +58,11 @@ export const ProfileWrapper = styled.div`
   min-height: 25.6px;
   width: 25.6px;
   height: 25.6px;
+`;
+export const UnacceptedWrapper = styled(ProfileWrapper)`
+  background-color: #677082;
+  opacity: 0.5;
+  border-radius: 100%;
 `;
 export const MemberName = styled.p`
   margin: 0;
@@ -64,14 +75,14 @@ export const MemberName = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 80%;
+  max-width: 100%;
   @media (max-width: 1200px) {
     max-width: 70%;
   }
 `;
-export const ArrowWrapper = styled.div`
-  flex-shrink: 0;
-  flex: 1;
+export const UnacceptedName = styled(MemberName)`
+  max-width: 100%;
+  color: #677082;
 `;
 export const Wrapper = styled.div`
   position: absolute;

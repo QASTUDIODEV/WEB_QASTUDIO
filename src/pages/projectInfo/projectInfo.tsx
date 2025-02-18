@@ -19,7 +19,7 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
           <S.Box height="59%">
             <ProjectSummary result={result} />
           </S.Box>
-          <S.Box height="35%">
+          <S.Box height="35%" style={{ justifyContent: 'space-between' }}>
             <CharacterBox result={result} />
           </S.Box>
         </S.Left>

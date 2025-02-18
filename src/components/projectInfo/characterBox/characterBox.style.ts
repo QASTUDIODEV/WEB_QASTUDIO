@@ -24,7 +24,7 @@ export const Title = styled.p`
 `;
 export const Character = styled.div`
   display: flex;
-  height: 95%;
+  height: 120px;
   width: 100%;
   align-items: center;
   gap: 16px;

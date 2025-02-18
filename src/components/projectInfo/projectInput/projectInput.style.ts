@@ -63,8 +63,8 @@ export const Input = styled.textarea`
   border-radius: 6.4px;
   background: rgba(217, 230, 255, 0.05);
   border: none;
-  overflow: 'hidden';
-  resize: 'none';
+  overflow: hidden;
+  resize: none;
   @media (max-width: 840px) {
     height: 100%;
     width: 70%;

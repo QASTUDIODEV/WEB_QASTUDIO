@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import type { TInfoDTO } from '@/types/projectInfo/projectInfo';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
@@ -10,23 +8,26 @@ import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider.tsx
 import Profile from '@/components/common/profile/profile';
 import * as S from '@/components/projectInfo/teamMember/teamMember.style';
 
+import Menu from '../menu/menu';
+
 import Plus from '@/assets/icons/add.svg?react';
 import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
+import MenuDark from '@/assets/icons/menu_dark.svg?react';
 import { openModal } from '@/slices/modalSlice.ts';
 
 export default function TeamMember({ result }: TInfoDTO) {
   const modalDispatch = useDispatch();
-  const navigate = useNavigate();
   const { useGetProjectMember } = useProjectInfo({ projectId: Number(result?.projectId) });
   const { data: members } = useGetProjectMember;
   const member = members?.result.members;
+  const unAcceptedMember = members?.result.unacceptedMembers;
   return (
     <>
       <S.Title>Team Members</S.Title>
       <S.MemberContainer>
         {member?.map((a, i) => (
-          <S.Member key={i} onClick={() => navigate(`/userInfo/${a.userId}`)}>
+          <S.Member key={i}>
             <S.MemberBox>
               <S.ProfileWrapper>
                 <Profile profileImg={a.profileImage} />
@@ -34,10 +35,25 @@ export default function TeamMember({ result }: TInfoDTO) {
               <S.MemberName>{a.nickname}</S.MemberName>
               {a.projectRole === 'LEADER' && <Crown />}
             </S.MemberBox>
-            <S.ArrowWrapper>
-              <ArrowRight />
-            </S.ArrowWrapper>
+            <Menu userId={a.userId} isLeader={result?.isLeader}>
+              <ArrowRight style={{ cursor: 'pointer' }} />
+            </Menu>
           </S.Member>
+        ))}
+        {unAcceptedMember?.map((a, i) => (
+          <>
+            <S.Member key={i}>
+              <S.MemberBox>
+                <S.UnacceptedWrapper>
+                  <Profile />
+                </S.UnacceptedWrapper>
+                <S.UnacceptedName>{a}</S.UnacceptedName>
+              </S.MemberBox>
+              <Menu isLeader={result?.isLeader}>
+                <MenuDark />
+              </Menu>
+            </S.Member>
+          </>
         ))}
       </S.MemberContainer>
       <S.Wrapper>
