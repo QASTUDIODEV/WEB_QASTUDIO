@@ -1,7 +1,6 @@
 import { useProjectId } from '@/hooks/common/useProjectId.ts';
 import useGetStatistics from '@/hooks/test/useGetStatistics';
 
-import Loading from '@/components/common/loading/loading';
 import ProjectStatistics from '@/components/dashboard/projectStatistics/projectStatistics';
 import Table from '@/components/dashboard/table/table';
 
@@ -12,11 +11,7 @@ export default function DashboardPage() {
   const { data: statisticsData, isPending } = useGetStatistics({ projectId });
 
   if (isPending) {
-    return (
-      <S.Container>
-        <Loading />
-      </S.Container>
-    );
+    return <></>;
   }
 
   if (statisticsData)

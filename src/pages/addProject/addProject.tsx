@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useProjectExtractInfo from '@/hooks/projectInfo/useProjectExtractInfo.ts';
 import { useUploadZipFile } from '@/hooks/projectInfo/useUploadZip';
 import useProjectList from '@/hooks/sidebar/sidebar';
 
@@ -11,7 +11,6 @@ import Button from '@/components/common/button/button';
 import Loading from '@/components/common/loading/loading';
 import Modal from '@/components/common/modal/modal';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
-import ProjectProfile from '@/components/common/sidebar/projectProfile/projectProfile';
 
 import ProjectInfoPage from '../projectInfo/projectInfo';
 
@@ -23,8 +22,7 @@ export default function AddProjectPage() {
   const dispatch = useDispatch();
   const { projectId } = useParams();
   const { useUploadFile } = useUploadZipFile();
-  const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isSuccess, isError: projectInfoError } = useProjectExtractInfo;
+  const { data } = useProjectExtractInfo(Number(projectId));
   const { useGetProjectList } = useProjectList();
   const { data: projectList, isSuccess: isProjectListLoaded } = useGetProjectList;
   const navigate = useNavigate();
@@ -106,29 +104,13 @@ export default function AddProjectPage() {
       </S.Container>
     );
   }
-  if (projectInfoError) {
-    return (
-      <S.Container>
-        <S.Error>권한이 없습니다</S.Error>
-      </S.Container>
-    );
-  }
+
   return success || data?.result.viewType ? (
     <ProjectInfoPage projectInfo={data} />
   ) : (
     <S.Container>
       {projectList?.result.projectList[0] && (
         <>
-          {projectId && isSuccess && (
-            <S.ProfileWrapper>
-              <S.Profile>
-                <S.Wrapper>
-                  <ProjectProfile profileImg={data.result.projectImage} />
-                </S.Wrapper>
-                <S.ProfileName>{data.result.projectName}</S.ProfileName>
-              </S.Profile>
-            </S.ProfileWrapper>
-          )}
           <S.Title>Add Project File</S.Title>
           <S.Text>
             Please enter the project folder for AI to understand the project. <br />
