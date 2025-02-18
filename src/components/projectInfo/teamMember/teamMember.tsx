@@ -49,9 +49,13 @@ export default function TeamMember({ result }: TInfoDTO) {
                 </S.UnacceptedWrapper>
                 <S.UnacceptedName>{a}</S.UnacceptedName>
               </S.MemberBox>
-              <Menu isLeader={result?.isLeader} projectId={Number(result?.projectId)} email={a}>
+              {result?.isLeader ? (
+                <Menu isLeader={result?.isLeader} projectId={Number(result?.projectId)} email={a}>
+                  <MenuDark />
+                </Menu>
+              ) : (
                 <MenuDark />
-              </Menu>
+              )}
             </S.Member>
           </>
         ))}

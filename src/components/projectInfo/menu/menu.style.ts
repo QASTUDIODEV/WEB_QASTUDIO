@@ -21,7 +21,7 @@ export const Last = styled(Option)`
 `;
 export const Menu = styled.div`
   width: 86px;
-  min-height: 0;
+  min-height: 38px;
   background: #16181c;
   border-radius: 8px;
   border: 1px solid #082659;
