@@ -23,7 +23,7 @@ export type TGetProjectInfoResponse = TCommonResponse<{
   assistantId: string;
 }>;
 
-export type TGetScenarioInfoResponse = TCommonResponse<{
+export type TGetScenarioListResponse = TCommonResponse<{
   characterId: number;
   scenarios: [
     {
@@ -83,6 +83,48 @@ export type TFetchPageSourceResponse = TCommonResponse<{
   css: string;
 }>;
 
+export type TGetScenarioInfoResponse = TCommonResponse<{
+  scenarioId: number;
+  scenarioName: string;
+  scenarioDescription: string;
+  actions: [
+    {
+      actionId: number;
+      actionDescription: string;
+      step: number;
+      actionType: string;
+      locator: {
+        strategy: string;
+        value: string;
+      };
+      action: {
+        type: string;
+        value: string;
+      };
+    },
+  ];
+}>;
+
+export type TPatchScenarioInfoResponse = TCommonResponse<{
+  scenarioName: string;
+  scenarioDescription: string;
+  actions: [
+    {
+      actionDescription: string;
+      step: number;
+      actionType: string;
+      locator: {
+        strategy: string;
+        value: string;
+      };
+      action: {
+        type: string;
+        value: string;
+      };
+    },
+  ];
+}>;
+
 // --value--
 export type TGetProjectInfoValues = {
   projectId?: number;
@@ -135,4 +177,26 @@ export type TExecuteScenarioValues = {
 
 export type TFetchPageSourceValues = {
   targetUrl: string | null;
+};
+
+export type TPatchScenarioInfo = {
+  scenarioId: number | null;
+  data: {
+    characterId: number | null;
+    scenarioName: string | null;
+    scenarioDescription: string | null;
+    actions: {
+      actionDescription: string | null;
+      step: number | null;
+      actionType: string | null;
+      locator: {
+        strategy: string | null;
+        value: string | null;
+      };
+      action: {
+        type: string | null;
+        value: string | null;
+      };
+    }[];
+  };
 };

@@ -53,3 +53,14 @@ export const createCharacterModalScehma = z.object({
   characterDescription: z.string().min(1, 'Required.'),
   accessPage: z.array(z.string()).nonempty('At least one page is required.'),
 });
+
+export const projectModalSchema = z.object({
+  projectName: z.string().min(3, { message: 'Project name must be at least 3 characters.' }).nonempty({ message: 'Project name is required.' }),
+  projectUrl: z.string().url({ message: 'Enter a valid URL.' }).nonempty({ message: 'Project URL is required.' }),
+  email: z
+    .string()
+    .optional() // 빈 문자열 허용
+    .refine((value) => value === '' || emailRegex.test(value!), {
+      message: 'Must be email format',
+    }),
+});

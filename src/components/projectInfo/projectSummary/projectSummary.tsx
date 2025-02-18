@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { TInfoDTO } from '@/types/projectInfo/projectInfo';
 
 import { useDispatch } from '@/hooks/common/useCustomRedux.ts';
+import useGetPageSummary from '@/hooks/projectInfo/useGetPageSummary.ts';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
@@ -20,8 +21,8 @@ export default function ProjectInfoPage({ result }: TInfoDTO) {
   const modalDispatch = useDispatch();
   const [isStructureVisible, setIsStructureVisible] = useState(true);
   const [selectedPage, setSelectedPage] = useState(0);
-  const { useGetPageSummary, useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
-  const { data: summaryList } = useGetPageSummary;
+  const { useGetCharacter } = useProjectInfo({ projectId: Number(result?.projectId) });
+  const { data: summaryList } = useGetPageSummary(Number(result?.projectId));
   const { data: characterList } = useGetCharacter;
   const summary = summaryList?.result.pageSummaryList;
   const character = characterList?.result.detailCharacters;

@@ -1,32 +1,57 @@
 import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
+import type { AxiosError } from 'axios';
 
 import { DEVICE, STACK } from '@/enums/enums';
 
-import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
+import useProjectExtractInfo from '@/hooks/projectInfo/useProjectExtractInfo';
 
 import ProjectTitle from '@/components/common/projectTitle/projectTitle';
 
 import * as S from './projectHeader.style';
 import Button from '../button/button';
+import Loading from '../loading/loading';
 import { MODAL_TYPES } from '../modalProvider/modalProvider';
 
 import Goto from '@/assets/icons/arrow_goto.svg?react';
 import Delete from '@/assets/icons/del.svg?react';
 import Edit from '@/assets/icons/edit.svg?react';
+import { Circle1, Circle2, Circle3, Circle4 } from '@/layouts/auth/auth.style';
+import ErrorPage from '@/pages/error/error';
+import NoAuthority from '@/pages/noAuthority/noAuthority';
 import { openModal } from '@/slices/modalSlice';
+
+export type TAxiosResponseError = AxiosError<{
+  code: string;
+  message: string;
+  error: string;
+}>;
 
 export default function ProjectHeader() {
   const { projectId } = useParams();
-  const { useProjectExtractInfo } = useProjectInfo({ projectId: Number(projectId) });
-  const { data, isLoading } = useProjectExtractInfo;
+  const { data, isLoading, error } = useProjectExtractInfo(Number(projectId));
   const location = useLocation();
   const isInformationPage = location.pathname.startsWith('/project/information/');
 
   const dispatch = useDispatch();
-
+  if (error) {
+    const errorCode = (error as TAxiosResponseError)?.response?.data?.code;
+    if (errorCode === 'PROJECT403') {
+      return <NoAuthority />;
+    } else {
+      return <ErrorPage />;
+    }
+  }
   if (isLoading) {
-    return;
+    return (
+      <S.Container>
+        <Loading />
+        <Circle1 />
+        <Circle2 />
+        <Circle3 />
+        <Circle4 />
+      </S.Container>
+    );
   }
   if (!projectId) {
     return;
