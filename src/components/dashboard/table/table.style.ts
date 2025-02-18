@@ -80,6 +80,12 @@ const Tr = styled.tr`
 const Td = styled.td`
   ${({ theme }) => theme.text.medium_14};
   padding: 15px 20px;
+  max-width: 350px;
+  overflow: hidden;
+
+  word-break: break-word;
+  word-wrap: break-word;
+  white-space: normal;
 
   &:first-child {
     border-top-left-radius: 6px;
