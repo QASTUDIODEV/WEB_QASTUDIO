@@ -3,6 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
   min-width: 161px;
   min-height: 72px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 10px 20px;
   border-radius: 8px;
   display: flex;
@@ -18,4 +22,7 @@ export const Text = styled.p`
   line-height: 150%;
   letter-spacing: 0.24px;
   color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
