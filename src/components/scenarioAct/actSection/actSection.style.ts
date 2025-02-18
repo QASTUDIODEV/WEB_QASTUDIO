@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background: ${({ theme }) => theme.colors.primary.pri_900};
+  background-color: white;
   height: 100%;
   overflow: hidden;
 `;

@@ -22,7 +22,6 @@ export enum ACTION_TYPE {
   Fill_Text = 'Fill_Text',
 }
 export enum LOCATOR_TYPE {
-  ID = 'id',
   CSSSELECTOR = 'css_selector',
   XPATH = 'xpath',
 }
