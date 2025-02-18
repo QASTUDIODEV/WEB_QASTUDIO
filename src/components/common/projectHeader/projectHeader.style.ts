@@ -28,13 +28,14 @@ export const LeftSideComponents = styled.div`
 `;
 
 export const Container = styled.div`
-  display: flex;
-  z-index: 700;
-  position: absolute;
-  width: 100%;
+  background-color: ${({ theme }) => theme.colors.primary.pri_900};
+  color: ${({ theme }) => theme.colors.white};
+  position: relative;
   height: 100%;
-  overflow-y: hidden;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.primary.pri_900};
+  z-index: 700;
 `;

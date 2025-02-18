@@ -57,7 +57,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
   z-index: 700;
 `;
 
