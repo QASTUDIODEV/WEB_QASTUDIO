@@ -10,7 +10,7 @@ import { clickLocatorInput, setCurrentLocator } from '@/slices/scenarioActSlice'
 
 const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string; cssContent: string }) => {
   const frame = useFrame();
-  if (!frame) return null;
+  if (!frame?.document || !frame?.window) return null;
 
   const { document, window } = frame;
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     latestLocator.current = currentLocator;
   }, [currentLocator]);
 
-  //  클릭 이벤트 핸들러
+  // 클릭 이벤트 핸들러
   const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
@@ -53,36 +53,24 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     lastHighlightedElement.current = target;
   };
 
-  //  모든 URL 이동 차단
+  // URL 이동 차단
   const blockNavigation = () => {
-    if (typeof window === 'undefined') return;
-
-    // window.open 차단
-    window.open = () => {
-      return null;
-    };
-
-    // window.onbeforeunload을 사용해 페이지 새로고침 차단
+    window.open = () => null;
     window.onbeforeunload = (event) => {
       event.preventDefault();
       return '';
     };
-
-    // 히스토리 변경 차단 (pushState, replaceState)
     const blockHistory = (method: 'pushState' | 'replaceState') => {
       const originalMethod = window.history[method];
-      window.history[method] = function (...args) {
+      window.history[method] = (...args: Parameters<History['pushState']>) => {
+        console.warn(`Navigation blocked: ${method}`);
         return originalMethod.apply(window.history, args);
       };
     };
-
     blockHistory('pushState');
     blockHistory('replaceState');
 
-    // 뒤로 가기
-    window.addEventListener('popstate', (event) => {
-      event.preventDefault();
-    });
+    window.addEventListener('popstate', (event) => event.preventDefault());
   };
 
   useEffect(() => {
@@ -103,7 +91,7 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     }
     styleTagRef.current.innerHTML = cssContent;
 
-    //이벤트 리스너 등록
+    // 이벤트 리스너 등록
     document.body.addEventListener('click', handleClick, true);
     document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => event.preventDefault()));
 
@@ -111,24 +99,21 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
 
     return () => {
       if (!document) return;
-      if (handleClick) {
-        document.body.removeEventListener('click', handleClick, true);
-      }
+
+      document.body.removeEventListener('click', handleClick, true);
       document.querySelectorAll('form').forEach((form) => {
         if (form.parentNode) {
-          form.replaceWith(form.cloneNode(true));
+          form.replaceWith(form.cloneNode(true) as HTMLFormElement);
         }
       });
+
       if (styleTagRef.current && styleTagRef.current.parentNode) {
         styleTagRef.current.parentNode.removeChild(styleTagRef.current);
         styleTagRef.current = null;
       }
-      if (mountHereRef.current && mountHereRef.current.parentNode) {
-        while (mountHereRef.current.firstChild) {
-          if (mountHereRef.current.contains(mountHereRef.current.firstChild)) {
-            mountHereRef.current.removeChild(mountHereRef.current.firstChild);
-          }
-        }
+
+      if (mountHereRef.current) {
+        mountHereRef.current.replaceChildren();
       }
     };
   }, [htmlContent, cssContent]);
