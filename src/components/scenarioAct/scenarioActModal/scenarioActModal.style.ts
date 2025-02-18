@@ -73,6 +73,8 @@ const ResultBox = styled.div`
 const MessageBox = styled(ResultBox)`
   height: 230px;
   overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-all;
 `;
 const ErrorWrapper = styled.div`
   width: 100%;
