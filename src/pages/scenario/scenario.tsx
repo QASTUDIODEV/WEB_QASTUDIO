@@ -29,7 +29,7 @@ export default function ScenarioPage() {
   });
 
   const { useGetCharacterList } = useGetScenarioInfo({ projectId: projectId || '', currentPage: currentPage });
-  const { data: CharacterListData, isPending } = useGetCharacterList;
+  const { data: CharacterListData, isPending, error } = useGetCharacterList;
 
   const CharacterData = CharacterListData?.result.characters;
 
@@ -70,6 +70,10 @@ export default function ScenarioPage() {
   };
 
   if (isPending) {
+    return <></>;
+  }
+
+  if (error) {
     return <></>;
   }
 
