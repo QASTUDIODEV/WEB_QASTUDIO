@@ -13,6 +13,7 @@ export type TInfoDTO = {
         viewType: string;
         developmentSkill: string;
         assistantId: string;
+        isLeader: boolean;
       }
     | undefined;
 };
@@ -61,6 +62,7 @@ export type TGetProjectMember = TCommonResponse<{
     nickname: string;
     profileImage: string;
   }[];
+  unacceptedMembers: string[];
 }>;
 
 export type TProjectMember = TCommonResponse<{

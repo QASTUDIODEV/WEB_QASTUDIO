@@ -5,9 +5,8 @@ import { media } from '@/styles/media';
 export const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  height: 100vh;
-  overflow: auto;
-  padding: 3% 6% 2% 6%;
+  height: calc(100vh - 100px);
+  padding: 3% 6% 0 6%;
   display: flex;
   flex-direction: column;
   min-width: 410px;
@@ -22,9 +21,6 @@ export const Container = styled.div`
     .buttonShow {
       opacity: 0;
     }
-  }
-  @media (max-width: 1300px) {
-    overflow: auto;
   }
 `;
 export const Box = styled.div<{ height: string }>`
