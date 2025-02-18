@@ -146,3 +146,12 @@ export type TEditProjectInfo = {
   projectUrl: string;
   memberEmailList: TEmail[];
 };
+export type TChangeOwnerRequest = {
+  projectId: number;
+  userId: number;
+};
+export type TChangeOwner = TCommonResponse<{}>;
+export type TDeleteMemberRequest = {
+  projectId: number;
+  email: string;
+};

@@ -1,7 +1,10 @@
 import type {
   TAddPage,
   TAddPageRequest,
+  TChangeOwner,
+  TChangeOwnerRequest,
   TCharacterId,
+  TDeleteMemberRequest,
   TDeleteProject,
   TEditProjectInfo,
   TEditRequest,
@@ -64,8 +67,16 @@ export const deleteProject = async ({ projectId }: TProjectInfo): Promise<TDelet
   const { data } = await axiosInstance.delete(`/api/v0/projects/${projectId}`);
   return data;
 };
+export const deleteMember = async ({ projectId, email }: TDeleteMemberRequest): Promise<TChangeOwner> => {
+  const { data } = await axiosInstance.delete(`/api/v0/projects/${projectId}/team-members`, { data: { email } });
+  return data;
+};
 export const getTeamMemberAllEmail = async ({ projectId }: TProjectInfo): Promise<TGetTeamMemberAllEmail> => {
   const { data } = await axiosInstance.get(`/api/v0/projects/${projectId}/team-members/all-emails`);
+  return data;
+};
+export const changeOwner = async ({ projectId, userId }: TChangeOwnerRequest): Promise<TChangeOwner> => {
+  const { data } = await axiosInstance.post(`/api/v0/projects/${projectId}/team-members/change-permissions`, { userId });
   return data;
 };
 export const editProject = async ({ projectId, projectImage, projectName, projectUrl, memberEmailList }: TEditProjectInfo): Promise<TAddProject> => {

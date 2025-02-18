@@ -13,16 +13,18 @@ export type TMenuProps = {
   children: React.ReactNode;
   userId?: number;
   isLeader?: boolean;
+  projectId?: number;
+  email?: string;
 };
 
-export default function Menu({ children, userId, isLeader }: TMenuProps) {
+export default function Menu({ children, userId, isLeader, projectId, email }: TMenuProps) {
   const modalDispatch = useDispatch();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-
+  console.log(email);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
@@ -57,13 +59,23 @@ export default function Menu({ children, userId, isLeader }: TMenuProps) {
   return (
     <S.Container ref={buttonRef} onClick={handleToggle}>
       {children}
-      {isLeader &&
-        visible &&
+      {visible &&
         ReactDOM.createPortal(
           <S.Menu ref={menuRef} style={{ top: menuPosition.top, left: menuPosition.left }}>
-            {/* modalProps: { projectId: projectId, character: character } */}
-            <S.Option onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.ChangeOwnerModal }))}>Owner</S.Option>
-            <S.Option onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.DeleteTeamMember }))}>Remove</S.Option>
+            {isLeader && (
+              <>
+                <S.Option
+                  onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.ChangeOwnerModal, modalProps: { projectId: projectId, userId: userId } }))}
+                >
+                  Owner
+                </S.Option>
+                <S.Option
+                  onClick={() => modalDispatch(openModal({ modalType: MODAL_TYPES.DeleteTeamMember, modalProps: { projectId: projectId, email: email } }))}
+                >
+                  Remove
+                </S.Option>
+              </>
+            )}
             {userId && <S.Last onClick={() => navigate(`/userInfo/${userId}`)}>MyPage</S.Last>}
           </S.Menu>,
           document.body,
