@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ACTION_STATE, ACTION_TYPE } from '@/enums/enums';
+import { ACTION_STATE, ACTION_TYPE, LOCATOR_TYPE } from '@/enums/enums';
 
 import { getIcon } from '@/utils/getIcon';
 
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useAction from '@/hooks/scenarioAct/useAction';
 
 import Button from '@/components/common/button/button';
+import LoadingSpinner from '@/components/common/loading/loadingSpinner';
 import { MODAL_TYPES } from '@/components/common/modalProvider/modalProvider';
 import * as S from '@/components/scenarioAct/actionItem/actionItem.style';
 import SelectDropdown from '@/components/scenarioAct/selectDropdown/selectDropdown';
@@ -17,6 +18,7 @@ import CheckCircle from '@/assets/icons/check_circle.svg?react';
 import Click from '@/assets/icons/click.svg?react';
 import FailCircle from '@/assets/icons/fail_circle.svg?react';
 import Globe from '@/assets/icons/globe.svg?react';
+import Input from '@/assets/icons/input.svg?react';
 import UnderError from '@/assets/icons/under_error.svg?react';
 import UnderSuccess from '@/assets/icons/under_success.svg?react';
 import { openModal } from '@/slices/modalSlice';
@@ -31,17 +33,19 @@ interface IActionItem {
 const stateIconMap = {
   [ACTION_STATE.SUCCESS]: CheckCircle,
   [ACTION_STATE.FAIL]: FailCircle,
+  [ACTION_STATE.IN_PROGRESS]: LoadingSpinner,
   [ACTION_STATE.UNVERIFIED]: null,
 };
 
 // 액션 아이콘 매핑
 const actionIconMap = {
   [ACTION_TYPE.CLICK]: Click,
-  [ACTION_TYPE.SEND_KEYS]: Globe,
+  [ACTION_TYPE.NAVIGATE]: Globe,
+  [ACTION_TYPE.Fill_Text]: Input,
 };
 
-const locatorList = ['id', 'css_selector', 'xpath'];
-const actionList = ['click', 'send_keys'];
+const locatorList = Object.values(LOCATOR_TYPE);
+const actionList = Object.values(ACTION_TYPE);
 
 export default function ActionItem({ scenarioId, actionId }: IActionItem) {
   const dispatch = useDispatch();
@@ -188,7 +192,7 @@ export default function ActionItem({ scenarioId, actionId }: IActionItem) {
             </S.DescriptionRow>
             <S.DescriptionRow>
               {/* send_keys일 때만 Input 표시 */}
-              {['send_keys'].includes(actionType) && (
+              {['Fill_Text'].includes(actionType) && (
                 <S.DescriptionRow>
                   <S.Input value={actionInputValue} onChange={(e) => setActionInputValue(e.target.value)} />
                 </S.DescriptionRow>

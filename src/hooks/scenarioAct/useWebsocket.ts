@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import { ACTION_STATE } from '@/enums/enums';
+
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 
 import { setActionState, setLastActionId, setRunningScenario, setSessionId, setWebSocketConnected, updateIframeContent } from '@/slices/scenarioActSlice';
@@ -24,8 +26,6 @@ const useWebSocket = (url: string) => {
     };
 
     socket.onmessage = async (event) => {
-      console.log('수신 메시지:', event.data);
-
       try {
         let parsedMessage;
         if (event.data instanceof Blob) {
@@ -37,7 +37,7 @@ const useWebSocket = (url: string) => {
           parsedMessage = event.data;
         }
 
-        console.log('파싱된 메시지:', parsedMessage);
+        console.log('수신된 메시지:', parsedMessage);
 
         if (parsedMessage.sessionId) {
           // 세션id
@@ -47,6 +47,9 @@ const useWebSocket = (url: string) => {
           if (parsedMessage.phase === 'AFTER_ACTION') {
             dispatch(setLastActionId(parsedMessage.actionId));
             dispatch(setActionState({ actionId: parsedMessage.actionId, state: parsedMessage.status }));
+          }
+          if (parsedMessage.phase === 'BEFORE_ACTION') {
+            dispatch(setActionState({ actionId: parsedMessage.actionId, state: ACTION_STATE.IN_PROGRESS }));
           }
           dispatch(
             updateIframeContent({
@@ -62,7 +65,7 @@ const useWebSocket = (url: string) => {
           }
         }
       } catch (error) {
-        console.error('WebSocket 메시지 파싱 오류:', error, '원본 메시지:', event.data);
+        console.error(error);
       }
     };
 
@@ -85,15 +88,7 @@ const useWebSocket = (url: string) => {
     };
   }, [url, dispatch, isConnected]);
 
-  const sendMessage = (message: string) => {
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      socketRef.current.send(message);
-    } else {
-      console.error('WebSocket이 연결되지 않음');
-    }
-  };
-
-  return { sendMessage };
+  return;
 };
 
 export default useWebSocket;

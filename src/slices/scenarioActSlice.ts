@@ -61,6 +61,11 @@ interface ICurrentLocator {
   isClicked: boolean;
 }
 
+interface IStep {
+  step: number;
+  selectedScenarioId: number | null;
+}
+
 interface IScenarioActSlice {
   characterId: number | null;
   projectUrl: string | null;
@@ -68,11 +73,13 @@ interface IScenarioActSlice {
   scenarios: IScenario[];
   characters: ICharacter[];
   recordActions: IRecordAction[];
+  editRecordActions: IRecordAction[];
   currentTestId: number;
-  webSocket: IWebSocketState;
   currentHtml: string;
   currentCss: string;
+  webSocket: IWebSocketState;
   currentLocator: ICurrentLocator;
+  step: IStep;
 }
 
 /*---  payload --- */
@@ -112,33 +119,32 @@ interface IActionPayload {
 // 초기 상태
 const initialState: IScenarioActSlice = {
   characterId: null,
-  projectUrl: 'https://www.kw.ac.kr/ko/',
-  projectName: 'QASTUDIO',
+  projectUrl: null,
+  projectName: null,
   characters: [],
   scenarios: [],
   recordActions: [],
+  editRecordActions: [],
   currentTestId: 0,
-  webSocket: {
-    runningScenarioId: null,
-    isConnected: false,
-    sessionId: null,
-    lastActionId: null,
-  },
-  currentHtml: `<div >
-
-</div>`,
+  currentHtml: `<div> </div>`,
   currentCss: `<!DOCTYPE html>
 <html>
 <head>
       <style >
-
       </style>
     </head>
 <body>
   <div id="mountHere"></div>
 </body>
 </html>`,
+  webSocket: {
+    runningScenarioId: null,
+    isConnected: false,
+    sessionId: null,
+    lastActionId: null,
+  },
   currentLocator: { actionId: null, id: null, xPath: null, cssSelector: null, isInputFocused: false, isClicked: false },
+  step: { step: 1, selectedScenarioId: null },
 };
 
 const scenarioActSlice = createSlice({
@@ -180,17 +186,33 @@ const scenarioActSlice = createSlice({
       }));
     },
 
-    // action 추가
+    // 시나리오 추가 record
+    fetchAction: (state, action: PayloadAction<IRecordAction[]>) => {
+      state.recordActions = action.payload;
+    },
     addAction: (state, action: PayloadAction<IRecordAction>) => {
       state.recordActions.push(action.payload);
     },
-    // action 삭제
     removeAction: (state, action: PayloadAction<number | undefined>) => {
       const deletedStep = action.payload;
       if (deletedStep === undefined) return;
       state.recordActions = state.recordActions.filter((itm) => itm.step !== deletedStep);
-      // 재정렬
       state.recordActions = state.recordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
+    },
+
+    // 시나리오 편집 record
+    fetchEditAction: (state, action: PayloadAction<IRecordAction[]>) => {
+      state.editRecordActions = action.payload;
+    },
+    addEditAction: (state, action: PayloadAction<IRecordAction>) => {
+      state.editRecordActions.push(action.payload);
+    },
+    removeEditAction: (state, action: PayloadAction<number | undefined>) => {
+      const deletedStep = action.payload;
+      if (deletedStep === undefined) return;
+      state.editRecordActions = state.editRecordActions.filter((itm) => itm.step !== deletedStep);
+      // 재정렬
+      state.editRecordActions = state.editRecordActions.map((itm) => (itm.step > deletedStep ? { ...itm, step: itm.step - 1 } : itm));
     },
 
     // 클릭 시 로케이터 설정
@@ -222,16 +244,17 @@ const scenarioActSlice = createSlice({
       state.webSocket.sessionId = action.payload;
     },
     updateIframeContent: (state, action: PayloadAction<{ html: string; css: string }>) => {
-      console.log(action.payload.html);
-      console.log(action.payload.css);
       state.currentHtml = action.payload.html;
       state.currentCss =
         action.payload.css +
         `.qa-highlighted-element {
-          outline: 3px solid #ffeb3b;
-          background-color: rgba(255, 235, 59, 0.2);
+      background: rgba(13, 64, 157, 0.2);
+      mix-blend-mode: multiply; 
+      border: 1px dashed #0D409D;
+      border-radius:4px;
         }`;
     },
+
     // 실행중인 시나리오 설정
     setRunningScenario: (state, action: PayloadAction<number | null>) => {
       state.webSocket.runningScenarioId = action.payload;
@@ -252,8 +275,15 @@ const scenarioActSlice = createSlice({
       };
     },
     setCurrentTestId: (state, action: PayloadAction<number>) => {
-      console.log(action.payload);
       state.currentTestId = action.payload;
+    },
+
+    // 컨트롤러 스탭
+    setStep: (state, action: PayloadAction<number>) => {
+      state.step.step = action.payload;
+    },
+    setScenarioId: (state, action: PayloadAction<number | null>) => {
+      state.step.selectedScenarioId = action.payload;
     },
   },
 });
@@ -277,5 +307,11 @@ export const {
   setLastActionId,
   setActionState,
   setCurrentTestId,
+  setStep,
+  setScenarioId,
+  fetchEditAction,
+  addEditAction,
+  removeEditAction,
+  fetchAction,
 } = scenarioActSlice.actions;
 export default scenarioActSlice.reducer;

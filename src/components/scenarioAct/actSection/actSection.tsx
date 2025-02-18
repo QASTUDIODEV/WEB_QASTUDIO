@@ -21,7 +21,12 @@ export default memo(function ActSection() {
 
   return (
     <S.Container>
-      <Frame style={style} initialContent="<html><head><style></style></head><body><div id='mountHere'></div></body></html>" mountTarget="#mountHere">
+      <Frame
+        style={style}
+        initialContent="<html><head><style></style></head><body><div id='mountHere'></div></body></html>"
+        mountTarget="#mountHere"
+        sandbox="allow-scripts allow-same-origin"
+      >
         <InnerComponent htmlContent={currentHtml} cssContent={currentCss} />
       </Frame>
     </S.Container>

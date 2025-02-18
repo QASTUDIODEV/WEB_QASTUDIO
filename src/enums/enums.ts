@@ -2,23 +2,29 @@ export enum DEVICE {
   PC = 'PC',
   MOBILE = 'MOBILE',
 }
-// 프로젝트 스택
+
 export enum STACK {
   NEXT = 'NEXT',
   REACT = 'REACT',
   JS = 'JS',
 }
-// 액션 상태
+
+// 시나리오 실행
 export enum ACTION_STATE {
   SUCCESS = 'SUCCESS',
   FAIL = 'FAIL',
+  IN_PROGRESS = 'IN_PROGRESS',
   UNVERIFIED = 'UNVERIFIED',
 }
-// 액션 상태
 export enum ACTION_TYPE {
-  NAVIGATE = 'navigate',
-  CLICK = 'click',
-  SEND_KEYS = 'send_keys',
+  CLICK = 'Click',
+  NAVIGATE = 'Navigate',
+  Fill_Text = 'Fill_Text',
+}
+export enum LOCATOR_TYPE {
+  ID = 'id',
+  CSSSELECTOR = 'css_selector',
+  XPATH = 'xpath',
 }
 
 //소셜 로그인
