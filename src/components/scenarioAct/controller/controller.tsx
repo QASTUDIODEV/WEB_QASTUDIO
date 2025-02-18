@@ -93,7 +93,7 @@ export default function Controller() {
             <S.IconContainer>
               <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
             </S.IconContainer>
-            <p>Modify Senario</p>
+            <p>Modify Scenario</p>
           </S.Header>
 
           {/*인풋들 */}
