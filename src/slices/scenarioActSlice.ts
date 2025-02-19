@@ -248,6 +248,7 @@ const scenarioActSlice = createSlice({
       state.currentCss =
         action.payload.css +
         `.qa-highlighted-element {
+      background-color:rgb(207,217,235);
       border: 1px dotted #0D409D;
       border-radius:4px;
         }`;
