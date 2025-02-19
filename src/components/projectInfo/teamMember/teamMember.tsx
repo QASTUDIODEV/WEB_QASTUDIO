@@ -22,6 +22,7 @@ export default function TeamMember({ result }: TInfoDTO) {
   const { data: members } = useGetProjectMember;
   const member = members?.result.members;
   const unAcceptedMember = members?.result.unacceptedMembers;
+
   return (
     <>
       <S.Title>Team Members</S.Title>
@@ -35,7 +36,7 @@ export default function TeamMember({ result }: TInfoDTO) {
               <S.MemberName>{a.nickname}</S.MemberName>
               {a.projectRole === 'LEADER' && <Crown />}
             </S.MemberBox>
-            <Menu userId={a.userId} isLeader={result?.isLeader} email={a.email}>
+            <Menu userId={a.userId} isLeader={result?.isLeader || false} email={a.email} projectId={Number(result?.projectId)}>
               <ArrowRight style={{ cursor: 'pointer' }} />
             </Menu>
           </S.Member>
