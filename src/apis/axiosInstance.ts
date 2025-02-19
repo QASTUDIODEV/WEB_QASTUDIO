@@ -23,13 +23,19 @@ let isRedirecting = false;
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.data.error === 'Unauthorized') {
       if (isRedirecting) {
         return Promise.reject(error);
       }
 
       isRedirecting = true;
       try {
+        const currentUrl = window.location.pathname;
+        if (currentUrl === '/' || currentUrl === '/signup') {
+          isRedirecting = false;
+          return;
+        }
+
         const refreshResponse = await refresh();
 
         if (refreshResponse.code === 200) {
@@ -39,11 +45,6 @@ axiosInstance.interceptors.response.use(
           return axiosInstance(error.config);
         }
       } catch (errors) {
-        const currentUrl = window.location.pathname;
-        if (currentUrl === '/' || currentUrl === '/signup') {
-          isRedirecting = false;
-          return;
-        }
         if (axios.isAxiosError(errors)) {
           const refreshError = error as AxiosError<IRefreshResponse>;
           if (refreshError.response?.data.message === 'The token is null.') {
