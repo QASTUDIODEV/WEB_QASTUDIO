@@ -22,6 +22,16 @@ export const Container = styled.div`
       opacity: 0;
     }
   }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 6px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 6px;
+  }
 `;
 export const Box = styled.div<{ height: string }>`
   height: ${(props) => props.height};
@@ -34,6 +44,11 @@ export const Box = styled.div<{ height: string }>`
   flex-direction: column;
   align-items: stretch;
   border: 0.8px solid rgba(32, 75, 153, 0.2);
+  &:hover {
+    ::-webkit-scrollbar-thumb {
+      background: #ffffff26;
+    }
+  }
 `;
 export const Left = styled.div`
   width: 75%;

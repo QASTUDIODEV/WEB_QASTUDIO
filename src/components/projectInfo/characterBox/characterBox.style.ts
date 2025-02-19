@@ -30,9 +30,6 @@ export const Character = styled.div`
   gap: 16px;
   @media (max-width: 720px) {
     overflow: hidden;
-    &:hover {
-      overflow: overlay;
-    }
   }
   ${media.desktop`
     align-items: flex-start;
@@ -46,13 +43,10 @@ export const CharacterList = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
-  overflow: hidden;
+  overflow-x: scroll;
   ${media.desktop`
     height: 100%;
   `}
-  &:hover {
-    overflow: overlay;
-  }
 `;
 export const CharacterBox = styled.div`
   position: relative;

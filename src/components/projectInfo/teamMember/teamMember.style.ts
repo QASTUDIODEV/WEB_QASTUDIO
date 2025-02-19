@@ -23,16 +23,12 @@ export const Title = styled.p`
   `}
 `;
 export const MemberContainer = styled.div`
-  overflow: hidden;
+  overflow-y: scroll;
   width: 100%;
   max-height: 78%;
   ${media.desktop`
     max-height: 80%;
   `}
-  &:hover {
-    overflow-y: overlay;
-  }
-  scrollbar-width: none;
   z-index: 200;
 `;
 export const Member = styled.div`
