@@ -39,16 +39,16 @@ export default function DeleteTeamMember({ onClose, projectId = 0, email = '' }:
     <Modal title="Are you sure to remove the team member?" onClose={onClose}>
       <S.ModalBox>
         <S.Content>If you press the Remove button, it will never recover again and all data will be deleted.</S.Content>
-        <S.BtnWrapper>
-          {errorMessage && <ValidationMessage message={errorMessage} isError={true} />}
-          <Button type="normal" color="white_square" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="normal" color="blue" onClick={handleChange}>
-            Delete
-          </Button>
-        </S.BtnWrapper>
       </S.ModalBox>
+      <S.BtnWrapper>
+        {errorMessage && <ValidationMessage message={errorMessage} isError={true} />}
+        <Button type="normal" color="white_square" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type="normal" color="blue" onClick={handleChange}>
+          Delete
+        </Button>
+      </S.BtnWrapper>
     </Modal>
   );
 }

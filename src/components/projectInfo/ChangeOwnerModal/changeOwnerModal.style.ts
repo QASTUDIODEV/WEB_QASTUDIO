@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
 export const ModalBox = styled.div`
-  min-width: 760px;
-  width: 760px;
+  max-width: 90%;
   margin-top: 20px;
   gap: 20px;
   display: flex;
@@ -10,7 +9,6 @@ export const ModalBox = styled.div`
   position: relative;
 `;
 export const Content = styled.p`
-  max-width: 95%;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
@@ -25,4 +23,5 @@ export const BtnWrapper = styled.div`
   position: sticky;
   right: 0;
   gap: 20px;
+  margin-top: 20px;
 `;

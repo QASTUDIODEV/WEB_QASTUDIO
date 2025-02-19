@@ -39,16 +39,16 @@ export default function ChangeOwnerModal({ onClose, projectId = 0, userId = 0 }:
     <Modal title="Do you want to delegate the room manager authority?" onClose={onClose}>
       <S.ModalBox>
         <S.Content>As soon as you lose the room manager authority, you lose the right to modify or remove the project.</S.Content>
-        <S.BtnWrapper>
-          {errorMessage && <ValidationMessage message={errorMessage} isError={true} />}
-          <Button type="normal" color="white_square" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="normal" color="blue" onClick={handleChange}>
-            Delegrate
-          </Button>
-        </S.BtnWrapper>
       </S.ModalBox>
+      <S.BtnWrapper>
+        {errorMessage && <ValidationMessage message={errorMessage} isError={true} />}
+        <Button type="normal" color="white_square" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type="normal" color="blue" onClick={handleChange}>
+          Delegrate
+        </Button>
+      </S.BtnWrapper>
     </Modal>
   );
 }
