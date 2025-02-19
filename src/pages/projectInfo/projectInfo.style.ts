@@ -61,6 +61,7 @@ export const Box = styled.div<{ height: string }>`
 `;
 export const CharacterBox = styled(Box)`
   min-height: 200px;
+  max-height: 214px;
 `;
 export const ChartBox = styled(Box)`
   min-height: 300px;
