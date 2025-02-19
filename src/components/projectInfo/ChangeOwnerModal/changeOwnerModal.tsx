@@ -10,8 +10,8 @@ import * as S from '@/components/projectInfo/ChangeOwnerModal/changeOwnerModal.s
 
 type TModalProps = {
   onClose: () => void;
-  projectId: number;
-  userId: number;
+  projectId?: number;
+  userId?: number;
 };
 export default function ChangeOwnerModal({ onClose, projectId = 0, userId = 0 }: TModalProps) {
   const { useChangeOwn } = useChangeOwner();

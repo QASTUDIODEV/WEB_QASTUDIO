@@ -10,8 +10,8 @@ import * as S from '@/components/projectInfo/deleteTeamMember/deleteTeamMemberMo
 
 type TModalProps = {
   onClose: () => void;
-  projectId: number;
-  email: string;
+  projectId?: number;
+  email?: string;
 };
 export default function DeleteTeamMember({ onClose, projectId = 0, email = '' }: TModalProps) {
   const { useDeleteMember } = useChangeOwner();
