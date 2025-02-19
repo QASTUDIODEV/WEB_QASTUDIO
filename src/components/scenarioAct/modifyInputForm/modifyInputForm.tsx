@@ -38,7 +38,14 @@ export default function ModifyInputForm() {
     control: scenarioControl,
     setValue: setScenarioValue,
     formState: { isValid: isScenarioValid },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      scenarioName: scenario?.scenarioName,
+      scenarioDescription: scenario?.scenarioDescription,
+      character: characterId,
+    },
+  });
 
   const {
     register: registerAction,

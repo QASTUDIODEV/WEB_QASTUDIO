@@ -11,6 +11,8 @@ import ActSection from '@/components/scenarioAct/actSection/actSection';
 import Controller from '@/components/scenarioAct/controller/controller';
 import Header from '@/components/scenarioAct/header/header';
 
+import ErrorPage from '@/pages/error/error';
+import NoAuthority from '@/pages/noAuthority/noAuthority';
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
 import { setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
 
