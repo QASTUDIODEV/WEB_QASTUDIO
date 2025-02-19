@@ -56,10 +56,10 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
   // URL 이동 차단
   const blockNavigation = () => {
     window.open = () => null;
-    window.onbeforeunload = (event) => {
+    /*     window.onbeforeunload = (event) => {
       event.preventDefault();
       return '';
-    };
+    }; */
     const blockHistory = (method: 'pushState' | 'replaceState') => {
       const originalMethod = window.history[method];
       window.history[method] = (...args: Parameters<History['pushState']>) => {

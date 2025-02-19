@@ -20,6 +20,7 @@ export enum ACTION_TYPE {
   CLICK = 'Click',
   NAVIGATE = 'Navigate',
   Fill_Text = 'Fill_Text',
+  WAIT = 'Wait',
 }
 export enum LOCATOR_TYPE {
   CSSSELECTOR = 'css_selector',
