@@ -105,11 +105,7 @@ export default function AddProjectPage() {
     );
   }
   if (projectInfoError) {
-    return (
-      <S.Container>
-        <S.Error>권한이 없습니다</S.Error>
-      </S.Container>
-    );
+    return <></>;
   }
   if (isLoading) {
     return <></>;
