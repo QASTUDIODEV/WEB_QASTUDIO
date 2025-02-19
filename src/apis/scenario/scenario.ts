@@ -32,8 +32,9 @@ const postCharacterScenario = async ({
   characterName,
   characterDescription,
   accessPage,
+  withAI,
 }: TRequestPostCharacterScenarioValue): Promise<TRequestCharacterScenarioResponse> => {
-  const { data } = await axiosInstance.post(`/api/v0/projects/${projectId}/characters`, { characterName, characterDescription, accessPage });
+  const { data } = await axiosInstance.post(`/api/v0/projects/${projectId}/characters`, { characterName, characterDescription, accessPage, withAI });
   return data;
 };
 
@@ -44,11 +45,13 @@ const patchCharacterScenario = async ({
   characterName,
   characterDescription,
   accessPage,
+  withAI,
 }: TRequestPatchCharacterScenarioValue): Promise<TRequestCharacterScenarioResponse> => {
   const { data } = await axiosInstance.patch(`/api/v0/projects/${projectId}/characters/${characterId}/scenarios/${scenarioId}`, {
     characterName,
     characterDescription,
     accessPage,
+    withAI,
   });
   return data;
 };

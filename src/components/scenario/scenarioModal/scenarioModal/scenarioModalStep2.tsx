@@ -34,7 +34,14 @@ export default function ScenarioModalStep2({ characterData, setModalStep }: TSce
         </S.DescriptionItem>
         <S.DescriptionItem>
           <S.SubTitle>Access control</S.SubTitle>
-          {characterData?.result.accessPage.map((page, index) => <S.DescriptionContent key={index}>{page}</S.DescriptionContent>)}
+          <S.AccessControlItems>
+            {characterData?.result.accessPage.map((page, index) => (
+              <S.DescriptionContent key={index}>
+                {page}
+                {index !== characterData.result.accessPage.length - 1 ? ', ' : ''}
+              </S.DescriptionContent>
+            ))}
+          </S.AccessControlItems>
         </S.DescriptionItem>
       </S.DescriptionContainer>
 

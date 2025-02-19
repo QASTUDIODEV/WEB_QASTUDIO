@@ -87,6 +87,7 @@ export const DescriptionContent = styled.div`
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_18};
   font-size: 14.4px;
+  width: fit-content;
 `;
 export const ScenarioContainer = styled.div`
   display: flex;
@@ -114,4 +115,20 @@ export const ScenarioDescription = styled.div`
   color: white;
   ${({ theme }) => theme.text.medium_18};
   font-size: 17.6px;
+`;
+
+export const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const RightSideComponents = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const AccessControlItems = styled.div`
+  display: flex;
+  gap: 5px;
 `;
