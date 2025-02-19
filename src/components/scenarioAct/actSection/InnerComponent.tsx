@@ -28,7 +28,6 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
   // 클릭 이벤트 핸들러
   const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-
     if (lastHighlightedElement.current) {
       lastHighlightedElement.current.classList.remove('qa-highlighted-element');
     }

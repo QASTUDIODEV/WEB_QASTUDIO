@@ -41,7 +41,6 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         },
         {
           onSuccess: (data) => {
-            console.log(data);
             dispatch(setCurrentTestId(data.result.testId));
           },
         },
