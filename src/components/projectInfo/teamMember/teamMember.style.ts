@@ -26,6 +26,9 @@ export const MemberContainer = styled.div`
   overflow-y: scroll;
   width: 100%;
   max-height: 78%;
+  @media (max-width: 1380px) {
+    max-height: 70%;
+  }
   ${media.desktop`
     max-height: 80%;
   `}

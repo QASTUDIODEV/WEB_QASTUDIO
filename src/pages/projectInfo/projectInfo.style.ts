@@ -10,12 +10,15 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 410px;
-  min-height: 780px;
+  @media (max-width: 1380px) {
+    min-height: calc(100vh + 100px);
+    margin-bottom: 30px;
+  }
   ${media.desktop`
     .show {
       opacity: 0;
     }
-    margin-bottom: 30px;
+    height: 100%;
   `}
   @media (max-width: 610px) {
     .buttonShow {
@@ -49,6 +52,10 @@ export const Box = styled.div<{ height: string }>`
       background: #ffffff26;
     }
   }
+  ${media.desktop`
+    max-height: 500px;
+  `}
+  flex-grow: 1;
 `;
 export const Left = styled.div`
   width: 75%;
@@ -58,7 +65,8 @@ export const Left = styled.div`
   justify-content: start;
   ${media.desktop`
     width: 100%;
-    height: 75%;
+    height: 55%;
+    gap: 4%;
   `}
 `;
 export const Right = styled.div`
@@ -72,13 +80,13 @@ export const Right = styled.div`
   min-width: 168px;
   ${media.desktop`
     width: 100%;
-    height: 50%;
-    margin: 40px 0 0 0;
+    height: 40%;
+    margin: 0;
   `}
 `;
 export const SemiBox = styled.div`
   display: flex;
-  height: 70%;
+  height: 80%;
   margin-top: 3%;
   ${media.desktop`
     width: 100%;
