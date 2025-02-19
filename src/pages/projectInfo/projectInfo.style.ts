@@ -62,6 +62,9 @@ export const Box = styled.div<{ height: string }>`
 export const CharacterBox = styled(Box)`
   min-height: 200px;
 `;
+export const ChartBox = styled(Box)`
+  min-height: 300px;
+`;
 export const Left = styled.div`
   width: 75%;
   gap: 6%;
@@ -70,7 +73,8 @@ export const Left = styled.div`
   justify-content: start;
   ${media.desktop`
     width: 100%;
-    height: 55%;
+    min-height: 55%;
+    flex-grow: 1
     gap: 4%;
   `}
 `;
@@ -85,8 +89,9 @@ export const Right = styled.div`
   min-width: 168px;
   ${media.desktop`
     width: 100%;
-    height: 40%;
-    margin: 0;
+    min-height: 40%;
+    flex-grow: 1;
+    margin: 4% 0 0 0;
   `}
 `;
 export const SemiBox = styled.div`
