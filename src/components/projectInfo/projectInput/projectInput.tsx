@@ -34,6 +34,7 @@ export default function ProjectInput({ result }: TInfoDTO) {
 
   useEffect(() => {
     setContent(result?.introduction || '');
+    setIsEdit(false);
   }, [result?.projectId]);
 
   return (
