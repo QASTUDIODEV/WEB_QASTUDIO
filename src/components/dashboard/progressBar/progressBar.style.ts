@@ -30,6 +30,7 @@ const PercentageText = styled.p`
 
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_14};
+  text-wrap: nowrap;
   z-index: 1;
 `;
 
