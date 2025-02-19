@@ -9,7 +9,9 @@ import InviteTokenExpiredModal from '@/components/auth/inviteModal/inviteTokenEx
 import LogoutModal from '@/components/common/sidebar/logtoutModal/logoutModal';
 import ProjectModal from '@/components/common/sidebar/projectModal/projectModal';
 import ErrorModal from '@/components/dashboard/errorModal/errorModal';
+import ChangeOwnerModal from '@/components/projectInfo/ChangeOwnerModal/changeOwnerModal';
 import DeleteProjectModal from '@/components/projectInfo/deleteProjectModal/deleteProjectModal';
+import DeleteTeamMember from '@/components/projectInfo/deleteTeamMember/deleteTeamMemberModal';
 import EditProjectModal from '@/components/projectInfo/editProjectModal/editProjectModal';
 import InviteModal from '@/components/projectInfo/inviteModal/inviteModal';
 import CreatePageModal from '@/components/projectInfo/pageModal/pageModal';
@@ -34,6 +36,8 @@ export const MODAL_TYPES = {
   EditProjectModal: 'EditProjectModal',
   DeleteProjectModal: 'DeleteProjectModal',
   ContinueModal: 'ContinueModal',
+  ChangeOwnerModal: 'ChangeOwnerModal',
+  DeleteTeamMember: 'DeleteTeamMember',
 };
 
 export const MODAL_COMPONENTS = {
@@ -51,6 +55,8 @@ export const MODAL_COMPONENTS = {
   [MODAL_TYPES.EditProjectModal]: EditProjectModal,
   [MODAL_TYPES.DeleteProjectModal]: DeleteProjectModal,
   [MODAL_TYPES.ContinueModal]: ContinueModal,
+  [MODAL_TYPES.ChangeOwnerModal]: ChangeOwnerModal,
+  [MODAL_TYPES.DeleteTeamMember]: DeleteTeamMember,
 };
 
 export default function ModalProvider() {

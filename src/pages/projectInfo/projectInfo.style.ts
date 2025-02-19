@@ -5,26 +5,37 @@ import { media } from '@/styles/media';
 export const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
-  height: 100vh;
-  overflow: auto;
-  padding: 3% 6% 2% 6%;
+  height: calc(100vh - 100px);
+  padding: 3% 6% 3% 6%;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   min-width: 410px;
-  min-height: 780px;
+  min-height: 650px;
+  @media (max-width: 1380px) {
+    min-height: calc(100vh + 100px);
+    margin-bottom: 30px;
+  }
   ${media.desktop`
     .show {
       opacity: 0;
     }
-    margin-bottom: 30px;
+    height: 100%;
   `}
   @media (max-width: 610px) {
     .buttonShow {
       opacity: 0;
     }
   }
-  @media (max-width: 1300px) {
-    overflow: auto;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 6px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 6px;
   }
 `;
 export const Box = styled.div<{ height: string }>`
@@ -38,6 +49,22 @@ export const Box = styled.div<{ height: string }>`
   flex-direction: column;
   align-items: stretch;
   border: 0.8px solid rgba(32, 75, 153, 0.2);
+  &:hover {
+    ::-webkit-scrollbar-thumb {
+      background: #ffffff26;
+    }
+  }
+  ${media.desktop`
+    max-height: 500px;
+  `}
+  flex-grow: 1;
+`;
+export const CharacterBox = styled(Box)`
+  min-height: 200px;
+  max-height: 214px;
+`;
+export const ChartBox = styled(Box)`
+  min-height: 300px;
 `;
 export const Left = styled.div`
   width: 75%;
@@ -47,7 +74,9 @@ export const Left = styled.div`
   justify-content: start;
   ${media.desktop`
     width: 100%;
-    height: 75%;
+    min-height: 55%;
+    flex-grow: 1
+    gap: 4%;
   `}
 `;
 export const Right = styled.div`
@@ -61,13 +90,14 @@ export const Right = styled.div`
   min-width: 168px;
   ${media.desktop`
     width: 100%;
-    height: 50%;
-    margin: 40px 0 0 0;
+    min-height: 40%;
+    flex-grow: 1;
+    margin: 4% 0 0 0;
   `}
 `;
 export const SemiBox = styled.div`
   display: flex;
-  height: 70%;
+  height: 80%;
   margin-top: 3%;
   ${media.desktop`
     width: 100%;

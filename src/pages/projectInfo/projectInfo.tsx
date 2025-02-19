@@ -16,12 +16,12 @@ export default function ProjectInfoPage({ projectInfo }: { projectInfo?: TGetPro
       </S.Box>
       <S.SemiBox>
         <S.Left>
-          <S.Box height="59%">
+          <S.ChartBox height="59%">
             <ProjectSummary result={result} />
-          </S.Box>
-          <S.Box height="35%">
+          </S.ChartBox>
+          <S.CharacterBox height="35%">
             <CharacterBox result={result} />
-          </S.Box>
+          </S.CharacterBox>
         </S.Left>
         <S.Right>
           <S.Box height="100%">
