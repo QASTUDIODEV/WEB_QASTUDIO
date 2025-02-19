@@ -19,7 +19,7 @@ export default function useProjectInfo(projectId: number | undefined) {
 
   // 역할 리스트 가져오기
   const useGetCharacterList = useCoreQuery([QUERY_KEYS.GET_CHARACTER_LIST2, projectId], () => getCharacterList({ projectId: projectId! }), {
-    enabled: projectId !== null && projectId !== undefined,
+    enabled: !!projectId,
   });
 
   useEffect(() => {
