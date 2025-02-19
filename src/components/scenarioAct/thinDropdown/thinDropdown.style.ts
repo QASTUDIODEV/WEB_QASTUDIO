@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const DropdownContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 38px;
+  height: 100%;
 `;
 
 export const DropdownHeader = styled.div<{ $hasSelection: boolean; $isOpen: boolean }>`

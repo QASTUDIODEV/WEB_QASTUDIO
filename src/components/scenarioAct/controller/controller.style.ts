@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  height: 100%;
+  height: 100vh;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_20};
   min-width: 500px;
@@ -48,6 +48,8 @@ export const AddContainer = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 export const IconContainer = styled.div`
   cursor: pointer;
