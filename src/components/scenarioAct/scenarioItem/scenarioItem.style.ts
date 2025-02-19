@@ -26,6 +26,10 @@ export const Title = styled.div`
   flex: 1;
   ${({ theme }) => theme.text.medium_24};
   font-size: 19.2px;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ActionList = styled.div`
@@ -50,4 +54,8 @@ export const IconContainer = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
+
+export const headDivider = styled.div`
+  display: flex;
 `;

@@ -5,7 +5,7 @@ export const Container = styled.div`
   height: 100vh;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_20};
-  min-width: 500px;
+  min-width: 400px;
 `;
 
 export const ActContainer = styled.div`

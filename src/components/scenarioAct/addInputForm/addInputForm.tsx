@@ -120,7 +120,7 @@ export default function AddInputForm() {
       {/* 시나리오 입력 폼 */}
       <S.InputContainer>
         <S.InputTitle>Title</S.InputTitle>
-        <Input placeholder="Enter scenario title." type="thin" {...registerScenario('scenarioName', { required: true })} />
+        <Input placeholder="Enter scenario title." {...registerScenario('scenarioName', { required: true })} />
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Character</S.InputTitle>
@@ -144,7 +144,7 @@ export default function AddInputForm() {
 
       <S.InputContainer>
         <S.InputTitle>Description</S.InputTitle>
-        <Input placeholder="Describe the scenario." type="thin" {...registerScenario('scenarioDescription', { required: true })} />
+        <Input placeholder="Describe the scenario." {...registerScenario('scenarioDescription', { required: true })} />
       </S.InputContainer>
 
       {/* 선택 토글 */}
@@ -169,7 +169,7 @@ export default function AddInputForm() {
                 handleDel={() => dispatch(removeAction(action.step))}
               />
             ))}
-            <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
+            <Input placeholder="Enter action title." {...registerAction('actionTitle', { required: true })} />
             {/* 액션 타입 */}
             <S.DivideInputContainer>
               <Controller
@@ -178,7 +178,7 @@ export default function AddInputForm() {
                 rules={{ required: true }}
                 render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
               />
-              {['Fill_Text'].includes(actionType) && <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />}
+              {['Fill_Text'].includes(actionType) && <Input placeholder="Enter key." {...registerAction('actionValue', { required: true })} />}
             </S.DivideInputContainer>
             {/* 로케이터 */}
             <S.DivideInputContainer>
@@ -190,7 +190,6 @@ export default function AddInputForm() {
               />
               <Input
                 placeholder="Enter key."
-                type="thin"
                 value={locatorInputValue}
                 onChange={(e) => setValue('locatorValue', e.target.value)}
                 onFocus={handleFocus}
