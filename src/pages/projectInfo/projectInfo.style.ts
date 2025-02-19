@@ -6,10 +6,12 @@ export const Container = styled.div`
   color: #d6deec;
   background: ${({ theme }) => theme.colors.primary.pri_900};
   height: calc(100vh - 100px);
-  padding: 3% 6% 0 6%;
+  padding: 3% 6% 3% 6%;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   min-width: 410px;
+  min-height: 650px;
   @media (max-width: 1380px) {
     min-height: calc(100vh + 100px);
     margin-bottom: 30px;
@@ -56,6 +58,9 @@ export const Box = styled.div<{ height: string }>`
     max-height: 500px;
   `}
   flex-grow: 1;
+`;
+export const CharacterBox = styled(Box)`
+  min-height: 200px;
 `;
 export const Left = styled.div`
   width: 75%;
