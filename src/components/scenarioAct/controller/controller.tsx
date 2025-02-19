@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
@@ -20,9 +20,8 @@ export default function Controller() {
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct);
   const step = useSelector((state) => state.scenarioAct.step);
-
   useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
-
+  const { projectId: stringProjectId } = useParams<{ projectId: string }>();
   // 스텝 함수
   const handleStep = (newStep: number, scenarioId?: number) => {
     dispatch(setStep(newStep));
@@ -31,8 +30,16 @@ export default function Controller() {
     }
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleGoBack = async () => {
+    window.onbeforeunload = null;
+    const restoreHistory = (method: 'pushState' | 'replaceState') => {
+      const originalMethod = window.history[method] as any;
+      window.history[method] = originalMethod;
+    };
+    restoreHistory('pushState');
+    restoreHistory('replaceState');
+    navigate(`/project/scenario/${stringProjectId}`);
+
     setTimeout(() => {
       window.location.reload();
     }, 100);

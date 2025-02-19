@@ -37,7 +37,7 @@ export const DropdownList = styled.ul<{ $isOpen: boolean }>`
   border-top: none;
   z-index: 1000;
   overflow-y: auto;
-  max-height: 78px;
+  max-height: 155px;
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   flex-direction: column;
 `;

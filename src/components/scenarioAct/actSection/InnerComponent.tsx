@@ -29,11 +29,6 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
   const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
-    if (target.tagName.toLowerCase() === 'a') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
     if (lastHighlightedElement.current) {
       lastHighlightedElement.current.classList.remove('qa-highlighted-element');
     }
@@ -53,13 +48,23 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     lastHighlightedElement.current = target;
   };
 
+  // <a> 태그 클릭 차단
+  const handleLinkClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() === 'a') {
+      event.preventDefault();
+      console.warn('Blocked link click:', (target as HTMLAnchorElement).href);
+    }
+  };
+
   // URL 이동 차단
   const blockNavigation = () => {
     window.open = () => null;
-    /*     window.onbeforeunload = (event) => {
+    window.onbeforeunload = (event) => {
       event.preventDefault();
       return '';
-    }; */
+    };
+
     const blockHistory = (method: 'pushState' | 'replaceState') => {
       const originalMethod = window.history[method];
       window.history[method] = (...args: Parameters<History['pushState']>) => {
@@ -92,7 +97,8 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     styleTagRef.current.innerHTML = cssContent;
 
     // 이벤트 리스너 등록
-    document.body.addEventListener('click', handleClick, true);
+    document.addEventListener('click', handleClick, true);
+    document.addEventListener('click', handleLinkClick, true);
     document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => event.preventDefault()));
 
     blockNavigation();
@@ -100,7 +106,8 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     return () => {
       if (!document) return;
 
-      document.body.removeEventListener('click', handleClick, true);
+      document.removeEventListener('click', handleClick, true);
+      document.removeEventListener('click', handleLinkClick, true);
       document.querySelectorAll('form').forEach((form) => {
         if (form.parentNode) {
           form.replaceWith(form.cloneNode(true) as HTMLFormElement);

@@ -56,6 +56,7 @@ export const IconContainer = styled.div`
   }
 `;
 
-export const headDivider = styled.div`
+export const HeadDivider = styled.div`
   display: flex;
+  gap: 6.4px;
 `;

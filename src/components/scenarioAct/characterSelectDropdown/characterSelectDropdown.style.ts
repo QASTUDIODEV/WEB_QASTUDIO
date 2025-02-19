@@ -4,10 +4,15 @@ export const Container = styled.div`
   position: relative;
   ${({ theme }) => theme.text.medium_18};
   height: 47px;
+  width: 150px;
 `;
 
 export const Header = styled.div<{ $isOpen: boolean }>`
-  width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   display: flex;
   padding: 10px;
   height: 100%;

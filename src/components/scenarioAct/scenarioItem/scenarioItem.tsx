@@ -71,16 +71,16 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
   return (
     <S.Container>
       <S.ScenarioHeader $isOpen={scenario?.isOpen}>
-        <S.headDivider>
+        <S.HeadDivider>
           <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
           <S.Title>{scenario?.scenarioName}</S.Title>
-        </S.headDivider>
-        <S.headDivider>
+        </S.HeadDivider>
+        <S.HeadDivider>
           <S.IconContainer>
             <Edit onClick={() => handleEdit(3, scenarioId)} />
           </S.IconContainer>
           <S.IconContainer>{scenarioId == runningScenarioId ? <LoadingSpinner /> : <Play onClick={handlePlay} />}</S.IconContainer>
-        </S.headDivider>
+        </S.HeadDivider>
       </S.ScenarioHeader>
 
       {scenario?.isOpen && (
