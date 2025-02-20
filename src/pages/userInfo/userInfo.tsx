@@ -10,8 +10,7 @@ import * as S from './userInfo.style';
 
 export default function UserInfo() {
   const { userId } = useParams();
-  const { useGetOtherUserInfo } = useOtherUserInfo({ userId: userId || '' });
-  const { data: userData } = useGetOtherUserInfo;
+  const { data: userData } = useOtherUserInfo({ userId: userId || '' });
 
   return (
     <S.Container>

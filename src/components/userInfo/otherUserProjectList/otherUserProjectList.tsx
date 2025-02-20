@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import type { TUserProjectListResponse } from '@/types/userController/userController';
 
-import useOtherUserInfo from '@/hooks/userInfo/useOtherUserInfo';
+import useOtherUserProjects from '@/hooks/userInfo/useOtherUserProjects.ts';
 
 import Project from '@/components/mypage/project/project';
 
@@ -16,8 +16,7 @@ export default function OtherUserProjectList() {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const { useGetOtherUserProjects } = useOtherUserInfo({ userId: userId || '', currentPage });
-  const { data } = useGetOtherUserProjects;
+  const { data } = useOtherUserProjects({ userId: userId || '', currentPage });
 
   const projectsData = data?.result.userProjectList;
 
