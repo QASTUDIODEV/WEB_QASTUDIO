@@ -79,6 +79,7 @@ export default function AddProjectPage() {
       { projectId: Number(projectId), zipFile: file },
       {
         onSuccess: (res) => {
+          queryClient.invalidateQueries({ queryKey: ['getProjectInfo'] });
           console.log('Upload success:', res);
           setIsUploaded(true);
         },
