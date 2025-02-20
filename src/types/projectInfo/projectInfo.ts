@@ -13,6 +13,7 @@ export type TInfoDTO = {
         viewType: string;
         developmentSkill: string;
         assistantId: string;
+        isLeader: boolean;
       }
     | undefined;
 };
@@ -61,6 +62,7 @@ export type TGetProjectMember = TCommonResponse<{
     nickname: string;
     profileImage: string;
   }[];
+  unacceptedMembers: string[];
 }>;
 
 export type TProjectMember = TCommonResponse<{
@@ -143,4 +145,13 @@ export type TEditProjectInfo = {
   projectName: string;
   projectUrl: string;
   memberEmailList: TEmail[];
+};
+export type TChangeOwnerRequest = {
+  projectId: number;
+  userId: number;
+};
+export type TChangeOwner = TCommonResponse<{}>;
+export type TDeleteMemberRequest = {
+  projectId: number;
+  email: string;
 };

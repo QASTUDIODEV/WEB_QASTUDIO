@@ -80,6 +80,9 @@ const LRBox = styled.div<{ width: string }>`
   width: ${(props) => props.width};
   max-width: 100%;
   overflow: scroll;
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 `;
 
 const InnerBox = styled.div`

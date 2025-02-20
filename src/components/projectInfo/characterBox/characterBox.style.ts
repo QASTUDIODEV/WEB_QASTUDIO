@@ -24,42 +24,32 @@ export const Title = styled.p`
 `;
 export const Character = styled.div`
   display: flex;
-  height: 95%;
   width: 100%;
   align-items: center;
   gap: 16px;
   @media (max-width: 720px) {
     overflow: hidden;
-    &:hover {
-      overflow: overlay;
-    }
   }
   ${media.desktop`
     align-items: flex-start;
-    height: 100%;
   `}
 `;
 export const CharacterList = styled.div`
   width: 85%;
-  height: 97%;
-  max-height: fit-content;
   display: flex;
   align-items: center;
   gap: 16px;
-  overflow: hidden;
+  overflow-x: scroll;
   ${media.desktop`
     height: 100%;
   `}
-  &:hover {
-    overflow: overlay;
-  }
 `;
 export const CharacterBox = styled.div`
   position: relative;
   background: #007f7f;
   border-radius: 6.4px;
-  width: 112px;
-  height: inherit;
+  min-width: 140px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -67,7 +57,6 @@ export const CharacterBox = styled.div`
   gap: 8px;
   cursor: pointer;
   ${media.desktop`
-    height: 90%;
     flex-wrap: wrap;
   `}
 `;
@@ -98,9 +87,10 @@ export const rowBox = styled.div`
 `;
 export const CharacterAddBox = styled.div`
   ${({ theme }) => theme.align.column_center}
+  height: 120px;
+  width: 140px;
   background: #d9e6ff1a;
   border-radius: 6.4px;
-  height: inherit;
   min-width: 112px;
   padding: 12px;
   cursor: pointer;
@@ -108,7 +98,4 @@ export const CharacterAddBox = styled.div`
     width: 50%;
     height: 50%;
   }
-  ${media.desktop`
-    height: 90%;
-  `}
 `;
