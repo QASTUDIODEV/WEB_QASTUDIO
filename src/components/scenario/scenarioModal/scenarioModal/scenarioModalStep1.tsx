@@ -107,6 +107,9 @@ export default function ScenarioModalStep1({
     queryClient.invalidateQueries({
       queryKey: QUERY_KEYS.GET_CHARACTER_LIST({ projectId, currentPage }),
     });
+    queryClient.invalidateQueries({
+      queryKey: QUERY_KEYS.CHARACTER({ projectId: Number(projectId) }),
+    });
   };
 
   const onSubmit: SubmitHandler<TFormValues> = async (submitData) => {
