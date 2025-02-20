@@ -57,14 +57,15 @@ export default function CharacterSelectDropdown() {
     <S.Container ref={dropdownRef}>
       {/* 헤더 */}
       <S.Header onClick={toggleDropdown} $isOpen={isOpen}>
-        {selectedCharacter?.characterName || 'Select Character'} {isOpen ? <ArrowUp /> : <ArrowDown />}
+        <S.TextWrapper>{selectedCharacter?.characterName || 'Select Character'}</S.TextWrapper>
+        {isOpen ? <ArrowUp /> : <ArrowDown />}
       </S.Header>
 
       {/* 드롭다운 리스트 */}
       <S.DropdownList $isOpen={isOpen}>
         {characters.map((char) => (
           <S.DropdownListItem key={char.characterId} onClick={() => handleOptionClick(char.characterId)} $isSelected={char.characterId === selectedCharacterId}>
-            {char.characterName}
+            <S.TextWrapper>{char.characterName}</S.TextWrapper>
           </S.DropdownListItem>
         ))}
       </S.DropdownList>

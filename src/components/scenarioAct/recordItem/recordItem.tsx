@@ -29,7 +29,7 @@ export default function RecordItem({ step, actionType, actionDescription, handle
       <p>{step}.</p>
       <S.TextContainer>
         <S.IconContainer>{getIcon(actionIconMap, actionType)}</S.IconContainer>
-        <p>{actionDescription}</p>
+        <S.Description>{actionDescription}</S.Description>
       </S.TextContainer>
 
       <S.DelContainer>

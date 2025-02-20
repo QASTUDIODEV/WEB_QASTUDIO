@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`;
 
 export const InputContainer = styled.div`
   padding: 8px 24px;
@@ -42,7 +47,7 @@ export const DivideInputContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-
+  height: 40px;
   & > *:only-child {
     grid-column: span 2;
   }
@@ -50,6 +55,7 @@ export const DivideInputContainer = styled.div`
 
 export const AddButton = styled.button<{ disabled?: boolean }>`
   height: 32px;
+  padding: 6.4px;
   display: flex;
   justify-content: center;
   align-items: center;

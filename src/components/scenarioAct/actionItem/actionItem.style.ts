@@ -44,6 +44,10 @@ export const ActionName = styled.div`
   height: 100%;
   font-size: 16px;
   margin-right: 10px;
+  max-width: 230px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const UnderIcon = styled.div`

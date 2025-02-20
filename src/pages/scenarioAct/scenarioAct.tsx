@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import type { AxiosError } from 'axios';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useFetchPageSource from '@/hooks/scenarioAct/useFetchPageSource';
@@ -13,6 +14,12 @@ import Header from '@/components/scenarioAct/header/header';
 
 import * as S from '@/pages/scenarioAct/scenarioAct.style';
 import { setScenarioList, updateIframeContent } from '@/slices/scenarioActSlice';
+
+export type TAxiosResponseError = AxiosError<{
+  code: string;
+  message: string;
+  error: string;
+}>;
 
 export default function ScenarioActPage() {
   const dispatch = useDispatch();
@@ -62,6 +69,7 @@ export default function ScenarioActPage() {
           <Loading />
         </S.Overlay>
       )}
+
       <S.Header>
         <Header />
       </S.Header>

@@ -65,6 +65,9 @@ export default function FindingPassword() {
     changePasswordMutation(
       { email: email, newPassword: password },
       {
+        onSuccess: () => {
+          navigate('/');
+        },
         onError: (error) => {
           const errorPasswordMessage = error?.response?.data?.message || 'An error occurred.';
           setPasswordErrorMessage(errorPasswordMessage);

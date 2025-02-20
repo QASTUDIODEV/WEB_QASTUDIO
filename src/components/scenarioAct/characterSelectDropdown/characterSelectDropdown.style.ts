@@ -4,10 +4,15 @@ export const Container = styled.div`
   position: relative;
   ${({ theme }) => theme.text.medium_18};
   height: 47px;
+  width: 150px;
 `;
 
 export const Header = styled.div<{ $isOpen: boolean }>`
-  width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   display: flex;
   padding: 10px;
   height: 100%;
@@ -45,4 +50,11 @@ export const DropdownListItem = styled.li<{ $isSelected: boolean }>`
   &:hover {
     background: rgba(255, 255, 255, 0.1);
   }
+`;
+
+export const TextWrapper = styled.div`
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

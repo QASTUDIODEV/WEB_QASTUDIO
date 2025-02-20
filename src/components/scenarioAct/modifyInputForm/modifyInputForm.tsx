@@ -38,7 +38,14 @@ export default function ModifyInputForm() {
     control: scenarioControl,
     setValue: setScenarioValue,
     formState: { isValid: isScenarioValid },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      scenarioName: scenario?.scenarioName,
+      scenarioDescription: scenario?.scenarioDescription,
+      character: characterId,
+    },
+  });
 
   const {
     register: registerAction,
@@ -132,7 +139,7 @@ export default function ModifyInputForm() {
       {/* 시나리오 입력 폼 */}
       <S.InputContainer>
         <S.InputTitle>Title</S.InputTitle>
-        <Input placeholder="Enter scenario title." type="thin" {...registerScenario('scenarioName', { required: true })} />
+        <Input placeholder="Enter scenario title." {...registerScenario('scenarioName', { required: true })} />
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Character</S.InputTitle>
@@ -155,10 +162,9 @@ export default function ModifyInputForm() {
       </S.InputContainer>
       <S.InputContainer>
         <S.InputTitle>Description</S.InputTitle>
-        <Input placeholder="Describe the scenario." type="thin" {...registerScenario('scenarioDescription', { required: true })} />
+        <Input placeholder="Describe the scenario." {...registerScenario('scenarioDescription', { required: true })} />
       </S.InputContainer>
 
-      {/* 선택 토글 */}
       <S.SelectHeader>Actions</S.SelectHeader>
 
       <S.DetailContainer>
@@ -171,7 +177,9 @@ export default function ModifyInputForm() {
             handleDel={() => dispatch(removeEditAction(action.step))}
           />
         ))}
-        <Input placeholder="Enter action title." type="thin" {...registerAction('actionTitle', { required: true })} />
+        <S.InputWrapper>
+          <Input placeholder="Enter action title." {...registerAction('actionTitle', { required: true })} />
+        </S.InputWrapper>
         {/* 액션 타입 */}
         <S.DivideInputContainer>
           <Controller
@@ -180,7 +188,7 @@ export default function ModifyInputForm() {
             rules={{ required: true }}
             render={({ field }) => <ThinDropdown options={actionList} value={field.value} onChange={field.onChange} placeholder="Select action." />}
           />
-          {['Fill_Text'].includes(actionType) && <Input placeholder="Enter key." type="thin" {...registerAction('actionValue', { required: true })} />}
+          {['Fill_Text'].includes(actionType) && <Input placeholder="Enter key." {...registerAction('actionValue', { required: true })} />}
         </S.DivideInputContainer>
         {/* 로케이터 */}
         <S.DivideInputContainer>
@@ -192,7 +200,6 @@ export default function ModifyInputForm() {
           />
           <Input
             placeholder="Enter key."
-            type="thin"
             value={locatorInputValue}
             onChange={(e) => setActionValue('locatorValue', e.target.value)}
             onFocus={handleFocus}

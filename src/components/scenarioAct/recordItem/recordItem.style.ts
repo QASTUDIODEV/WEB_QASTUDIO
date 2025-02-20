@@ -35,3 +35,9 @@ export const IconContainer = styled.div`
     height: 100%;
   }
 `;
+export const Description = styled.div`
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;

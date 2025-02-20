@@ -28,6 +28,9 @@ const getCharacterList = async ({ projectId }: TGetProjectInfoValues): Promise<T
 };
 
 const getScenarioList = async ({ characterId }: TGetProjectInfoValues): Promise<TGetScenarioListResponse> => {
+  if (characterId === null || characterId === undefined || isNaN(characterId) || characterId <= 0) {
+    throw new Error('Invalid characterId');
+  }
   const { data } = await axiosInstance.get(`/api/v0/scenarios/characters/${characterId}`);
   return data;
 };
