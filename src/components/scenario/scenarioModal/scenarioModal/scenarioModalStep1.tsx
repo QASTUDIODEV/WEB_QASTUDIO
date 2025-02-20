@@ -145,6 +145,7 @@ export default function ScenarioModalStep1({
             accessPage: selectedOptions,
             characterId: characterId,
             scenarioId: scenarioId,
+            aiScenario: checked,
           },
           {
             onSuccess: (data) => {
@@ -216,23 +217,18 @@ export default function ScenarioModalStep1({
           ))}
         </S.TagContainer>
         <S.ButtonContainer>
-          {!isSubmitted ? (
-            <>
-              {checked ? (
-                <S.CheckboxContainer onClick={() => setChecked(!checked)}>
-                  <CheckBoxTrueIcon />
-                  <div>Create scenarios with AI</div>
-                </S.CheckboxContainer>
-              ) : (
-                <S.CheckboxContainer onClick={() => setChecked(!checked)}>
-                  <CheckBoxFalseIcon />
-                  <div>Create scenarios with AI</div>
-                </S.CheckboxContainer>
-              )}
-            </>
+          {checked ? (
+            <S.CheckboxContainer onClick={() => setChecked(!checked)}>
+              <CheckBoxTrueIcon />
+              <div>Create scenarios with AI</div>
+            </S.CheckboxContainer>
           ) : (
-            <div />
+            <S.CheckboxContainer onClick={() => setChecked(!checked)}>
+              <CheckBoxFalseIcon />
+              <div>Create scenarios with AI</div>
+            </S.CheckboxContainer>
           )}
+
           <S.RightSideComponents>
             {errorMessage !== '' ? <ValidataionMessage message={errorMessage} isError={!!errorMessage} /> : <div />}
             <Button
