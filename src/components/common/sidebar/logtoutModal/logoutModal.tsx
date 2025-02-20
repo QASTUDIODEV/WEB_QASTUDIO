@@ -24,6 +24,7 @@ export default function LogoutModal({ onClose }: TLogoutModalProps) {
         },
         onError: () => {
           navigate('/', { replace: true });
+          onClose();
         },
       },
     );
