@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import Button from '@/components/common/button/button';
@@ -11,7 +9,6 @@ type TLogoutModalProps = {
 };
 
 export default function LogoutModal({ onClose }: TLogoutModalProps) {
-  const navigate = useNavigate();
   const { useLogout } = useUserAuth();
   const { mutate: logoutMutate } = useLogout;
   const handleLogout = () => {
@@ -19,11 +16,11 @@ export default function LogoutModal({ onClose }: TLogoutModalProps) {
       {},
       {
         onSuccess: () => {
-          navigate('/', { replace: true });
+          window.location.replace('/');
           onClose();
         },
         onError: () => {
-          navigate('/', { replace: true });
+          window.location.replace('/');
           onClose();
         },
       },

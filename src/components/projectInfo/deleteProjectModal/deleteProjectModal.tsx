@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { QUERY_KEYS } from '@/constants/querykeys/queryKeys';
+
+import { queryClient } from '@/apis/queryClient';
 
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
@@ -14,15 +18,18 @@ type TAuthModalProps = {
 };
 export default function DeleteProjectModal({ onClose }: TAuthModalProps) {
   const { projectId } = useParams();
+  const navigate = useNavigate();
   const { useDeleteProject } = useProjectInfo({ projectId: Number(projectId) });
-  const { mutate: deleteProjectMutate } = useDeleteProject;
+  const { mutate: deleteProjectMutate, isPending } = useDeleteProject;
   const [errorMessage, setErrorMessage] = useState('');
   const handleDelete = () => {
     deleteProjectMutate(
       { projectId: Number(projectId) },
       {
         onSuccess: () => {
-          window.location.href = '/project';
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROJECT_LIST });
+          navigate('/project');
+          onClose();
         },
         onError: (error) => {
           setErrorMessage(error.response?.data.message || 'An error occurred.');
@@ -38,7 +45,7 @@ export default function DeleteProjectModal({ onClose }: TAuthModalProps) {
         <Button color={'white_square'} onClick={onClose}>
           Cancel
         </Button>
-        <Button color={'blue'} onClick={handleDelete}>
+        <Button color={'blue'} onClick={handleDelete} disabled={isPending}>
           Delete
         </Button>
       </S.ButtonBox>
