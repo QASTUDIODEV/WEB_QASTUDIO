@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  width: calc(100vw - 300px);
   width: 100%;
   justify-self: center;
   height: 100vh;
@@ -12,6 +11,8 @@ const Container = styled.div`
   gap: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
+  justify-content: center;
+  align-self: center;
 `;
 const Title = styled.div`
   width: 79px;
