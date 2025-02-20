@@ -8,6 +8,7 @@ import { queryClient } from '@/apis/queryClient';
 import { useProjectInfo } from '@/hooks/projectInfo/useProjectInfo';
 
 import Button from '@/components/common/button/button';
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
 
 import * as S from './deleteProjectModal.style';
@@ -39,6 +40,7 @@ export default function DeleteProjectModal({ onClose }: TAuthModalProps) {
   };
   return (
     <Modal title={'Are you sure you want to remove the page?'} onClose={onClose} isExitButtonVisible={false}>
+      {isPending && <ModalLoading />}
       <S.Container>If you press the Remove button, it will never recover again and all data will be deleted.</S.Container>
       <S.ButtonBox>
         {errorMessage && <ValidataionMessage message={errorMessage} isError={true} />}
