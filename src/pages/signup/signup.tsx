@@ -37,9 +37,9 @@ type TAPIFormValues = {
 function SignupPage() {
   const navigate = useNavigate();
   const { useGetUserEmail } = useInvite();
-  const { data: emailData } = useGetUserEmail;
+  const { isSuccess } = useGetUserEmail;
 
-  if (emailData) {
+  if (isSuccess) {
     navigate('/project');
   }
 

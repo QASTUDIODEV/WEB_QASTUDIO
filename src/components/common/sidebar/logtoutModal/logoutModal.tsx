@@ -1,42 +1,43 @@
-import { useNavigate } from 'react-router-dom';
-
 import useUserAuth from '@/hooks/auth/useUserAuth';
 
 import Button from '@/components/common/button/button';
 import Modal from '@/components/common/modal/modal';
 import * as S from '@/components/common/sidebar/logtoutModal/logoutModal.style';
 
+import ModalLoading from '../../loading/modalLoading';
+
 type TLogoutModalProps = {
   onClose: () => void;
 };
 
 export default function LogoutModal({ onClose }: TLogoutModalProps) {
-  const navigate = useNavigate();
   const { useLogout } = useUserAuth();
-  const { mutate: logoutMutate } = useLogout;
+  const { mutate: logoutMutate, isPending } = useLogout;
   const handleLogout = () => {
     logoutMutate(
       {},
       {
         onSuccess: () => {
-          navigate('/', { replace: true });
+          window.location.replace('/');
           onClose();
         },
         onError: () => {
-          navigate('/', { replace: true });
+          window.location.replace('/');
           onClose();
         },
       },
     );
   };
+
   return (
     <Modal title="Are you sure you want to log out?" onClose={onClose}>
+      {isPending && <ModalLoading />}
       <S.ModalBox>
         <S.BtnWrapper>
-          <Button type="normal" color="white_square" onClick={onClose}>
+          <Button type="normal" color="white_square" onClick={onClose} disabled={isPending}>
             No
           </Button>
-          <Button type="normal" color="blue" onClick={handleLogout}>
+          <Button type="normal" color="blue" onClick={handleLogout} disabled={isPending}>
             Yes
           </Button>
         </S.BtnWrapper>
