@@ -112,7 +112,7 @@ export default function ModifyInputForm() {
     dispatch(
       openModal({
         modalType: MODAL_TYPES.ContinueModal,
-        modalProps: { title: 'The creation has been completed.', description: 'The creation has been completed.' },
+        modalProps: { title: 'The modification has been completed.', description: 'The modification has been completed.' },
       }),
     );
   };
