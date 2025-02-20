@@ -124,7 +124,7 @@ export default function InviteModal({ onClose, projectId = 0 }: TInviteModalProp
             </Button>
           </S.BtnWrapper>
           {(emailErrorMsg || errors.email?.message) && (
-            <ValidataionMessage message={emailErrorMsg ?? errors.email?.message ?? ''} isError={!!(emailErrorMsg || errors.email)} />
+            <ValidataionMessage message={errors.email?.message ?? emailErrorMsg ?? ''} isError={!!(emailErrorMsg || errors.email)} />
           )}
           {!errors.email?.message && error && <ValidataionMessage message={'The user is already added to the project.'} isError={!!error} />}
           <S.tagWrapper>

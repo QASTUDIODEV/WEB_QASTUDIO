@@ -74,7 +74,7 @@ export default function ProjectHeader() {
               iconPosition="right"
               onClick={() => {
                 if (data?.result?.projectUrl) {
-                  window.location.href = data?.result.projectUrl;
+                  window.open(data.result.projectUrl, '_blank');
                 }
               }}
             >
