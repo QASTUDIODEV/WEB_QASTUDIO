@@ -5,7 +5,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  max-width: 100px;
+
   margin-top: 15px;
   color: ${({ theme }) => theme.colors.gray.gray_300};
 `;
