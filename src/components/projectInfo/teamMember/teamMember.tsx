@@ -11,9 +11,9 @@ import * as S from '@/components/projectInfo/teamMember/teamMember.style';
 import Menu from '../menu/menu';
 
 import Plus from '@/assets/icons/add.svg?react';
-import ArrowRight from '@/assets/icons/arrow_right.svg?react';
 import Crown from '@/assets/icons/crown.svg?react';
 import MenuDark from '@/assets/icons/menu_dark.svg?react';
+import MoreInfo from '@/assets/icons/moreInfo.svg?react';
 import { openModal } from '@/slices/modalSlice.ts';
 
 export default function TeamMember({ result }: TInfoDTO) {
@@ -37,7 +37,7 @@ export default function TeamMember({ result }: TInfoDTO) {
               {a.projectRole === 'LEADER' && <Crown />}
             </S.MemberBox>
             <Menu userId={a.userId} isLeader={result?.isLeader || false} email={a.email} projectId={Number(result?.projectId)}>
-              <ArrowRight style={{ cursor: 'pointer' }} />
+              <MoreInfo style={{ cursor: 'pointer' }} />
             </Menu>
           </S.Member>
         ))}

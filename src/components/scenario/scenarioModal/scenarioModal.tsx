@@ -37,7 +37,7 @@ export default function ScenarioModal({ projectId = '0', currentPage = 0 }: TSce
   const [scenarioId, setScenarioId] = useState<number>(-1);
   const [characterId, setCharacterId] = useState<number>(-1);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
+  const [checked, setChecked] = useState(false);
   const { usePostCharacter, usePatchCharacter } = useChangeScenarioInfo();
   const { mutate: postCharacter, isPending: postCharacterPending } = usePostCharacter;
   const { mutate: patchCharacter, isPending: patchCharacterPending } = usePatchCharacter;
@@ -55,6 +55,8 @@ export default function ScenarioModal({ projectId = '0', currentPage = 0 }: TSce
       <FormProvider {...methods}>
         {modalStep === 1 && (
           <ScenarioModalStep1
+            checked={checked}
+            setChecked={setChecked}
             postCharacter={postCharacter}
             patchCharacter={patchCharacter}
             setCharacterData={setCharacterData}
