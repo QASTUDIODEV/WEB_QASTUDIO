@@ -12,9 +12,9 @@ import { openModal } from '@/slices/modalSlice.ts';
 export type TMenuProps = {
   children: React.ReactNode;
   userId?: number;
-  isLeader?: boolean;
-  projectId?: number;
-  email?: string;
+  isLeader: boolean;
+  projectId: number;
+  email: string;
 };
 
 export default function Menu({ children, userId, isLeader, projectId, email }: TMenuProps) {
@@ -24,6 +24,7 @@ export default function Menu({ children, userId, isLeader, projectId, email }: T
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && buttonRef.current && !buttonRef.current.contains(event.target as Node)) {

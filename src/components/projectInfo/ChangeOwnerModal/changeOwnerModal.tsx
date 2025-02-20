@@ -27,7 +27,9 @@ export default function ChangeOwnerModal({ onClose, projectId = 0, userId = 0 }:
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['getProjectMember', projectId] });
+          queryClient.invalidateQueries({ queryKey: ['getMemberEmail', projectId] });
           onClose();
+          window.location.reload();
         },
         onError: (err) => {
           setErrorMessage(err.response?.data.message || 'An error occurred.');
