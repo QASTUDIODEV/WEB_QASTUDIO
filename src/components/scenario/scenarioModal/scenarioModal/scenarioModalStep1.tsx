@@ -118,7 +118,7 @@ export default function ScenarioModalStep1({
           characterName: submitData.characterName,
           characterDescription: submitData.characterDescription,
           accessPage: selectedOptions,
-          withAI: checked,
+          aiScenario: checked,
         },
         {
           onSuccess: (data) => {
@@ -145,7 +145,7 @@ export default function ScenarioModalStep1({
             accessPage: selectedOptions,
             characterId: characterId,
             scenarioId: scenarioId,
-            withAI: checked,
+            aiScenario: checked,
           },
           {
             onSuccess: (data) => {
