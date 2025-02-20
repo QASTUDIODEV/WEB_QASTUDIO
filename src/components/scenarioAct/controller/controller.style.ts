@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   height: 100vh;
+  overflow-y: auto;
   color: ${({ theme }) => theme.colors.primary.pri_50};
   ${({ theme }) => theme.text.medium_20};
   min-width: 400px;

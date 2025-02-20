@@ -7,7 +7,7 @@ import useAddPage from '@/hooks/projectInfo/useAddPage';
 import Button from '@/components/common/button/button';
 import Input from '@/components/common/input/input';
 import ValidataionMessage from '@/components/common/input/validationMessage';
-import Loading from '@/components/common/loading/loading';
+import ModalLoading from '@/components/common/loading/modalLoading';
 import Modal from '@/components/common/modal/modal';
 import Dropdown from '@/components/projectInfo/dropDown/dropDown';
 import * as S from '@/components/projectInfo/pageModal/pageModal.style';
@@ -111,7 +111,7 @@ export default function PageModal({ onClose, projectId = 0, character }: TPageMo
     <Modal title={`Create New Page ${modalStep}/2`} onClose={onClose}>
       {isPending && (
         <LoadingContainer>
-          <Loading />
+          <ModalLoading />
         </LoadingContainer>
       )}
       {modalStep === 1 ? (
