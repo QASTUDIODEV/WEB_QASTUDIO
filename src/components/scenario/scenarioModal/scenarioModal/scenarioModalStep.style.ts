@@ -126,6 +126,7 @@ export const CheckboxContainer = styled.div`
 export const RightSideComponents = styled.div`
   display: flex;
   gap: 10px;
+  justify-content: flex-end;
 `;
 
 export const AccessControlItems = styled.div`

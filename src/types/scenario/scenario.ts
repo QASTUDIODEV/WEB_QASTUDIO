@@ -93,7 +93,6 @@ export type TRequestPatchCharacterScenarioValue = {
   characterName: string;
   characterDescription: string;
   accessPage: string[];
-  aiScenario: boolean;
 };
 
 export type TRequestCharacterScenarioResponse = TCommonResponse<{

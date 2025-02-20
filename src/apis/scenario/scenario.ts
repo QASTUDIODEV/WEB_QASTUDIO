@@ -45,13 +45,11 @@ const patchCharacterScenario = async ({
   characterName,
   characterDescription,
   accessPage,
-  aiScenario,
 }: TRequestPatchCharacterScenarioValue): Promise<TRequestCharacterScenarioResponse> => {
   const { data } = await axiosInstance.patch(`/api/v0/projects/${projectId}/characters/${characterId}/scenarios/${scenarioId}`, {
     characterName,
     characterDescription,
     accessPage,
-    aiScenario,
   });
   return data;
 };
