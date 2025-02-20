@@ -35,6 +35,20 @@ const GlobalStyle = createGlobalStyle`
     li, ul {
         list-style: none none;
     }
+
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        border-radius: 6px;
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    }
+    &::-webkit-scrollbar-corner {
+        background: transparent;
+    }
 `;
 
 export default GlobalStyle;
