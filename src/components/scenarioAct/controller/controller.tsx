@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import useWebSocket from '@/hooks/scenarioAct/useWebsocket';
@@ -20,9 +20,8 @@ export default function Controller() {
   const dispatch = useDispatch();
   const scenario = useSelector((state) => state.scenarioAct);
   const step = useSelector((state) => state.scenarioAct.step);
-
   useWebSocket(import.meta.env.VITE_WEBSOCKET_URL);
-
+  const { projectId: stringProjectId } = useParams<{ projectId: string }>();
   // 스텝 함수
   const handleStep = (newStep: number, scenarioId?: number) => {
     dispatch(setStep(newStep));
@@ -32,10 +31,8 @@ export default function Controller() {
   };
 
   const handleGoBack = () => {
-    navigate(-1);
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+    navigate(`/project/scenario/${stringProjectId}`, { replace: true });
+    window.location.href = `/project/scenario/${stringProjectId}`;
   };
 
   return (
@@ -93,7 +90,7 @@ export default function Controller() {
             <S.IconContainer>
               <Delete onClick={() => handleStep(1)} style={{ cursor: 'pointer' }} />
             </S.IconContainer>
-            <p>Modify Senario</p>
+            <p>Modify Scenario</p>
           </S.Header>
 
           {/*인풋들 */}

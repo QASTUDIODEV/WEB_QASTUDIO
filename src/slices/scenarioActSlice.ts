@@ -248,9 +248,8 @@ const scenarioActSlice = createSlice({
       state.currentCss =
         action.payload.css +
         `.qa-highlighted-element {
-      background: rgba(13, 64, 157, 0.2);
-      mix-blend-mode: multiply; 
-      border: 1px dashed #0D409D;
+      background-color:rgb(207,217,235);
+      border: 1px dotted #0D409D;
       border-radius:4px;
         }`;
     },

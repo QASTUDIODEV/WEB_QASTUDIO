@@ -14,8 +14,8 @@ interface IDropdownProps {
 }
 
 export default function ThinDropdown({ options, onSelect, placeholder, value, onChange }: IDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false); // 오픈 상태
-  const [selected, setSelected] = useState<string | null>(value || null); // 선택된 값
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>(value || null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (option: string) => {

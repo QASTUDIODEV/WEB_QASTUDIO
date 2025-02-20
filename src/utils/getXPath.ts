@@ -17,7 +17,7 @@ function getXPath(element: HTMLElement): string {
       xpath = `//a[@href='${currentElement.getAttribute('href')}']`;
       break;
     } else {
-      // 형제 요소 중 몇 번째인지 계산하여 index 추가
+      // 형제 요소 중 몇 번째인지 계산
       let index = 1;
       let sibling = currentElement.previousElementSibling;
       while (sibling) {

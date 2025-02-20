@@ -21,6 +21,7 @@ import Globe from '@/assets/icons/globe.svg?react';
 import Input from '@/assets/icons/input.svg?react';
 import UnderError from '@/assets/icons/under_error.svg?react';
 import UnderSuccess from '@/assets/icons/under_success.svg?react';
+import Wait from '@/assets/icons/wait.svg?react';
 import { openModal } from '@/slices/modalSlice';
 import { blurLocatorInput, clickLocatorInput, focusLocatorInput } from '@/slices/scenarioActSlice';
 
@@ -42,6 +43,7 @@ const actionIconMap = {
   [ACTION_TYPE.CLICK]: Click,
   [ACTION_TYPE.NAVIGATE]: Globe,
   [ACTION_TYPE.Fill_Text]: Input,
+  [ACTION_TYPE.WAIT]: Wait,
 };
 
 const locatorList = Object.values(LOCATOR_TYPE);

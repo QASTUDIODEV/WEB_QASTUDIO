@@ -41,7 +41,6 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
         },
         {
           onSuccess: (data) => {
-            console.log(data);
             dispatch(setCurrentTestId(data.result.testId));
           },
         },
@@ -71,12 +70,16 @@ export default function scenarioItem({ scenarioId }: IScenarioItemProp) {
   return (
     <S.Container>
       <S.ScenarioHeader $isOpen={scenario?.isOpen}>
-        <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
-        <S.Title>{scenario?.scenarioName}</S.Title>
-        <S.IconContainer>
-          <Edit onClick={() => handleEdit(3, scenarioId)} />
-        </S.IconContainer>
-        <S.IconContainer>{scenarioId == runningScenarioId ? <LoadingSpinner /> : <Play onClick={handlePlay} />}</S.IconContainer>
+        <S.HeadDivider>
+          <S.IconContainer onClick={handleOpen}>{scenario?.isOpen ? <ArrowUp /> : <ArrowDown />}</S.IconContainer>
+          <S.Title>{scenario?.scenarioName}</S.Title>
+        </S.HeadDivider>
+        <S.HeadDivider>
+          <S.IconContainer>
+            <Edit onClick={() => handleEdit(3, scenarioId)} />
+          </S.IconContainer>
+          <S.IconContainer>{scenarioId == runningScenarioId ? <LoadingSpinner /> : <Play onClick={handlePlay} />}</S.IconContainer>
+        </S.HeadDivider>
       </S.ScenarioHeader>
 
       {scenario?.isOpen && (

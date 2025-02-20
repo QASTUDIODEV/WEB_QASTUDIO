@@ -9,7 +9,10 @@ import { useDispatch, useSelector } from '@/hooks/common/useCustomRedux';
 import { clickLocatorInput, setCurrentLocator } from '@/slices/scenarioActSlice';
 
 const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string; cssContent: string }) => {
-  const { document } = useFrame();
+  const frame = useFrame();
+  if (!frame?.document || !frame?.window) return null;
+
+  const { document, window } = frame;
   const dispatch = useDispatch();
   const mountHereRef = useRef<HTMLDivElement | null>(null);
   const styleTagRef = useRef<HTMLStyleElement | null>(null);
@@ -23,16 +26,8 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
   }, [currentLocator]);
 
   // 클릭 이벤트 핸들러
-  const handleEvent = (event: Event) => {
+  const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-
-    if (target.tagName.toLowerCase() === 'a') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    if (event.type !== 'click') return;
-
     if (lastHighlightedElement.current) {
       lastHighlightedElement.current.classList.remove('qa-highlighted-element');
     }
@@ -42,6 +37,7 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     const xPath = getXPath(target);
 
     console.log('=== Element Details ===', { id, cssSelector, xPath, latestLocator });
+
     if (!latestLocator.current.isInputFocused || latestLocator.current.actionId === null) return;
 
     dispatch(setCurrentLocator({ actionId: latestLocator.current.actionId, id, cssSelector, xPath }));
@@ -49,6 +45,36 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
 
     target.classList.add('qa-highlighted-element');
     lastHighlightedElement.current = target;
+  };
+
+  // <a> 태그 클릭 차단
+  const handleLinkClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() === 'a') {
+      event.preventDefault();
+      console.warn('Blocked link click:', (target as HTMLAnchorElement).href);
+    }
+  };
+
+  // URL 이동 차단
+  const blockNavigation = () => {
+    window.open = () => null;
+    window.onbeforeunload = (event) => {
+      event.preventDefault();
+      return '';
+    };
+
+    const blockHistory = (method: 'pushState' | 'replaceState') => {
+      const originalMethod = window.history[method];
+      window.history[method] = (...args: Parameters<History['pushState']>) => {
+        console.warn(`Navigation blocked: ${method}`);
+        return originalMethod.apply(window.history, args);
+      };
+    };
+    blockHistory('pushState');
+    blockHistory('replaceState');
+
+    window.addEventListener('popstate', (event) => event.preventDefault());
   };
 
   useEffect(() => {
@@ -70,20 +96,28 @@ const InnerComponent = memo(({ htmlContent, cssContent }: { htmlContent: string;
     styleTagRef.current.innerHTML = cssContent;
 
     // 이벤트 리스너 등록
-    const eventTypes: (keyof DocumentEventMap)[] = ['click', 'mousedown', 'mouseup', 'keydown'];
-    eventTypes.forEach((event) => document.addEventListener(event, handleEvent, true));
+    document.addEventListener('click', handleClick, true);
+    document.addEventListener('click', handleLinkClick, true);
+    document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => event.preventDefault()));
+
+    blockNavigation();
 
     return () => {
-      // 이벤트 리스너 제거
-      eventTypes.forEach((event) => document.removeEventListener(event, handleEvent, true));
+      if (!document) return;
 
-      // 스타일 태그 제거
-      if (styleTagRef.current?.parentNode) {
+      document.removeEventListener('click', handleClick, true);
+      document.removeEventListener('click', handleLinkClick, true);
+      document.querySelectorAll('form').forEach((form) => {
+        if (form.parentNode) {
+          form.replaceWith(form.cloneNode(true) as HTMLFormElement);
+        }
+      });
+
+      if (styleTagRef.current && styleTagRef.current.parentNode) {
         styleTagRef.current.parentNode.removeChild(styleTagRef.current);
         styleTagRef.current = null;
       }
 
-      // HTML 클리어
       if (mountHereRef.current) {
         mountHereRef.current.replaceChildren();
       }
