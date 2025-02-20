@@ -30,19 +30,9 @@ export default function Controller() {
     }
   };
 
-  const handleGoBack = async () => {
-    window.onbeforeunload = null;
-    const restoreHistory = (method: 'pushState' | 'replaceState') => {
-      const originalMethod = window.history[method] as any;
-      window.history[method] = originalMethod;
-    };
-    restoreHistory('pushState');
-    restoreHistory('replaceState');
-    navigate(`/project/scenario/${stringProjectId}`);
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+  const handleGoBack = () => {
+    navigate(`/project/scenario/${stringProjectId}`, { replace: true });
+    window.location.href = `/project/scenario/${stringProjectId}`;
   };
 
   return (
